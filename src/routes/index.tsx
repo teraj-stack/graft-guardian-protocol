@@ -417,11 +417,22 @@ function Row({ label, a, b }: { label: string; a: string; b: string }) {
 function Microbiome() {
   return (
     <Section id="mikrobiom" eyebrow="06 — Mikrobiom i strefa dawcza">
-      <SectionHeader
-        title="Antyseptyka, która nie zabija graftu."
-        lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
-      />
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="relative">
+        <video
+          src={microbiomeVideo.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 -top-6 hidden w-40 rounded-lg border border-border/60 shadow-lg md:block md:w-56 lg:w-64"
+        />
+        <SectionHeader
+          title="Antyseptyka, która nie zabija graftu."
+          lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
+        />
+      </div>
         <Card title="HOCI — kwas podchlorawy" badge="0,01–0,02%">
           <p>
             HOCI to ten sam związek, który neutrofile produkują podczas
