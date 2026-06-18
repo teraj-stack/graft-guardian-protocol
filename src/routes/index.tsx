@@ -400,6 +400,7 @@ function LADD() {
         <video
           ref={videoRef}
           src={laddVideo.url}
+          poster={laddPoster}
           muted
           loop
           playsInline
