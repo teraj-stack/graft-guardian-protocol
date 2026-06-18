@@ -140,6 +140,7 @@ function Nav() {
           <a href="#hbot" className="hover:text-foreground">HBOT</a>
           <a href="#ladd" className="hover:text-foreground">LADD</a>
           <a href="#protokol" className="hover:text-foreground">14 dni</a>
+          <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
         </nav>
         <a
