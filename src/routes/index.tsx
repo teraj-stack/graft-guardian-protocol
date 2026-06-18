@@ -400,8 +400,7 @@ function LADD() {
                 <br />
                 <br />
                 <br />
-                Klasyczna mezoterapia igłowa zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia, zaburzać neowaskularyzacj. Wielu pacjentów rezygnuje z zabiegów uzupełniających z
-                obawy przed bólem. Proponowane rozwiązania powstały dzię MySkinCode.pl
+                Klasyczna mezoterapia igłowa zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia, zaburzać neowaskularyzacj. Wielu pacjentów rezygnuje z zabiegów uzupełniających z obawy przed bólem. Proponowane rozwiązania powstały dzięki współpracy z MySkinCode.pl
               </>
             }
           />
