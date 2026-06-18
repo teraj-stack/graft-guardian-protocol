@@ -330,7 +330,7 @@ function HBOT() {
   return (
     <Section id="hbot" eyebrow="04 — Tlenoterapia hiperbaryczna (HBOT)">
       <SectionHeader
-        title="Tlen rozpuszczony w plazmie dociera tam, gdzie krwinki czerwone jeszcze nie."
+        title="Tlen dociera tam, gdzie krwinki czerwone jeszcze nie."
         lead="Pod ciśnieniem 1,5–2,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w plazmie (prawo Henry'ego) dyfunduje do graftów zanim zostanie odtworzona ich sieć kapilarna."
       />
       <div className="grid gap-6 md:grid-cols-2">
