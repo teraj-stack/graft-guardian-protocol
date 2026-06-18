@@ -141,6 +141,7 @@ function Nav() {
           <a href="#ladd" className="hover:text-foreground">LADD</a>
           <a href="#protokol" className="hover:text-foreground">14 dni</a>
           <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
+          <Link to="/przypomnienia" className="hover:text-foreground">Przypomnienia</Link>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
         </nav>
         <a
@@ -649,12 +650,18 @@ function Journey() {
             robić, kiedy się niepokoić. Dodatkowo: bezpośredni kontakt do
             prowadzącego przez pierwsze 30 dni.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/panel"
               className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
               Wejdź do panelu pacjenta →
+            </Link>
+            <Link
+              to="/przypomnienia"
+              className="inline-flex items-center rounded-sm border border-foreground/80 px-5 py-3 text-sm font-medium text-foreground transition hover:bg-secondary"
+            >
+              Ustaw przypomnienia e-mail/SMS
             </Link>
           </div>
         </div>

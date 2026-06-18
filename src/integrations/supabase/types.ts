@@ -14,13 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reminder_sends: {
+        Row: {
+          channel: string
+          error: string | null
+          id: string
+          provider_message_id: string | null
+          sent_at: string
+          status: string
+          subscription_id: string
+          week: number
+        }
+        Insert: {
+          channel: string
+          error?: string | null
+          id?: string
+          provider_message_id?: string | null
+          sent_at?: string
+          status: string
+          subscription_id: string
+          week: number
+        }
+        Update: {
+          channel?: string
+          error?: string | null
+          id?: string
+          provider_message_id?: string | null
+          sent_at?: string
+          status?: string
+          subscription_id?: string
+          week?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_sends_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "reminder_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_subscriptions: {
+        Row: {
+          active: boolean
+          channel_email: boolean
+          channel_sms: boolean
+          consent_at: string
+          created_at: string
+          email: string
+          id: string
+          phone: string | null
+          selected_weeks: number[]
+          surgery_date: string
+          unsubscribe_token: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          channel_email?: boolean
+          channel_sms?: boolean
+          consent_at?: string
+          created_at?: string
+          email: string
+          id?: string
+          phone?: string | null
+          selected_weeks?: number[]
+          surgery_date: string
+          unsubscribe_token?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          channel_email?: boolean
+          channel_sms?: boolean
+          consent_at?: string
+          created_at?: string
+          email?: string
+          id?: string
+          phone?: string | null
+          selected_weeks?: number[]
+          surgery_date?: string
+          unsubscribe_token?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      reminder_weeks_valid: { Args: { weeks: number[] }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

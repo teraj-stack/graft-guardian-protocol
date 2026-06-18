@@ -237,12 +237,20 @@ function PanelPage() {
             <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">panel pacjenta</span>
           </Link>
-          <Link
-            to="/"
-            className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
-          >
-            ← Strona główna
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/przypomnienia"
+              className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
+            >
+              Przypomnienia
+            </Link>
+            <Link
+              to="/"
+              className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
+            >
+              ← Strona główna
+            </Link>
+          </div>
         </div>
       </header>
 
