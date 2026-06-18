@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
-import microbiomeVideo from "@/assets/microbiome.mp4.asset.json";
+
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
 
@@ -472,16 +472,6 @@ function Microbiome() {
           </p>
         </Card>
         <div className="flex flex-col gap-6">
-          <video
-            src={microbiomeVideo.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            className="pointer-events-none w-full max-w-xs self-end rounded-lg border border-border/60 shadow-lg md:max-w-sm"
-          />
           <Card title="Botaniczne formuły pozabiegowe" badge="Arnica · Centella">
             <p>
               Sterylne żele bez konserwantów na bazie wyciągów z
