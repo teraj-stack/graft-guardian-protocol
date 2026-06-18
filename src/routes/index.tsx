@@ -391,7 +391,7 @@ function LADD() {
   return (
     <Section id="ladd" eyebrow="05 — LADD: Laser-Assisted Drug Delivery">
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-        <div className="flex-1">
+        <div className="flex flex-1 flex-col">
           <SectionHeader
             title="Mikrokanały zamiast wcierania."
             lead={
@@ -404,6 +404,25 @@ function LADD() {
               </>
             }
           />
+          <div className="mt-auto flex flex-wrap items-end gap-3 pt-8">
+            {[
+              { src: mscLogo.url, alt: "MySkinCode" },
+              { src: bujokLogo.url, alt: "Bujok Medical" },
+              { src: mabelLogo.url, alt: "Mabel Hair Clinic" },
+            ].map((logo) => (
+              <div
+                key={logo.alt}
+                className="flex h-20 w-20 items-center justify-center rounded-sm border border-border/60 bg-card p-2 md:h-24 md:w-24"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  loading="lazy"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+            ))}
+          </div>
         </div>
         <video
           ref={videoRef}
