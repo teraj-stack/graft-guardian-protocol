@@ -3,6 +3,7 @@ import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
 import microbiomeVideo from "@/assets/microbiome.mp4.asset.json";
+import laddVideo from "@/assets/ladd.mp4.asset.json";
 
 const TITLE = "Protokół po przeszczepie włosów — FUE, PBM, HBOT, LADD";
 const DESCRIPTION =
@@ -366,10 +367,23 @@ function HBOT() {
 function LADD() {
   return (
     <Section id="ladd" eyebrow="05 — LADD: Laser-Assisted Drug Delivery">
-      <SectionHeader
-        title="Mikrokanały zamiast wcierania."
-        lead="Laser-Assisted Drug Delivery to kontrolowane utworzenie pionowych mikrokanałów w warstwie rogowej, umożliwiających dostarczenie aktywnej substancji (minoksydyl, PRP, peptydy, eksosomy) na głębokość brodawki włosa. Skuteczność penetracji rośnie kilkukrotnie w porównaniu z aplikacją topową."
-      />
+      <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+        <div className="flex-1">
+          <SectionHeader
+            title="Mikrokanały zamiast wcierania."
+            lead="Laser-Assisted Drug Delivery to kontrolowane utworzenie pionowych mikrokanałów w warstwie rogowej, umożliwiających dostarczenie aktywnej substancji (minoksydyl, PRP, peptydy, eksosomy) na głębokość brodawki włosa. Skuteczność penetracji rośnie kilkukrotnie w porównaniu z aplikacją topową."
+          />
+        </div>
+        <video
+          src={laddVideo.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full max-w-xs shrink-0 rounded-sm border border-border/60 shadow-lg md:max-w-sm"
+        />
+      </div>
+
 
       <div className="mt-8 overflow-x-auto rounded-sm border border-border bg-card">
         <table className="w-full min-w-[640px] text-left text-sm">
