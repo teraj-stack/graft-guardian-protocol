@@ -629,7 +629,7 @@ function Journey() {
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-7">
           <h2 className="font-display text-4xl md:text-5xl">
-            Znieczulenie wiedzą jako parametr kliniczny.
+            Pacjent wyedukowany, to pacjent współpracujący.
           </h2>
           <p className="mt-6 text-muted-foreground">
             Pacjent opuszczający klinikę z zakrwawioną głową, bez planu,
