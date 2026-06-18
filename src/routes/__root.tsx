@@ -80,6 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Protokół Po Przeszczepie" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "google-site-verification", content: "faPtW_FvSsiPhsR5PMFM65mR80STVixgk2FP1mvrEWk" },
       { title: "Protokół Po Przeszczepie" },
       { property: "og:title", content: "Protokół Po Przeszczepie" },
       { name: "twitter:title", content: "Protokół Po Przeszczepie" },
