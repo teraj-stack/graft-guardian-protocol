@@ -680,7 +680,23 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 border-t border-border pt-6 text-xs text-muted-foreground">
+        <div className="mt-12 border-t border-border pt-8">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+            Współtwórcy projektu
+          </p>
+          <div className="mt-6 grid grid-cols-1 items-center gap-6 sm:grid-cols-3">
+            <div className="flex items-center justify-center rounded-md bg-white p-4 h-24">
+              <img src={mscLogo.url} alt="MySkinCode — Technical Support MedTech SaaS" className="max-h-full max-w-full object-contain" loading="lazy" />
+            </div>
+            <div className="flex items-center justify-center rounded-md bg-black p-4 h-24">
+              <img src={bujokLogo.url} alt="Bujok Medical" className="max-h-full max-w-full object-contain" loading="lazy" />
+            </div>
+            <div className="flex items-center justify-center rounded-md bg-[#3f4a73] p-4 h-24">
+              <img src={mabelLogo.url} alt="Mabel Hair — Hair Transplant Clinic" className="max-h-full max-w-full object-contain" loading="lazy" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
           © {new Date().getFullYear()} Protokół po przeszczepie. Wszystkie prawa zastrzeżone.
         </div>
       </div>
