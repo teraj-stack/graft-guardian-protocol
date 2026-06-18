@@ -10,12 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
 import { Route as PanelRouteImport } from './routes/panel'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
+import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
+import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
+import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrzypomnieniaRoute = PrzypomnieniaRouteImport.update({
+  id: '/przypomnienia',
+  path: '/przypomnienia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PanelRoute = PanelRouteImport.update({
@@ -28,35 +38,102 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrzypomnieniaWypiszRoute = PrzypomnieniaWypiszRouteImport.update({
+  id: '/wypisz',
+  path: '/wypisz',
+  getParentRoute: () => PrzypomnieniaRoute,
+} as any)
+const ApiPublicRemindersUnsubscribeRoute =
+  ApiPublicRemindersUnsubscribeRouteImport.update({
+    id: '/api/public/reminders/unsubscribe',
+    path: '/api/public/reminders/unsubscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersSubscribeRoute =
+  ApiPublicRemindersSubscribeRouteImport.update({
+    id: '/api/public/reminders/subscribe',
+    path: '/api/public/reminders/subscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersDispatchRoute =
+  ApiPublicRemindersDispatchRouteImport.update({
+    id: '/api/public/reminders/dispatch',
+    path: '/api/public/reminders/dispatch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/panel': typeof PanelRoute
+  '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
+  '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/panel': typeof PanelRoute
+  '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
+  '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/panel': typeof PanelRoute
+  '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
+  '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/panel' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/panel'
+    | '/przypomnienia'
+    | '/sitemap.xml'
+    | '/przypomnienia/wypisz'
+    | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/subscribe'
+    | '/api/public/reminders/unsubscribe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/panel' | '/sitemap.xml'
-  id: '__root__' | '/' | '/panel' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/panel'
+    | '/przypomnienia'
+    | '/sitemap.xml'
+    | '/przypomnienia/wypisz'
+    | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/subscribe'
+    | '/api/public/reminders/unsubscribe'
+  id:
+    | '__root__'
+    | '/'
+    | '/panel'
+    | '/przypomnienia'
+    | '/sitemap.xml'
+    | '/przypomnienia/wypisz'
+    | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/subscribe'
+    | '/api/public/reminders/unsubscribe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PanelRoute: typeof PanelRoute
+  PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
+  ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
+  ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +143,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/przypomnienia': {
+      id: '/przypomnienia'
+      path: '/przypomnienia'
+      fullPath: '/przypomnienia'
+      preLoaderRoute: typeof PrzypomnieniaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/panel': {
@@ -82,13 +166,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/przypomnienia/wypisz': {
+      id: '/przypomnienia/wypisz'
+      path: '/wypisz'
+      fullPath: '/przypomnienia/wypisz'
+      preLoaderRoute: typeof PrzypomnieniaWypiszRouteImport
+      parentRoute: typeof PrzypomnieniaRoute
+    }
+    '/api/public/reminders/unsubscribe': {
+      id: '/api/public/reminders/unsubscribe'
+      path: '/api/public/reminders/unsubscribe'
+      fullPath: '/api/public/reminders/unsubscribe'
+      preLoaderRoute: typeof ApiPublicRemindersUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders/subscribe': {
+      id: '/api/public/reminders/subscribe'
+      path: '/api/public/reminders/subscribe'
+      fullPath: '/api/public/reminders/subscribe'
+      preLoaderRoute: typeof ApiPublicRemindersSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders/dispatch': {
+      id: '/api/public/reminders/dispatch'
+      path: '/api/public/reminders/dispatch'
+      fullPath: '/api/public/reminders/dispatch'
+      preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface PrzypomnieniaRouteChildren {
+  PrzypomnieniaWypiszRoute: typeof PrzypomnieniaWypiszRoute
+}
+
+const PrzypomnieniaRouteChildren: PrzypomnieniaRouteChildren = {
+  PrzypomnieniaWypiszRoute: PrzypomnieniaWypiszRoute,
+}
+
+const PrzypomnieniaRouteWithChildren = PrzypomnieniaRoute._addFileChildren(
+  PrzypomnieniaRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PanelRoute: PanelRoute,
+  PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
+  ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
+  ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

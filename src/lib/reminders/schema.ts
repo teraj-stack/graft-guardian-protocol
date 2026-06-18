@@ -21,9 +21,7 @@ export const subscribeSchema = z
       .array(z.number().int().min(1).max(12))
       .min(1, "Wybierz co najmniej jeden tydzień")
       .max(12),
-    consent: z.literal(true, {
-      errorMap: () => ({ message: "Wymagana zgoda na otrzymywanie wiadomości" }),
-    }),
+    consent: z.literal(true, { message: "Wymagana zgoda na otrzymywanie wiadomości" }),
   })
   .refine((d) => d.channelEmail || d.channelSms, {
     message: "Wybierz co najmniej jeden kanał",
