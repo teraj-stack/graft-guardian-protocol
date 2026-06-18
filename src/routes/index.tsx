@@ -417,22 +417,10 @@ function Row({ label, a, b }: { label: string; a: string; b: string }) {
 function Microbiome() {
   return (
     <Section id="mikrobiom" eyebrow="06 — Mikrobiom i strefa dawcza">
-      <div className="relative">
-        <video
-          src={microbiomeVideo.url}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          className="pointer-events-none absolute right-0 -top-6 hidden w-40 rounded-lg border border-border/60 shadow-lg md:block md:w-56 lg:w-64"
-        />
-        <SectionHeader
-          title="Antyseptyka, która nie zabija graftu."
-          lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
-        />
-      </div>
+      <SectionHeader
+        title="Antyseptyka, która nie zabija graftu."
+        lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
+      />
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="HOCI — kwas podchlorawy" badge="0,01–0,02%">
           <p>
@@ -444,21 +432,33 @@ function Microbiome() {
             spray do mycia skóry głowy od doby 2.
           </p>
         </Card>
-        <Card title="Botaniczne formuły pozabiegowe" badge="Arnica · Centella">
-          <p>
-            Sterylne żele bez konserwantów na bazie wyciągów z
-            <em> Arnica montana</em> (helenalina, dihydrohelenalina —
-            redukcja erytemy) oraz <em>Centella asiatica</em>
-            (madekasozyd, asiatykozyd — stymulacja syntezy kolagenu I,
-            redukcja stanu zapalnego). Zastosowanie nad strefą dawczą,
-            która po FUE przypomina rozległe otarcie.
-          </p>
-          <Mech>
-            Niekontrolowane namnażanie <em>Malassezia</em> i
-            patogennych szczepów gronkowca wokół mikroran sprzyja
-            włóknieniu bliznowatemu i utracie graftów.
-          </Mech>
-        </Card>
+        <div className="flex flex-col gap-6">
+          <video
+            src={microbiomeVideo.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            className="pointer-events-none w-full max-w-xs self-end rounded-lg border border-border/60 shadow-lg md:max-w-sm"
+          />
+          <Card title="Botaniczne formuły pozabiegowe" badge="Arnica · Centella">
+            <p>
+              Sterylne żele bez konserwantów na bazie wyciągów z
+              <em> Arnica montana</em> (helenalina, dihydrohelenalina —
+              redukcja erytemy) oraz <em>Centella asiatica</em>
+              (madekasozyd, asiatykozyd — stymulacja syntezy kolagenu I,
+              redukcja stanu zapalnego). Zastosowanie nad strefą dawczą,
+              która po FUE przypomina rozległe otarcie.
+            </p>
+            <Mech>
+              Niekontrolowane namnażanie <em>Malassezia</em> i
+              patogennych szczepów gronkowca wokół mikroran sprzyja
+              włóknieniu bliznowatemu i utracie graftów.
+            </Mech>
+          </Card>
+        </div>
       </div>
     </Section>
   );
