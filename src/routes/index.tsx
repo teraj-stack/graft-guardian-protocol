@@ -640,11 +640,13 @@ function Journey() {
             strupów przed czasem).
           </p>
           <p className="mt-4 text-muted-foreground">
-            Każdy pacjent otrzymuje precyzyjny e-book &bdquo;Patient
-            Journey&rdquo; z instrukcjami na każdy z pierwszych 14 dni —
-            co robić rano, wieczorem, czego nie robić, kiedy się
-            niepokoić. Dodatkowo: bezpośredni kontakt do prowadzącego
-            przez pierwsze 30 dni.
+            Każdy pacjent po zalogowaniu na Naszą stronę ma dostęp do
+            materiałów dostępnych online (pełna dokumentacja oraz
+            najnowsze trendy w medycynie regeneracyjnej, anti-aging) oraz
+            e-book &bdquo;Patient Journey&rdquo; z instrukcjami na każdy z
+            pierwszych 14 dni — co robić rano, wieczorem, czego nie
+            robić, kiedy się niepokoić. Dodatkowo: bezpośredni kontakt do
+            prowadzącego przez pierwsze 30 dni.
           </p>
         </div>
         <aside className="md:col-span-5">
