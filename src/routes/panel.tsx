@@ -511,9 +511,22 @@ function FilterRow({
   );
 }
 
-function MaterialCard({ material }: { material: Material }) {
+function MaterialCard({
+  material,
+  done,
+  onToggle,
+}: {
+  material: Material;
+  done: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <li className="flex flex-col rounded-sm border border-border bg-card p-5 shadow-[var(--shadow-editorial)] transition hover:border-accent/60">
+    <li
+      className={
+        "flex flex-col rounded-sm border bg-card p-5 shadow-[var(--shadow-editorial)] transition " +
+        (done ? "border-accent/70 opacity-80" : "border-border hover:border-accent/60")
+      }
+    >
       <div className="flex items-center justify-between gap-3">
         <span className="rounded-sm border border-accent/40 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-accent">
           {material.type}
@@ -536,6 +549,20 @@ function MaterialCard({ material }: { material: Material }) {
           </span>
         ))}
       </div>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-pressed={done}
+        className={
+          "mt-4 inline-flex items-center justify-center gap-2 rounded-sm border px-3 py-2 text-xs uppercase tracking-wider transition " +
+          (done
+            ? "border-accent bg-accent text-accent-foreground hover:opacity-90"
+            : "border-border text-foreground hover:border-accent hover:text-accent")
+        }
+      >
+        <span>{done ? "✓" : "○"}</span>
+        <span>{done ? "Ukończone" : "Oznacz jako ukończone"}</span>
+      </button>
     </li>
   );
 }
