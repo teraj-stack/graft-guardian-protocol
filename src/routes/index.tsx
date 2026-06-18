@@ -398,7 +398,7 @@ function LADD() {
               <>
                 Laser-Assisted Drug Delivery to kontrolowane utworzenie pionowych mikrokanałów w warstwie rogowej, umożliwiających dostarczenie aktywnej substancji (minoksydyl, PRP, peptydy, eksosomy) na głębokość brodawki włosa. Skuteczność penetracji rośnie kilkukrotnie w porównaniu z aplikacją topową.
                 <br />
-                <br />
+                -----------------------------------------------------
                 <br />
                 Klasyczna mezoterapia igłowa zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia, zaburzać neowaskularyzacj. Wielu pacjentów rezygnuje z zabiegów uzupełniających z obawy przed bólem. Proponowane rozwiązania powstały dzięki współpracy z MySkinCode.pl
               </>
