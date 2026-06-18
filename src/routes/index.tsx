@@ -433,6 +433,7 @@ function Microbiome() {
           lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
         />
       </div>
+      <div className="grid gap-6 md:grid-cols-2">
         <Card title="HOCI — kwas podchlorawy" badge="0,01–0,02%">
           <p>
             HOCI to ten sam związek, który neutrofile produkują podczas
