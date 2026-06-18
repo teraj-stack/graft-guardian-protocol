@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { usePanelProgress } from "@/hooks/use-panel-progress";
 
 const TITLE = "Panel pacjenta — biblioteka materiałów pozabiegowych";
 const DESCRIPTION =
