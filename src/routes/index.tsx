@@ -121,8 +121,9 @@ function Nav() {
     <header className="relative z-20 border-b border-border/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-baseline gap-2">
-          <span className="font-display text-2xl leading-none">Protokół</span>
-          <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+
             po przeszczepie
           </span>
         </a>
