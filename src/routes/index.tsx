@@ -633,8 +633,8 @@ function Journey() {
           </h2>
           <p className="mt-6 text-muted-foreground">
             Pacjent opuszczający klinikę z zakrwawioną głową, bez planu,
-            bez kontaktu — to nie tylko problem doświadczenia. Kortyzol w
-            stresie pozabiegowym jest wazokonstryktorem. Lęk realnie
+            bez kontaktu — to nie tylko złe doświadczenie. Kortyzol w
+            stresie pozabiegowym upośledza krążenie skórne. Lęk realnie
             pogarsza perfuzję skóry głowy i zwiększa ryzyko mechanicznej
             utraty graftów (drapanie, niewłaściwe mycie, zdejmowanie
             strupów przed czasem).
