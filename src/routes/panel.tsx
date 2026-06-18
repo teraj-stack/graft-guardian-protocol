@@ -203,8 +203,11 @@ export const Route = createFileRoute("/panel")({
 
 function PanelPage() {
   const { week, cat, type, q } = Route.useSearch();
+  const { progress, hydrated, toggleMaterial, toggleWeek, reset, isMaterialDone, isWeekDone } =
+    usePanelProgress();
+  const [hideDone, setHideDone] = useState(false);
 
-  const filtered = useMemo(() => {
+  const baseFiltered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return MATERIALS.filter((m) => {
       if (week !== "all" && !m.weeks.includes(week)) return false;
@@ -216,6 +219,15 @@ function PanelPage() {
       return true;
     });
   }, [week, cat, type, q]);
+
+  const filtered = useMemo(
+    () => (hideDone ? baseFiltered.filter((m) => !isMaterialDone(m.id)) : baseFiltered),
+    [baseFiltered, hideDone, isMaterialDone]
+  );
+
+  const doneCount = progress.materials.length;
+  const totalCount = MATERIALS.length;
+  const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -241,20 +253,38 @@ function PanelPage() {
         </h1>
         <p className="mt-6 max-w-2xl text-base text-muted-foreground md:text-lg">
           Materiały dostępne wyłącznie dla pacjentów Kliniki. Filtruj po tygodniu po zabiegu,
-          kategorii i&nbsp;formacie. Wszystkie treści aktualizowane na bieżąco zgodnie z&nbsp;literaturą.
+          kategorii i&nbsp;formacie. Postęp zapisuje się lokalnie w&nbsp;Twojej przeglądarce.
         </p>
+
+        <ProgressPanel
+          hydrated={hydrated}
+          doneCount={doneCount}
+          totalCount={totalCount}
+          pct={pct}
+          weeks={WEEKS as readonly number[]}
+          isWeekDone={isWeekDone}
+          toggleWeek={toggleWeek}
+          reset={reset}
+          hideDone={hideDone}
+          setHideDone={setHideDone}
+        />
 
         <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} />
 
         {filtered.length === 0 ? (
           <div className="mt-12 rounded-sm border border-dashed border-border bg-card p-10 text-center">
             <p className="font-display text-2xl">Brak materiałów dla wybranych filtrów.</p>
-            <p className="mt-2 text-sm text-muted-foreground">Zmień zakres tygodnia lub kategorię.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Zmień zakres tygodnia lub odznacz „ukryj ukończone”.</p>
           </div>
         ) : (
           <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {filtered.map((m) => (
-              <MaterialCard key={m.id} material={m} />
+              <MaterialCard
+                key={m.id}
+                material={m}
+                done={isMaterialDone(m.id)}
+                onToggle={() => toggleMaterial(m.id)}
+              />
             ))}
           </ul>
         )}
@@ -263,9 +293,106 @@ function PanelPage() {
       <footer className="border-t border-border bg-background">
         <div className="mx-auto max-w-6xl px-6 py-10 text-xs text-muted-foreground">
           Materiały edukacyjne. Nie zastępują indywidualnej konsultacji lekarskiej.
+          Postęp przechowywany lokalnie (localStorage) — nie synchronizuje się między urządzeniami.
         </div>
       </footer>
     </div>
+  );
+}
+
+function ProgressPanel({
+  hydrated,
+  doneCount,
+  totalCount,
+  pct,
+  weeks,
+  isWeekDone,
+  toggleWeek,
+  reset,
+  hideDone,
+  setHideDone,
+}: {
+  hydrated: boolean;
+  doneCount: number;
+  totalCount: number;
+  pct: number;
+  weeks: readonly number[];
+  isWeekDone: (w: number) => boolean;
+  toggleWeek: (w: number) => void;
+  reset: () => void;
+  hideDone: boolean;
+  setHideDone: (v: boolean) => void;
+}) {
+  return (
+    <section className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Twój postęp</p>
+          <p className="mt-2 font-display text-3xl">
+            {hydrated ? `${doneCount} / ${totalCount}` : "— / —"}
+            <span className="ml-3 text-base text-muted-foreground">ukończonych materiałów</span>
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setHideDone(!hideDone)}
+            className={
+              "inline-flex items-center rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
+              (hideDone
+                ? "border-accent bg-accent text-accent-foreground"
+                : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")
+            }
+          >
+            {hideDone ? "✓ Ukryj ukończone" : "Ukryj ukończone"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (window.confirm("Wyczyścić cały zapisany postęp?")) reset();
+            }}
+            className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-destructive hover:text-destructive"
+          >
+            Wyczyść postęp
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-secondary">
+        <div
+          className="h-full bg-accent transition-all duration-500"
+          style={{ width: `${hydrated ? pct : 0}%` }}
+        />
+      </div>
+
+      <div className="mt-6 border-t border-border/50 pt-4">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Ukończone tygodnie protokołu
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {weeks.map((w) => {
+            const done = hydrated && isWeekDone(w);
+            return (
+              <button
+                key={w}
+                type="button"
+                onClick={() => toggleWeek(w)}
+                className={
+                  "inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
+                  (done
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")
+                }
+                aria-pressed={done}
+              >
+                <span>{done ? "✓" : "○"}</span>
+                <span>Tydzień {w}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
