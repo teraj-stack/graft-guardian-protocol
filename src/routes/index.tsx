@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
@@ -365,6 +366,27 @@ function HBOT() {
 /* ---------- LADD ---------- */
 
 function LADD() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <Section id="ladd" eyebrow="05 — LADD: Laser-Assisted Drug Delivery">
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
@@ -375,11 +397,12 @@ function LADD() {
           />
         </div>
         <video
+          ref={videoRef}
           src={laddVideo.url}
-          autoPlay
           muted
           loop
           playsInline
+          preload="none"
           className="w-full max-w-xs shrink-0 rounded-sm border border-border/60 shadow-lg md:max-w-sm"
         />
       </div>
