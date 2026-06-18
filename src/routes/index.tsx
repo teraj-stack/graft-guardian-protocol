@@ -352,7 +352,6 @@ function HBOT() {
           </p>
           <Mech>
             Współpracujemy z certyfikowanym ośrodkiem terapii
-            hiperbarycznej. Kwalifikację prowadzi lekarz medycyny
             hiperbarycznej.
           </Mech>
         </Card>
