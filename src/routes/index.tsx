@@ -9,7 +9,7 @@ import laddPoster from "@/assets/ladd-poster.jpg";
 
 const TITLE = "Protokół po przeszczepie włosów — FUE, PBM, HBOT, LADD";
 const DESCRIPTION =
-  "Zintegrowany, oparty na dowodach protokół wspomagający przeżywalność graftów po FUE: ochrona ex vivo (HypoThermosol + ATP-v), fotobiomodulacja 650/830 nm, HBOT 1,5–2,0 ATA, LADD z PRP i minoksydylem.";
+  "Zintegrowany protokół po przeszczepie włosów FUE: ochrona ex vivo, fotobiomodulacja, HBOT i LADD. Zwiększ przeżywalność graftów dzięki metodom EBM.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,12 +18,12 @@ export const Route = createFileRoute("/")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://graft-guardian-protocol.lovable.app/" },
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://graft-guardian-protocol.lovable.app/" }],
     scripts: [
       {
         type: "application/ld+json",
