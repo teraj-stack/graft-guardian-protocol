@@ -356,7 +356,7 @@ function FilterRow({
             <Link
               key={o.value}
               from="/panel"
-              search={(prev) => {
+              search={(prev: Record<string, unknown>) => {
                 const next: Record<string, unknown> = { ...prev };
                 if (o.value === "all") {
                   delete next[paramKey];
