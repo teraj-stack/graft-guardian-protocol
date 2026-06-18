@@ -649,6 +649,14 @@ function Journey() {
             robić, kiedy się niepokoić. Dodatkowo: bezpośredni kontakt do
             prowadzącego przez pierwsze 30 dni.
           </p>
+          <div className="mt-8">
+            <Link
+              to="/panel"
+              className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Wejdź do panelu pacjenta →
+            </Link>
+          </div>
         </div>
         <aside className="md:col-span-5">
           <div className="rounded-sm border border-border bg-card p-6">
