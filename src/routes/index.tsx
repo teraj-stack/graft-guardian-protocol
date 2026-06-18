@@ -157,8 +157,7 @@ function Hero() {
             Protokół kliniczny · FUE · evidence-based
           </p>
           <h1 className="font-display text-5xl leading-[1.02] md:text-7xl">
-            Protokół pozabiegowy oparty na ochronie metabolicznej graftów,
-            fotobiomodulacji, <em className="text-accent">HBOT</em> i LADD.
+            Zintegrowany ekosystem partnerski wspierający wdrażanie procedur tkankowo-oszczędzających. Protokół utworzono dzięki międzynarodowej współpracy kooperacji: — MySkinCode.pl Medical Lasers and STEM cells Solutions oraz Mabel Hair Clinic
           </h1>
           <p className="mt-8 max-w-2xl text-base text-muted-foreground md:text-lg">
             Pierwsze 14 dni decyduje o przeżywalności graftów. Zamiast soli
