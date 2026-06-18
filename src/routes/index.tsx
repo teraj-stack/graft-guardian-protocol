@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
@@ -140,6 +140,7 @@ function Nav() {
           <a href="#hbot" className="hover:text-foreground">HBOT</a>
           <a href="#ladd" className="hover:text-foreground">LADD</a>
           <a href="#protokol" className="hover:text-foreground">14 dni</a>
+          <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
         </nav>
         <a
@@ -648,6 +649,14 @@ function Journey() {
             robić, kiedy się niepokoić. Dodatkowo: bezpośredni kontakt do
             prowadzącego przez pierwsze 30 dni.
           </p>
+          <div className="mt-8">
+            <Link
+              to="/panel"
+              className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Wejdź do panelu pacjenta →
+            </Link>
+          </div>
         </div>
         <aside className="md:col-span-5">
           <div className="rounded-sm border border-border bg-card p-6">
