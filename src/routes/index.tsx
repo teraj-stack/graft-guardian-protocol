@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { getPricingOverrides } from "@/lib/pricing.functions";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
