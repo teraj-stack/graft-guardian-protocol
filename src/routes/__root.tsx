@@ -129,7 +129,7 @@ function BackButton() {
   if (pathname === "/") return null;
 
   return (
-    <div className="fixed left-2 top-2 z-50 sm:left-4 sm:top-4">
+    <div className="fixed bottom-4 right-4 z-50 sm:left-4 sm:top-4 sm:bottom-auto sm:right-auto">
       <Link
         to="/"
         className="inline-flex items-center gap-1.5 rounded-full bg-[#0c121b]/80 px-2.5 py-2 text-xs font-medium text-[#c8b06c] backdrop-blur-sm ring-1 ring-[#c8b06c]/20 transition-all hover:bg-[#0c121b] hover:ring-[#c8b06c]/40 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
