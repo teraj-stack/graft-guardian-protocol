@@ -131,6 +131,10 @@ function VitalsPage() {
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
   const handleExport = async () => {
+    if (dateFrom && dateTo && dateTo < dateFrom) {
+      toast.error("Data końcowa nie może być wcześniejsza niż data początkowa. Popraw zakres dat.");
+      return;
+    }
     setExporting(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
