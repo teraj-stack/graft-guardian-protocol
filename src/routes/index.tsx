@@ -8,9 +8,9 @@ import graftgenLogo from "@/assets/graftgen-logo.jpeg.asset.json";
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
 
-const TITLE = "Protokół po przeszczepie włosów — FUE, PBM, HBOT, LADD";
+const TITLE = "Protokół po przeszczepie włosów — DHI, PBM, HBOT, LADD";
 const DESCRIPTION =
-  "Zintegrowany protokół po przeszczepie włosów FUE: ochrona ex vivo, fotobiomodulacja, HBOT i LADD. Zwiększ przeżywalność graftów dzięki metodom EBM.";
+  "Zintegrowany protokół po przeszczepie włosów DHI: ochrona ex vivo, fotobiomodulacja, HBOT i LADD. Zwiększ przeżywalność graftów dzięki metodom EBM.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/")({
           inLanguage: "pl",
           about: {
             "@type": "MedicalProcedure",
-            name: "Protokół pozabiegowy po przeszczepie włosów metodą FUE",
+            name: "Protokół pozabiegowy po przeszczepie włosów metodą DHI",
           },
         }),
       },
@@ -67,7 +67,7 @@ const FAQ: { q: string; a: string }[] = [
     a: "650 nm (czerwone) penetruje do 1–2 mm i działa głównie na poziomie naskórka, skóry właściwej oraz brodawki włosa. 830 nm (bliska podczerwień) sięga 3–5 mm, dociera do brodawek głębiej osadzonych mieszków i obrzękniętej tkanki podskórnej. Oba zakresy aktywują oksydazę c-cytochromową (kompleks IV łańcucha oddechowego), zwiększając produkcję ATP mitochondrialnego.",
   },
   {
-    q: "Kiedy mogę umyć głowę po FUE?",
+    q: "Kiedy mogę umyć głowę po DHI?",
     a: "Pierwsze delikatne, bezdotykowe spłukiwanie obszaru biorczego solą fizjologiczną lub HOCI — od 48 godziny. Pełne mycie szamponem o pH 5,5 bez SLS — od doby 4. Tarcie i zdejmowanie strupów wyłącznie po 8. dobie. Wcześniejsze tarcie to najczęstsza mechaniczna przyczyna utraty graftów.",
   },
   {
@@ -163,7 +163,7 @@ function Hero() {
       <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-8">
           <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
-            Protokół kliniczny · FUE · evidence-based
+            Protokół kliniczny · DHI · evidence-based
           </p>
           <h1 className="font-display text-5xl leading-[1.02] md:text-7xl">
             Protokół pozabiegowy oparty na ochronie metabolicznej graftów,
@@ -226,7 +226,7 @@ function Why() {
       <SectionHeader title="Okno, w którym decyduje się los każdego graftu." />
       <div className="grid gap-8 md:grid-cols-3">
         <Para>
-          Po ekstrakcji metodą FUE graft jest tkanką niedokrwioną. Od momentu
+          Po ekstrakcji metodą DHI graft jest tkanką niedokrwioną. Od momentu
           pobrania do rewaskularyzacji w łożysku biorczym przeżywa wyłącznie
           dzięki dyfuzji z osocza otaczającego mikroranę. Pierwsze
           naczynia włosowate dochodzą do brodawki włosa zwykle między
@@ -529,7 +529,7 @@ function Microbiome() {
               redukcja erytemy) oraz <em>Centella asiatica</em>
               (madekasozyd, asiatykozyd — stymulacja syntezy kolagenu I,
               redukcja stanu zapalnego). Zastosowanie nad strefą dawczą,
-              która po FUE przypomina rozległe otarcie.
+              która po DHI przypomina rozległe otarcie.
             </p>
             <Mech>
               Niekontrolowane namnażanie <em>Malassezia</em> i
@@ -758,7 +758,7 @@ function Footer() {
             <p className="font-display text-2xl">Protokół po przeszczepie</p>
             <p className="mt-3 max-w-md text-sm text-muted-foreground">
               Materiał edukacyjny dla pacjentów po przeszczepie włosów
-              metodą FUE. Treści mają charakter informacyjny i nie
+              metodą DHI. Treści mają charakter informacyjny i nie
               zastępują indywidualnej konsultacji lekarskiej. Decyzje
               terapeutyczne podejmuje lekarz na podstawie pełnego wywiadu
               i badania.
