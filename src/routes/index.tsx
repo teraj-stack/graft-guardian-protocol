@@ -115,8 +115,10 @@ function Index() {
         <Journey />
         <FAQSection />
         <CTA />
+        <Contact />
       </main>
       <Footer />
+
     </div>
   );
 }
