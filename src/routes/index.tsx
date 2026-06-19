@@ -224,7 +224,7 @@ function Hero() {
           <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
             Protokół kliniczny · DHI · evidence-based
           </p>
-          <h1 className="font-display text-5xl leading-[1.02] md:text-7xl">
+          <h1 className="font-display text-4xl leading-[1.02] break-words sm:text-5xl md:text-7xl">
             Protokół pozabiegowy oparty na ochronie metabolicznej graftów,
             fotobiomodulacji, <em className="text-accent">HBOT</em> i LADD.
           </h1>
