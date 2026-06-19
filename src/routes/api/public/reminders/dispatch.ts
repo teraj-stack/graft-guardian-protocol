@@ -9,6 +9,7 @@ import {
   sendEmailReminder,
   sendSmsReminder,
 } from "@/lib/reminders/sender.server";
+import { daysBetween, dueWeeksForDay } from "@/lib/reminders/schedule";
 
 interface Subscription {
   id: string;
@@ -27,24 +28,6 @@ interface AlreadySent {
   channel: string;
 }
 
-function daysBetween(today: Date, surgery: string): number {
-  const s = new Date(surgery + "T00:00:00Z");
-  const t = new Date(
-    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
-  );
-  return Math.floor((t.getTime() - s.getTime()) / 86_400_000);
-}
-
-// Return every week (1..12) whose trigger day (7*N) has already passed.
-// Catch-up: if cron missed day 7N, week N still fires the first time we run
-// after that day. The reminder_sends idempotency check prevents double sends.
-function dueWeeksForDay(day: number): number[] {
-  if (day < 7) return [];
-  const maxWeek = Math.min(12, Math.floor(day / 7));
-  const weeks: number[] = [];
-  for (let w = 1; w <= maxWeek; w++) weeks.push(w);
-  return weeks;
-}
 
 export const Route = createFileRoute("/api/public/reminders/dispatch")({
   server: {
