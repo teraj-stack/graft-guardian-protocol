@@ -444,6 +444,21 @@ function VitalsPage() {
               <option value={90}>p90</option>
             </select>
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Metryki wykresu PDF</label>
+            <div className="h-9 inline-flex items-center gap-3 rounded-md border bg-background px-3 text-sm">
+              {(["CLS", "LCP", "INP"] as const).map((m) => (
+                <label key={m} className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={pdfMetrics.includes(m)}
+                    onChange={() => toggleMetric(m)}
+                  />
+                  {m}
+                </label>
+              ))}
+            </div>
+          </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
             <input
               type="checkbox"
