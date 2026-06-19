@@ -128,31 +128,88 @@ function Index() {
 /* ---------- Nav ---------- */
 
 function Nav() {
+  const [open, setOpen] = useState(false);
+  const navLinks = [
+    { href: "#ex-vivo", label: "Ex Vivo" },
+    { href: "#pbm", label: "PBM" },
+    { href: "#hbot", label: "HBOT" },
+    { href: "#ladd", label: "LADD" },
+    { href: "#protokol", label: "14 dni" },
+    { href: "#cennik", label: "Cennik" },
+    { to: "/panel", label: "Panel pacjenta" },
+    { to: "/przypomnienia", label: "Przypomnienia" },
+    { href: "#faq", label: "FAQ" },
+    { href: "#kontakt", label: "Kontakt" },
+  ] as const;
+
   return (
     <header className="relative z-20 border-b border-border/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
           <img src={graftgenLogo.url} alt="Graftgen.com" className="h-10 w-auto md:h-12" />
         </a>
+
         <nav className="hidden gap-7 text-sm text-muted-foreground md:flex">
-          <a href="#ex-vivo" className="hover:text-foreground">Ex Vivo</a>
-          <a href="#pbm" className="hover:text-foreground">PBM</a>
-          <a href="#hbot" className="hover:text-foreground">HBOT</a>
-          <a href="#ladd" className="hover:text-foreground">LADD</a>
-          <a href="#protokol" className="hover:text-foreground">14 dni</a>
-          <a href="#cennik" className="hover:text-foreground">Cennik</a>
-          <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
-          <Link to="/przypomnienia" className="hover:text-foreground">Przypomnienia</Link>
-          <a href="#faq" className="hover:text-foreground">FAQ</a>
-          <a href="#kontakt" className="hover:text-foreground">Kontakt</a>
+          {navLinks.map((l) =>
+            "to" in l ? (
+              <Link key={l.to} to={l.to} className="hover:text-foreground">{l.label}</Link>
+            ) : (
+              <a key={l.href} href={l.href} className="hover:text-foreground">{l.label}</a>
+            )
+          )}
         </nav>
-        <a
-          href="#konsultacja"
-          className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
-        >
-          Umów konsultację
-        </a>
+
+        <div className="flex items-center gap-3">
+          <a
+            href="#konsultacja"
+            className="hidden md:inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
+          >
+            Umów konsultację
+          </a>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-border/60 text-foreground md:hidden"
+            aria-label={open ? "Zamknij menu" : "Otwórz menu"}
+            aria-expanded={open}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {open ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {open && (
+        <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
+          <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
+            {navLinks.map((l) =>
+              "to" in l ? (
+                <Link key={l.to} to={l.to} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</Link>
+              ) : (
+                <a key={l.href} href={l.href} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</a>
+              )
+            )}
+            <a
+              href="#konsultacja"
+              onClick={() => setOpen(false)}
+              className="mt-2 inline-flex items-center justify-center rounded-sm bg-foreground px-4 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Umów konsultację
+            </a>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
@@ -167,7 +224,7 @@ function Hero() {
           <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
             Protokół kliniczny · DHI · evidence-based
           </p>
-          <h1 className="font-display text-5xl leading-[1.02] md:text-7xl">
+          <h1 className="font-display text-4xl leading-[1.02] break-words sm:text-5xl md:text-7xl">
             Protokół pozabiegowy oparty na ochronie metabolicznej graftów,
             fotobiomodulacji, <em className="text-accent">HBOT</em> i LADD.
           </h1>
@@ -696,7 +753,7 @@ function FAQSection() {
         {FAQ.map((f) => (
           <details key={f.q} className="group py-6">
             <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-              <h3 className="font-display text-xl md:text-2xl">{f.q}</h3>
+              <h3 className="font-display text-xl break-words md:text-2xl">{f.q}</h3>
               <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
                 +
               </span>
@@ -904,7 +961,7 @@ function Pricing() {
               <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
                 {p.code}
               </span>
-              <h3 className="mt-3 font-display text-2xl md:text-3xl">{p.name}</h3>
+              <h3 className="mt-3 font-display text-2xl break-words md:text-3xl">{p.name}</h3>
               <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
                 {p.params}
               </p>
@@ -974,12 +1031,12 @@ function Pricing() {
       </p>
 
       <div className="mt-16">
-        <h3 className="font-display text-2xl md:text-3xl">Pytania o pakiety i rozliczenia</h3>
+        <h3 className="font-display text-2xl break-words md:text-3xl">Pytania o pakiety i rozliczenia</h3>
         <div className="mt-8 divide-y divide-border border-y border-border">
           {PRICING_FAQ.map((f) => (
             <details key={f.q} className="group py-6">
               <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-                <h4 className="font-display text-xl md:text-2xl">{f.q}</h4>
+                <h4 className="font-display text-xl break-words md:text-2xl">{f.q}</h4>
                 <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
                   +
                 </span>
@@ -1022,7 +1079,7 @@ function CTA() {
           <div className="md:col-span-4">
             <a
               href="mailto:kontakt@protokol.example"
-              className="inline-flex w-full items-center justify-center rounded-sm bg-accent px-6 py-4 text-base font-medium text-accent-foreground transition hover:opacity-90"
+              className="flex w-full items-center justify-center rounded-sm bg-accent px-6 py-4 text-base font-medium text-accent-foreground transition hover:opacity-90"
             >
               Umów konsultację →
             </a>
@@ -1127,7 +1184,7 @@ function Section({
 function SectionHeader({ title, lead }: { title: string; lead?: React.ReactNode }) {
   return (
     <div className="mb-12 max-w-3xl">
-      <h2 className="font-display text-4xl md:text-5xl">{title}</h2>
+      <h2 className="font-display text-3xl break-words md:text-5xl">{title}</h2>
       {lead && <div className="mt-6 text-base text-muted-foreground md:text-lg">{lead}</div>}
     </div>
   );
@@ -1149,7 +1206,7 @@ function Card({
   return (
     <article className="flex flex-col rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8">
       <div className="mb-4 flex items-start justify-between gap-4">
-        <h3 className="font-display text-2xl md:text-3xl">{title}</h3>
+        <h3 className="font-display text-2xl break-words md:text-3xl">{title}</h3>
         {badge && (
           <span className="shrink-0 rounded-sm border border-accent/40 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-accent">
             {badge}
