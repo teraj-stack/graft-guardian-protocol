@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
+import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
 import { Route as PanelRouteImport } from './routes/panel'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
@@ -26,6 +27,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const PrzypomnieniaRoute = PrzypomnieniaRouteImport.update({
   id: '/przypomnienia',
   path: '/przypomnienia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrywatnoscRoute = PrywatnoscRouteImport.update({
+  id: '/prywatnosc',
+  path: '/prywatnosc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PanelRoute = PanelRouteImport.update({
@@ -65,6 +71,7 @@ const ApiPublicRemindersDispatchRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/panel': typeof PanelRoute
+  '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/panel': typeof PanelRoute
+  '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/panel': typeof PanelRoute
+  '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/panel'
+    | '/prywatnosc'
     | '/przypomnienia'
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/panel'
+    | '/prywatnosc'
     | '/przypomnienia'
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/panel'
+    | '/prywatnosc'
     | '/przypomnienia'
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PanelRoute: typeof PanelRoute
+  PrywatnoscRoute: typeof PrywatnoscRoute
   PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
@@ -150,6 +163,13 @@ declare module '@tanstack/react-router' {
       path: '/przypomnienia'
       fullPath: '/przypomnienia'
       preLoaderRoute: typeof PrzypomnieniaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prywatnosc': {
+      id: '/prywatnosc'
+      path: '/prywatnosc'
+      fullPath: '/prywatnosc'
+      preLoaderRoute: typeof PrywatnoscRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/panel': {
@@ -212,6 +232,7 @@ const PrzypomnieniaRouteWithChildren = PrzypomnieniaRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PanelRoute: PanelRoute,
+  PrywatnoscRoute: PrywatnoscRoute,
   PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
