@@ -161,8 +161,12 @@ export const Route = createFileRoute("/api/public/hooks/security-watch")({
 
         // 7. Persist snapshot if changed (keep history compact)
         if (changed) {
-          await supabaseAdmin
-            .from("security_watch_snapshots" as never)
+          await (supabaseAdmin as unknown as {
+            from: (t: string) => {
+              insert: (row: Record<string, unknown>) => Promise<unknown>;
+            };
+          })
+            .from("security_watch_snapshots")
             .insert({ findings: fullFindings, fingerprint });
         }
 
