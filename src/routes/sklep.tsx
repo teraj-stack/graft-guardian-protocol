@@ -62,7 +62,7 @@ function Shop() {
         </h1>
         <p className="mt-4 max-w-2xl text-muted-foreground">
           Wybrane preparaty i akcesoria, których używamy w protokole. Wszystkie produkty wysyłane
-          bezpośrednio ze sklepu Graftgen.
+          bezpośrednio ze sklepu Graftgen.com
         </p>
 
         <div className="mt-12">
