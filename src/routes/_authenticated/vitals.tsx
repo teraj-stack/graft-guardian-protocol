@@ -131,6 +131,7 @@ function VitalsPage() {
   const [pdfOrientation, setPdfOrientation] = useState<"portrait" | "landscape">("landscape");
   const [pdfMetadata, setPdfMetadata] = useState(true);
   const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
+  const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
