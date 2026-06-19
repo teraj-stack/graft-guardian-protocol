@@ -479,7 +479,7 @@ function HBOT() {
 
 function LADD() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [showDeleted, setShowDeleted] = useState(false);
+  
 
   useEffect(() => {
     const video = videoRef.current;
