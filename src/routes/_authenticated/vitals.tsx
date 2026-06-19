@@ -403,6 +403,18 @@ function VitalsPage() {
               <option value="portrait">Portrait</option>
             </select>
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Zawartość PDF</label>
+            <select
+              value={pdfMode}
+              onChange={(e) => setPdfMode(e.target.value as typeof pdfMode)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="table">Tabela</option>
+              <option value="chart">Wykres trendu</option>
+              <option value="both">Wykres + tabela</option>
+            </select>
+          </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
             <input
               type="checkbox"
