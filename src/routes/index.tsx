@@ -516,7 +516,7 @@ function LADD() {
               </>
             }
           />
-          <div className="mt-auto flex flex-wrap items-end gap-3 pt-8">
+          <div className="mt-auto grid grid-cols-2 gap-3 pt-8 md:grid-cols-4">
             {[
               { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
               { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
@@ -525,7 +525,7 @@ function LADD() {
             ].map((logo) => (
               <div
                 key={logo.alt}
-                className="flex h-[104px] w-[104px] items-center justify-center rounded-sm border border-border/60 bg-card p-2 md:h-[125px] md:w-[125px]"
+                className="flex aspect-square items-center justify-center rounded-sm border border-border/60 bg-card p-3"
               >
                 <img
                   src={logo.src}
