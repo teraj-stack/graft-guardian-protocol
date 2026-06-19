@@ -181,7 +181,7 @@ export function Journey() {
               <li>· Lista zakupowa preparatów (HOCI, szampon pH 5,5, maść)</li>
               <li>· Diagramy: pozycja spania, technika mycia, kąt natrysku</li>
               <li>· Czerwone flagi wymagające kontaktu z kliniką</li>
-              <li>· Plan reintrodukcji aktywności (sport, sauna, basen, słońce)</li>
+              <li>· Plan powrotu do aktywności (sport, sauna, basen, słońce)</li>
             </ul>
           </div>
         </aside>
