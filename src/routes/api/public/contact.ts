@@ -44,7 +44,7 @@ export const Route = createFileRoute("/api/public/contact")({
             { status: 400, headers: corsHeaders() }
           );
         }
-        const { name, email, message, website } = parsed.data;
+        const { name, email, message, topic, website } = parsed.data;
         // Honeypot tripped → silently accept
         if (website && website.length > 0) {
           return Response.json({ ok: true }, { headers: corsHeaders() });
