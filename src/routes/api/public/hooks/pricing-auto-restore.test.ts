@@ -1,5 +1,26 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+const updateCalls: Array<{ values: unknown; lteCol: string; lteVal: string }> =
+  [];
+let updateError: { message: string } | null = null;
+
+vi.mock("@/integrations/supabase/client.server", () => {
+  return {
+    supabaseAdmin: {
+      from: (_table: string) => ({
+        update: (values: unknown) => ({
+          lte: (col: string, val: string) => {
+            updateCalls.push({ values, lteCol: col, lteVal: val });
+            return Promise.resolve({ error: updateError });
+          },
+        }),
+      }),
+    },
+  };
+});
+
 import { Route } from "./pricing-auto-restore";
+
 
 const handler = (Route.options as any).server.handlers.POST as (ctx: {
   request: Request;
