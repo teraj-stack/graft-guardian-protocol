@@ -78,6 +78,7 @@ export const STOREFRONT_PRODUCTS_QUERY = `
                 id
                 title
                 price { amount currencyCode }
+                compareAtPrice { amount currencyCode }
                 availableForSale
                 selectedOptions { name value }
               }
