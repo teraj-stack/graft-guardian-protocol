@@ -95,22 +95,22 @@ function ProductPage() {
                 return (
                   <div className="mt-4 flex flex-wrap items-baseline gap-3">
                     <span className="text-xl font-semibold">
-                      {priceN.toFixed(2)} {price.currencyCode}
+                      {formatMoney(priceN)} {price.currencyCode}
                     </span>
                     {hasDiscount && (
                       <>
                         <span className="text-base text-muted-foreground line-through">
-                          {compareN.toFixed(2)} {compare!.currencyCode}
+                          {formatMoney(compareN)} {compare!.currencyCode}
                         </span>
                         <span className="rounded-sm bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent">
-                          −{pct}% • oszczędzasz {(compareN - priceN).toFixed(2)} {price.currencyCode}
+                          −{pct}% • oszczędzasz {formatMoney(compareN - priceN)} {price.currencyCode}
                         </span>
                       </>
                     )}
                     {sessions > 0 && (
                       <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">{(perSession).toFixed(2)} {price.currencyCode}</span> / sesja
-                        <span title={`Cena za 1 sesję = cena pakietu (${priceN.toFixed(2)} ${price.currencyCode}) ÷ ${sessions} sesji`}>
+                        <span className="font-medium text-foreground">{formatMoney(perSession)} {price.currencyCode}</span> / sesja
+                        <span title={`Cena za 1 sesję = cena pakietu (${formatMoney(priceN)} ${price.currencyCode}) ÷ ${sessions} sesji`}>
                           <Info className="h-3.5 w-3.5 cursor-help text-muted-foreground/70" />
                         </span>
                       </span>
@@ -153,12 +153,12 @@ function ProductPage() {
                             )}
                           </span>
                           <span className={`text-xs ${active ? "text-background/80" : "text-muted-foreground"}`}>
-                            {p.toFixed(0)} {v.node.price.currencyCode}
-                            {pct > 0 && <span className="ml-1 line-through opacity-70">{c.toFixed(0)}</span>}
+                            {formatMoney(p)} {v.node.price.currencyCode}
+                            {pct > 0 && <span className="ml-1 line-through opacity-70">{formatMoney(c)}</span>}
                             {vSessions > 0 && (
                               <span className={`ml-1.5 inline-flex items-center gap-0.5 text-[10px] ${active ? "text-background/70" : "text-muted-foreground/70"}`}>
-                                ({vPerSession.toFixed(0)}/sesja)
-                                <span title={`Cena za 1 sesję = cena pakietu (${p.toFixed(2)} ${v.node.price.currencyCode}) ÷ ${vSessions} sesji`}>
+                                ({formatMoney(vPerSession)}/sesja)
+                                <span title={`Cena za 1 sesję = cena pakietu (${formatMoney(p)} ${v.node.price.currencyCode}) ÷ ${vSessions} sesji`}>
                                   <Info className="h-3 w-3 cursor-help opacity-70" />
                                 </span>
                               </span>
@@ -497,7 +497,7 @@ function SessionPlans({ product, currentVariant }: { product: any; currentVarian
   const pricePerSession = (variant: any) => {
     const n = parseInt(variant.title.match(/\d+/)?.[0] ?? "1", 10);
     const amount = parseFloat(variant.price.amount);
-    return (amount / n).toFixed(2);
+    return formatMoney(amount / n);
   };
 
   const priceRange = useMemo(() => {
@@ -505,7 +505,7 @@ function SessionPlans({ product, currentVariant }: { product: any; currentVarian
     if (!prices.length) return null;
     const min = Math.min(...prices);
     const max = Math.max(...prices);
-    return { min: min.toFixed(2), max: max.toFixed(2), currency: variants[0]?.price?.currencyCode ?? "PLN" };
+    return { min: formatMoney(min), max: formatMoney(max), currency: variants[0]?.price?.currencyCode ?? "PLN" };
   }, [variants]);
 
   return (
@@ -559,7 +559,7 @@ function SessionPlans({ product, currentVariant }: { product: any; currentVarian
                   <div className="mt-5 border-t border-border/40 pt-4">
                     <div className="flex items-baseline justify-between">
                       <span className="text-sm text-muted-foreground">
-                        {parseFloat(variant.price.amount).toFixed(2)} {variant.price.currencyCode}
+                        {formatMoney(parseFloat(variant.price.amount))} {variant.price.currencyCode}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         ~{pricePerSession(variant)} {variant.price.currencyCode} / sesja
