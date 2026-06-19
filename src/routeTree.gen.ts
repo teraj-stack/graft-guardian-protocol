@@ -24,6 +24,7 @@ import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
@@ -105,6 +106,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicVitalsRoute = ApiPublicVitalsRouteImport.update({
+  id: '/api/public/vitals',
+  path: '/api/public/vitals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   id: '/api/public/contact',
   path: '/api/public/contact',
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   ProductHandleRoute: typeof ProductHandleRoute
   RaportyStatusRoute: typeof RaportyStatusRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicVitalsRoute: typeof ApiPublicVitalsRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
@@ -407,6 +420,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/vitals': {
+      id: '/api/public/vitals'
+      path: '/api/public/vitals'
+      fullPath: '/api/public/vitals'
+      preLoaderRoute: typeof ApiPublicVitalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/contact': {
       id: '/api/public/contact'
       path: '/api/public/contact'
@@ -491,6 +511,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductHandleRoute: ProductHandleRoute,
   RaportyStatusRoute: RaportyStatusRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicVitalsRoute: ApiPublicVitalsRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
