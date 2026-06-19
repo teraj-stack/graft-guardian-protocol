@@ -110,15 +110,18 @@ for (const rel of listFiles()) {
       }
     }
 
-    // 3) Adres: jesli linia mowi o ulicy/miescie, musi byc kanoniczna.
+    // 3) Adres: jesli linia mowi o ulicy/miescie/kodzie, kanoniczne
+    // komponenty musza pojawic sie w obrebie 2 sasiednich linii
+    // (dopuszczamy lamanie HTML <br />).
     const mentionsAddr = /Kominka|Rybnik|44-217/i.test(line);
     if (mentionsAddr) {
-      const okStreet = line.includes("Kominka 44");
-      const okCity = line.includes(CANONICAL_CITY);
-      const okPost = line.includes(CANONICAL_POSTCODE);
-      if (!(okStreet && okCity && okPost)) {
-        // Linia zawiera fragment adresu — wymagamy pelnego, kanonicznego zapisu
-        // w obrebie tego samego bloku tekstu (linii).
+      const window = [lines[i - 1] || "", line, lines[i + 1] || ""].join("\n");
+      const okStreet = window.includes("Kominka 44");
+      const okCity = window.includes(CANONICAL_CITY);
+      const okPost = window.includes(CANONICAL_POSTCODE);
+      // Forbidden artefakty starego adresu (gdyby pozostal np. inny kod/miasto)
+      const badPost = /\b\d{2}-\d{3}\b/.test(window) && !window.includes(CANONICAL_POSTCODE);
+      if (!(okStreet && okCity && okPost) || badPost) {
         report(rel, ln, "address", line, `${CANONICAL_STREET}, ${CANONICAL_POSTCODE} ${CANONICAL_CITY}`);
       }
     }
