@@ -474,7 +474,7 @@ function LADD() {
           <div className="mt-auto flex flex-wrap items-end gap-3 pt-8">
             {[
               { src: mscLogo.url, alt: "MySkinCode" },
-              { src: bujokLogo.url, alt: "Bujok Medical" },
+              { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions" },
               { src: mabelLogo.url, alt: "Mabel Hair Clinic" },
             ].map((logo) => (
               <div
@@ -1160,7 +1160,7 @@ function Footer() {
               <img src={mscLogo.url} alt="MySkinCode — Technical Support MedTech SaaS" className="max-h-full max-w-full object-contain" loading="lazy" />
             </div>
             <div className="flex items-center justify-center rounded-md bg-black p-4 h-24">
-              <img src={bujokLogo.url} alt="Bujok Medical" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={bujokLogo.url} alt="Medical Lasers and STEM Cells Solutions" className="max-h-full max-w-full object-contain" loading="lazy" />
             </div>
             <div className="flex items-center justify-center rounded-md bg-[#3f4a73] p-4 h-24">
               <img src={mabelLogo.url} alt="Mabel Hair — Hair Transplant Clinic" className="max-h-full max-w-full object-contain" loading="lazy" />
