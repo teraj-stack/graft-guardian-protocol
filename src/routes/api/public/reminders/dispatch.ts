@@ -35,11 +35,15 @@ function daysBetween(today: Date, surgery: string): number {
   return Math.floor((t.getTime() - s.getTime()) / 86_400_000);
 }
 
-// Map day-since-surgery to the matching week trigger (only the FIRST day of each week sends).
-function weekTriggeredOnDay(day: number): number | null {
-  if (day < 7 || day > 12 * 7) return null;
-  if (day % 7 !== 0) return null;
-  return day / 7; // day 7 -> week 1, day 14 -> week 2, …, day 84 -> week 12
+// Return every week (1..12) whose trigger day (7*N) has already passed.
+// Catch-up: if cron missed day 7N, week N still fires the first time we run
+// after that day. The reminder_sends idempotency check prevents double sends.
+function dueWeeksForDay(day: number): number[] {
+  if (day < 7) return [];
+  const maxWeek = Math.min(12, Math.floor(day / 7));
+  const weeks: number[] = [];
+  for (let w = 1; w <= maxWeek; w++) weeks.push(w);
+  return weeks;
 }
 
 export const Route = createFileRoute("/api/public/reminders/dispatch")({
