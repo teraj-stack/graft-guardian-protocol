@@ -52,10 +52,20 @@ function TeamReportStatus() {
     to: toIso(to, true),
   };
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["report-sends", status, email, from, to],
     queryFn: () => fetchAll({ data: filters }),
+    placeholderData: keepPreviousData,
+    staleTime: 30_000,
   });
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
+
+  // Reset to first page whenever filters change
+  useEffect(() => {
+    setPage(1);
+  }, [status, email, from, to, pageSize]);
 
   const stats = useMemo(() => {
     const rows = data ?? [];
