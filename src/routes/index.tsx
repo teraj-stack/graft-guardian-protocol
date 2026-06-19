@@ -961,7 +961,7 @@ function Pricing() {
               <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
                 {p.code}
               </span>
-              <h3 className="mt-3 font-display text-2xl md:text-3xl">{p.name}</h3>
+              <h3 className="mt-3 font-display text-2xl break-words md:text-3xl">{p.name}</h3>
               <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
                 {p.params}
               </p>
@@ -1031,7 +1031,7 @@ function Pricing() {
       </p>
 
       <div className="mt-16">
-        <h3 className="font-display text-2xl md:text-3xl">Pytania o pakiety i rozliczenia</h3>
+        <h3 className="font-display text-2xl break-words md:text-3xl">Pytania o pakiety i rozliczenia</h3>
         <div className="mt-8 divide-y divide-border border-y border-border">
           {PRICING_FAQ.map((f) => (
             <details key={f.q} className="group py-6">
@@ -1206,7 +1206,7 @@ function Card({
   return (
     <article className="flex flex-col rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8">
       <div className="mb-4 flex items-start justify-between gap-4">
-        <h3 className="font-display text-2xl md:text-3xl">{title}</h3>
+        <h3 className="font-display text-2xl break-words md:text-3xl">{title}</h3>
         {badge && (
           <span className="shrink-0 rounded-sm border border-accent/40 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-accent">
             {badge}
