@@ -312,8 +312,8 @@ function Why() {
           pobrania do rewaskularyzacji w łożysku biorczym przeżywa wyłącznie
           dzięki dyfuzji tlenu z osocza otaczającego miejsce przeszczepu.
           Pierwsze naczynia włosowate dochodzą do brodawki włosa zwykle między
-          48. a 96. godziną. Dla niedotlenionej cebulki włosa to krytyczny
-          okres, który determinuje przyjęcie ostateczny efekt zabiegu.
+          48 - 96godz. Dla niedotlenionej cebulki włosa to krytyczny okres,
+          który determinuje przyjęcie ostateczny efekt zabiegu.
         </Para>
         <Para>
           W tym czasie komórki macierzyste wybrzuszenia (bulge) i komórki
@@ -324,8 +324,8 @@ function Why() {
         <Para>
           Kortyzol pacjenta w stresie pozabiegowym jest wazokonstryktorem.
           Lęk, ból i dezinformacja realnie pogarszają perfuzję skóry głowy
-          — dlatego &bdquo;znieczulenie wiedzą&rdquo; nie jest miękkim
-          dodatkiem, tylko parametrem klinicznym.
+          — dlatego koordynacja opieki pozabiegowej nie jest dodatkiem,
+          tylko parametrem klinicznym.
         </Para>
       </div>
     </Section>
