@@ -201,7 +201,14 @@ function Nav() {
       {open && (
         <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
           <div className="mb-4 flex justify-center">
-            <img src={graftgenLogo.url} alt="Graftgen.com" className="h-14 w-auto" />
+            <img
+              src={graftgenLogo.url}
+              alt="Graftgen.com"
+              width={415}
+              height={531}
+              decoding="async"
+              className="h-14 w-auto"
+            />
           </div>
           <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
             {navLinks.map((l) =>
