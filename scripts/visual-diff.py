@@ -29,7 +29,28 @@ Seeding baselines locally::
 Env:
   VISUAL_OUT          (default: visual-report)
   VISUAL_BASELINES    (default: tests/visual-baselines)
-  VISUAL_DIFF_THRESHOLD pct, default 1.0
+  VISUAL_DIFF_THRESHOLD                 global default pct (default 1.0)
+  VISUAL_DIFF_THRESHOLD_<SECTION>       per-section override (PBM, HBOT, LADD)
+  VISUAL_DIFF_THRESHOLD_<VIEWPORT>      per-viewport override (DESKTOP, MOBILE)
+  VISUAL_DIFF_THRESHOLD_<SECTION>_<VP>  per-section + per-viewport (highest priority)
+
+  Resolution order (most specific wins):
+    1. env VISUAL_DIFF_THRESHOLD_<SECTION>_<VIEWPORT>
+    2. config thresholds[section][viewport]
+    3. env VISUAL_DIFF_THRESHOLD_<SECTION>
+    4. config thresholds[section]["default"]
+    5. env VISUAL_DIFF_THRESHOLD_<VIEWPORT>
+    6. config thresholds["default"][viewport]
+    7. env VISUAL_DIFF_THRESHOLD  /  config thresholds["default"]["default"]
+    8. built-in default 1.0
+
+  Optional config: tests/visual-baselines/thresholds.json
+    {
+      "default": { "default": 1.0, "desktop": 1.0, "mobile": 1.5 },
+      "pbm":     { "default": 0.5 },
+      "hbot":    { "default": 0.5 },
+      "ladd":    { "desktop": 0.75, "mobile": 1.25 }
+    }
 """
 
 from __future__ import annotations
@@ -46,10 +67,84 @@ from PIL import Image, ImageChops, ImageFilter
 OUT = Path(os.environ.get("VISUAL_OUT", "visual-report"))
 BASELINES = Path(os.environ.get("VISUAL_BASELINES", "tests/visual-baselines"))
 DIFF_DIR = OUT / "diff"
-THRESHOLD_PCT = float(os.environ.get("VISUAL_DIFF_THRESHOLD", "1.0"))
+THRESHOLD_DEFAULT = float(os.environ.get("VISUAL_DIFF_THRESHOLD", "1.0"))
+THRESHOLD_CONFIG_PATH = BASELINES / "thresholds.json"
+SECTIONS = ("pbm", "hbot", "ladd")
 
 # Pixel intensity (0-255) above which a channel-delta counts as "changed".
 PIXEL_NOISE = 12
+
+
+def _load_threshold_config() -> dict:
+    if not THRESHOLD_CONFIG_PATH.exists():
+        return {}
+    try:
+        return json.loads(THRESHOLD_CONFIG_PATH.read_text())
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"warning: failed to read {THRESHOLD_CONFIG_PATH}: {e}", file=sys.stderr)
+        return {}
+
+
+THRESHOLD_CONFIG = _load_threshold_config()
+
+
+def _classify_section(name: str) -> str | None:
+    low = name.lower()
+    for s in SECTIONS:
+        if s in low:
+            return s
+    return None
+
+
+def _env_threshold(*parts: str) -> float | None:
+    key = "VISUAL_DIFF_THRESHOLD_" + "_".join(p.upper() for p in parts)
+    v = os.environ.get(key)
+    if v is None:
+        return None
+    try:
+        return float(v)
+    except ValueError:
+        print(f"warning: {key}={v!r} is not a number, ignoring", file=sys.stderr)
+        return None
+
+
+def _cfg_threshold(section: str, viewport: str) -> float | None:
+    s = THRESHOLD_CONFIG.get(section)
+    if not isinstance(s, dict):
+        return None
+    v = s.get(viewport)
+    return float(v) if isinstance(v, (int, float)) else None
+
+
+def resolve_threshold(viewport: str, name: str) -> tuple[float, str]:
+    """Return (threshold_pct, source) for a given screenshot."""
+    section = _classify_section(name)
+    vp = viewport.lower()
+
+    if section:
+        v = _env_threshold(section, vp)
+        if v is not None:
+            return v, f"env:{section}+{vp}"
+        v = _cfg_threshold(section, vp)
+        if v is not None:
+            return v, f"config:{section}.{vp}"
+        v = _env_threshold(section)
+        if v is not None:
+            return v, f"env:{section}"
+        v = _cfg_threshold(section, "default")
+        if v is not None:
+            return v, f"config:{section}.default"
+
+    v = _env_threshold(vp)
+    if v is not None:
+        return v, f"env:{vp}"
+    v = _cfg_threshold("default", vp)
+    if v is not None:
+        return v, f"config:default.{vp}"
+    v = _cfg_threshold("default", "default")
+    if v is not None:
+        return v, "config:default.default"
+    return THRESHOLD_DEFAULT, "default"
 
 
 def _normalize(a: Image.Image, b: Image.Image) -> tuple[Image.Image, Image.Image]:
@@ -156,13 +251,18 @@ def render_html(report: dict) -> str:
               <header>
                 <h2>{r['viewport']} / {r['name']}</h2>
                 <span class="badge" style="background:{color}">{status}</span>
-                <span class="meta">changed: {r['changed_pct']:.2f}%</span>
+                <span class="meta">changed: {r['changed_pct']:.2f}% · threshold: {r.get('threshold_pct', 0):.2f}% ({r.get('threshold_source', '-')})</span>
               </header>
               {cells}
             </section>
             """
         )
     summary = report["summary"]
+    th = report.get("thresholds_effective", {})
+    th_rows = "".join(
+        f"<tr><td>{k}</td><td>{v['pct']:.2f}%</td><td>{v['source']}</td></tr>"
+        for k, v in sorted(th.items())
+    )
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8" />
 <title>Visual logo diff report</title>
@@ -177,13 +277,17 @@ def render_html(report: dict) -> str:
   .meta {{ font-size:12px; color:#8b93a4; margin-left:auto; }}
   img {{ max-width:100%; display:block; border:1px solid #242833; border-radius:6px; }}
   .missing {{ color:#b8852b; margin:6px 0; }}
+  table.th {{ border-collapse:collapse; margin:0 0 24px; font-size:12px; }}
+  table.th td {{ border:1px solid #242833; padding:4px 10px; color:#a9b0bd; }}
+  table.th td:first-child {{ color:#e7e9ee; font-family:ui-monospace,monospace; }}
 </style></head>
 <body>
   <h1>Visual logo diff</h1>
   <p class="summary">
     {summary['total']} pairs · {summary['regressions']} regressions ·
-    {summary['missing_baselines']} new · threshold {THRESHOLD_PCT:.2f}%
+    {summary['missing_baselines']} new · default threshold {THRESHOLD_DEFAULT:.2f}%
   </p>
+  <table class="th"><thead><tr><td>section / viewport</td><td>threshold</td><td>source</td></tr></thead><tbody>{th_rows}</tbody></table>
   {''.join(rows)}
 </body></html>"""
 
@@ -244,15 +348,19 @@ def main() -> int:
 
         ratio = _changed_ratio(diff)
         pct = ratio * 100.0
-        ok = pct <= THRESHOLD_PCT
+        threshold_pct, threshold_source = resolve_threshold(vp, name)
+        ok = pct <= threshold_pct
         if not ok:
             regressions += 1
         images.append({
             "viewport": vp,
             "name": name,
+            "section": _classify_section(name),
             "status": "ok",
             "ok": ok,
             "changed_pct": pct,
+            "threshold_pct": threshold_pct,
+            "threshold_source": threshold_source,
             "baseline": str(baseline_copy.relative_to(DIFF_DIR)),
             "current": str(current_copy.relative_to(DIFF_DIR)),
             "heatmap": str(heat_path.relative_to(DIFF_DIR)),
@@ -260,8 +368,18 @@ def main() -> int:
             "sidebyside": str(side_path.relative_to(DIFF_DIR)),
         })
 
+    # Effective threshold matrix for every (section, viewport) combo we know.
+    viewports = sorted({i["viewport"] for i in images}) or ["desktop", "mobile"]
+    thresholds_effective: dict[str, dict] = {}
+    for section in (*SECTIONS, "default"):
+        for vp in viewports:
+            probe = f"{section}-probe" if section != "default" else "other-probe"
+            pct, src = resolve_threshold(vp, probe)
+            thresholds_effective[f"{section}/{vp}"] = {"pct": pct, "source": src}
+
     report = {
-        "threshold_pct": THRESHOLD_PCT,
+        "threshold_default_pct": THRESHOLD_DEFAULT,
+        "thresholds_effective": thresholds_effective,
         "summary": {
             "total": len(images),
             "regressions": regressions,
@@ -274,8 +392,15 @@ def main() -> int:
 
     print(
         f"diff: {len(images)} pairs, {regressions} regression(s), "
-        f"{missing} missing baseline(s). threshold={THRESHOLD_PCT:.2f}%"
+        f"{missing} missing baseline(s). default threshold={THRESHOLD_DEFAULT:.2f}%"
     )
+    for img in images:
+        if img["status"] == "ok" and not img["ok"]:
+            print(
+                f"  REGRESSION {img['viewport']}/{img['name']}: "
+                f"{img['changed_pct']:.2f}% > {img['threshold_pct']:.2f}% "
+                f"({img['threshold_source']})"
+            )
     if missing and not any(i["status"] == "ok" for i in images):
         print("No baselines committed yet. Run with --update-baselines to seed.")
         return 2
