@@ -11,7 +11,9 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
-import { getVitalsSummary } from "@/lib/vitals.functions";
+import { getVitalsSummary, exportVitalsCsv } from "@/lib/vitals.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
   head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen" }] }),
@@ -120,7 +122,32 @@ function VitalsPage() {
     queryFn: () => getVitalsSummary(),
   });
   const [range, setRange] = useState<7 | 28>(7);
+  const [expMetric, setExpMetric] = useState<"all" | "CLS" | "LCP" | "INP" | "FCP" | "TTFB">("all");
+  const [expDevice, setExpDevice] = useState<"all" | "mobile" | "desktop" | "tablet">("all");
+  const [exporting, setExporting] = useState(false);
+  const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
+      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`Wyeksportowano ${res.count} rekordów`);
+    } catch (e) {
+      toast.error(`Eksport nie powiódł się: ${(e as Error).message}`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -150,6 +177,57 @@ function VitalsPage() {
         <TrendChart metric="CLS" data={trend} unit="" />
         <TrendChart metric="LCP" data={trend} unit="ms" />
         <TrendChart metric="INP" data={trend} unit="ms" />
+      </div>
+
+      <div className="rounded-md border bg-card p-4 mb-10">
+        <div className="flex flex-wrap items-end gap-3">
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Zakres</label>
+            <select
+              value={range}
+              onChange={(e) => setRange(Number(e.target.value) as 7 | 28)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value={7}>7 dni</option>
+              <option value={28}>28 dni</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Metryka</label>
+            <select
+              value={expMetric}
+              onChange={(e) => setExpMetric(e.target.value as typeof expMetric)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="all">Wszystkie</option>
+              <option value="CLS">CLS</option>
+              <option value="LCP">LCP</option>
+              <option value="INP">INP</option>
+              <option value="FCP">FCP</option>
+              <option value="TTFB">TTFB</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Urządzenie</label>
+            <select
+              value={expDevice}
+              onChange={(e) => setExpDevice(e.target.value as typeof expDevice)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="all">Wszystkie</option>
+              <option value="mobile">Mobile</option>
+              <option value="desktop">Desktop</option>
+              <option value="tablet">Tablet</option>
+            </select>
+          </div>
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="h-9 px-4 rounded-md bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50"
+          >
+            {exporting ? "Eksportowanie…" : "Eksportuj CSV"}
+          </button>
+        </div>
       </div>
 
       <h2 className="text-lg font-semibold mb-2">Tabela p75 (28 dni)</h2>
