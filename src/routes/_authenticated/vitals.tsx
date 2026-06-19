@@ -124,6 +124,8 @@ function VitalsPage() {
   const [range, setRange] = useState<7 | 28>(7);
   const [expMetric, setExpMetric] = useState<"all" | "CLS" | "LCP" | "INP" | "FCP" | "TTFB">("all");
   const [expDevice, setExpDevice] = useState<"all" | "mobile" | "desktop" | "tablet">("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [exporting, setExporting] = useState(false);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
