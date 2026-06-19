@@ -1,7 +1,8 @@
-// Cron-triggered dispatcher. Called by pg_cron with the Supabase anon key
-// in the `apikey` header (Lovable convention). The /api/public/* prefix
-// already bypasses auth at the edge; we additionally verify the apikey to
-// avoid public abuse.
+// Cron-triggered dispatcher. Called by pg_cron with a dedicated CRON_SECRET
+// in the `x-cron-secret` header. The /api/public/* prefix bypasses edge auth,
+// so this server-only secret is the sole gate against public abuse.
+// Do NOT fall back to the Supabase anon/publishable key — it ships in the
+// client bundle and is therefore not a secret.
 
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -45,12 +46,9 @@ export const Route = createFileRoute("/api/public/reminders/dispatch")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = request.headers.get("apikey");
-        const expected =
-          process.env.SUPABASE_PUBLISHABLE_KEY ||
-          process.env.SUPABASE_ANON_KEY ||
-          "";
-        if (!expected || apiKey !== expected) {
+        const cronSecret = request.headers.get("x-cron-secret");
+        const expected = process.env.CRON_SECRET;
+        if (!expected || !cronSecret || cronSecret !== expected) {
           return new Response("Unauthorized", { status: 401 });
         }
 
