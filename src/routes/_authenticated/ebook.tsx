@@ -175,7 +175,7 @@ function ChapterEditor({
               className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm"
             />
           </Field>
-          <Field label="Etykieta dnia (np. „Dni 1–2")">
+          <Field label={'Etykieta dnia (np. „Dni 1–2")'}>
             <input
               value={d.day_label}
               onChange={(e) => setD({ ...d, day_label: e.target.value })}
