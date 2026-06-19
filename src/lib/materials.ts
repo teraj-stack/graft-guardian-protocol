@@ -60,7 +60,7 @@ export const MATERIALS: Material[] = [
     id: "m04",
     title: "Fotobiomodulacja w domu — hełm 650/830 nm",
     description:
-      "Jak ustawić sesje 20 min, częstotliwość 3–4×/tydzień, dawki J/cm², krzywa Arndta-Schulza i dlaczego więcej nie znaczy lepiej.",
+      "Jak ustawić sesje 20 min, częstotliwość 2x dziennie/tydz., dawki J/cm², krzywa Arndta-Schulza i dlaczego więcej nie znaczy lepiej.",
     category: "PBM",
     type: "Artykuł",
     weeks: [2, 3, 4, 6, 8, 12],
