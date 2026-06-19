@@ -127,6 +127,9 @@ function ProductPage() {
           </div>
         )}
       </section>
+
+      {product && <SessionPlans product={product} currentVariant={currentVariant} />}
     </div>
   );
 }
+
