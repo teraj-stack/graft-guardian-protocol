@@ -82,6 +82,10 @@ export function CartDrawer() {
                           <img
                             src={item.product.node.images.edges[0].node.url}
                             alt={item.product.node.title}
+                            width={64}
+                            height={64}
+                            loading="lazy"
+                            decoding="async"
                             className="h-full w-full object-cover"
                           />
                         )}
