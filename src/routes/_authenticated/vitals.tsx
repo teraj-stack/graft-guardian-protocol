@@ -155,6 +155,7 @@ function VitalsPage() {
   const [pdfCompare, setPdfCompare] = useState(false);
   const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(["d0-3", "d4-14"]);
   const [pdfCompareLayout, setPdfCompareLayout] = useState<"overlay" | "side-by-side">("overlay");
+  const [pdfCompareYScale, setPdfCompareYScale] = useState<"shared" | "independent">("shared");
   const toggleCompareWindow = (w: WinKey) =>
     setPdfCompareWindows((cur) => (cur.includes(w) ? cur.filter((x) => x !== w) : [...cur, w]));
   const WINDOW_COLORS: Record<WinKey, [number, number, number]> = {
@@ -334,15 +335,17 @@ function VitalsPage() {
               doc.setTextColor(0);
               startY = chartY + chartH + 36;
             } else if (pdfCompareLayout === "side-by-side") {
-              // Shared yMax across windows so subplots are comparable
-              const yMax = Math.max(t.poor * 1.05, ...allVals);
+              const sharedYMax = Math.max(t.poor * 1.05, ...allVals);
               const N = series.length;
               const gap = 18;
               const subW = (chartW - gap * (N - 1)) / N;
               for (let si = 0; si < N; si++) {
                 const s = series[si];
                 const subX = chartX + si * (subW + gap);
-                const yFor = drawAxes(subX, chartY, subW, chartH, t, 0, yMax, m === "CLS", si === N - 1);
+                const subYMax = pdfCompareYScale === "independent"
+                  ? Math.max(t.poor * 1.05, ...(s.vals.length ? s.vals : [t.poor]))
+                  : sharedYMax;
+                const yFor = drawAxes(subX, chartY, subW, chartH, t, 0, subYMax, m === "CLS", si === N - 1);
                 // Subplot title (window label)
                 doc.setFontSize(8);
                 doc.setTextColor(60);
@@ -670,6 +673,19 @@ function VitalsPage() {
                   <option value="side-by-side">Obok siebie (side-by-side)</option>
                 </select>
               </div>
+              {pdfCompareLayout === "side-by-side" && (
+                <div className="mt-2">
+                  <label className="block text-xs text-muted-foreground mb-1">Skala Y podwykresów</label>
+                  <select
+                    value={pdfCompareYScale}
+                    onChange={(e) => setPdfCompareYScale(e.target.value as "shared" | "independent")}
+                    className="h-9 rounded-md border bg-background px-2 text-sm"
+                  >
+                    <option value="shared">Wspólna (porównywalne)</option>
+                    <option value="independent">Niezależna (per okno)</option>
+                  </select>
+                </div>
+              )}
             </div>
           )}
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
