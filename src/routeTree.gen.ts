@@ -22,8 +22,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
@@ -95,6 +97,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedVitalsRoute = AuthenticatedVitalsRouteImport.update({
+  id: '/vitals',
+  path: '/vitals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
   id: '/raporty',
   path: '/raporty',
@@ -104,6 +111,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiPublicVitalsRoute = ApiPublicVitalsRouteImport.update({
+  id: '/api/public/vitals',
+  path: '/api/public/vitals',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   id: '/api/public/contact',
@@ -153,10 +165,12 @@ export interface FileRoutesByFullPath {
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/raporty': typeof AuthenticatedRaportyRoute
+  '/vitals': typeof AuthenticatedVitalsRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
@@ -175,10 +189,12 @@ export interface FileRoutesByTo {
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/raporty': typeof AuthenticatedRaportyRoute
+  '/vitals': typeof AuthenticatedVitalsRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
@@ -199,10 +215,12 @@ export interface FileRoutesById {
   '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
+  '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
@@ -223,10 +241,12 @@ export interface FileRouteTypes {
     | '/sklep'
     | '/admin'
     | '/raporty'
+    | '/vitals'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
@@ -245,10 +265,12 @@ export interface FileRouteTypes {
     | '/sklep'
     | '/admin'
     | '/raporty'
+    | '/vitals'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
@@ -268,10 +290,12 @@ export interface FileRouteTypes {
     | '/sklep'
     | '/_authenticated/admin'
     | '/_authenticated/raporty'
+    | '/_authenticated/vitals'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
@@ -293,6 +317,7 @@ export interface RootRouteChildren {
   ProductHandleRoute: typeof ProductHandleRoute
   RaportyStatusRoute: typeof RaportyStatusRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicVitalsRoute: typeof ApiPublicVitalsRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
@@ -393,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/vitals': {
+      id: '/_authenticated/vitals'
+      path: '/vitals'
+      fullPath: '/vitals'
+      preLoaderRoute: typeof AuthenticatedVitalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/raporty': {
       id: '/_authenticated/raporty'
       path: '/raporty'
@@ -406,6 +438,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/vitals': {
+      id: '/api/public/vitals'
+      path: '/api/public/vitals'
+      fullPath: '/api/public/vitals'
+      preLoaderRoute: typeof ApiPublicVitalsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/contact': {
       id: '/api/public/contact'
@@ -455,11 +494,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
+  AuthenticatedVitalsRoute: typeof AuthenticatedVitalsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
+  AuthenticatedVitalsRoute: AuthenticatedVitalsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -491,6 +532,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductHandleRoute: ProductHandleRoute,
   RaportyStatusRoute: RaportyStatusRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicVitalsRoute: ApiPublicVitalsRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,

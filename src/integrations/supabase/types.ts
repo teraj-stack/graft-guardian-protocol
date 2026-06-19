@@ -228,6 +228,54 @@ export type Database = {
         }
         Relationships: []
       }
+      web_vitals: {
+        Row: {
+          connection: string | null
+          country: string | null
+          created_at: string
+          device: string
+          id: number
+          metric: string
+          metric_id: string | null
+          nav_type: string | null
+          page: string
+          rating: string | null
+          session_id: string
+          user_agent: string | null
+          value: number
+        }
+        Insert: {
+          connection?: string | null
+          country?: string | null
+          created_at?: string
+          device: string
+          id?: number
+          metric: string
+          metric_id?: string | null
+          nav_type?: string | null
+          page: string
+          rating?: string | null
+          session_id: string
+          user_agent?: string | null
+          value: number
+        }
+        Update: {
+          connection?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string
+          id?: number
+          metric?: string
+          metric_id?: string | null
+          nav_type?: string | null
+          page?: string
+          rating?: string | null
+          session_id?: string
+          user_agent?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
