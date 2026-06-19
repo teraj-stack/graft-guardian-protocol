@@ -7,7 +7,7 @@ import { getPricingOverrides } from "@/lib/pricing.functions";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
-import graftgenLogo from "@/assets/graftgen-logo.jpeg.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo-v2.png.asset.json";
 
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
