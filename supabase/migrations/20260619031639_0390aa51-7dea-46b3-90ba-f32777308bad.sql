@@ -1,0 +1,1 @@
+UPDATE public.pricing_overrides SET hidden = false, restore_at = NULL, updated_at = now() WHERE code = 'LADD';
