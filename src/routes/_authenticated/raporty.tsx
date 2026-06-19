@@ -291,3 +291,16 @@ function StatCard({ label, value, accent = "text-slate-100" }: { label: string; 
     </div>
   );
 }
+
+function PagerBtn({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="px-2 py-1 rounded-md border border-slate-700 text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-transparent text-xs"
+    >
+      {children}
+    </button>
+  );
+}
