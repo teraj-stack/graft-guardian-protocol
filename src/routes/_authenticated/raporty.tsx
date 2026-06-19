@@ -70,6 +70,13 @@ function TeamReportStatus() {
     };
   }, [data]);
 
+  function resetFilters() {
+    setStatus("all");
+    setEmail("");
+    setFrom("");
+    setTo("");
+  }
+
   async function handleExport(format: "csv" | "xlsx") {
     setExporting(format);
     try {
