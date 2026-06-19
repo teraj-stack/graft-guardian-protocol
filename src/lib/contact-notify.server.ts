@@ -16,22 +16,49 @@ export interface NotifyResult {
 }
 
 
+export const CONTACT_TOPICS = {
+  konsultacja: {
+    label: "Konsultacja",
+    envKey: "CONTACT_NOTIFY_TO_KONSULTACJA",
+  },
+  zabieg: {
+    label: "Zabieg",
+    envKey: "CONTACT_NOTIFY_TO_ZABIEG",
+  },
+  ladd_prp: {
+    label: "LADD / PRP + minoksydyl",
+    envKey: "CONTACT_NOTIFY_TO_LADD",
+  },
+  inne: {
+    label: "Inne",
+    envKey: "CONTACT_NOTIFY_TO_INNE",
+  },
+} as const;
+
+export type ContactTopic = keyof typeof CONTACT_TOPICS;
+
+function resolveRecipients(topic: ContactTopic | undefined): string[] {
+  const fallback = process.env.CONTACT_NOTIFY_TO || "kontakt@bujokmedical.pl";
+  const topicEnv = topic ? process.env[CONTACT_TOPICS[topic].envKey] : undefined;
+  const raw = (topicEnv && topicEnv.trim().length > 0) ? topicEnv : fallback;
+  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+}
+
 export async function notifyClinicOfContact(args: {
   name: string;
   email: string;
   message: string;
   receivedAt: string;
+  topic?: ContactTopic;
 }): Promise<NotifyResult> {
   const resendKey = process.env.RESEND_API_KEY;
   const lovableKey = process.env.LOVABLE_API_KEY;
-  const toRaw = process.env.CONTACT_NOTIFY_TO || "kontakt@bujokmedical.pl";
-  const recipients = toRaw
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const recipients = resolveRecipients(args.topic);
+  const topicLabel = args.topic ? CONTACT_TOPICS[args.topic].label : "—";
   if (recipients.length === 0) {
     return { status: "skipped", error: "no_recipients" };
   }
+
   if (!resendKey || !lovableKey) {
     return {
       status: "provider_missing",
@@ -41,11 +68,12 @@ export async function notifyClinicOfContact(args: {
   const fromAddress =
     process.env.REMINDER_FROM_EMAIL || "onboarding@resend.dev";
 
-  const subject = `Nowa wiadomość z formularza — ${args.name}`;
+  const subject = `[${topicLabel}] Nowa wiadomość — ${args.name}`;
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;color:#0c121b">
       <h2 style="margin:0 0 16px;font-family:'Cormorant Garamond',serif;font-weight:500">Nowa wiadomość z formularza kontaktowego</h2>
       <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <tr><td style="padding:6px 0;color:#6b7280">Temat</td><td style="padding:6px 0"><strong>${escapeHtml(topicLabel)}</strong></td></tr>
         <tr><td style="padding:6px 0;color:#6b7280">Imię</td><td style="padding:6px 0"><strong>${escapeHtml(args.name)}</strong></td></tr>
         <tr><td style="padding:6px 0;color:#6b7280">E-mail</td><td style="padding:6px 0"><a href="mailto:${escapeHtml(args.email)}">${escapeHtml(args.email)}</a></td></tr>
         <tr><td style="padding:6px 0;color:#6b7280">Otrzymano</td><td style="padding:6px 0">${escapeHtml(args.receivedAt)}</td></tr>
@@ -55,7 +83,8 @@ export async function notifyClinicOfContact(args: {
       <p style="margin-top:24px;font-size:12px;color:#9ca3af">Aby odpowiedzieć pacjentowi, kliknij Reply — adres zwrotny jest ustawiony na e-mail pacjenta.</p>
     </div>
   `;
-  const text = `Nowa wiadomość z formularza\n\nImię: ${args.name}\nE-mail: ${args.email}\nOtrzymano: ${args.receivedAt}\n\n${args.message}`;
+  const text = `Nowa wiadomość z formularza\n\nTemat: ${topicLabel}\nImię: ${args.name}\nE-mail: ${args.email}\nOtrzymano: ${args.receivedAt}\n\n${args.message}`;
+
 
   try {
     const resp = await fetch(
@@ -104,6 +133,7 @@ export async function smsNotifyClinicOfContact(args: {
   name: string;
   email: string;
   message: string;
+  topic?: ContactTopic;
 }): Promise<NotifyResult[]> {
   const twilioKey = process.env.TWILIO_API_KEY;
   const lovableKey = process.env.LOVABLE_API_KEY;
@@ -125,10 +155,12 @@ export async function smsNotifyClinicOfContact(args: {
     ];
   }
 
+  const topicLabel = args.topic ? CONTACT_TOPICS[args.topic].label : "—";
   const body = truncate(
-    `Nowa wiadomosc (Protokol): ${args.name} <${args.email}> — ${args.message}`,
+    `[${topicLabel}] Nowa wiadomosc (Protokol): ${args.name} <${args.email}> — ${args.message}`,
     320
   );
+
 
   const MAX_ATTEMPTS = Number(process.env.SMS_MAX_ATTEMPTS || 3);
   const BASE_DELAY_MS = Number(process.env.SMS_RETRY_BASE_MS || 400);
