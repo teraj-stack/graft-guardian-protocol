@@ -889,7 +889,7 @@ export function EbookLeadMagnet() {
       <div className="grid gap-12 md:grid-cols-12 md:items-start">
         <div className="md:col-span-7">
           <SectionHeader
-            title="Pobierz e-book „Patient Journey" — pierwsze 14 dni po zabiegu DHI."
+            title={'Pobierz e-book „Patient Journey" — pierwsze 14 dni po zabiegu DHI.'}
             lead="Konkretny protokół dzień-po-dniu: HBOT, PBM, mikrobiom, mycie, sen, dieta, czego unikać. Bez lania wody — same instrukcje i twarde parametry."
           />
           <ul className="mt-2 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
