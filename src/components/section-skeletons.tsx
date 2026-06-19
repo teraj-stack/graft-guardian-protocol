@@ -100,6 +100,36 @@ export function JourneySkeleton() {
   );
 }
 
+export function DayZeroToThreeSkeleton() {
+  return (
+    <SectionShell minHeight={900}>
+      <Header titleW="55%" />
+      <div className="grid gap-6 md:grid-cols-3">
+        <CardBlock lines={5} />
+        <CardBlock lines={5} />
+        <CardBlock lines={5} />
+      </div>
+      <div className="mt-8 rounded-sm border border-border bg-card p-6">
+        <Skeleton className="mb-4 h-7 w-1/2" />
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-5/6" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-5/6" />
+          </div>
+        </div>
+      </div>
+    </SectionShell>
+  );
+}
+
 export function EvidenceBasementSkeleton() {
   return (
     <SectionShell minHeight={2100}>
