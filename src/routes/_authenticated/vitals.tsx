@@ -230,6 +230,24 @@ function VitalsPage() {
               <option value="tablet">Tablet</option>
             </select>
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Od</label>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Do</label>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            />
+          </div>
           <button
             onClick={handleExport}
             disabled={exporting}
