@@ -4,11 +4,15 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type Row = { metric: string; value: number; device: string; page: string; created_at: string };
 
-function p75(values: number[]): number {
+function calcPercentile(values: number[], pct: number): number {
   if (!values.length) return 0;
   const s = [...values].sort((a, b) => a - b);
-  const i = Math.min(s.length - 1, Math.floor(s.length * 0.75));
+  const i = Math.min(s.length - 1, Math.floor(s.length * pct));
   return s[i];
+}
+
+function p75(values: number[]): number {
+  return calcPercentile(values, 0.75);
 }
 
 const TRACKED = ["CLS", "LCP", "INP"] as const;
