@@ -60,7 +60,7 @@ function TeamReportStatus() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex items-center justify-between">
           <Link to="/" className="text-sm text-[#c9a96a] hover:underline">← Strona główna</Link>
-          <Link to="/_authenticated/admin" className="text-sm text-slate-400 hover:text-slate-200">Cennik →</Link>
+          <Link to="/admin" className="text-sm text-slate-400 hover:text-slate-200">Cennik →</Link>
         </div>
         <h1 className="font-serif text-3xl md:text-4xl mb-2">Wysyłka cotygodniowych raportów</h1>
         <p className="text-slate-400 mb-8">Pulpit zespołu: statusy ostatnich 500 wysyłek raportów PDF.</p>
