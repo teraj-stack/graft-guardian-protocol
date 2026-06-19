@@ -292,7 +292,7 @@ function StatCard({ label, value, accent = "text-slate-100" }: { label: string; 
   );
 }
 
-function PagerBtn({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
+function PagerBtn({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: ReactNode }) {
   return (
     <button
       type="button"
