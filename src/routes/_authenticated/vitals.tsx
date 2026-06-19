@@ -250,7 +250,8 @@ function VitalsPage() {
 
       if (pdfMode !== "table") {
         const trendKey = `trend${range}${pdfPercentile === 75 ? "" : `_p${pdfPercentile}`}` as keyof typeof data;
-        const pdfTrend = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
+        const pdfTrendRaw = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
+        const pdfTrend = filterWindow(pdfTrendRaw);
         const chartW = pageW - 100;
         const chartH = 170;
 
