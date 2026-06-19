@@ -91,3 +91,55 @@ export const getVitalsSummary = createServerFn({ method: "GET" })
       trend28: buildSeries(rows, 28),
     };
   });
+
+export const exportVitalsCsv = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { days?: number; metric?: string; device?: string }) =>
+    z
+      .object({
+        days: z.union([z.literal(7), z.literal(28)]).default(7),
+        metric: z.enum(["all", "CLS", "LCP", "INP", "FCP", "TTFB"]).default("all"),
+        device: z.enum(["all", "mobile", "desktop", "tablet"]).default("all"),
+      })
+      .parse(d ?? {}),
+  )
+  .handler(async ({ data, context }): Promise<{ filename: string; csv: string; count: number }> => {
+    const { supabase, userId } = context;
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+    const isAdmin = (roles ?? []).some((r) => r.role === "admin");
+    if (!isAdmin) throw new Response("Forbidden", { status: 403 });
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - data.days * 24 * 3600 * 1000).toISOString();
+    let q = supabaseAdmin
+      .from("web_vitals")
+      .select("metric,value,device,page,created_at")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(50_000);
+    if (data.metric !== "all") q = q.eq("metric", data.metric);
+    if (data.device !== "all") q = q.eq("device", data.device);
+    const { data: rows, error } = await q;
+    if (error) throw new Response(error.message, { status: 500 });
+
+    const headers = ["created_at", "metric", "value", "device", "page"];
+    const esc = (v: unknown) => {
+      if (v === null || v === undefined) return "";
+      const s = String(v);
+      return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const lines = [headers.join(",")];
+    for (const r of (rows ?? []) as Row[]) {
+      lines.push([r.created_at, r.metric, r.value, r.device, r.page].map(esc).join(","));
+    }
+    const csv = "\uFEFF" + lines.join("\r\n") + "\r\n";
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    return {
+      filename: `web-vitals_${data.days}d_${data.metric}_${data.device}_${stamp}.csv`,
+      csv,
+      count: rows?.length ?? 0,
+    };
+  });
