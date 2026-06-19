@@ -293,4 +293,69 @@ describe.skipIf(!hasEnv)("reminders dispatcher (DB integration)", () => {
     // Real DB (via the unwrapped client) shows no rows landed.
     expect(await loadSends(subId)).toEqual([]);
   });
+
+  it("post-failure re-dispatch: no duplicate reminder_sends for the same weeks", async () => {
+    // End-to-end retry contract:
+    //   run #1 — sender throws on week 2 → atomic abort, zero rows
+    //   run #2 — healthy sender → inserts weeks [1, 2, 4] exactly once
+    //   run #3 — same day, healthy sender → zero new rows (idempotent)
+    // Final state: exactly one reminder_sends row per (sub, week, channel),
+    // no duplicates introduced by retrying after a controlled failure.
+    const subId = await createSubscription({
+      surgeryDaysAgo: 30,
+      selectedWeeks: [1, 2, 4, 8, 12],
+      email: true,
+    });
+    const now = new Date();
+
+    const flakySenders: ReminderSenders = {
+      sendEmailReminder: async ({ week }) => {
+        if (week === 2) throw new Error("controlled SMTP outage");
+        return { status: "sent", providerMessageId: `ok-${week}` };
+      },
+      sendSmsReminder: async () => ({ status: "skipped" }),
+    };
+
+    // Run #1: controlled failure mid-batch.
+    const failed = await runDispatch({
+      supabase,
+      now,
+      senders: flakySenders,
+      onlySubscriptionId: subId,
+    });
+    expect(failed.ok).toBe(false);
+    expect(failed.inserted).toBe(0);
+    expect(await loadSends(subId)).toEqual([]);
+
+    // Run #2: recovery — sender healthy, catch-up should land all weeks.
+    const recovered = await runDispatch({
+      supabase,
+      now,
+      senders: noopSenders,
+      onlySubscriptionId: subId,
+    });
+    expect(recovered.ok).toBe(true);
+    expect(recovered.inserted).toBe(3);
+
+    const afterRecovery = await loadSends(subId);
+    expect(afterRecovery.map((r) => r.week)).toEqual([1, 2, 4]);
+
+    // Run #3: immediate re-dispatch on same day — must not duplicate.
+    const replay = await runDispatch({
+      supabase,
+      now,
+      senders: noopSenders,
+      onlySubscriptionId: subId,
+    });
+    expect(replay.ok).toBe(true);
+    expect(replay.processed).toBe(0);
+    expect(replay.inserted).toBe(0);
+
+    // Final hard check: exactly one row per (week, channel) — zero duplicates.
+    const finalRows = await loadSends(subId);
+    expect(finalRows).toHaveLength(3);
+    const keys = finalRows.map((r) => `${r.week}:${r.channel}`);
+    expect(new Set(keys).size).toBe(keys.length);
+    expect(keys.sort()).toEqual(["1:email", "2:email", "4:email"]);
+  });
 });
