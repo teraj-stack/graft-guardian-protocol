@@ -122,7 +122,32 @@ function VitalsPage() {
     queryFn: () => getVitalsSummary(),
   });
   const [range, setRange] = useState<7 | 28>(7);
+  const [expMetric, setExpMetric] = useState<"all" | "CLS" | "LCP" | "INP" | "FCP" | "TTFB">("all");
+  const [expDevice, setExpDevice] = useState<"all" | "mobile" | "desktop" | "tablet">("all");
+  const [exporting, setExporting] = useState(false);
+  const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
+      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`Wyeksportowano ${res.count} rekordów`);
+    } catch (e) {
+      toast.error(`Eksport nie powiódł się: ${(e as Error).message}`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
