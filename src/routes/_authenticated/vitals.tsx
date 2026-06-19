@@ -193,6 +193,59 @@ function VitalsPage() {
   const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(initialPdfPrefs.compareWindows);
   const [pdfCompareLayout, setPdfCompareLayout] = useState<PdfPrefs["compareLayout"]>(initialPdfPrefs.compareLayout);
   const [pdfCompareYScale, setPdfCompareYScale] = useState<PdfPrefs["compareYScale"]>(initialPdfPrefs.compareYScale);
+
+  // Presets — named bundles of PDF export settings, stored per browser session.
+  const PDF_PRESETS_KEY = "vitals.pdfExportPresets.v1";
+  type PdfPreset = { name: string; prefs: PdfPrefs };
+  const loadPresets = (): PdfPreset[] => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = window.sessionStorage.getItem(PDF_PRESETS_KEY);
+      return raw ? (JSON.parse(raw) as PdfPreset[]) : [];
+    } catch { return []; }
+  };
+  const [pdfPresets, setPdfPresets] = useState<PdfPreset[]>(loadPresets);
+  const [selectedPreset, setSelectedPreset] = useState<string>("");
+  const persistPresets = (list: PdfPreset[]) => {
+    setPdfPresets(list);
+    if (typeof window !== "undefined") {
+      try { window.sessionStorage.setItem(PDF_PRESETS_KEY, JSON.stringify(list)); } catch { /* ignore */ }
+    }
+  };
+  const currentPrefs = (): PdfPrefs => ({
+    orientation: pdfOrientation, metadata: pdfMetadata, mode: pdfMode,
+    percentile: pdfPercentile, metrics: pdfMetrics, window: pdfWindow,
+    compare: pdfCompare, compareWindows: pdfCompareWindows,
+    compareLayout: pdfCompareLayout, compareYScale: pdfCompareYScale,
+  });
+  const applyPrefs = (p: PdfPrefs) => {
+    setPdfOrientation(p.orientation); setPdfMetadata(p.metadata); setPdfMode(p.mode);
+    setPdfPercentile(p.percentile); setPdfMetrics(p.metrics); setPdfWindow(p.window);
+    setPdfCompare(p.compare); setPdfCompareWindows(p.compareWindows);
+    setPdfCompareLayout(p.compareLayout); setPdfCompareYScale(p.compareYScale);
+  };
+  const saveCurrentAsPreset = () => {
+    const name = (typeof window !== "undefined" ? window.prompt("Nazwa presetu:", selectedPreset || "")?.trim() : "") || "";
+    if (!name) return;
+    const next = [...pdfPresets.filter((p) => p.name !== name), { name, prefs: currentPrefs() }];
+    persistPresets(next);
+    setSelectedPreset(name);
+    toast.success(`Preset "${name}" zapisany.`);
+  };
+  const applyPresetByName = (name: string) => {
+    setSelectedPreset(name);
+    if (!name) return;
+    const preset = pdfPresets.find((p) => p.name === name);
+    if (!preset) return;
+    applyPrefs({ ...PDF_DEFAULTS, ...preset.prefs });
+    toast.success(`Wczytano preset "${name}".`);
+  };
+  const deleteSelectedPreset = () => {
+    if (!selectedPreset) return;
+    persistPresets(pdfPresets.filter((p) => p.name !== selectedPreset));
+    toast.info(`Usunięto preset "${selectedPreset}".`);
+    setSelectedPreset("");
+  };
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -801,6 +854,36 @@ function VitalsPage() {
           >
             Resetuj ustawienia PDF
           </button>
+          <div className="flex items-center gap-2 ml-2 pl-2 border-l">
+            <label className="text-xs text-muted-foreground">Preset:</label>
+            <select
+              value={selectedPreset}
+              onChange={(e) => applyPresetByName(e.target.value)}
+              className="h-9 px-2 rounded-md border bg-background text-sm min-w-[140px]"
+              title="Szybkie przywracanie zapisanych zestawów ustawień"
+            >
+              <option value="">— wybierz preset —</option>
+              {pdfPresets.map((p) => (
+                <option key={p.name} value={p.name}>{p.name}</option>
+              ))}
+            </select>
+            <button
+              onClick={saveCurrentAsPreset}
+              disabled={exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium hover:bg-muted disabled:opacity-50"
+              title="Zapisz bieżące ustawienia jako nowy preset (lub nadpisz istniejący o tej samej nazwie)"
+            >
+              Zapisz preset
+            </button>
+            <button
+              onClick={deleteSelectedPreset}
+              disabled={!selectedPreset || exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Usuń wybrany preset"
+            >
+              Usuń
+            </button>
+          </div>
         </div>
       </div>
 
