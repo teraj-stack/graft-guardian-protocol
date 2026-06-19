@@ -88,7 +88,7 @@ jobs:
             const runUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`;
             const runLink = `\n\n🔗 [Zobacz logi i artefakty tego sprawdzania (run #${context.runId})](${runUrl})`;
 
-            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}\n\n### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}${runLink}\n\n### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
