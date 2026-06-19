@@ -1,5 +1,5 @@
 {
-  "_comment": "Per-section and per-viewport visual diff thresholds (in %). Most specific entry wins; env vars VISUAL_DIFF_THRESHOLD_<SECTION>[_<VIEWPORT>] override this file. See scripts/visual-diff.py for full resolution order.",
+  "_comment": "Per-brand / per-section / per-viewport visual diff thresholds (in %). Most specific entry wins; env vars VISUAL_DIFF_THRESHOLD_[<BRAND>_]<SECTION>[_<VIEWPORT>] override this file. See scripts/visual-diff.py for full resolution order.",
   "default": {
     "default": 1.0,
     "desktop": 1.0,
@@ -19,5 +19,16 @@
     "default": 1.0,
     "desktop": 0.75,
     "mobile":  1.25
+  },
+  "brands": {
+    "graftgen": {
+      "default": { "default": 0.6, "desktop": 0.5, "mobile": 0.75 },
+      "pbm":     { "default": 0.5, "desktop": 0.4, "mobile": 0.6 },
+      "hbot":    { "default": 0.5, "desktop": 0.4, "mobile": 0.6 }
+    },
+    "msc": {
+      "default": { "default": 1.0, "desktop": 0.75, "mobile": 1.25 },
+      "ladd":    { "default": 1.0, "desktop": 0.75, "mobile": 1.25 }
+    }
   }
 }
