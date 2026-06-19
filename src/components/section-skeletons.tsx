@@ -193,26 +193,3 @@ export function ContactSkeleton() {
     </SectionShell>
   );
 }
-
-export function ContactSkeleton() {
-  return (
-    <SectionShell minHeight={700}>
-      <Header titleW="35%" />
-      <div className="grid gap-8 md:grid-cols-2">
-        <div className="space-y-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="space-y-2">
-              <Skeleton className="h-3 w-24" />
-              <Skeleton className="h-10 w-full" />
-            </div>
-          ))}
-          <Skeleton className="h-11 w-40" />
-        </div>
-        <div className="space-y-4">
-          <CardBlock lines={6} />
-          <CardBlock lines={3} />
-        </div>
-      </div>
-    </SectionShell>
-  );
-}
