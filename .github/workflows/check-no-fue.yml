@@ -64,7 +64,14 @@ jobs:
               detailsBlocks += `<details>\n<summary><strong>📄 ${file}</strong> — ${hits.length} ${hits.length === 1 ? 'wystąpienie' : 'wystąpienia'}</summary>\n\n${lines}\n\n</details>\n\n`;
             }
 
-            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+            const perFileSummary = files.map(file => {
+              const hits = byFile[file];
+              const first = hits[0];
+              const url = `${baseUrl}/${enc(file)}#L${first.line}`;
+              return `| [${file}](${url}) | ${hits.length} |`;
+            }).join('\n');
+
+            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.\n\n### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
