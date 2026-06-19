@@ -10,6 +10,7 @@ import {
   storefrontApiRequest,
   type ShopifyProduct,
 } from "@/lib/shopify";
+import { PRICING, PRICING_FAQ } from "@/lib/pricing-data";
 
 
 const TITLE = "Sklep — kosmetyki i akcesoria po przeszczepie włosów";
@@ -93,7 +94,95 @@ function Shop() {
             </div>
           )}
         </div>
+
+        <PricingSummary />
+        <PricingFaq />
       </section>
+    </div>
+  );
+}
+
+function PricingSummary() {
+  return (
+    <div id="cennik" className="mt-24 border-t border-border/60 pt-14">
+      <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Cennik</p>
+      <h2 className="mt-3 font-serif text-3xl text-foreground md:text-4xl">
+        Pakiety 1 / 5 / 10 / 20 sesji.
+      </h2>
+      <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
+        Ceny uśrednione na podstawie górnego przedziału stawek klinik premium
+        w Warszawie i Gdańsku (stan: 2026). Ostateczna wycena ustalana po
+        konsultacji kwalifikacyjnej.
+      </p>
+      <div className="mt-10 overflow-x-auto">
+        <table className="w-full min-w-[640px] border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+              <th className="py-3 pr-4">Zabieg</th>
+              <th className="py-3 pr-4 text-right">1 sesja</th>
+              <th className="py-3 pr-4 text-right">Pakiet 5</th>
+              <th className="py-3 pr-4 text-right">Pakiet 10</th>
+              <th className="py-3 pr-4 text-right">Pakiet 20</th>
+              <th className="py-3 text-right" />
+            </tr>
+          </thead>
+          <tbody>
+            {PRICING.map((p) => (
+              <tr key={p.code} className="border-b border-border/40">
+                <td className="py-4 pr-4">
+                  <div className="font-medium text-foreground">{p.name}</div>
+                  <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                    {p.code} · {p.params}
+                  </div>
+                </td>
+                <td className="py-4 pr-4 text-right text-foreground">{p.single.price}</td>
+                {p.packs.map((pk) => (
+                  <td key={pk.sessions} className="py-4 pr-4 text-right">
+                    <div className="text-foreground">{pk.price}</div>
+                    <div className="text-[11px] text-muted-foreground">
+                      {pk.unitPrice}/sesja · −{pk.saving}
+                    </div>
+                  </td>
+                ))}
+                <td className="py-4 text-right">
+                  <Link
+                    to="/product/$handle"
+                    params={{ handle: p.handle }}
+                    className="text-xs text-accent hover:underline"
+                  >
+                    Kup →
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function PricingFaq() {
+  return (
+    <div className="mt-20 border-t border-border/60 pt-14">
+      <h2 className="font-serif text-3xl text-foreground md:text-4xl">
+        Pytania o pakiety i rozliczenia
+      </h2>
+      <div className="mt-8 divide-y divide-border border-y border-border">
+        {PRICING_FAQ.map((f) => (
+          <details key={f.q} className="group py-6">
+            <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
+              <h3 className="font-serif text-lg text-foreground md:text-xl">{f.q}</h3>
+              <span className="mt-2 shrink-0 font-serif text-2xl text-accent transition group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p className="mt-4 max-w-3xl text-sm text-muted-foreground md:text-base">
+              {f.a}
+            </p>
+          </details>
+        ))}
+      </div>
     </div>
   );
 }
