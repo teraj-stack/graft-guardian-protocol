@@ -265,6 +265,23 @@ function VitalsPage() {
     }
   };
 
+  const resetPdfSettings = () => {
+    if (typeof window !== "undefined") {
+      try { window.sessionStorage.removeItem(PDF_PREFS_KEY); } catch { /* ignore */ }
+    }
+    setPdfOrientation(PDF_DEFAULTS.orientation);
+    setPdfMetadata(PDF_DEFAULTS.metadata);
+    setPdfMode(PDF_DEFAULTS.mode);
+    setPdfPercentile(PDF_DEFAULTS.percentile);
+    setPdfMetrics(PDF_DEFAULTS.metrics);
+    setPdfWindow(PDF_DEFAULTS.window);
+    setPdfCompare(PDF_DEFAULTS.compare);
+    setPdfCompareWindows(PDF_DEFAULTS.compareWindows);
+    setPdfCompareLayout(PDF_DEFAULTS.compareLayout);
+    setPdfCompareYScale(PDF_DEFAULTS.compareYScale);
+    toast.info("Ustawienia eksportu PDF zostały zresetowane do domyślnych.");
+  };
+
   const handleExportPdf = async () => {
     if (!validateRange()) return;
     if (pdfMode !== "table" && pdfMetrics.length === 0) {
