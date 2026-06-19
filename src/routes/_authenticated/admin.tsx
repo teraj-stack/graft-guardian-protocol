@@ -197,10 +197,12 @@ function PricingRow({
 }) {
   const [hidden, setHidden] = useState<boolean>(current?.hidden ?? false);
   const [restoreAt, setRestoreAt] = useState<string>(toDateInputValue(current?.restore_at ?? null));
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     setHidden(current?.hidden ?? false);
     setRestoreAt(toDateInputValue(current?.restore_at ?? null));
+    setValidationError(null);
   }, [current?.hidden, current?.restore_at]);
 
   return (
