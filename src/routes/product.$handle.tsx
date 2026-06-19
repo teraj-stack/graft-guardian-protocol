@@ -89,6 +89,8 @@ function ProductPage() {
                 const compareN = compare ? parseFloat(compare.amount) : 0;
                 const hasDiscount = compareN > priceN;
                 const pct = hasDiscount ? Math.round((1 - priceN / compareN) * 100) : 0;
+                const sessions = parseInt(currentVariant?.title?.match(/\d+/)?.[0] ?? "0", 10);
+                const perSession = sessions > 0 ? priceN / sessions : 0;
                 return (
                   <div className="mt-4 flex flex-wrap items-baseline gap-3">
                     <span className="text-xl font-semibold">
@@ -103,6 +105,11 @@ function ProductPage() {
                           −{pct}% • oszczędzasz {(compareN - priceN).toFixed(2)} {price.currencyCode}
                         </span>
                       </>
+                    )}
+                    {sessions > 0 && (
+                      <span className="text-sm text-muted-foreground">
+                        <span className="font-medium text-foreground">{(perSession).toFixed(2)} {price.currencyCode}</span> / sesja
+                      </span>
                     )}
                   </div>
                 );
