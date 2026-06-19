@@ -11,7 +11,10 @@ export interface NotifyResult {
   status: "sent" | "skipped" | "error" | "provider_missing";
   providerMessageId?: string;
   error?: string;
+  attempts?: number;
+  to?: string;
 }
+
 
 export async function notifyClinicOfContact(args: {
   name: string;
