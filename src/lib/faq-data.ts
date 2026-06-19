@@ -36,7 +36,7 @@ export const FAQ: { q: string; a: string }[] = [
     a: "Shock loss przeszczepionych włosów: tydzień 2–6. Wejście w anagen: miesiąc 3–4. Pierwsze widoczne zagęszczenie: miesiąc 6. Efekt końcowy: 12–15 miesięcy od zabiegu.",
   },
   {
-    q: "Jak stosować domową fototerapię LLLT 2x dziennie i co robić, gdy pominę sesję?",
-    a: "Hełm LLLT załóż na czystą, suchą skórę głowy. Jedna sesja to 20 minut w pozycji siedzącej lub leżącej. Wykonuj rano i wieczorem (np. 8:00 i 20:00) z zachowaniem co najmniej 6-godzinnej przerwy między naświetlaniami. Jeśli pominiesz sesję — nie podwajaj dawki w kolejnej. Po prostu wznów plan zgodnie z harmonogramem. Pominięcie pojedynczej sesji nie zaburza kumulacji efektu, systematyczność ma znaczenie w skali tygodni.",
+    q: "Kiedy mogę wrócić do sportu, sauny, basenu i słońca po przeszczepie włosów metodą DHI?",
+    a: "Sport lekki (spacer, joga bez inwersji) — od doby 3. Trening siłowy i bieganie — od tygodnia 2, gdy strupki są zlane i ryzyko mechanicznego urazu graftów maleje. Sauna sucha i parowa — nie wcześniej niż 14 dni po zabiegu, ponieważ nagłe rozszerzenie naczyń i pocenie się osłabiają adhezję graftów. Basen z chlorowaną wodą — 14 dni, słona woda (morze) — 21 dni; chlor i sól działają drażniąco na gojącą się skórę głowy. Słońce bezpośrednie — unikaj przez 30 dni. Po tym czasie używaj kapelusza z filtrem UPF 50+; UV upośledza gojenie i zwiększa ryzyko przebarwień w strefie biorczej. Z solarium i opalania natryskowego wstrzymaj się 4 tygodnie.",
   },
 ];
