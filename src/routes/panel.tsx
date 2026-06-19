@@ -148,7 +148,7 @@ const MATERIALS: Material[] = [
   },
   {
     id: "m13",
-    title: "Mikrobiom skóry głowy po FUE — co stosować, czego unikać",
+    title: "Mikrobiom skóry głowy po DHI — co stosować, czego unikać",
     description:
       "Szampony pH 5,5 bez SLS, prebiotyki topowe, dlaczego chlorheksydyna i jodyna szkodzą po dobie 3. Lista preparatów z neutralnym mikrobiomem.",
     category: "Pielęgnacja",
