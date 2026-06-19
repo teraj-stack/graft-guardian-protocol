@@ -147,10 +147,10 @@ function Nav() {
 
   return (
     <header className="relative z-20 border-b border-border/60">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
+      <div className="mx-auto flex h-20 md:h-24 max-w-6xl items-stretch justify-between px-6">
+        <a href="#" className="flex items-stretch py-1.5" aria-label="Graftgen.com">
           <span
-            className="block h-[52px] md:h-[62px] overflow-hidden rounded-lg p-1.5 bg-background"
+            className="block h-full overflow-hidden rounded-lg bg-background"
             style={{ aspectRatio: "415 / 531", width: "auto" }}
           >
             <img
