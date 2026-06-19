@@ -115,20 +115,34 @@ function ProductPage() {
                 <div className="mt-6">
                   <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">Wariant</p>
                   <div className="flex flex-wrap gap-2">
-                    {variants.map((v: { node: { id: string; title: string; availableForSale: boolean } }) => {
+                    {variants.map((v: { node: { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string }; compareAtPrice?: { amount: string; currencyCode: string } | null } }) => {
                       const active = (currentVariant?.id ?? variants[0].node.id) === v.node.id;
+                      const p = parseFloat(v.node.price.amount);
+                      const c = v.node.compareAtPrice ? parseFloat(v.node.compareAtPrice.amount) : 0;
+                      const pct = c > p ? Math.round((1 - p / c) * 100) : 0;
                       return (
                         <button
                           key={v.node.id}
                           onClick={() => setVariantId(v.node.id)}
                           disabled={!v.node.availableForSale}
-                          className={`rounded-sm border px-3 py-2 text-sm transition ${
+                          className={`flex flex-col items-start gap-0.5 rounded-sm border px-3 py-2 text-sm transition ${
                             active
                               ? "border-foreground bg-foreground text-background"
                               : "border-border/60 text-foreground hover:border-accent"
                           } ${!v.node.availableForSale ? "opacity-40" : ""}`}
                         >
-                          {v.node.title}
+                          <span className="flex items-center gap-2">
+                            {v.node.title}
+                            {pct > 0 && (
+                              <span className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${active ? "bg-background/15 text-background" : "bg-accent/15 text-accent"}`}>
+                                −{pct}%
+                              </span>
+                            )}
+                          </span>
+                          <span className={`text-xs ${active ? "text-background/80" : "text-muted-foreground"}`}>
+                            {p.toFixed(0)} {v.node.price.currencyCode}
+                            {pct > 0 && <span className="ml-1 line-through opacity-70">{c.toFixed(0)}</span>}
+                          </span>
                         </button>
                       );
                     })}
