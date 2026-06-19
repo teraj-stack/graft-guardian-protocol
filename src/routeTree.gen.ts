@@ -14,6 +14,7 @@ import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
 import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
 import { Route as PanelRouteImport } from './routes/panel'
 import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
@@ -45,6 +46,11 @@ const PanelRoute = PanelRouteImport.update({
 const CookiesRoute = CookiesRouteImport.update({
   id: '/cookies',
   path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +95,7 @@ const ApiPublicHooksPricingAutoRestoreRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
@@ -118,6 +126,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/cookies'
     | '/panel'
     | '/prywatnosc'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/cookies'
     | '/panel'
     | '/prywatnosc'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/cookies'
     | '/panel'
     | '/prywatnosc'
@@ -177,6 +189,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CookiesRoute: typeof CookiesRoute
   PanelRoute: typeof PanelRoute
   PrywatnoscRoute: typeof PrywatnoscRoute
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       path: '/cookies'
       fullPath: '/cookies'
       preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -292,6 +312,7 @@ const PrzypomnieniaRouteWithChildren = PrzypomnieniaRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CookiesRoute: CookiesRoute,
   PanelRoute: PanelRoute,
   PrywatnoscRoute: PrywatnoscRoute,
