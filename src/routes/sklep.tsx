@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useCartStore } from "@/stores/cartStore";
+import { formatMoney } from "@/lib/utils";
 import { CartDrawer } from "@/components/CartDrawer";
 import {
   STOREFRONT_PRODUCTS_QUERY,
@@ -136,7 +137,7 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{product.node.description}</p>
         <div className="mt-4 flex items-center justify-between">
           <span className="text-base font-semibold text-foreground">
-            {parseFloat(price.amount).toFixed(2)} {price.currencyCode}
+            {formatMoney(parseFloat(price.amount))} {price.currencyCode}
           </span>
           <button
             onClick={onAdd}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
+import { formatMoney } from "@/lib/utils";
 
 export function CartDrawer() {
   const [open, setOpen] = useState(false);
@@ -93,7 +94,7 @@ export function CartDrawer() {
                           </p>
                         )}
                         <p className="mt-1 text-sm font-semibold text-foreground">
-                          {parseFloat(item.price.amount).toFixed(2)} {item.price.currencyCode}
+                          {formatMoney(parseFloat(item.price.amount))} {item.price.currencyCode}
                         </p>
                         <div className="mt-2 flex items-center gap-2">
                           <button
@@ -130,7 +131,7 @@ export function CartDrawer() {
                 <div className="mb-3 flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Razem</span>
                   <span className="font-serif text-xl text-foreground">
-                    {totalPrice.toFixed(2)} {currency}
+                    {formatMoney(totalPrice)} {currency}
                   </span>
                 </div>
                 <button
