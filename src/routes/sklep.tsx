@@ -102,21 +102,32 @@ function Shop() {
   );
 }
 
-type CompareLookup = Record<string, Record<number, string | null>>;
+interface CompareInfo {
+  formattedCap: string | null;
+  discountPct: number | null;
+}
+
+type CompareLookup = Record<string, Record<number, CompareInfo>>;
 
 function buildCompareLookup(products: ShopifyProduct[]): CompareLookup {
   const lookup: CompareLookup = {};
   for (const edge of products) {
     const handle = edge.node.handle;
-    const byCount: Record<number, string | null> = {};
+    const byCount: Record<number, CompareInfo> = {};
     for (const v of edge.node.variants.edges) {
       const sessions = parseInt(v.node.title?.match(/\d+/)?.[0] ?? "0", 10) || 1;
       const cap = v.node.compareAtPrice;
-      if (cap?.amount && Number(cap.amount) > Number(v.node.price.amount)) {
-        const n = Math.round(Number(cap.amount));
-        byCount[sessions] = `${n.toLocaleString("pl-PL")} ${cap.currencyCode === "PLN" ? "zł" : cap.currencyCode}`;
+      const price = Number(v.node.price.amount);
+      if (cap?.amount && Number(cap.amount) > price) {
+        const capNum = Number(cap.amount);
+        const pct = Math.round(((capNum - price) / capNum) * 100);
+        const n = Math.round(capNum);
+        byCount[sessions] = {
+          formattedCap: `${n.toLocaleString("pl-PL")} ${cap.currencyCode === "PLN" ? "zł" : cap.currencyCode}`,
+          discountPct: pct,
+        };
       } else if (!(sessions in byCount)) {
-        byCount[sessions] = null;
+        byCount[sessions] = { formattedCap: null, discountPct: null };
       }
     }
     lookup[handle] = byCount;
@@ -157,11 +168,20 @@ function PricingSummary({ products }: { products: ShopifyProduct[] }) {
             {PRICING.map((p) => {
               const cap = compare[p.handle] ?? {};
               const renderCap = (n: number) =>
-                cap[n] ? (
-                  <span className="text-[12px] text-muted-foreground line-through">{cap[n]}</span>
+                cap[n]?.formattedCap ? (
+                  <span className="text-[12px] text-muted-foreground line-through">{cap[n].formattedCap}</span>
                 ) : (
                   <span className="text-[12px] text-muted-foreground/50">—</span>
                 );
+              const discountBadge = (n: number) => {
+                const info = cap[n];
+                if (!info?.discountPct) return null;
+                return (
+                  <span className="ml-1.5 inline-flex items-center rounded-sm bg-accent/10 px-1.5 py-0.5 text-[11px] font-medium text-accent">
+                    −{info.discountPct}%
+                  </span>
+                );
+              };
               return (
                 <tr key={p.code} className="border-b border-border/40">
                   <td className="py-4 pr-4">
@@ -170,11 +190,17 @@ function PricingSummary({ products }: { products: ShopifyProduct[] }) {
                       {p.code} · {p.params}
                     </div>
                   </td>
-                  <td className="py-4 pr-4 text-right text-foreground">{p.single.price}</td>
+                  <td className="py-4 pr-4 text-right text-foreground">
+                    <span>{p.single.price}</span>
+                    {discountBadge(1)}
+                  </td>
                   <td className="py-4 pr-4 text-right">{renderCap(1)}</td>
                   {p.packs.flatMap((pk) => [
                     <td key={`${pk.sessions}-p`} className="py-4 pr-4 text-right">
-                      <div className="text-foreground">{pk.price}</div>
+                      <div className="text-foreground">
+                        <span>{pk.price}</span>
+                        {discountBadge(pk.sessions)}
+                      </div>
                       <div className="text-[11px] text-muted-foreground">
                         {pk.unitPrice}/sesja · −{pk.saving}
                       </div>
