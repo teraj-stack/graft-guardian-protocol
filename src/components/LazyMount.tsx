@@ -1,9 +1,14 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
  * Renders children only once they scroll near the viewport.
  * Reduces initial JS work, DOM size, and defers any data fetching
  * triggered by below-the-fold sections.
+ *
+ * When `children` is a React.lazy() component, the dynamic import only
+ * starts after intersection — i.e. true per-section code splitting.
+ * A Suspense boundary is included with `minHeight` as the fallback to
+ * prevent layout shift while the chunk is in flight.
  */
 export function LazyMount({
   children,
@@ -43,7 +48,9 @@ export function LazyMount({
 
   return (
     <div ref={ref} style={shown ? undefined : { minHeight }}>
-      {shown ? children : null}
+      {shown ? (
+        <Suspense fallback={<div style={{ minHeight }} aria-hidden />}>{children}</Suspense>
+      ) : null}
     </div>
   );
 }
