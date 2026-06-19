@@ -22,10 +22,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
 import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
+import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
+import { Route as ApiPublicEbookRequestRouteImport } from './routes/api/public/ebook-request'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
@@ -97,6 +100,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EbookTokenRoute = EbookTokenRouteImport.update({
+  id: '/ebook/$token',
+  path: '/ebook/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedVitalsRoute = AuthenticatedVitalsRouteImport.update({
   id: '/vitals',
   path: '/vitals',
@@ -107,6 +115,11 @@ const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
   path: '/raporty',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEbookRoute = AuthenticatedEbookRouteImport.update({
+  id: '/ebook',
+  path: '/ebook',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -115,6 +128,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 const ApiPublicVitalsRoute = ApiPublicVitalsRouteImport.update({
   id: '/api/public/vitals',
   path: '/api/public/vitals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicEbookRequestRoute = ApiPublicEbookRequestRouteImport.update({
+  id: '/api/public/ebook-request',
+  path: '/api/public/ebook-request',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
@@ -164,12 +182,15 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/ebook': typeof AuthenticatedEbookRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
+  '/ebook/$token': typeof EbookTokenRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/ebook-request': typeof ApiPublicEbookRequestRoute
   '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
@@ -188,12 +209,15 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/ebook': typeof AuthenticatedEbookRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
+  '/ebook/$token': typeof EbookTokenRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/ebook-request': typeof ApiPublicEbookRequestRoute
   '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
@@ -214,12 +238,15 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/ebook': typeof AuthenticatedEbookRoute
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
   '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
+  '/ebook/$token': typeof EbookTokenRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/ebook-request': typeof ApiPublicEbookRequestRoute
   '/api/public/vitals': typeof ApiPublicVitalsRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
@@ -240,12 +267,15 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
+    | '/ebook'
     | '/raporty'
     | '/vitals'
+    | '/ebook/$token'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/ebook-request'
     | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
@@ -264,12 +294,15 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
+    | '/ebook'
     | '/raporty'
     | '/vitals'
+    | '/ebook/$token'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/ebook-request'
     | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
@@ -289,12 +322,15 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/_authenticated/admin'
+    | '/_authenticated/ebook'
     | '/_authenticated/raporty'
     | '/_authenticated/vitals'
+    | '/ebook/$token'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
+    | '/api/public/ebook-request'
     | '/api/public/vitals'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
@@ -314,9 +350,11 @@ export interface RootRouteChildren {
   RaportRoute: typeof RaportRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SklepRoute: typeof SklepRoute
+  EbookTokenRoute: typeof EbookTokenRoute
   ProductHandleRoute: typeof ProductHandleRoute
   RaportyStatusRoute: typeof RaportyStatusRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicEbookRequestRoute: typeof ApiPublicEbookRequestRoute
   ApiPublicVitalsRoute: typeof ApiPublicVitalsRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
@@ -418,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ebook/$token': {
+      id: '/ebook/$token'
+      path: '/ebook/$token'
+      fullPath: '/ebook/$token'
+      preLoaderRoute: typeof EbookTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/vitals': {
       id: '/_authenticated/vitals'
       path: '/vitals'
@@ -432,6 +477,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRaportyRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ebook': {
+      id: '/_authenticated/ebook'
+      path: '/ebook'
+      fullPath: '/ebook'
+      preLoaderRoute: typeof AuthenticatedEbookRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -444,6 +496,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/vitals'
       fullPath: '/api/public/vitals'
       preLoaderRoute: typeof ApiPublicVitalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/ebook-request': {
+      id: '/api/public/ebook-request'
+      path: '/api/public/ebook-request'
+      fullPath: '/api/public/ebook-request'
+      preLoaderRoute: typeof ApiPublicEbookRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/contact': {
@@ -493,12 +552,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedEbookRoute: typeof AuthenticatedEbookRoute
   AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
   AuthenticatedVitalsRoute: typeof AuthenticatedVitalsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedEbookRoute: AuthenticatedEbookRoute,
   AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
   AuthenticatedVitalsRoute: AuthenticatedVitalsRoute,
 }
@@ -529,9 +590,11 @@ const rootRouteChildren: RootRouteChildren = {
   RaportRoute: RaportRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SklepRoute: SklepRoute,
+  EbookTokenRoute: EbookTokenRoute,
   ProductHandleRoute: ProductHandleRoute,
   RaportyStatusRoute: RaportyStatusRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicEbookRequestRoute: ApiPublicEbookRequestRoute,
   ApiPublicVitalsRoute: ApiPublicVitalsRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,

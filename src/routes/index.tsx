@@ -43,6 +43,9 @@ const Pricing = lazy(() =>
 const FAQSection = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.FAQSection })),
 );
+const EbookLeadMagnet = lazy(() =>
+  import("./-sections/below-fold").then((m) => ({ default: m.EbookLeadMagnet })),
+);
 const CTA = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.CTA })),
 );
@@ -116,6 +119,7 @@ function Index() {
         <LazyMount minHeight={2100} fallback={<EvidenceBasementSkeleton />}><EvidenceBasement /></LazyMount>
         <LazyMount minHeight={1000} fallback={<PricingSkeleton />}><Pricing /></LazyMount>
         <LazyMount minHeight={1200} fallback={<FAQSkeleton />}><FAQSection /></LazyMount>
+        <LazyMount minHeight={620} fallback={<div style={{ minHeight: 620 }} />}><EbookLeadMagnet /></LazyMount>
         <LazyMount minHeight={520} fallback={<CTASkeleton />}><CTA /></LazyMount>
         <LazyMount minHeight={1080} fallback={<ContactSkeleton />}><Contact /></LazyMount>
       </main>
