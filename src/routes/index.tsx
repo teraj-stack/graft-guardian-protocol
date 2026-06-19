@@ -805,7 +805,10 @@ function Footer() {
         </div>
         <div className="mt-10 border-t border-border pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Protokół po przeszczepie. Wszystkie prawa zastrzeżone.</span>
-          <Link to="/prywatnosc" className="hover:text-accent">Polityka prywatności i RODO</Link>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link to="/prywatnosc" className="hover:text-accent">Polityka prywatności i RODO</Link>
+            <Link to="/cookies" className="hover:text-accent">Polityka cookies</Link>
+          </div>
         </div>
       </div>
     </footer>
