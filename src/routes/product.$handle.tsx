@@ -5,6 +5,8 @@ import { useCartStore } from "@/stores/cartStore";
 import { formatMoney } from "@/lib/utils";
 import { Clock, Package, CheckCircle, Calculator, Info } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
+import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
 import {
   STOREFRONT_PRODUCT_BY_HANDLE_QUERY,
   storefrontApiRequest,
@@ -23,6 +25,17 @@ export const Route = createFileRoute("/product/$handle")({
 async function fetchProduct(handle: string) {
   const data = await storefrontApiRequest(STOREFRONT_PRODUCT_BY_HANDLE_QUERY, { handle });
   return data?.data?.product ?? null;
+}
+
+function productPlaceholder(product: any) {
+  const t = (product.title ?? "").toLowerCase();
+  if (t.includes("hiperbaryczn") || t.includes("hbot") || t.includes("fototerap") || t.includes("pbm") || t.includes("lllt")) {
+    return { src: graftgenLogo.url, alt: "Graftgen.com" };
+  }
+  if (t.includes("ladd") || t.includes("plazm") || t.includes("cap") || t.includes("tul")) {
+    return { src: mscLogo.url, alt: "MSC" };
+  }
+  return { src: graftgenLogo.url, alt: "Graftgen.com" };
 }
 
 function ProductPage() {
@@ -78,7 +91,14 @@ function ProductPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex aspect-square items-center justify-center text-muted-foreground">—</div>
+                (() => {
+                  const ph = product ? productPlaceholder(product) : { src: graftgenLogo.url, alt: "Graftgen.com" };
+                  return (
+                    <div className="flex aspect-square items-center justify-center p-12">
+                      <img src={ph.src} alt={ph.alt} className="max-h-full max-w-full object-contain opacity-90" loading="lazy" />
+                    </div>
+                  );
+                })()
               )}
             </div>
             <div>
