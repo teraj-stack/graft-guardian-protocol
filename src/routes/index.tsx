@@ -150,7 +150,7 @@ function Nav() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
           <span
-            className="block h-[52px] md:h-[62px]"
+            className="block h-[52px] md:h-[62px] overflow-hidden rounded-lg"
             style={{ aspectRatio: "415 / 531", width: "auto" }}
           >
             <img
