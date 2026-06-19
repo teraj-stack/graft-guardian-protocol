@@ -130,6 +130,7 @@ function VitalsPage() {
   const [exportingPdf, setExportingPdf] = useState(false);
   const [pdfOrientation, setPdfOrientation] = useState<"portrait" | "landscape">("landscape");
   const [pdfMetadata, setPdfMetadata] = useState(true);
+  const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
@@ -169,6 +170,10 @@ function VitalsPage() {
 
   const handleExportPdf = async () => {
     if (!validateRange()) return;
+    if (pdfMode !== "table" && (expMetric === "all" || expMetric === "FCP" || expMetric === "TTFB")) {
+      toast.error("Wykres trendu dostępny dla pojedynczej metryki: CLS, LCP lub INP.");
+      return;
+    }
     setExportingPdf(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
@@ -197,6 +202,7 @@ function VitalsPage() {
       const { jsPDF } = await import("jspdf");
       const autoTable = (await import("jspdf-autotable")).default;
       const doc = new jsPDF({ orientation: pdfOrientation, unit: "pt" });
+      const pageW = doc.internal.pageSize.getWidth();
       let startY = 40;
       if (pdfMetadata) {
         doc.setFontSize(14);
@@ -213,14 +219,80 @@ function VitalsPage() {
         doc.text(meta, 40, 58);
         startY = 76;
       }
-      autoTable(doc, {
-        startY,
-        head: [header],
-        body: rows,
-        styles: { fontSize: 8, cellPadding: 3 },
-        headStyles: { fillColor: [200, 176, 108] },
-        margin: { left: 40, right: 40 },
-      });
+
+      if (pdfMode !== "table") {
+        const m = expMetric as "CLS" | "LCP" | "INP";
+        const chartData = trend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
+        const chartX = 40;
+        const chartW = pageW - 80;
+        const chartH = 200;
+        const chartY = startY;
+        doc.setFontSize(11);
+        doc.text(`Trend p75 — ${m} (${range} dni)`, chartX, chartY - 4);
+        // axes box
+        doc.setDrawColor(180);
+        doc.rect(chartX, chartY + 6, chartW, chartH);
+        if (chartData.length === 0) {
+          doc.setFontSize(9);
+          doc.setTextColor(120);
+          doc.text("Brak danych w wybranym oknie", chartX + chartW / 2 - 60, chartY + chartH / 2);
+          doc.setTextColor(0);
+        } else {
+          const t = THRESHOLDS[m];
+          const vals = chartData.map((d) => d[m]);
+          const yMax = Math.max(t.poor * 1.05, ...vals);
+          const yMin = 0;
+          const n = chartData.length;
+          const xFor = (i: number) =>
+            chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
+          const yFor = (v: number) =>
+            chartY + 6 + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
+          // threshold lines
+          doc.setDrawColor(16, 185, 129);
+          doc.setLineDashPattern([3, 3], 0);
+          doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
+          doc.setDrawColor(239, 68, 68);
+          doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
+          doc.setLineDashPattern([], 0);
+          // y-axis labels
+          doc.setFontSize(7);
+          doc.setTextColor(110);
+          const fmtY = (v: number) => (m === "CLS" ? v.toFixed(2) : `${Math.round(v)}`);
+          doc.text(fmtY(yMax), chartX - 4, chartY + 10, { align: "right" });
+          doc.text(fmtY(yMin), chartX - 4, chartY + 6 + chartH, { align: "right" });
+          doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
+          doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
+          // data polyline
+          doc.setDrawColor(200, 176, 108);
+          doc.setLineWidth(1.2);
+          for (let i = 1; i < n; i++) {
+            doc.line(xFor(i - 1), yFor(chartData[i - 1][m]), xFor(i), yFor(chartData[i][m]));
+          }
+          // dots + sparse x labels
+          doc.setFillColor(200, 176, 108);
+          const step = Math.max(1, Math.ceil(n / 8));
+          for (let i = 0; i < n; i++) {
+            doc.circle(xFor(i), yFor(chartData[i][m]), 1.6, "F");
+            if (i % step === 0 || i === n - 1) {
+              doc.text(chartData[i].date.slice(5), xFor(i), chartY + chartH + 18, { align: "center" });
+            }
+          }
+          doc.setTextColor(0);
+          doc.setLineWidth(0.2);
+        }
+        startY = chartY + chartH + 36;
+      }
+
+      if (pdfMode !== "chart") {
+        autoTable(doc, {
+          startY,
+          head: [header],
+          body: rows,
+          styles: { fontSize: 8, cellPadding: 3 },
+          headStyles: { fillColor: [200, 176, 108] },
+          margin: { left: 40, right: 40 },
+        });
+      }
       const filename = res.filename.replace(/\.csv$/i, ".pdf");
       doc.save(filename);
       toast.success(`Wyeksportowano ${rows.length} rekordów do PDF`);
@@ -329,6 +401,18 @@ function VitalsPage() {
             >
               <option value="landscape">Landscape</option>
               <option value="portrait">Portrait</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Zawartość PDF</label>
+            <select
+              value={pdfMode}
+              onChange={(e) => setPdfMode(e.target.value as typeof pdfMode)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="table">Tabela</option>
+              <option value="chart">Wykres trendu</option>
+              <option value="both">Wykres + tabela</option>
             </select>
           </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
