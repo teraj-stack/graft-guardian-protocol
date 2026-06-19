@@ -2,7 +2,7 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
-import { Clock, Package, CheckCircle, Calculator } from "lucide-react";
+import { Clock, Package, CheckCircle, Calculator, Info } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import {
   STOREFRONT_PRODUCT_BY_HANDLE_QUERY,
@@ -107,8 +107,11 @@ function ProductPage() {
                       </>
                     )}
                     {sessions > 0 && (
-                      <span className="text-sm text-muted-foreground">
+                      <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                         <span className="font-medium text-foreground">{(perSession).toFixed(2)} {price.currencyCode}</span> / sesja
+                        <span title={`Cena za 1 sesję = cena pakietu (${priceN.toFixed(2)} ${price.currencyCode}) ÷ ${sessions} sesji`}>
+                          <Info className="h-3.5 w-3.5 cursor-help text-muted-foreground/70" />
+                        </span>
                       </span>
                     )}
                   </div>
@@ -152,8 +155,11 @@ function ProductPage() {
                             {p.toFixed(0)} {v.node.price.currencyCode}
                             {pct > 0 && <span className="ml-1 line-through opacity-70">{c.toFixed(0)}</span>}
                             {vSessions > 0 && (
-                              <span className={`ml-1.5 text-[10px] ${active ? "text-background/70" : "text-muted-foreground/70"}`}>
+                              <span className={`ml-1.5 inline-flex items-center gap-0.5 text-[10px] ${active ? "text-background/70" : "text-muted-foreground/70"}`}>
                                 ({vPerSession.toFixed(0)}/sesja)
+                                <span title={`Cena za 1 sesję = cena pakietu (${p.toFixed(2)} ${v.node.price.currencyCode}) ÷ ${vSessions} sesji`}>
+                                  <Info className="h-3 w-3 cursor-help opacity-70" />
+                                </span>
                               </span>
                             )}
                           </span>
