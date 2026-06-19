@@ -7,7 +7,7 @@ import { getPricingOverrides } from "@/lib/pricing.functions";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
-import graftgenLogo from "@/assets/graftgen-logo-v2.png.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
 
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
@@ -200,6 +200,9 @@ function Nav() {
 
       {open && (
         <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
+          <div className="mb-4 flex justify-center">
+            <img src={graftgenLogo.url} alt="Graftgen.com" className="h-14 w-auto" />
+          </div>
           <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
             {navLinks.map((l) =>
               "to" in l ? (
