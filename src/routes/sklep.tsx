@@ -95,14 +95,37 @@ function Shop() {
           )}
         </div>
 
-        <PricingSummary />
+        <PricingSummary products={data ?? []} />
         <PricingFaq />
       </section>
     </div>
   );
 }
 
-function PricingSummary() {
+type CompareLookup = Record<string, Record<number, string | null>>;
+
+function buildCompareLookup(products: ShopifyProduct[]): CompareLookup {
+  const lookup: CompareLookup = {};
+  for (const edge of products) {
+    const handle = edge.node.handle;
+    const byCount: Record<number, string | null> = {};
+    for (const v of edge.node.variants.edges) {
+      const sessions = parseInt(v.node.title?.match(/\d+/)?.[0] ?? "0", 10) || 1;
+      const cap = v.node.compareAtPrice;
+      if (cap?.amount && Number(cap.amount) > Number(v.node.price.amount)) {
+        const n = Math.round(Number(cap.amount));
+        byCount[sessions] = `${n.toLocaleString("pl-PL")} ${cap.currencyCode === "PLN" ? "zł" : cap.currencyCode}`;
+      } else if (!(sessions in byCount)) {
+        byCount[sessions] = null;
+      }
+    }
+    lookup[handle] = byCount;
+  }
+  return lookup;
+}
+
+function PricingSummary({ products }: { products: ShopifyProduct[] }) {
+  const compare = buildCompareLookup(products);
   return (
     <div id="cennik" className="mt-24 border-t border-border/60 pt-14">
       <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Cennik</p>
@@ -111,56 +134,74 @@ function PricingSummary() {
       </h2>
       <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
         Ceny uśrednione na podstawie górnego przedziału stawek klinik premium
-        w Warszawie i Gdańsku (stan: 2026). Ostateczna wycena ustalana po
-        konsultacji kwalifikacyjnej.
+        w Warszawie i Gdańsku (stan: 2026). Kolumny <em>katalog</em> pokazują
+        cenę przed rabatem (compareAtPrice z Shopify).
       </p>
       <div className="mt-10 overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse text-sm">
+        <table className="w-full min-w-[880px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
               <th className="py-3 pr-4">Zabieg</th>
               <th className="py-3 pr-4 text-right">1 sesja</th>
+              <th className="py-3 pr-4 text-right">Katalog</th>
               <th className="py-3 pr-4 text-right">Pakiet 5</th>
+              <th className="py-3 pr-4 text-right">Katalog 5</th>
               <th className="py-3 pr-4 text-right">Pakiet 10</th>
+              <th className="py-3 pr-4 text-right">Katalog 10</th>
               <th className="py-3 pr-4 text-right">Pakiet 20</th>
+              <th className="py-3 pr-4 text-right">Katalog 20</th>
               <th className="py-3 text-right" />
             </tr>
           </thead>
           <tbody>
-            {PRICING.map((p) => (
-              <tr key={p.code} className="border-b border-border/40">
-                <td className="py-4 pr-4">
-                  <div className="font-medium text-foreground">{p.name}</div>
-                  <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                    {p.code} · {p.params}
-                  </div>
-                </td>
-                <td className="py-4 pr-4 text-right text-foreground">{p.single.price}</td>
-                {p.packs.map((pk) => (
-                  <td key={pk.sessions} className="py-4 pr-4 text-right">
-                    <div className="text-foreground">{pk.price}</div>
-                    <div className="text-[11px] text-muted-foreground">
-                      {pk.unitPrice}/sesja · −{pk.saving}
+            {PRICING.map((p) => {
+              const cap = compare[p.handle] ?? {};
+              const renderCap = (n: number) =>
+                cap[n] ? (
+                  <span className="text-[12px] text-muted-foreground line-through">{cap[n]}</span>
+                ) : (
+                  <span className="text-[12px] text-muted-foreground/50">—</span>
+                );
+              return (
+                <tr key={p.code} className="border-b border-border/40">
+                  <td className="py-4 pr-4">
+                    <div className="font-medium text-foreground">{p.name}</div>
+                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                      {p.code} · {p.params}
                     </div>
                   </td>
-                ))}
-                <td className="py-4 text-right">
-                  <Link
-                    to="/product/$handle"
-                    params={{ handle: p.handle }}
-                    className="text-xs text-accent hover:underline"
-                  >
-                    Kup →
-                  </Link>
-                </td>
-              </tr>
-            ))}
+                  <td className="py-4 pr-4 text-right text-foreground">{p.single.price}</td>
+                  <td className="py-4 pr-4 text-right">{renderCap(1)}</td>
+                  {p.packs.flatMap((pk) => [
+                    <td key={`${pk.sessions}-p`} className="py-4 pr-4 text-right">
+                      <div className="text-foreground">{pk.price}</div>
+                      <div className="text-[11px] text-muted-foreground">
+                        {pk.unitPrice}/sesja · −{pk.saving}
+                      </div>
+                    </td>,
+                    <td key={`${pk.sessions}-c`} className="py-4 pr-4 text-right">
+                      {renderCap(pk.sessions)}
+                    </td>,
+                  ])}
+                  <td className="py-4 text-right">
+                    <Link
+                      to="/product/$handle"
+                      params={{ handle: p.handle }}
+                      className="text-xs text-accent hover:underline"
+                    >
+                      Kup →
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
     </div>
   );
 }
+
 
 function PricingFaq() {
   return (
