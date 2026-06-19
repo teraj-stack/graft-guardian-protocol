@@ -190,4 +190,107 @@ describe.skipIf(!hasEnv)("reminders dispatcher (DB integration)", () => {
     expect(result.inserted).toBe(0);
     expect(await loadSends(subId)).toEqual([]);
   });
+
+  it("atomicity: sender throw mid-batch leaves zero rows in reminder_sends", async () => {
+    // Day-30 sub with selected [1,2,4,8,12] → catch-up wants weeks 1, 2, 4.
+    // Week 1 succeeds, week 2 throws. Without the abort guarantee, week 1's
+    // row would land while week 2+ would not — a partial state. With the
+    // guarantee, the whole batch aborts before INSERT and the table is empty.
+    const subId = await createSubscription({
+      surgeryDaysAgo: 30,
+      selectedWeeks: [1, 2, 4, 8, 12],
+      email: true,
+    });
+
+    const calls: number[] = [];
+    const flakySenders: ReminderSenders = {
+      sendEmailReminder: async ({ week }) => {
+        calls.push(week);
+        if (week === 2) throw new Error("simulated SMTP 500");
+        return { status: "sent", providerMessageId: `ok-${week}` };
+      },
+      sendSmsReminder: async () => ({ status: "skipped" }),
+    };
+
+    const result = await runDispatch({
+      supabase,
+      now: new Date(),
+      senders: flakySenders,
+      onlySubscriptionId: subId,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/simulated SMTP 500/);
+    expect(result.inserted).toBe(0);
+    // Sender was actually invoked up to the throw — proves the loop ran.
+    expect(calls).toEqual([1, 2]);
+
+    // Hard DB check: zero reminder_sends rows for this subscription.
+    expect(await loadSends(subId)).toEqual([]);
+
+    // The next dispatcher run with a working sender must still see all
+    // three weeks as due (nothing was logged) — the "abort → safe to retry"
+    // half of the contract.
+    const retry = await runDispatch({
+      supabase,
+      now: new Date(),
+      senders: noopSenders,
+      onlySubscriptionId: subId,
+    });
+    expect(retry.ok).toBe(true);
+    expect(retry.inserted).toBe(3);
+    expect((await loadSends(subId)).map((r) => r.week)).toEqual([1, 2, 4]);
+  });
+
+  it("atomicity: a failed batch INSERT leaves zero rows (single-statement rollback)", async () => {
+    // Route reminder_sends INSERTs through a wrapper that returns a DB error,
+    // simulating a constraint/permission failure at write time. The dispatcher
+    // must surface ok:false and the table must be unchanged (no partial rows).
+    const subId = await createSubscription({
+      surgeryDaysAgo: 14,
+      selectedWeeks: [1, 2],
+      email: true,
+    });
+
+    const wrapped = new Proxy(supabase, {
+      get(target, prop, receiver) {
+        if (prop === "from") {
+          return (table: string) => {
+            const builder = (target as any).from(table);
+            if (table !== "reminder_sends") return builder;
+            return new Proxy(builder, {
+              get(b: any, p: string | symbol) {
+                if (p === "insert") {
+                  // .insert(...).select(...) is awaited; make the awaited
+                  // value resolve to a Supabase-shaped error response.
+                  return () => ({
+                    select: () => Promise.resolve({
+                      data: null,
+                      error: { message: "simulated insert failure" },
+                    }),
+                  });
+                }
+                return b[p];
+              },
+            });
+          };
+        }
+        return Reflect.get(target, prop, receiver);
+      },
+    }) as typeof supabase;
+
+    const result = await runDispatch({
+      supabase: wrapped,
+      now: new Date(),
+      senders: noopSenders,
+      onlySubscriptionId: subId,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.inserted).toBe(0);
+    expect(result.error).toMatch(/simulated insert failure/);
+
+    // Real DB (via the unwrapped client) shows no rows landed.
+    expect(await loadSends(subId)).toEqual([]);
+  });
 });
