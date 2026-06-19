@@ -124,11 +124,17 @@ function VitalsPage() {
   const [range, setRange] = useState<7 | 28>(7);
   const [expMetric, setExpMetric] = useState<"all" | "CLS" | "LCP" | "INP" | "FCP" | "TTFB">("all");
   const [expDevice, setExpDevice] = useState<"all" | "mobile" | "desktop" | "tablet">("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [exporting, setExporting] = useState(false);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
   const handleExport = async () => {
+    if (dateFrom && dateTo && dateTo < dateFrom) {
+      toast.error("Data końcowa nie może być wcześniejsza niż data początkowa. Popraw zakres dat.");
+      return;
+    }
     setExporting(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
@@ -223,6 +229,24 @@ function VitalsPage() {
               <option value="desktop">Desktop</option>
               <option value="tablet">Tablet</option>
             </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Od</label>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Do</label>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            />
           </div>
           <button
             onClick={handleExport}
