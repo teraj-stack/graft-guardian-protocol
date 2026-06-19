@@ -209,7 +209,7 @@ export function DayZeroToThree() {
           </ul>
           <Mech>Zero dotykania, drapania, mycia strefy biorczej.</Mech>
         </Card>
-        <Card title="Dni 1–2" badge="Krytyczne okno" badgeTone="red">
+        <Card title="Doba 1–2" badge="Krytyczne okno" badgeTone="red">
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex gap-2"><span className="text-accent">✓</span> Druga sesja HBOT (24 h po pierwszej)</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> PBM co 24 h, 20–30 min</li>
