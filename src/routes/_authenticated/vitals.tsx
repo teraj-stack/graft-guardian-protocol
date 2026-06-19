@@ -179,6 +179,57 @@ function VitalsPage() {
         <TrendChart metric="INP" data={trend} unit="ms" />
       </div>
 
+      <div className="rounded-md border bg-card p-4 mb-10">
+        <div className="flex flex-wrap items-end gap-3">
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Zakres</label>
+            <select
+              value={range}
+              onChange={(e) => setRange(Number(e.target.value) as 7 | 28)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value={7}>7 dni</option>
+              <option value={28}>28 dni</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Metryka</label>
+            <select
+              value={expMetric}
+              onChange={(e) => setExpMetric(e.target.value as typeof expMetric)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="all">Wszystkie</option>
+              <option value="CLS">CLS</option>
+              <option value="LCP">LCP</option>
+              <option value="INP">INP</option>
+              <option value="FCP">FCP</option>
+              <option value="TTFB">TTFB</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Urządzenie</label>
+            <select
+              value={expDevice}
+              onChange={(e) => setExpDevice(e.target.value as typeof expDevice)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="all">Wszystkie</option>
+              <option value="mobile">Mobile</option>
+              <option value="desktop">Desktop</option>
+              <option value="tablet">Tablet</option>
+            </select>
+          </div>
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="h-9 px-4 rounded-md bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50"
+          >
+            {exporting ? "Eksportowanie…" : "Eksportuj CSV"}
+          </button>
+        </div>
+      </div>
+
       <h2 className="text-lg font-semibold mb-2">Tabela p75 (28 dni)</h2>
       {data.total === 0 ? (
         <div className="rounded-md border p-6 text-sm text-muted-foreground">
