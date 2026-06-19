@@ -21,7 +21,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/_authenticated/admin" as any });
+      if (data.session) navigate({ to: "/admin" });
     });
   }, [navigate]);
 
@@ -35,7 +35,7 @@ function AuthPage() {
       setError(error.message);
       return;
     }
-    navigate({ to: "/_authenticated/admin" as any });
+    navigate({ to: "/admin" });
   }
 
   return (
