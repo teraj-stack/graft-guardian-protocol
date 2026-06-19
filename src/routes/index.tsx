@@ -711,6 +711,95 @@ function FAQSection() {
   );
 }
 
+/* ---------- Pricing ---------- */
+
+const PRICING = [
+  {
+    code: "HBOT",
+    name: "Tlenoterapia hiperbaryczna",
+    params: "60–90 min · 2,0–2,4 ATA · 100% O₂",
+    single: "420 zł",
+    pkg: "3 800 zł",
+    pkgLabel: "pakiet 10 sesji",
+    note: "Średnia z najwyższych stawek ośrodków premium w Warszawie i Gdańsku (ATAmed, Vimed, Komora-Hiperbaryczna, Regeneracja Gdańsk).",
+  },
+  {
+    code: "LADD",
+    name: "LADD: PRP + minoksydyl",
+    params: "Er:YAG / tul · PRP (Magellan/Arthrex) · minoksydyl topowo",
+    single: "2 400 zł",
+    pkg: "6 600 zł",
+    pkgLabel: "pakiet 3 sesji",
+    note: "Uśrednienie najwyższych cen PRP premium oraz zabiegów laser-assisted drug delivery w klinikach trychologicznych Warszawy i Gdańska.",
+  },
+  {
+    code: "PBM",
+    name: "Fototerapia (PBM / LLLT)",
+    params: "630–680 nm · 5 J/cm² · 20–30 min",
+    single: "600 zł",
+    pkg: "4 800 zł",
+    pkgLabel: "pakiet 10 sesji",
+    note: "Średnia z górnego przedziału cen klinik premium (Wellclinic, Hairmitage, Trycho-Med) dla zabiegów wykonywanych w gabinecie.",
+  },
+] as const;
+
+function Pricing() {
+  return (
+    <Section id="cennik" eyebrow="10 — Cennik">
+      <SectionHeader
+        title="Cennik zabiegów wspierających."
+        lead={
+          <>
+            Ceny uśrednione na podstawie <strong>górnego przedziału stawek klinik premium</strong>{" "}
+            w Warszawie i Gdańsku (stan: 2026). Ostateczna wycena ustalana jest
+            indywidualnie po konsultacji kwalifikacyjnej i zależy od liczby sesji,
+            powierzchni opracowania oraz protokołu łączonego.
+          </>
+        }
+      />
+      <div className="grid gap-6 md:grid-cols-3">
+        {PRICING.map((p) => (
+          <article
+            key={p.code}
+            className="flex flex-col rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8"
+          >
+            <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
+              {p.code}
+            </span>
+            <h3 className="mt-3 font-display text-2xl md:text-3xl">{p.name}</h3>
+            <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
+              {p.params}
+            </p>
+            <div className="my-6 h-px bg-border" />
+            <dl className="space-y-3 text-sm">
+              <div className="flex items-baseline justify-between gap-4">
+                <dt className="text-muted-foreground">Sesja pojedyncza</dt>
+                <dd className="font-display text-2xl text-foreground">{p.single}</dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-4">
+                <dt className="text-muted-foreground">{p.pkgLabel}</dt>
+                <dd className="font-display text-xl text-accent">{p.pkg}</dd>
+              </div>
+            </dl>
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+              {p.note}
+            </p>
+          </article>
+        ))}
+      </div>
+      <p className="mt-10 max-w-3xl text-xs leading-relaxed text-muted-foreground">
+        Metodologia: dla każdej kategorii pobrano publicznie dostępne cenniki
+        klinik klasy premium w Warszawie i Gdańsku, odfiltrowano oferty
+        wprowadzające i pakiety rabatowe Booksy, a następnie uśredniono najwyższy
+        zakres cen (75.–100. percentyl). Ceny nie zawierają konsultacji
+        kwalifikacyjnej (350–500 zł) ani preparatów dodatkowych. Niniejsze
+        zestawienie ma charakter informacyjny i nie stanowi oferty w rozumieniu
+        art. 66 §1 Kodeksu cywilnego.
+      </p>
+    </Section>
+  );
+}
+
 /* ---------- CTA ---------- */
 
 function CTA() {
