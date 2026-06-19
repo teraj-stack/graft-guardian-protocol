@@ -191,9 +191,11 @@ function AdminPage() {
                 name={item.name}
                 current={current}
                 onSave={(payload) => upsert.mutate(payload)}
-                onClear={() => del.mutate(item.code)}
+                onClear={() =>
+                  current && del.mutate({ code: item.code, name: item.name, snapshot: current })
+                }
                 saving={upsert.isPending && upsert.variables?.code === item.code}
-                clearing={del.isPending && del.variables === item.code}
+                clearing={del.isPending && del.variables?.code === item.code}
               />
             );
           })}
