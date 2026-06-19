@@ -151,6 +151,13 @@ jobs:
               return `https://quickchart.io/chart?w=320&h=180&bkg=white&c=${encodeURIComponent(JSON.stringify(cfg))}`;
             };
 
+            const textDeltaSummary = (prevVal, currVal, label) => {
+              const d = currVal - prevVal;
+              const arrow = d > 0 ? '⬆️' : d < 0 ? '⬇️' : '➡️';
+              const sign = d > 0 ? '+' : '';
+              return `**${label}** — Poprzedni: \`${prevVal}\` → Bieżący: \`${currVal}\` (${arrow} ${sign}${d})`;
+            };
+
             const chartBlock = `#### Miniwykresy (ostatnie ${history.length} ${history.length === 1 ? 'przebieg' : 'przebiegi'})\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![hits](${quickChart('Łączne wykrycia', hitsSeries, '#d73a49')}) | ![files](${quickChart('Liczba plików', filesSeries, '#0366d6')}) |\n| \`${sparkline(hitsSeries)}\` ${hitsSeries.join(' → ')} | \`${sparkline(filesSeries)}\` ${filesSeries.join(' → ')} |\n\n<sub>Oś X (od najstarszego do najnowszego): ${labels}</sub>\n\n`;
 
             let trendSection;
