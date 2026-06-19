@@ -102,21 +102,32 @@ function Shop() {
   );
 }
 
-type CompareLookup = Record<string, Record<number, string | null>>;
+interface CompareInfo {
+  formattedCap: string | null;
+  discountPct: number | null;
+}
+
+type CompareLookup = Record<string, Record<number, CompareInfo>>;
 
 function buildCompareLookup(products: ShopifyProduct[]): CompareLookup {
   const lookup: CompareLookup = {};
   for (const edge of products) {
     const handle = edge.node.handle;
-    const byCount: Record<number, string | null> = {};
+    const byCount: Record<number, CompareInfo> = {};
     for (const v of edge.node.variants.edges) {
       const sessions = parseInt(v.node.title?.match(/\d+/)?.[0] ?? "0", 10) || 1;
       const cap = v.node.compareAtPrice;
-      if (cap?.amount && Number(cap.amount) > Number(v.node.price.amount)) {
-        const n = Math.round(Number(cap.amount));
-        byCount[sessions] = `${n.toLocaleString("pl-PL")} ${cap.currencyCode === "PLN" ? "zł" : cap.currencyCode}`;
+      const price = Number(v.node.price.amount);
+      if (cap?.amount && Number(cap.amount) > price) {
+        const capNum = Number(cap.amount);
+        const pct = Math.round(((capNum - price) / capNum) * 100);
+        const n = Math.round(capNum);
+        byCount[sessions] = {
+          formattedCap: `${n.toLocaleString("pl-PL")} ${cap.currencyCode === "PLN" ? "zł" : cap.currencyCode}`,
+          discountPct: pct,
+        };
       } else if (!(sessions in byCount)) {
-        byCount[sessions] = null;
+        byCount[sessions] = { formattedCap: null, discountPct: null };
       }
     }
     lookup[handle] = byCount;
