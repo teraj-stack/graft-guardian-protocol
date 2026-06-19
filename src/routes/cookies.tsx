@@ -94,7 +94,7 @@ function CookiesPage() {
         <section className="mt-10 space-y-4">
           <h2 className="font-serif text-2xl">5. Administrator i kontakt IOD</h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Administratorem jest Bujok Medical Sp. z o.o., ul. Kard. Bolesława Kominka 44, 44-217 Rybnik (KRS 0000791172, NIP 6423218241, REGON 383695904). Kontakt w sprawach RODO i cookies:{" "}
+            Administratorem jest Medical Lasers and STEM Cells Solutions Sp. z o.o., ul. Kard. Bolesława Kominka 44, 44-217 Rybnik (KRS 0000791172, NIP 6423218241, REGON 383695904). Kontakt w sprawach RODO i cookies:{" "}
             <a href="mailto:mila.skrzynska@gmail.com" className="underline hover:text-accent">mila.skrzynska@gmail.com</a>.
           </p>
           <p className="text-sm leading-relaxed text-muted-foreground">

@@ -1505,7 +1505,7 @@ function Contact() {
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
               Kontakt bezpośredni
             </p>
-            <p className="mt-4 font-display text-2xl">Bujok Medical Sp. z o.o.</p>
+            <p className="mt-4 font-display text-2xl">Medical Lasers and STEM Cells Solutions Sp. z o.o.</p>
             <p className="mt-2 text-sm text-muted-foreground">
               ul. Kard. Bolesława Kominka 44<br />
               44-217 Rybnik
