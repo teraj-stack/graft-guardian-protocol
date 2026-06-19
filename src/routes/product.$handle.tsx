@@ -27,6 +27,17 @@ async function fetchProduct(handle: string) {
   return data?.data?.product ?? null;
 }
 
+function productPlaceholder(product: any) {
+  const t = (product.title ?? "").toLowerCase();
+  if (t.includes("hiperbaryczn") || t.includes("hbot") || t.includes("fototerap") || t.includes("pbm") || t.includes("lllt")) {
+    return { src: graftgenLogo.url, alt: "Graftgen.com" };
+  }
+  if (t.includes("ladd") || t.includes("plazm") || t.includes("cap") || t.includes("tul")) {
+    return { src: mscLogo.url, alt: "MSC" };
+  }
+  return { src: graftgenLogo.url, alt: "Graftgen.com" };
+}
+
 function ProductPage() {
   const { handle } = useParams({ from: "/product/$handle" });
   const { data: product, isLoading } = useQuery({
