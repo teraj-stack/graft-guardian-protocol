@@ -48,7 +48,7 @@ export const MATERIALS: Material[] = [
   },
   {
     id: "m03",
-    title: "Protokół HBOT 1,5–2,0 ATA — pełna dokumentacja",
+    title: "Protokół HBOT 1,5–3,0 ATA — pełna dokumentacja",
     description:
       "Sesje 1–4, kwalifikacja, przeciwwskazania (odma, ucho środkowe, POChP), wyrównywanie ciśnienia, co zabrać do komory.",
     category: "HBOT",
