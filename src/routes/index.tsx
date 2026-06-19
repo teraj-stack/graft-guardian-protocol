@@ -792,7 +792,6 @@ function EvidenceBasement() {
             <sup className="ml-0.5 text-accent">[3,4]</sup> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej).
           </p>
         </Card>
-        <Card title="Źródła (RCT i przeglądy) — z weryfikacją zgodności">
         <SourcesCard />
       </div>
     </Section>
