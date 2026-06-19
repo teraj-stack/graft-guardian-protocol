@@ -463,6 +463,18 @@ function VitalsPage() {
             </select>
           </div>
           <div>
+            <label className="block text-xs text-muted-foreground mb-1">Okno wykresu PDF</label>
+            <select
+              value={pdfWindow}
+              onChange={(e) => setPdfWindow(e.target.value as typeof pdfWindow)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="all">Całe okno</option>
+              <option value="d0-3">D0–3 (ostatnie 4 dni)</option>
+              <option value="d4-14">D4–14</option>
+              <option value="m1+">M1+ (15+ dni)</option>
+            </select>
+          <div>
             <label className="block text-xs text-muted-foreground mb-1">Metryki wykresu PDF</label>
             <div className="h-9 inline-flex items-center gap-3 rounded-md border bg-background px-3 text-sm">
               {(["CLS", "LCP", "INP"] as const).map((m) => (
