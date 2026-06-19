@@ -898,7 +898,7 @@ const REFERENCES: RefEntry[] = [
   },
 ];
 
-function StatusBadge({ status, label, value, source, message }: { status: "ok" | "not_found" | "error" | "loading"; label: string; value: string; source: string; message?: string }) {
+function StatusBadge({ status, label, value, source, message }: { status: "ok" | "not_found" | "error" | "loading" | "skipped"; label: string; value: string; source: string; message?: string }) {
   const styles: Record<string, string> = {
     ok: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
     not_found: "border-red-500/40 bg-red-500/10 text-red-300",
