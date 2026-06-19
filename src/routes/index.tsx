@@ -308,7 +308,7 @@ function Stat({ k, v }: { k: string; v: string }) {
 
 function Why() {
   return (
-    <Section id="dlaczego" eyebrow="01 — Dlaczego pierwsze 14 dni">
+    <Section id="dlaczego" eyebrow="01 — DLACZEGO PIERWSZE 100 GODZIN?">
       <SectionHeader title="Okno, w którym decyduje się los każdego przeszczepionego włosa." />
       <div className="grid gap-8 md:grid-cols-3">
         <Para>
