@@ -161,4 +161,8 @@ export const PRICING_FAQ: { q: string; a: string }[] = [
     q: "Czy pakiet 1 sesji to to samo, co pojedyncza wizyta bez zobowiązania?",
     a: "Tak. Wariant '1 sesja' odpowiada standardowej wizycie 'pay-as-you-go'. Nie ma rabatu, ale też nie ma zobowiązania do kolejnych wizyt. Cena jest identyczna ze stawką katalogową (compareAtPrice). Jeśli po pierwszej sesji zdecydujesz się na pakiet 5, 10 lub 20, różnica jest rozliczana z wstecznym rabatem, jak przy przeskoku między pakietami.",
   },
+  {
+    q: "Co zawiera cotygodniowy raport w pakiecie 20 sesji, jak go otrzymam i jakie ma znaczenie kliniczne?",
+    a: "Pakiet 20 sesji obejmuje cotygodniowy raport postępu wysyłany na adres e-mail pacjenta (opcjonalnie SMS z linkiem). Raport zawiera: 1) Liczbę wykonanych i zaplanowanych sesji w danym tygodniu z oznaczeniem modalności (HBOT / LADD / PBM). 2) Aktualne parametry biometryczne: liczba mieszków w fazie anagen (trichoskopia), grubość włosa µm, gęstość graftów na cm², ewentualne strefy rzadsze. 3) Wykres trendu porównujący bieżące wyniki z baseline (przed zabiegiem DHI). 4) Ocena tolerancji skóry: erytema, łuszczenie, poziom nawilżenia — skalowane 1–5. 5) Zalecenia na kolejny tydzień: korekta dawki świetlnej, zmiana częstotliwości HBOT, ewentualne wskazanie do konsultacji lekarskiej. Znaczenie kliniczne: raport pozwala wykryć wczesne oznaki zaburzeń gojenia (np. opóźniona angiogeneza, przewlekły erytem) przed objawami klinicznymi i skorygować protokół bez konieczności osobistej wizyty kontrolnej. Dane są archiwowane w panelu pacjenta i mogą być udostępnione lekarzowi transplantologowi na życzenie.",
+  },
 ];
