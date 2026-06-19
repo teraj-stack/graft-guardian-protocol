@@ -749,6 +749,47 @@ function Journey() {
   );
 }
 
+/* ---------- Evidence Basement Medicine ---------- */
+
+function EvidenceBasement() {
+  return (
+    <Section id="evidence" eyebrow="09 — Evidence Basement Medicine">
+      <SectionHeader title="Udokumentowana fotobiomodulacja jako terapia wspomagająca." />
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card title="Przeżywalność graftów">
+          <p>
+            Zabiegi przeszczepu włosów (szczególnie w renomowanych klinikach) cechują się naturalnie wysoką przeżywalnością na poziomie{" "}
+            <strong className="text-foreground">90–95%</strong>.
+          </p>
+          <p className="mt-4">
+            Badania RCT wykazują, że stosowanie PBM (650 nm) nie zwiększa w spektakularny sposób samej przeżywalności w liczbach bezwzględnych (trudno przekroczyć granicę 95%), ale dramatycznie ratuje grafty narażone na niedokrwienie (ischemia-reperfusion injury), co statystycznie daje zysk na poziomie{" "}
+            <strong className="text-foreground">5–8%</strong> większej całkowitej liczby przyjętych jednostek w porównaniu do grupy placebo.
+          </p>
+        </Card>
+        <Card title="Przyspieszenie anagenu i gojenia">
+          <p>
+            Normalnie, przeflancowane włosy wchodzą w fazę telogenu i wypadają po 2–4 tygodniach, a nowy anagen zaczyna się w 3–4 miesiącu.
+          </p>
+          <p className="mt-4">
+            Według badań, u pacjentów naświetlanych falą 655 nm obserwowano wczesne wejście w anagen o średnio 3–4 tygodnie szybciej. Zmniejszeniu ulega również zjawisko „shock loss" (pooperacyjnego łysienia telogenowego) w okolicy biorczej, redukując jego skalę o około{" "}
+            <strong className="text-foreground">20–30%</strong>.
+          </p>
+          <p className="mt-4">
+            Stosowanie mieszanego światła (np. 633 nm + 830 nm) tuż po zabiegu prowadzi do szybszego odpadania strupów o około 3–5 dni. Zauważalna obiektywnie (pomiar spektrofotometryczny) redukcja rumienia pozabiegowego jest o{" "}
+            <strong className="text-foreground">30–40%</strong> szybsza w pierwszych 14 dniach.
+          </p>
+        </Card>
+        <Card title="Ostateczna gęstość i grubość włosa">
+          <p>
+            Rok po zabiegu, w grupach stosujących fototerapię (650 nm, 3× w tygodniu po 15–20 min), badania RCT odnotowują zwiększenie średnicy łodygi włosa średnio o{" "}
+            <strong className="text-foreground">10–15%</strong> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej).
+          </p>
+        </Card>
+      </div>
+    </Section>
+  );
+}
+
 /* ---------- FAQ ---------- */
 
 function FAQSection() {
