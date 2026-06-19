@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAllReportSends, exportReportSendsCsv, exportReportSendsXlsx, type ReportSendStatus } from "@/lib/report-sends.functions";
 import { ReportStatusBadge } from "@/components/ReportStatusBadge";
 
