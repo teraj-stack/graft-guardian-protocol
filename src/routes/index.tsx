@@ -888,10 +888,15 @@ function Mech({ children }: { children: React.ReactNode }) {
 
 /* ---------- Contact ---------- */
 
+type NotifySummary = {
+  email: string;
+  sms: string[];
+};
+
 type ContactStatus =
   | { kind: "idle" }
   | { kind: "submitting" }
-  | { kind: "success"; receivedAt: string }
+  | { kind: "success"; receivedAt: string; notifications?: NotifySummary }
   | { kind: "error"; message: string };
 
 function Contact() {
