@@ -202,8 +202,123 @@ function TherapyCalculator({ product, currentVariant }: { product: any; currentV
             <p className="mt-0.5 text-xs text-muted-foreground">Plan terapeutyczny</p>
           </div>
         </div>
+
+        <WeeklySchedule sessions={sessions} frequency={plan.frequency} />
       </div>
     </section>
+  );
+}
+
+const DAY_LABELS = ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Ndz"];
+
+function parseFrequency(freq: string): { mode: "interval" | "perWeek"; value: number } {
+  const f = freq.toLowerCase();
+  const perWeek = f.match(/(\d+)(?:\s*[–\-]\s*(\d+))?\s*×\s*\/\s*tydzie/);
+  if (perWeek) {
+    const a = parseInt(perWeek[1]);
+    const b = perWeek[2] ? parseInt(perWeek[2]) : a;
+    return { mode: "perWeek", value: Math.round((a + b) / 2) };
+  }
+  const everyWeeks = f.match(/\/\s*(\d+)(?:\s*[–\-]\s*(\d+))?\s*tygodn/);
+  if (everyWeeks) {
+    const a = parseInt(everyWeeks[1]);
+    const b = everyWeeks[2] ? parseInt(everyWeeks[2]) : a;
+    return { mode: "interval", value: Math.round(((a + b) / 2) * 7) };
+  }
+  if (/\/\s*dzie/.test(f)) return { mode: "interval", value: 1 };
+  const everyDays = f.match(/\/\s*(\d+)(?:\s*[–\-]\s*(\d+))?\s*dni/);
+  if (everyDays) {
+    const a = parseInt(everyDays[1]);
+    const b = everyDays[2] ? parseInt(everyDays[2]) : a;
+    return { mode: "interval", value: Math.round((a + b) / 2) };
+  }
+  return { mode: "interval", value: 7 };
+}
+
+function buildSchedule(sessions: number, freq: string, startDay: number) {
+  const parsed = parseFrequency(freq);
+  const out: { week: number; day: number }[] = [];
+  if (parsed.mode === "perWeek") {
+    const patterns: Record<number, number[]> = {
+      1: [0], 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 2, 3, 4], 6: [0, 1, 2, 3, 4, 5], 7: [0, 1, 2, 3, 4, 5, 6],
+    };
+    const pattern = patterns[Math.min(7, Math.max(1, parsed.value))];
+    let count = 0;
+    for (let w = 0; count < sessions && w < 400; w++) {
+      for (const offset of pattern) {
+        if (count >= sessions) break;
+        const totalDay = w * 7 + offset;
+        out.push({ week: w + 1, day: (startDay + totalDay) % 7 });
+        count++;
+      }
+    }
+  } else {
+    const interval = Math.max(1, parsed.value);
+    for (let i = 0; i < sessions; i++) {
+      const totalDay = i * interval;
+      out.push({ week: Math.floor(totalDay / 7) + 1, day: (startDay + totalDay) % 7 });
+    }
+  }
+  return out;
+}
+
+function WeeklySchedule({ sessions, frequency }: { sessions: number; frequency: string }) {
+  const [startDay, setStartDay] = useState(0);
+  const schedule = useMemo(() => buildSchedule(sessions, frequency, startDay), [sessions, frequency, startDay]);
+  const weeks = useMemo(() => {
+    const map = new Map<number, number[]>();
+    for (const s of schedule) {
+      if (!map.has(s.week)) map.set(s.week, []);
+      map.get(s.week)!.push(s.day);
+    }
+    return Array.from(map.entries()).sort((a, b) => a[0] - b[0]);
+  }, [schedule]);
+
+  return (
+    <div className="mt-5 rounded-sm border border-border/40 bg-secondary/20 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground">Harmonogram tygodniowy</p>
+        <label className="flex items-center gap-2 text-xs text-muted-foreground">
+          Start:
+          <select
+            value={startDay}
+            onChange={(e) => setStartDay(parseInt(e.target.value))}
+            className="rounded-sm border border-border/60 bg-background px-2 py-1 text-xs"
+          >
+            {DAY_LABELS.map((d, i) => (
+              <option key={i} value={i}>{d}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <div className="mt-3 max-h-[420px] space-y-1.5 overflow-y-auto pr-1">
+        {weeks.map(([week, days]) => (
+          <div key={week} className="flex items-center gap-2">
+            <span className="w-16 shrink-0 text-xs text-muted-foreground">Tydz. {week}</span>
+            <div className="flex flex-1 gap-1">
+              {DAY_LABELS.map((label, i) => {
+                const active = days.includes(i);
+                return (
+                  <div
+                    key={i}
+                    className={`flex h-7 flex-1 items-center justify-center rounded-sm text-[10px] uppercase tracking-wider ${
+                      active
+                        ? "border border-accent/40 bg-accent/20 text-accent"
+                        : "border border-border/30 text-muted-foreground/40"
+                    }`}
+                  >
+                    {label}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 text-[11px] text-muted-foreground">
+        Łącznie {schedule.length} sesji w {weeks.length} {weeks.length === 1 ? "tygodniu" : "tygodniach"}. Harmonogram orientacyjny — finalne terminy ustala lekarz.
+      </p>
+    </div>
   );
 }
 
