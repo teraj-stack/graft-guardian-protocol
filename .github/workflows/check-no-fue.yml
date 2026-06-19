@@ -29,9 +29,19 @@ jobs:
           echo "exitcode=$?" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Upload FUE report artifact
+        id: upload
+        if: steps.guard.outputs.exitcode != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fue-report
+          path: fue-report.json
+
       - name: Comment PR with FUE findings
         if: github.event_name == 'pull_request' && steps.guard.outputs.exitcode != '0'
         uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
         with:
           script: |
             const fs = require('fs');
@@ -71,7 +81,12 @@ jobs:
               return `| [${file}](${url}) | ${hits.length} |`;
             }).join('\n');
 
-            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.\n\n### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+            const artifactUrl = process.env.ARTIFACT_URL || '';
+            const artifactLink = artifactUrl
+              ? `\n\n📥 [Pobierz pełny raport JSON](${artifactUrl})`
+              : '';
+
+            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}\n\n### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
