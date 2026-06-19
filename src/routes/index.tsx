@@ -1275,10 +1275,12 @@ function Contact() {
     const payload = {
       name: String(fd.get("name") ?? ""),
       email: String(fd.get("email") ?? ""),
+      topic: String(fd.get("topic") ?? ""),
       message: String(fd.get("message") ?? ""),
       consent: fd.get("consent") === "on",
       website: String(fd.get("website") ?? ""),
     };
+
     try {
       const res = await fetch("/api/public/contact", {
         method: "POST",
