@@ -22,6 +22,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
@@ -96,6 +97,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedVitalsRoute = AuthenticatedVitalsRouteImport.update({
+  id: '/vitals',
+  path: '/vitals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
   id: '/raporty',
   path: '/raporty',
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/raporty': typeof AuthenticatedRaportyRoute
+  '/vitals': typeof AuthenticatedVitalsRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/raporty': typeof AuthenticatedRaportyRoute
+  '/vitals': typeof AuthenticatedVitalsRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
+  '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/sklep'
     | '/admin'
     | '/raporty'
+    | '/vitals'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/sklep'
     | '/admin'
     | '/raporty'
+    | '/vitals'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/sklep'
     | '/_authenticated/admin'
     | '/_authenticated/raporty'
+    | '/_authenticated/vitals'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
@@ -406,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/vitals': {
+      id: '/_authenticated/vitals'
+      path: '/vitals'
+      fullPath: '/vitals'
+      preLoaderRoute: typeof AuthenticatedVitalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/raporty': {
       id: '/_authenticated/raporty'
       path: '/raporty'
@@ -475,11 +494,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
+  AuthenticatedVitalsRoute: typeof AuthenticatedVitalsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
+  AuthenticatedVitalsRoute: AuthenticatedVitalsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

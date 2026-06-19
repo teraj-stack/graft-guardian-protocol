@@ -162,6 +162,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartSyncBridge />
+      <WebVitalsBridge />
       <BackButton />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
@@ -173,5 +174,12 @@ function RootComponent() {
 
 function CartSyncBridge() {
   useCartSync();
+  return null;
+}
+
+function WebVitalsBridge() {
+  useEffect(() => {
+    void import("../lib/web-vitals").then((m) => m.initWebVitals());
+  }, []);
   return null;
 }
