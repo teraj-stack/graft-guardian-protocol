@@ -150,7 +150,7 @@ function Nav() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
           <span
-            className="block h-10 md:h-12"
+            className="block h-[52px] md:h-[62px]"
             style={{ aspectRatio: "415 / 531", width: "auto" }}
           >
             <img
@@ -216,7 +216,7 @@ function Nav() {
               width={415}
               height={531}
               decoding="async"
-              className="h-14 w-auto"
+              className="h-[73px] w-auto"
             />
           </div>
           <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
