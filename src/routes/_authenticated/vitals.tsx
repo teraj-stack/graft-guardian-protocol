@@ -416,6 +416,18 @@ function VitalsPage() {
               <option value="both">Wykres + tabela</option>
             </select>
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Percentyl</label>
+            <select
+              value={pdfPercentile}
+              onChange={(e) => setPdfPercentile(Number(e.target.value) as 50 | 75 | 90)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value={50}>p50</option>
+              <option value={75}>p75</option>
+              <option value={90}>p90</option>
+            </select>
+          </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
             <input
               type="checkbox"
