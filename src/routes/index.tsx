@@ -114,6 +114,7 @@ function Index() {
         <Microbiome />
         <Timeline />
         <Journey />
+        <Pricing />
         <FAQSection />
         <CTA />
         <Contact />
@@ -139,6 +140,7 @@ function Nav() {
           <a href="#hbot" className="hover:text-foreground">HBOT</a>
           <a href="#ladd" className="hover:text-foreground">LADD</a>
           <a href="#protokol" className="hover:text-foreground">14 dni</a>
+          <a href="#cennik" className="hover:text-foreground">Cennik</a>
           <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
           <Link to="/przypomnienia" className="hover:text-foreground">Przypomnienia</Link>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
