@@ -793,6 +793,9 @@ const PRICING: PricingItem[] = [
   {
     code: "LADD",
     name: "LADD: PRP + minoksydyl",
+    // Tymczasowo ukryte w cenniku — protokół z laserem tulowym wraca za ~2 tygodnie.
+    hidden: true,
+
     params: "Er:YAG / tul · PRP (Magellan/Arthrex) · minoksydyl topowo",
     single: { price: "2 400 zł", label: "Sesja pojedyncza" },
     packs: [
@@ -935,7 +938,9 @@ interface PricingItem {
   packs: PricingPack[];
   scope: string[];
   note: string;
+  hidden?: boolean;
 }
+
 
 function Pricing() {
   return (
@@ -952,7 +957,7 @@ function Pricing() {
         }
       />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {PRICING.map((p) => (
+        {PRICING.filter((p) => !p.hidden).map((p) => (
           <article
             key={p.code}
             className="flex flex-col rounded-sm border border-border bg-card shadow-[var(--shadow-editorial)]"
