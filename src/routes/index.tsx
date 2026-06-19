@@ -957,7 +957,7 @@ function Pricing() {
         }
       />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {PRICING.map((p) => (
+        {PRICING.filter((p) => !p.hidden).map((p) => (
           <article
             key={p.code}
             className="flex flex-col rounded-sm border border-border bg-card shadow-[var(--shadow-editorial)]"
