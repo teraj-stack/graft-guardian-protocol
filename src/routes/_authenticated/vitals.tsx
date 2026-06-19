@@ -223,13 +223,15 @@ function VitalsPage() {
 
       if (pdfMode !== "table") {
         const m = expMetric as "CLS" | "LCP" | "INP";
-        const chartData = trend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
+        const trendKey = `trend${range}${pdfPercentile === 75 ? "" : `_p${pdfPercentile}`}` as keyof typeof data;
+        const pdfTrend = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
+        const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
         const chartX = 40;
         const chartW = pageW - 80;
         const chartH = 200;
         const chartY = startY;
         doc.setFontSize(11);
-        doc.text(`Trend p75 — ${m} (${range} dni)`, chartX, chartY - 4);
+        doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni)`, chartX, chartY - 4);
         // axes box
         doc.setDrawColor(180);
         doc.rect(chartX, chartY + 6, chartW, chartH);
