@@ -92,3 +92,78 @@ export async function notifyClinicOfContact(args: {
     return { status: "error", error: `fetch_failed_${(e as Error).message}` };
   }
 }
+
+function truncate(s: string, max: number): string {
+  return s.length <= max ? s : s.slice(0, max - 1) + "…";
+}
+
+export async function smsNotifyClinicOfContact(args: {
+  name: string;
+  email: string;
+  message: string;
+}): Promise<NotifyResult[]> {
+  const twilioKey = process.env.TWILIO_API_KEY;
+  const lovableKey = process.env.LOVABLE_API_KEY;
+  const fromNumber = process.env.TWILIO_FROM_NUMBER;
+  const toRaw = process.env.CONTACT_NOTIFY_SMS_TO || "";
+  const recipients = toRaw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (recipients.length === 0) {
+    return [{ status: "skipped", error: "no_recipients" }];
+  }
+  if (!twilioKey || !lovableKey || !fromNumber) {
+    return [
+      {
+        status: "provider_missing",
+        error: "TWILIO_API_KEY_or_TWILIO_FROM_NUMBER_missing",
+      },
+    ];
+  }
+
+  const body = truncate(
+    `Nowa wiadomosc (Protokol): ${args.name} <${args.email}> — ${args.message}`,
+    320
+  );
+
+  const results: NotifyResult[] = [];
+  for (const to of recipients) {
+    try {
+      const resp = await fetch(
+        "https://connector-gateway.lovable.dev/twilio/Messages.json",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${lovableKey}`,
+            "X-Connection-Api-Key": twilioKey,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({ To: to, From: fromNumber, Body: body }),
+        }
+      );
+      const text = await resp.text();
+      if (!resp.ok) {
+        results.push({
+          status: "error",
+          error: `twilio_${resp.status}_${text.slice(0, 200)}`,
+        });
+        continue;
+      }
+      let sid: string | undefined;
+      try {
+        sid = (JSON.parse(text) as { sid?: string }).sid;
+      } catch {
+        /* ignore */
+      }
+      results.push({ status: "sent", providerMessageId: sid });
+    } catch (e) {
+      results.push({
+        status: "error",
+        error: `fetch_failed_${(e as Error).message}`,
+      });
+    }
+  }
+  return results;
+}
+
