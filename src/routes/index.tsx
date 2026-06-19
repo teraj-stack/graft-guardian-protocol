@@ -264,7 +264,7 @@ function Hero() {
             Pierwsze 14 dni decyduje o przeżywalności graftów. Zamiast soli
             fizjologicznej i pasywnego gojenia — zintegrowany plan oparty
             na transplantologicznych płynach ochronnych, fotobiomodulacji
-            650/830 nm, tlenoterapii hiperbarycznej 1,5–2,0 ATA oraz
+            650/830 nm, tlenoterapii hiperbarycznej 1,5–3,0 ATA oraz
             laserowo wspomaganym dostarczaniu leków (LADD).
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
