@@ -1008,6 +1008,44 @@ function EvidenceAuditCard() {
     w.document.write(html);
     w.document.close();
   };
+  const exportJSON = () => {
+    const payload = {
+      meta: {
+        title: "Audyt dowodów — Evidence Basement Medicine",
+        generatedBy: "Graftgen",
+        generatedAt: new Date().toISOString(),
+        version: "1.0",
+      },
+      summary: {
+        direct: summary.direct,
+        indirect: summary.indirect,
+        interpretive: summary.interpretive,
+        total: CLAIMS.length,
+      },
+      claims: CLAIMS.map((c) => ({
+        id: c.id,
+        metric: c.metric,
+        value: c.value,
+        timeframe: c.timeframe,
+        population: c.population,
+        refs: c.refs,
+        level: c.level,
+        levelLabel: levelLabel[c.level],
+        rationale: c.rationale,
+        gaps: c.gaps,
+      })),
+      systemGap:
+        "Brak prospektywnego, head-to-head RCT „DHI + PBM/HBOT/LADD” vs. „DHI + standardowa opieka” z zaślepioną oceną przeżywalności graftów, czasu ustępowania rumienia i shock loss.",
+    };
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `audyt-dowodow-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   return (
     <Card title="Audyt dowodów — mapowanie liczb na źródła i luki">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -1023,6 +1061,9 @@ function EvidenceAuditCard() {
           </button>
           <button type="button" onClick={exportPDF} className="rounded-sm border border-accent bg-accent/10 px-2 py-1 text-accent hover:bg-accent/20">
             Eksport PDF
+          </button>
+          <button type="button" onClick={exportJSON} className="rounded-sm border border-border px-2 py-1 hover:border-accent hover:text-accent">
+            Eksport JSON
           </button>
         </div>
       </div>
