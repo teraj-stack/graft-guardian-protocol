@@ -113,9 +113,34 @@ jobs:
               return `➖ 0`;
             };
 
+            const history = Array.isArray(prev?.history) ? prev.history.slice(-19) : [];
+            history.push({ runId: context.runId, totalHits, totalFiles });
+
+            const sparkline = (values) => {
+              const blocks = ['▁','▂','▃','▄','▅','▆','▇','█'];
+              const max = Math.max(...values, 1);
+              const min = Math.min(...values, 0);
+              const span = max - min || 1;
+              return values.map(v => blocks[Math.round(((v - min) / span) * (blocks.length - 1))]).join('');
+            };
+            const quickChart = (label, values, color) => {
+              const cfg = {
+                type: 'sparkline',
+                data: { datasets: [{ data: values, borderColor: color, backgroundColor: color + '33', fill: true }] },
+                options: { plugins: { title: { display: true, text: label } } },
+              };
+              return `https://quickchart.io/chart?w=320&h=90&bkg=white&c=${encodeURIComponent(JSON.stringify(cfg))}`;
+            };
+
+            const hitsSeries = history.map(h => h.totalHits);
+            const filesSeries = history.map(h => h.totalFiles);
+            const labels = history.map(h => `#${h.runId}`).join(' · ');
+
+            const chartBlock = `#### Miniwykresy (ostatnie ${history.length} ${history.length === 1 ? 'przebieg' : 'przebiegi'})\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![hits](${quickChart('Łączne wykrycia', hitsSeries, '#d73a49')}) | ![files](${quickChart('Liczba plików', filesSeries, '#0366d6')}) |\n| \`${sparkline(hitsSeries)}\` ${hitsSeries.join(' → ')} | \`${sparkline(filesSeries)}\` ${filesSeries.join(' → ')} |\n\n<sub>Oś X (od najstarszego do najnowszego): ${labels}</sub>\n\n`;
+
             let trendSection;
             if (!prev) {
-              trendSection = `### 📈 Trend wykryć\n\n_Brak poprzedniego przebiegu do porównania — to pierwszy raport na tym PR._\n\n`;
+              trendSection = `### 📈 Trend wykryć\n\n_Brak poprzedniego przebiegu do porównania — to pierwszy raport na tym PR._\n\n${chartBlock}`;
             } else {
               const hitsDelta = fmtDelta(totalHits, prev.totalHits);
               const filesDelta = fmtDelta(totalFiles, prev.totalFiles);
@@ -130,7 +155,7 @@ jobs:
                 else if (cur !== old) status = 'zmiana';
                 return `| ${f} | ${old} | ${cur} | ${fmtDelta(cur, old)} | ${status} |`;
               }).join('\n');
-              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
+              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${chartBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
             }
 
             const state = Buffer.from(JSON.stringify({
@@ -138,6 +163,7 @@ jobs:
               totalHits,
               totalFiles,
               perFile: currentPerFile,
+              history,
             })).toString('base64');
             const stateBlock = `<!-- fue-state: ${state} -->`;
 
