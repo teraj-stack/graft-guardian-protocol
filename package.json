@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:visual": "python3 scripts/visual-logo-check.py",
     "prepare": "husky"
   },
   "dependencies": {
