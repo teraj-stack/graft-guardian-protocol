@@ -310,9 +310,10 @@ function Why() {
         <Para>
           Po ekstrakcji metodą DHI graft jest tkanką niedokrwioną. Od momentu
           pobrania do rewaskularyzacji w łożysku biorczym przeżywa wyłącznie
-          dzięki dyfuzji z osocza otaczającego mikroranę. Pierwsze
-          naczynia włosowate dochodzą do brodawki włosa zwykle między
-          48. a 96. godziną.
+          dzięki dyfuzji tlenu z osocza otaczającego miejsce przeszczepu.
+          Pierwsze naczynia włosowate dochodzą do brodawki włosa zwykle między
+          48. a 96. godziną. Dla niedotlenionej cebulki włosa to krytyczny
+          okres, który determinuje okres w
         </Para>
         <Para>
           W tym czasie komórki macierzyste wybrzuszenia (bulge) i komórki
@@ -337,7 +338,7 @@ function ExVivo() {
   return (
     <Section id="ex-vivo" eyebrow="02 — Faza Ex Vivo">
       <SectionHeader
-        title="Ochrona metaboliczna graftu od sekundy ekstrakcji."
+        title="Ochrona metaboliczna graftów od momentu ekstrakcji."
         lead="Standardem w wielu klinikach wciąż jest 0,9% NaCl lub płyn Ringera. Z punktu widzenia transplantologii są to roztwory podtrzymujące osmolarność, nie chroniące metabolizmu komórki. W naszym protokole grafty trafiają do roztworów stosowanych w przechowywaniu narządów do przeszczepu."
       />
       <div className="grid gap-6 md:grid-cols-2">
