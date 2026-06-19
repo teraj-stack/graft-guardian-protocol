@@ -54,23 +54,26 @@ export const Route = createFileRoute("/api/public/contact")({
           messageLength: message.length,
         });
 
-        // Fire-and-await clinic notification, but don't block patient on provider errors.
+        // Fire-and-await clinic notifications (email + SMS); don't block patient on provider errors.
         try {
-          const { notifyClinicOfContact } = await import(
-            "@/lib/contact-notify.server"
-          );
-          const result = await notifyClinicOfContact({
-            name,
-            email,
-            message,
-            receivedAt,
-          });
-          if (result.status !== "sent") {
-            console.warn("[contact] clinic notification not sent", result);
+          const { notifyClinicOfContact, smsNotifyClinicOfContact } =
+            await import("@/lib/contact-notify.server");
+          const [emailResult, smsResults] = await Promise.all([
+            notifyClinicOfContact({ name, email, message, receivedAt }),
+            smsNotifyClinicOfContact({ name, email, message }),
+          ]);
+          if (emailResult.status !== "sent") {
+            console.warn("[contact] email notification not sent", emailResult);
+          }
+          for (const r of smsResults) {
+            if (r.status !== "sent") {
+              console.warn("[contact] sms notification not sent", r);
+            }
           }
         } catch (e) {
           console.error("[contact] notify exception", (e as Error).message);
         }
+
 
         return Response.json(
           { ok: true, receivedAt },
