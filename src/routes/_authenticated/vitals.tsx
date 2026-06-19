@@ -903,12 +903,14 @@ function VitalsPage() {
             <select
               value={selectedPreset}
               onChange={(e) => applyPresetByName(e.target.value)}
-              className="h-9 px-2 rounded-md border bg-background text-sm min-w-[140px]"
+              className="h-9 px-2 rounded-md border bg-background text-sm min-w-[160px]"
               title="Szybkie przywracanie zapisanych zestawów ustawień"
             >
               <option value="">— wybierz preset —</option>
               {pdfPresets.map((p) => (
-                <option key={p.name} value={p.name}>{p.name}</option>
+                <option key={p.name} value={p.name}>
+                  {p.name}{defaultPreset === p.name ? " ★" : ""}
+                </option>
               ))}
             </select>
             <button
@@ -918,6 +920,22 @@ function VitalsPage() {
               title="Zapisz bieżące ustawienia jako nowy preset (lub nadpisz istniejący o tej samej nazwie)"
             >
               Zapisz preset
+            </button>
+            <button
+              onClick={renameSelectedPreset}
+              disabled={!selectedPreset || exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Zmień nazwę wybranego presetu"
+            >
+              Zmień nazwę
+            </button>
+            <button
+              onClick={setSelectedAsDefault}
+              disabled={!selectedPreset || exporting || exportingPdf}
+              className={`h-9 px-3 rounded-md border text-sm font-medium disabled:opacity-50 ${defaultPreset === selectedPreset ? "bg-amber-100 text-amber-800 border-amber-300" : "text-muted-foreground hover:text-foreground"}`}
+              title={defaultPreset === selectedPreset ? "Ten preset jest ustawiony jako domyślny" : "Ustaw wybrany preset jako domyślny dla tej sesji"}
+            >
+              {defaultPreset === selectedPreset ? "Domyślny ★" : "Ustaw jako domyślny"}
             </button>
             <button
               onClick={deleteSelectedPreset}
