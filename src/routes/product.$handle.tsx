@@ -264,6 +264,9 @@ function buildSchedule(sessions: number, freq: string, startDay: number) {
 
 function WeeklySchedule({ sessions, frequency }: { sessions: number; frequency: string }) {
   const [startDay, setStartDay] = useState(0);
+  const [defaultTime, setDefaultTime] = useState("09:00");
+  const [perDayEnabled, setPerDayEnabled] = useState(false);
+  const [perDayTimes, setPerDayTimes] = useState<Record<number, string>>({});
   const schedule = useMemo(() => buildSchedule(sessions, frequency, startDay), [sessions, frequency, startDay]);
   const weeks = useMemo(() => {
     const map = new Map<number, number[]>();
@@ -274,23 +277,63 @@ function WeeklySchedule({ sessions, frequency }: { sessions: number; frequency: 
     return Array.from(map.entries()).sort((a, b) => a[0] - b[0]);
   }, [schedule]);
 
+  const activeDays = useMemo(() => Array.from(new Set(schedule.map((s) => s.day))).sort(), [schedule]);
+  const timeForDay = (day: number) => (perDayEnabled ? perDayTimes[day] || defaultTime : defaultTime);
+
   return (
     <div className="mt-5 rounded-sm border border-border/40 bg-secondary/20 p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs uppercase tracking-widest text-muted-foreground">Harmonogram tygodniowy</p>
-        <label className="flex items-center gap-2 text-xs text-muted-foreground">
-          Start:
-          <select
-            value={startDay}
-            onChange={(e) => setStartDay(parseInt(e.target.value))}
-            className="rounded-sm border border-border/60 bg-background px-2 py-1 text-xs"
-          >
-            {DAY_LABELS.map((d, i) => (
-              <option key={i} value={i}>{d}</option>
-            ))}
-          </select>
-        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            Start:
+            <select
+              value={startDay}
+              onChange={(e) => setStartDay(parseInt(e.target.value))}
+              className="rounded-sm border border-border/60 bg-background px-2 py-1 text-xs"
+            >
+              {DAY_LABELS.map((d, i) => (
+                <option key={i} value={i}>{d}</option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            Godzina:
+            <input
+              type="time"
+              value={defaultTime}
+              onChange={(e) => setDefaultTime(e.target.value)}
+              className="rounded-sm border border-border/60 bg-background px-2 py-1 text-xs"
+            />
+          </label>
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={perDayEnabled}
+              onChange={(e) => setPerDayEnabled(e.target.checked)}
+              className="h-3 w-3"
+            />
+            Różne godziny dla dni
+          </label>
+        </div>
       </div>
+
+      {perDayEnabled && activeDays.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2 rounded-sm border border-border/30 bg-background/40 p-3">
+          {activeDays.map((day) => (
+            <label key={day} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              <span className="w-8 uppercase tracking-wider">{DAY_LABELS[day]}</span>
+              <input
+                type="time"
+                value={perDayTimes[day] || defaultTime}
+                onChange={(e) => setPerDayTimes((prev) => ({ ...prev, [day]: e.target.value }))}
+                className="rounded-sm border border-border/60 bg-background px-1.5 py-0.5 text-[11px]"
+              />
+            </label>
+          ))}
+        </div>
+      )}
+
       <div className="mt-3 max-h-[420px] space-y-1.5 overflow-y-auto pr-1">
         {weeks.map(([week, days]) => (
           <div key={week} className="flex items-center gap-2">
@@ -301,13 +344,14 @@ function WeeklySchedule({ sessions, frequency }: { sessions: number; frequency: 
                 return (
                   <div
                     key={i}
-                    className={`flex h-7 flex-1 items-center justify-center rounded-sm text-[10px] uppercase tracking-wider ${
+                    className={`flex h-10 flex-1 flex-col items-center justify-center rounded-sm text-[10px] uppercase tracking-wider ${
                       active
                         ? "border border-accent/40 bg-accent/20 text-accent"
                         : "border border-border/30 text-muted-foreground/40"
                     }`}
                   >
-                    {label}
+                    <span>{label}</span>
+                    {active && <span className="mt-0.5 text-[9px] tracking-normal opacity-80">{timeForDay(i)}</span>}
                   </div>
                 );
               })}
@@ -321,6 +365,7 @@ function WeeklySchedule({ sessions, frequency }: { sessions: number; frequency: 
     </div>
   );
 }
+
 
 interface SessionPlan {
   sessions: number;
