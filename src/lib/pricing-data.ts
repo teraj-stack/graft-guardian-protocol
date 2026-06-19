@@ -82,7 +82,7 @@ export const PRICING: PricingItem[] = [
     code: "PBM",
     name: "Fototerapia (PBM / LLLT)",
     handle: "fototerapia-pbm-lllt",
-    params: "630–680 nm · 5 J/cm² · 20–30 min",
+    params: "630–680 + 830 NM · 5 J/CM² · 20–30 MIN",
     single: { price: "600 zł", label: "Sesja pojedyncza" },
     packs: [
       { sessions: 5, price: "2 850 zł", unitPrice: "570 zł", saving: "5%" },
