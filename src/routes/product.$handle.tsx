@@ -2,7 +2,7 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
-import { Clock, Package, CheckCircle } from "lucide-react";
+import { Clock, Package, CheckCircle, Calculator } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import {
   STOREFRONT_PRODUCT_BY_HANDLE_QUERY,
@@ -128,8 +128,82 @@ function ProductPage() {
         )}
       </section>
 
+      {product && currentVariant && (
+        <TherapyCalculator product={product} currentVariant={currentVariant} />
+      )}
       {product && <SessionPlans product={product} currentVariant={currentVariant} />}
     </div>
+  );
+}
+
+function getProtocolCalcData(title: string): { sessionDurationMin: number; plans: SessionPlan[] } {
+  const base = getProtocolData(title);
+  const t = title.toLowerCase();
+  let sessionDurationMin = 60;
+  if (t.includes("hiperbaryczn") || t.includes("hbot")) sessionDurationMin = 90;
+  else if (t.includes("plazm") || t.includes("cap") || t.includes("cold plasma")) sessionDurationMin = 45;
+  else if (t.includes("fototerap") || t.includes("pbm") || t.includes("lllt") || t.includes("led")) sessionDurationMin = 30;
+  return { sessionDurationMin, plans: base.plans };
+}
+
+function TherapyCalculator({ product, currentVariant }: { product: any; currentVariant: any }) {
+  const sessions = parseInt(currentVariant?.title?.match(/\d+/)?.[0] ?? "0", 10);
+  const { sessionDurationMin, plans } = useMemo(() => getProtocolCalcData(product.title ?? ""), [product.title]);
+
+  const plan = plans.find((p) => p.sessions === sessions);
+  const totalHours = sessions * (sessionDurationMin / 60);
+
+  const weeks = useMemo(() => {
+    if (!plan) return 0;
+    const t = plan.timeline.toLowerCase();
+    const matchMies = t.match(/(\d+(?:[\s\-]+\d+)?)\s*miesi[ąęa]/);
+    if (matchMies) {
+      const parts = matchMies[1].split(/[\s\-]+/);
+      const avg = parts.length > 1 ? (parseInt(parts[0]) + parseInt(parts[1])) / 2 : parseInt(parts[0]);
+      return Math.round(avg * 4.345);
+    }
+    const matchTyg = t.match(/(\d+(?:[\s\-]+\d+)?)\s*tygodn/);
+    if (matchTyg) {
+      const parts = matchTyg[1].split(/[\s\-]+/);
+      return parts.length > 1 ? Math.round((parseInt(parts[0]) + parseInt(parts[1])) / 2) : parseInt(parts[0]);
+    }
+    return 0;
+  }, [plan]);
+
+  if (!sessions || !plan) return null;
+
+  return (
+    <section className="mx-auto max-w-6xl px-6 pb-6">
+      <div className="rounded-sm border border-border/60 bg-card p-5 md:p-6">
+        <div className="flex items-center gap-2">
+          <Calculator className="h-5 w-5 text-accent" />
+          <h3 className="font-serif text-lg md:text-xl">Kalkulator czasu terapii</h3>
+        </div>
+        <p className="mt-1 max-w-2xl text-xs text-muted-foreground">
+          Szacunkowy czas dla wybranego wariantu. Rzeczywisty czas może się różnić w zależności od kwalifikacji i protokołu.
+        </p>
+
+        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-sm border border-border/40 bg-secondary/30 p-4">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">Liczba tygodni</p>
+            <p className="mt-1 font-serif text-2xl">{weeks > 0 ? `~${weeks}` : "—"}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">{plan.timeline}</p>
+          </div>
+          <div className="rounded-sm border border-border/40 bg-secondary/30 p-4">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">Liczba godzin</p>
+            <p className="mt-1 font-serif text-2xl">{totalHours.toFixed(1).replace(/\.0$/, "")} h</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {sessions} × {sessionDurationMin} min
+            </p>
+          </div>
+          <div className="rounded-sm border border-border/40 bg-secondary/30 p-4">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">Częstotliwość</p>
+            <p className="mt-1 font-serif text-2xl">{plan.frequency}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">Plan terapeutyczny</p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
