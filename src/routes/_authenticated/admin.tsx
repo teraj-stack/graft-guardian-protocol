@@ -54,6 +54,10 @@ function AdminPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [forbidden, setForbidden] = useState(false);
+  const [undo, setUndo] = useState<
+    | { code: string; name: string; snapshot: AdminPricingOverride; remaining: number }
+    | null
+  >(null);
 
   const { data: overrides, isLoading, error } = useQuery({
     queryKey: ["admin-pricing-overrides"],
@@ -67,6 +71,19 @@ function AdminPage() {
     }
   }, [error]);
 
+  // 10-sekundowy countdown dla bannera Cofnij
+  useEffect(() => {
+    if (!undo) return;
+    if (undo.remaining <= 0) {
+      setUndo(null);
+      return;
+    }
+    const t = setTimeout(() => {
+      setUndo((u) => (u ? { ...u, remaining: u.remaining - 1 } : null));
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [undo]);
+
   const upsert = useMutation({
     mutationFn: (input: { code: string; hidden: boolean; restore_at: string | null }) =>
       adminUpsertPricingOverride({ data: input }),
@@ -77,17 +94,30 @@ function AdminPage() {
   });
 
   const del = useMutation({
-    mutationFn: (code: string) => adminDeletePricingOverride({ data: { code } }),
-    onSuccess: () => {
+    mutationFn: (vars: { code: string; name: string; snapshot: AdminPricingOverride }) =>
+      adminDeletePricingOverride({ data: { code: vars.code } }),
+    onSuccess: (_data, vars) => {
       queryClient.invalidateQueries({ queryKey: ["admin-pricing-overrides"] });
       queryClient.invalidateQueries({ queryKey: ["pricing-overrides"] });
+      setUndo({ code: vars.code, name: vars.name, snapshot: vars.snapshot, remaining: 10 });
     },
   });
+
+  function handleUndo() {
+    if (!undo) return;
+    upsert.mutate({
+      code: undo.snapshot.code,
+      hidden: undo.snapshot.hidden,
+      restore_at: undo.snapshot.restore_at,
+    });
+    setUndo(null);
+  }
 
   async function signOut() {
     await supabase.auth.signOut();
     navigate({ to: "/auth" });
   }
+
 
   if (forbidden) {
     return (
