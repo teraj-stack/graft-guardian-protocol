@@ -4,11 +4,15 @@ import { z } from "zod";
 const contactSchema = z.object({
   name: z.string().trim().min(2, "Imię jest za krótkie").max(100),
   email: z.string().trim().email("Nieprawidłowy adres e-mail").max(255),
+  topic: z.enum(["konsultacja", "zabieg", "ladd_prp", "inne"], {
+    message: "Wybierz temat",
+  }),
   message: z.string().trim().min(10, "Wiadomość jest za krótka").max(2000),
   consent: z.literal(true, { message: "Zgoda jest wymagana" }),
   // Honeypot — must remain empty
   website: z.string().max(0).optional().default(""),
 });
+
 
 function corsHeaders(): Record<string, string> {
   return {
