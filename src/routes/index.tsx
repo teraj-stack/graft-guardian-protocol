@@ -128,31 +128,88 @@ function Index() {
 /* ---------- Nav ---------- */
 
 function Nav() {
+  const [open, setOpen] = useState(false);
+  const navLinks = [
+    { href: "#ex-vivo", label: "Ex Vivo" },
+    { href: "#pbm", label: "PBM" },
+    { href: "#hbot", label: "HBOT" },
+    { href: "#ladd", label: "LADD" },
+    { href: "#protokol", label: "14 dni" },
+    { href: "#cennik", label: "Cennik" },
+    { to: "/panel", label: "Panel pacjenta" },
+    { to: "/przypomnienia", label: "Przypomnienia" },
+    { href: "#faq", label: "FAQ" },
+    { href: "#kontakt", label: "Kontakt" },
+  ] as const;
+
   return (
     <header className="relative z-20 border-b border-border/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
           <img src={graftgenLogo.url} alt="Graftgen.com" className="h-10 w-auto md:h-12" />
         </a>
+
         <nav className="hidden gap-7 text-sm text-muted-foreground md:flex">
-          <a href="#ex-vivo" className="hover:text-foreground">Ex Vivo</a>
-          <a href="#pbm" className="hover:text-foreground">PBM</a>
-          <a href="#hbot" className="hover:text-foreground">HBOT</a>
-          <a href="#ladd" className="hover:text-foreground">LADD</a>
-          <a href="#protokol" className="hover:text-foreground">14 dni</a>
-          <a href="#cennik" className="hover:text-foreground">Cennik</a>
-          <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
-          <Link to="/przypomnienia" className="hover:text-foreground">Przypomnienia</Link>
-          <a href="#faq" className="hover:text-foreground">FAQ</a>
-          <a href="#kontakt" className="hover:text-foreground">Kontakt</a>
+          {navLinks.map((l) =>
+            "to" in l ? (
+              <Link key={l.to} to={l.to} className="hover:text-foreground">{l.label}</Link>
+            ) : (
+              <a key={l.href} href={l.href} className="hover:text-foreground">{l.label}</a>
+            )
+          )}
         </nav>
-        <a
-          href="#konsultacja"
-          className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
-        >
-          Umów konsultację
-        </a>
+
+        <div className="flex items-center gap-3">
+          <a
+            href="#konsultacja"
+            className="hidden md:inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
+          >
+            Umów konsultację
+          </a>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-border/60 text-foreground md:hidden"
+            aria-label={open ? "Zamknij menu" : "Otwórz menu"}
+            aria-expanded={open}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {open ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {open && (
+        <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
+          <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
+            {navLinks.map((l) =>
+              "to" in l ? (
+                <Link key={l.to} to={l.to} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</Link>
+              ) : (
+                <a key={l.href} href={l.href} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</a>
+              )
+            )}
+            <a
+              href="#konsultacja"
+              onClick={() => setOpen(false)}
+              className="mt-2 inline-flex items-center justify-center rounded-sm bg-foreground px-4 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Umów konsultację
+            </a>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
