@@ -14,6 +14,7 @@ import {
 import { getVitalsSummary, exportVitalsCsv } from "@/lib/vitals.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
   head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen" }] }),
@@ -198,6 +199,24 @@ function VitalsPage() {
   const PDF_PRESETS_KEY = "vitals.pdfExportPresets.v1";
   const PDF_DEFAULT_PRESET_KEY = "vitals.pdfExportDefaultPreset.v1";
   type PdfPreset = { name: string; prefs: PdfPrefs };
+  const winKeySchema = z.enum(["all", "d0-3", "d4-14", "m1+"]);
+  const pdfPrefsSchema = z.object({
+    orientation: z.enum(["portrait", "landscape"]),
+    metadata: z.boolean(),
+    mode: z.enum(["table", "chart", "both"]),
+    percentile: z.union([z.literal(50), z.literal(75), z.literal(90)]),
+    metrics: z.array(z.enum(["CLS", "LCP", "INP"])),
+    window: winKeySchema,
+    compare: z.boolean(),
+    compareWindows: z.array(winKeySchema),
+    compareLayout: z.enum(["overlay", "side-by-side"]),
+    compareYScale: z.enum(["shared", "independent"]),
+  });
+  const presetSchema = z.object({
+    name: z.string().min(1, "Nazwa presetu nie może być pusta"),
+    prefs: pdfPrefsSchema,
+  });
+  const presetsArraySchema = z.array(presetSchema);
   const loadPresets = (): PdfPreset[] => {
     if (typeof window === "undefined") return [];
     try {
@@ -286,40 +305,56 @@ function VitalsPage() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
+      let json: unknown;
       try {
-        const json = JSON.parse(String(reader.result));
-        if (!Array.isArray(json)) {
-          toast.error("Plik JSON musi zawierać tablicę presetów.");
-          return;
-        }
-        const valid: PdfPreset[] = [];
-        for (const item of json) {
-          if (
-            typeof item?.name === "string" &&
-            item.name.trim() &&
-            typeof item?.prefs === "object" &&
-            item.prefs !== null
-          ) {
-            valid.push({ name: item.name.trim(), prefs: { ...PDF_DEFAULTS, ...item.prefs } });
-          }
-        }
-        if (valid.length === 0) {
-          toast.error("Nie znaleziono poprawnych presetów w pliku.");
-          return;
-        }
-        const next = [...pdfPresets];
-        for (const v of valid) {
-          const idx = next.findIndex((p) => p.name === v.name);
-          if (idx >= 0) next[idx] = v;
-          else next.push(v);
-        }
-        persistPresets(next);
-        toast.success(`Zaimportowano ${valid.length} presetów.`);
+        json = JSON.parse(String(reader.result));
       } catch {
-        toast.error("Nie udało się sparsować pliku JSON.");
-      } finally {
+        toast.error("Nie udało się sparsować pliku JSON. Upewnij się, że plik zawiera poprawny JSON.");
         if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
       }
+      if (!Array.isArray(json)) {
+        toast.error("Plik JSON musi zawierać tablicę presetów (np. [{ name, prefs }]).");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
+      const errors: string[] = [];
+      const valid: PdfPreset[] = [];
+      for (let i = 0; i < json.length; i++) {
+        const item = json[i];
+        const parseResult = presetSchema.safeParse(item);
+        if (!parseResult.success) {
+          const issues = parseResult.error.issues.slice(0, 3).map((issue) => {
+            const path = issue.path.length > 0 ? issue.path.join(".") : "root";
+            return `${path}: ${issue.message}`;
+          });
+          errors.push(`Preset [${i}] — ${issues.join("; ")}`);
+          continue;
+        }
+        valid.push({ name: parseResult.data.name.trim(), prefs: { ...PDF_DEFAULTS, ...parseResult.data.prefs } });
+      }
+      if (valid.length === 0) {
+        const summary = errors.slice(0, 3).join(" | ");
+        const more = errors.length > 3 ? ` (oraz ${errors.length - 3} innych błędów)` : "";
+        toast.error(`Nie znaleziono poprawnych presetów. ${summary}${more}`);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
+      if (errors.length > 0) {
+        const summary = errors.slice(0, 3).join(" | ");
+        const more = errors.length > 3 ? ` (oraz ${errors.length - 3} innych błędów)` : "";
+        toast.info(`Zaimportowano ${valid.length} presetów, ale pominięto ${errors.length} z błędami: ${summary}${more}`);
+      } else {
+        toast.success(`Zaimportowano ${valid.length} presetów.`);
+      }
+      const next = [...pdfPresets];
+      for (const v of valid) {
+        const idx = next.findIndex((p) => p.name === v.name);
+        if (idx >= 0) next[idx] = v;
+        else next.push(v);
+      }
+      persistPresets(next);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     };
     reader.readAsText(file);
   };
