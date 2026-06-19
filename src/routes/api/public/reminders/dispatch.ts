@@ -154,7 +154,9 @@ export const Route = createFileRoute("/api/public/reminders/dispatch")({
               error: result.error ?? null,
             });
           }
+          }
         }
+
 
         if (logRows.length > 0) {
           const { error: logErr } = await supabaseAdmin
