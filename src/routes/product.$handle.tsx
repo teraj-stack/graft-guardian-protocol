@@ -127,6 +127,8 @@ function ProductPage() {
                       const p = parseFloat(v.node.price.amount);
                       const c = v.node.compareAtPrice ? parseFloat(v.node.compareAtPrice.amount) : 0;
                       const pct = c > p ? Math.round((1 - p / c) * 100) : 0;
+                      const vSessions = parseInt(v.node.title.match(/\d+/)?.[0] ?? "0", 10);
+                      const vPerSession = vSessions > 0 ? p / vSessions : 0;
                       return (
                         <button
                           key={v.node.id}
@@ -149,6 +151,11 @@ function ProductPage() {
                           <span className={`text-xs ${active ? "text-background/80" : "text-muted-foreground"}`}>
                             {p.toFixed(0)} {v.node.price.currencyCode}
                             {pct > 0 && <span className="ml-1 line-through opacity-70">{c.toFixed(0)}</span>}
+                            {vSessions > 0 && (
+                              <span className={`ml-1.5 text-[10px] ${active ? "text-background/70" : "text-muted-foreground/70"}`}>
+                                ({vPerSession.toFixed(0)}/sesja)
+                              </span>
+                            )}
                           </span>
                         </button>
                       );
