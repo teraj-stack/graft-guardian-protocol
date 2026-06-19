@@ -242,7 +242,7 @@ function VitalsPage() {
           `Urzadzenie: ${expDevice}`,
           dateFrom || dateTo ? `Daty: ${dateFrom || "—"} → ${dateTo || "—"}` : "Daty: pełne okno",
           `Rekordów: ${rows.length}`,
-          pdfMode !== "table" ? `Wykres: p${pdfPercentile} • ${pdfMetrics.join(", ")}` : "",
+          pdfMode !== "table" ? `Wykres: p${pdfPercentile} • ${pdfMetrics.join(", ")} • okno ${WINDOW_LABEL[pdfWindow]}` : "",
         ].filter(Boolean).join("  •  ");
         doc.text(meta, 40, 58);
         startY = 76;
