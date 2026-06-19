@@ -489,7 +489,7 @@ function LADD() {
                 <br />
                 -----------------------------------------------------
                 <br />
-                Klasyczna <strong className="font-bold">mezoterapia igłowa</strong> zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia, zaburzać neowaskularyzacj. Wielu pacjentów rezygnuje z zabiegów uzupełniających z obawy przed bólem. Proponowane rozwiązania powstały dzięki współpracy z MySkinCode.pl
+                Klasyczna <strong className="font-bold">mezoterapia igłowa</strong> zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia, zaburzać neowaskularyzacj. Wielu pacjentów rezygnuje z zabiegów uzupełniających z obawy przed bólem. <strong className="font-bold">Protokoły laserowe LADD</strong> opracowano we współpracy z MySkinCode.pl
               </>
             }
           />
