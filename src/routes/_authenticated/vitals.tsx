@@ -154,6 +154,7 @@ function VitalsPage() {
   const filterWindow = (rows: TrendRow[]): TrendRow[] => filterByWindow(rows, pdfWindow);
   const [pdfCompare, setPdfCompare] = useState(false);
   const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(["d0-3", "d4-14"]);
+  const [pdfCompareLayout, setPdfCompareLayout] = useState<"overlay" | "side-by-side">("overlay");
   const toggleCompareWindow = (w: WinKey) =>
     setPdfCompareWindows((cur) => (cur.includes(w) ? cur.filter((x) => x !== w) : [...cur, w]));
   const WINDOW_COLORS: Record<WinKey, [number, number, number]> = {
@@ -273,23 +274,25 @@ function VitalsPage() {
         const pdfTrendRaw = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
         const chartW = pageW - 100;
         const chartH = 170;
-        const drawAxes = (chartX: number, chartY: number, t: { good: number; poor: number }, yMin: number, yMax: number, isCLS: boolean) => {
-          const yFor = (v: number) => chartY + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
+        const drawAxes = (chartX: number, chartY: number, w: number, h: number, t: { good: number; poor: number }, yMin: number, yMax: number, isCLS: boolean, showRightLabels = true) => {
+          const yFor = (v: number) => chartY + h - ((v - yMin) / (yMax - yMin)) * h;
           doc.setDrawColor(180);
-          doc.rect(chartX, chartY, chartW, chartH);
+          doc.rect(chartX, chartY, w, h);
           doc.setDrawColor(16, 185, 129);
           doc.setLineDashPattern([3, 3], 0);
-          doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
+          doc.line(chartX, yFor(t.good), chartX + w, yFor(t.good));
           doc.setDrawColor(239, 68, 68);
-          doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
+          doc.line(chartX, yFor(t.poor), chartX + w, yFor(t.poor));
           doc.setLineDashPattern([], 0);
           doc.setFontSize(7);
           doc.setTextColor(110);
           const fmtY = (v: number) => (isCLS ? v.toFixed(2) : `${Math.round(v)}`);
           doc.text(fmtY(yMax), chartX - 4, chartY + 8, { align: "right" });
-          doc.text(fmtY(yMin), chartX - 4, chartY + chartH, { align: "right" });
-          doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
-          doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
+          doc.text(fmtY(yMin), chartX - 4, chartY + h, { align: "right" });
+          if (showRightLabels) {
+            doc.text(`good ${fmtY(t.good)}`, chartX + w + 2, yFor(t.good) + 3);
+            doc.text(`poor ${fmtY(t.poor)}`, chartX + w + 2, yFor(t.poor) + 3);
+          }
           doc.setTextColor(0);
           return yFor;
         };
@@ -320,6 +323,8 @@ function VitalsPage() {
               return { w, pts, vals: pts.map((d) => d[m]) };
             });
             const allVals = series.flatMap((s) => s.vals);
+            const t = THRESHOLDS[m];
+            const fmtV = (v: number) => (m === "CLS" ? v.toFixed(3) : `${Math.round(v)}`);
             if (allVals.length === 0) {
               doc.setDrawColor(180);
               doc.rect(chartX, chartY, chartW, chartH);
@@ -327,11 +332,59 @@ function VitalsPage() {
               doc.setTextColor(120);
               doc.text("Brak danych w wybranych oknach", chartX + chartW / 2 - 70, chartY + chartH / 2);
               doc.setTextColor(0);
-            } else {
-              const t = THRESHOLDS[m];
+              startY = chartY + chartH + 36;
+            } else if (pdfCompareLayout === "side-by-side") {
+              // Shared yMax across windows so subplots are comparable
               const yMax = Math.max(t.poor * 1.05, ...allVals);
-              const yFor = drawAxes(chartX, chartY, t, 0, yMax, m === "CLS");
-              const fmtV = (v: number) => (m === "CLS" ? v.toFixed(3) : `${Math.round(v)}`);
+              const N = series.length;
+              const gap = 18;
+              const subW = (chartW - gap * (N - 1)) / N;
+              for (let si = 0; si < N; si++) {
+                const s = series[si];
+                const subX = chartX + si * (subW + gap);
+                const yFor = drawAxes(subX, chartY, subW, chartH, t, 0, yMax, m === "CLS", si === N - 1);
+                // Subplot title (window label)
+                doc.setFontSize(8);
+                doc.setTextColor(60);
+                doc.text(WINDOW_LABEL[s.w], subX + subW / 2, chartY - 4, { align: "center" });
+                doc.setTextColor(0);
+                const n = s.pts.length;
+                if (n === 0) {
+                  doc.setFontSize(8);
+                  doc.setTextColor(120);
+                  doc.text("brak danych", subX + subW / 2, chartY + chartH / 2, { align: "center" });
+                  doc.setTextColor(0);
+                } else {
+                  const [r, g, b] = WINDOW_COLORS[s.w];
+                  doc.setDrawColor(r, g, b);
+                  doc.setFillColor(r, g, b);
+                  doc.setLineWidth(1.2);
+                  const xFor = (i: number) => subX + (n === 1 ? subW / 2 : (i * subW) / (n - 1));
+                  for (let i = 1; i < n; i++) {
+                    doc.line(xFor(i - 1), yFor(s.pts[i - 1][m]), xFor(i), yFor(s.pts[i][m]));
+                  }
+                  for (let i = 0; i < n; i++) {
+                    doc.circle(xFor(i), yFor(s.pts[i][m]), 1.4, "F");
+                  }
+                  doc.setLineWidth(0.2);
+                }
+                // Per-subplot stats
+                const avg = s.vals.length ? s.vals.reduce((a, b2) => a + b2, 0) / s.vals.length : 0;
+                const pct = calcPct(s.vals, pdfPercentile / 100);
+                doc.setFontSize(7);
+                doc.setTextColor(60);
+                doc.text(
+                  `avg ${fmtV(avg)} • p${pdfPercentile} ${fmtV(pct)} • n=${s.vals.length}`,
+                  subX + subW / 2,
+                  chartY + chartH + 14,
+                  { align: "center" },
+                );
+                doc.setTextColor(0);
+              }
+              startY = chartY + chartH + 32;
+            } else {
+              const yMax = Math.max(t.poor * 1.05, ...allVals);
+              const yFor = drawAxes(chartX, chartY, chartW, chartH, t, 0, yMax, m === "CLS");
               for (const s of series) {
                 const n = s.pts.length;
                 if (n === 0) continue;
@@ -366,8 +419,8 @@ function VitalsPage() {
                   lx = chartX;
                 }
               }
+              startY = chartY + chartH + 36;
             }
-            startY = chartY + chartH + 36;
           } else {
             const pdfTrend = filterWindow(pdfTrendRaw);
             const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
@@ -383,7 +436,7 @@ function VitalsPage() {
               const vals = chartData.map((d) => d[m]);
               const yMax = Math.max(t.poor * 1.05, ...vals);
               const n = chartData.length;
-              const yFor = drawAxes(chartX, chartY, t, 0, yMax, m === "CLS");
+              const yFor = drawAxes(chartX, chartY, chartW, chartH, t, 0, yMax, m === "CLS");
               const xFor = (i: number) => chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
               const [r, g, b] = METRIC_COLORS[m];
               doc.setDrawColor(r, g, b);
@@ -605,6 +658,17 @@ function VitalsPage() {
                     {w === "all" ? "Całe" : w.toUpperCase()}
                   </label>
                 ))}
+              </div>
+              <div className="mt-2">
+                <label className="block text-xs text-muted-foreground mb-1">Układ porównania</label>
+                <select
+                  value={pdfCompareLayout}
+                  onChange={(e) => setPdfCompareLayout(e.target.value as "overlay" | "side-by-side")}
+                  className="h-9 rounded-md border bg-background px-2 text-sm"
+                >
+                  <option value="overlay">Nałożone (overlay)</option>
+                  <option value="side-by-side">Obok siebie (side-by-side)</option>
+                </select>
               </div>
             </div>
           )}
