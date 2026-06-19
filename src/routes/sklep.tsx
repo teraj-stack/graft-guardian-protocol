@@ -137,7 +137,7 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{product.node.description}</p>
         <div className="mt-4 flex items-center justify-between">
           <span className="text-base font-semibold text-foreground">
-            {parseFloat(price.amount).toFixed(2)} {price.currencyCode}
+            {formatMoney(parseFloat(price.amount))} {price.currencyCode}
           </span>
           <button
             onClick={onAdd}
