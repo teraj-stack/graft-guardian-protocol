@@ -1,10 +1,16 @@
 #!/usr/bin/env node
-// Strażnik nazwy firmy: nazwa musi brzmieć dokładnie
-// "Medical Lasers and STEM Cells Solutions Sp. z o.o." we wszystkich
-// miejscach widocznych dla użytkownika (UI, SEO, polityki).
-// Blokuje wszelkie warianty starej nazwy "Bujok Medical".
+// Straznik spojnosci danych firmy: nazwa, adres, NIP, KRS, REGON.
+// Pojedyncze zrodlo prawdy: src/lib/company.ts.
 //
-// Użycie:
+// Reguly:
+//  - Zaden plik nie moze zawierac wariantu starej nazwy "Bujok Medical".
+//  - Kazdy numer po etykiecie NIP / KRS / REGON musi odpowiadac wartosci
+//    kanonicznej (po odfiltrowaniu separatorow ' ', '-').
+//  - Wzmianki o ulicy/miescie musza odpowiadac kanonicznemu adresowi
+//    (heurystyka: jesli linia wspomina "Kominka" lub "Rybnik" / kod 44-217,
+//    powinna zawierac kanoniczna ulice i kod pocztowy).
+//
+// Uzycie:
 //   node scripts/check-company-name.mjs
 //   node scripts/check-company-name.mjs --json
 
@@ -13,16 +19,32 @@ import { execSync } from "node:child_process";
 import { resolve } from "node:path";
 
 const ROOT = resolve(process.cwd());
-const FORBIDDEN = /\bBujok\s*Medical\b/gi;
-const CANONICAL = "Medical Lasers and STEM Cells Solutions";
 
-// Pliki, w których pozostałość nazwy jest dopuszczalna (np. nazwy assetów,
-// odwołania do historycznego identyfikatora w storage).
+// --- Wartosci kanoniczne (musza byc zgodne z src/lib/company.ts) ---
+const CANONICAL_NAME = "Medical Lasers and STEM Cells Solutions";
+const CANONICAL_NIP = "6423218241";
+const CANONICAL_KRS = "0000791172";
+const CANONICAL_REGON = "383695904";
+const CANONICAL_STREET = "Kard. Bolesława Kominka 44";
+const CANONICAL_POSTCODE = "44-217";
+const CANONICAL_CITY = "Rybnik";
+
+const FORBIDDEN_NAME = /\bBujok\s*Medical\b/gi;
+// Etykieta + opcjonalne ":" + cyfry rozdzielone spacja/myslnikiem
+const ID_PATTERN = /\b(NIP|KRS|REGON)\b[^0-9A-Za-z]{0,5}([0-9][0-9 \-]{5,20}[0-9])/gi;
+
+const CANONICAL_IDS = {
+  NIP: CANONICAL_NIP,
+  KRS: CANONICAL_KRS,
+  REGON: CANONICAL_REGON,
+};
+
 const ALLOWLIST = new Set([
   "scripts/check-company-name.mjs",
-  "src/assets/bujok-medical.jpg.asset.json", // wewnętrzny klucz assetu
+  "src/lib/company.ts",
+  "src/assets/bujok-medical.jpg.asset.json",
 ]);
-const ALLOW_PREFIX = ["src/assets/"]; // identyfikatory plików graficznych
+const ALLOW_PREFIX = ["src/assets/"];
 const EXCLUDE_DIRS = [
   "node_modules", ".git", "dist", "build", ".output", ".vinxi",
   ".tanstack", ".cache", "coverage", ".vercel", ".wrangler",
@@ -53,6 +75,10 @@ function isExcluded(path) {
 }
 
 const hits = [];
+function report(file, line, kind, text, expected) {
+  hits.push({ file, line, kind, expected, text: text.trim().slice(0, 200) });
+}
+
 for (const rel of listFiles()) {
   if (isExcluded(rel)) continue;
   const abs = resolve(ROOT, rel);
@@ -61,24 +87,66 @@ for (const rel of listFiles()) {
   if (!st.isFile() || st.size > 2_000_000) continue;
   let content;
   try { content = readFileSync(abs, "utf8"); } catch { continue; }
-  if (!/bujok/i.test(content)) continue;
+
   const lines = content.split("\n");
   lines.forEach((line, i) => {
-    FORBIDDEN.lastIndex = 0;
-    if (FORBIDDEN.test(line)) {
-      hits.push({ file: rel, line: i + 1, text: line.trim().slice(0, 200) });
+    const ln = i + 1;
+
+    // 1) Stara nazwa firmy
+    FORBIDDEN_NAME.lastIndex = 0;
+    if (FORBIDDEN_NAME.test(line)) {
+      report(rel, ln, "name", line, `${CANONICAL_NAME} Sp. z o.o.`);
+    }
+
+    // 2) Identyfikatory NIP/KRS/REGON
+    ID_PATTERN.lastIndex = 0;
+    let m;
+    while ((m = ID_PATTERN.exec(line)) !== null) {
+      const label = m[1].toUpperCase();
+      const digits = m[2].replace(/[\s-]/g, "");
+      const expected = CANONICAL_IDS[label];
+      if (digits !== expected) {
+        report(rel, ln, label.toLowerCase(), line, expected);
+      }
+    }
+
+    // 3) Adres: jesli linia mowi o ulicy/miescie/kodzie, kanoniczne
+    // komponenty musza pojawic sie w obrebie 2 sasiednich linii
+    // (dopuszczamy lamanie HTML <br />).
+    const mentionsAddr = /Kominka|Rybnik|44-217/i.test(line);
+    if (mentionsAddr) {
+      const window = [lines[i - 1] || "", line, lines[i + 1] || ""].join("\n");
+      const okStreet = window.includes("Kominka 44");
+      const okCity = window.includes(CANONICAL_CITY);
+      const okPost = window.includes(CANONICAL_POSTCODE);
+      // Forbidden artefakty starego adresu (gdyby pozostal np. inny kod/miasto)
+      const badPost = /\b\d{2}-\d{3}\b/.test(window) && !window.includes(CANONICAL_POSTCODE);
+      if (!(okStreet && okCity && okPost) || badPost) {
+        report(rel, ln, "address", line, `${CANONICAL_STREET}, ${CANONICAL_POSTCODE} ${CANONICAL_CITY}`);
+      }
     }
   });
 }
 
 const asJson = process.argv.includes("--json");
 if (asJson) {
-  process.stdout.write(JSON.stringify({ ok: hits.length === 0, canonical: CANONICAL, hits }, null, 2) + "\n");
+  process.stdout.write(JSON.stringify({
+    ok: hits.length === 0,
+    canonical: {
+      name: `${CANONICAL_NAME} Sp. z o.o.`,
+      address: `${CANONICAL_STREET}, ${CANONICAL_POSTCODE} ${CANONICAL_CITY}`,
+      nip: CANONICAL_NIP, krs: CANONICAL_KRS, regon: CANONICAL_REGON,
+    },
+    hits,
+  }, null, 2) + "\n");
 } else if (hits.length === 0) {
-  console.log(`OK: nazwa firmy spojna - "${CANONICAL} Sp. z o.o.".`);
+  console.log("OK: nazwa, adres, NIP, KRS i REGON spojne w calej aplikacji.");
 } else {
-  console.error(`BLAD: znaleziono ${hits.length} nieaktualnych wystapien "Bujok Medical":\n`);
-  for (const h of hits) console.error(`  ${h.file}:${h.line}  ${h.text}`);
-  console.error(`\nPodmien na "${CANONICAL} Sp. z o.o." lub dopisz plik do ALLOWLIST.`);
+  console.error(`BLAD: znaleziono ${hits.length} niespojnosci danych firmy:\n`);
+  for (const h of hits) {
+    console.error(`  [${h.kind}] ${h.file}:${h.line}`);
+    console.error(`     znaleziono: ${h.text}`);
+    console.error(`     oczekiwano: ${h.expected}`);
+  }
 }
 process.exit(hits.length === 0 ? 0 : 1);
