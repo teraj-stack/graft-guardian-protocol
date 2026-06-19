@@ -93,6 +93,10 @@ export const getVitalsSummary = createServerFn({ method: "GET" })
       summary,
       trend7: buildSeries(rows, 7),
       trend28: buildSeries(rows, 28),
+      trend7_p50: buildSeries(rows, 7, 0.5),
+      trend7_p90: buildSeries(rows, 7, 0.9),
+      trend28_p50: buildSeries(rows, 28, 0.5),
+      trend28_p90: buildSeries(rows, 28, 0.9),
     };
   });
 
