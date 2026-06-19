@@ -798,6 +798,22 @@ const PRICING_FAQ: { q: string; a: string }[] = [
     q: "Jakie są zasady odwołania lub zwrotu?",
     a: "Do 48 h przed pierwszą sesją: zwrot 100% wartości pakietu. Po rozpoczęciu terapii: zwrot proporcjonalny do niewykorzystanych sesji (liczonych według ceny jednostkowej pakietu), pomniejszony o koszt konsultacji kwalifikacyjnej (350–500 zł). Nie pobieramy opłat administracyjnych.",
   },
+  {
+    q: "Jak umawiać terminy i z jakim wyprzedzeniem?",
+    a: "Terminy umawiane są wyłącznie przez rejestrację kliniczną — telefonicznie, mailowo lub przez panel pacjenta. Pakiety 5 sesji: rezerwacja z 48–72 h wyprzedzenia. Pakiety 10 i 20 sesji: planowanie całego cyklu na starcie z możliwością przesuwania pojedynczych wizyt z 24-godzinnym wyprzedzeniem. W dniu zabiegu przeszczepu DHI nie umawiamy pierwszej sesji wspomagającej wcześniej niż na dobę 3.",
+  },
+  {
+    q: "Jak wygląda harmonogram wizyt w pakietach 5, 10 i 20 sesji?",
+    a: "Pakiet 5 sesji to cykl krótki — zazwyczaj 1 sesja tygodniowo przez 5 tygodni, z opcją zagęszczenia do 2 sesji/tydzień w tygodniach 2–4. Pakiet 10 sesji: standardowo 2 sesje tygodniowo przez 5 tygodni (np. poniedziałek + czwartek), z przerwą w tygodniu 3 jeśli wystąpi zaczerwienenie. Pakiet 20 sesji: intensywny rytm 2–3 sesji/tydzień przez 7–8 tygodni, z obowiązkowym tygodniem przerwy między blokami 1–10 a 11–20. Przerwy między sesjami tej samej kategorii: HBOT min. 24 h, LADD min. 72 h, PBM min. 48 h.",
+  },
+  {
+    q: "Jaka jest polityka spóźnień na wizytę?",
+    a: "Spóźnienie do 10 minut: wizyta realizowana w pełnym zakresie, ale skrócony czas na konsultację przed sesją. Spóźnienie 11–20 minut: skrócenie czasu sesji proporcjonalnie lub przesunięcie na najbliższy wolny termin — decyduje lekarz/koordynator w zależności od kolejki. Spóźnienie powyżej 20 minut: wizyta traktowana jako nieodbyta (no-show) i rozliczana z pakietu, chyba że pacjent zgłosi opóźnienie z wyprzedzeniem min. 30 min i istnieje techniczna możliwość przesunięcia.",
+  },
+  {
+    q: "Jakie są zasady anulowania sesji w pakiecie?",
+    a: "Bezpłatne anulowanie lub zmiana terminu wymaga zgłoszenia min. 24 h przed sesją (w przypadku pakietów 10 i 20 sesji) lub min. 48 h (pakiet 5 sesji). Anulowanie w krótszym terminie: sesja rozliczana z pakietu jako wykorzystana. Nieobecność bez zgłoszenia (no-show): sesja odejmowana z pakietu automatycznie. W sytuacji choroby zakaźnej lub zaburzeń krzepnięcia potwierdzonych dokumentacją lekarską — sesja zawieszana bez utraty z pakietu.",
+  },
 ];
 
 interface PricingPack {
