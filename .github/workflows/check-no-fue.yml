@@ -200,6 +200,9 @@ jobs:
               history,
             })).toString('base64');
             const stateBlock = `<!-- fue-state: ${state} -->`;
+            const checkboxState = useQuickChart ? 'x' : ' ';
+            const toggleBlock = `${quickChartToggleMarker}\n- [${checkboxState}] Szybkie wykresy (QuickChart)`;
+
 
             const body = `${marker}\n${stateBlock}\n## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}${runLink}\n\n_Ostatnia aktualizacja: ${new Date().toISOString()} (run #${context.runId})._\n\n${trendSection}### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
 
