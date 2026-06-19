@@ -43,6 +43,9 @@ const Pricing = lazy(() =>
 const FAQSection = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.FAQSection })),
 );
+const EbookLeadMagnet = lazy(() =>
+  import("./-sections/below-fold").then((m) => ({ default: m.EbookLeadMagnet })),
+);
 const CTA = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.CTA })),
 );
