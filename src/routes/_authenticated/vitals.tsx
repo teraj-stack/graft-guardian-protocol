@@ -1082,6 +1082,14 @@ function VitalsPage() {
               className="hidden"
               onChange={handleImportFile}
             />
+            <button
+              onClick={downloadSamplePreset}
+              disabled={exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Pobierz przykładowy plik JSON z poprawnym schematem presetów"
+            >
+              Pobierz przykład JSON
+            </button>
           </div>
         </div>
       </div>
