@@ -937,7 +937,11 @@ function Contact() {
         return;
       }
       form.reset();
-      setStatus({ kind: "success", receivedAt: data.receivedAt ?? new Date().toISOString() });
+      setStatus({
+        kind: "success",
+        receivedAt: data.receivedAt ?? new Date().toISOString(),
+        notifications: data.notifications,
+      });
     } catch {
       setStatus({ kind: "error", message: "Błąd połączenia. Spróbuj ponownie." });
     }
