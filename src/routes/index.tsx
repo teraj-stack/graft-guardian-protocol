@@ -117,14 +117,14 @@ function Index() {
         <PBM />
         <HBOT />
         <LADD />
-        <Microbiome />
-        <Timeline />
-        <Journey />
-        <EvidenceBasement />
-        <Pricing />
-        <FAQSection />
-        <CTA />
-        <Contact />
+        <LazyMount minHeight={600}><Microbiome /></LazyMount>
+        <LazyMount minHeight={800}><Timeline /></LazyMount>
+        <LazyMount minHeight={600}><Journey /></LazyMount>
+        <LazyMount minHeight={800}><EvidenceBasement /></LazyMount>
+        <LazyMount minHeight={700}><Pricing /></LazyMount>
+        <LazyMount minHeight={500}><FAQSection /></LazyMount>
+        <LazyMount minHeight={300}><CTA /></LazyMount>
+        <LazyMount minHeight={700}><Contact /></LazyMount>
       </main>
       <Footer />
 
