@@ -127,14 +127,20 @@ function VitalsPage() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [exporting, setExporting] = useState(false);
+  const [exportingPdf, setExportingPdf] = useState(false);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
-  const handleExport = async () => {
+  const validateRange = () => {
     if (dateFrom && dateTo && dateTo < dateFrom) {
       toast.error("Data końcowa nie może być wcześniejsza niż data początkowa. Popraw zakres dat.");
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const handleExport = async () => {
+    if (!validateRange()) return;
     setExporting(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
@@ -156,6 +162,66 @@ function VitalsPage() {
       toast.error(`Eksport nie powiódł się: ${(e as Error).message}`);
     } finally {
       setExporting(false);
+    }
+  };
+
+  const handleExportPdf = async () => {
+    if (!validateRange()) return;
+    setExportingPdf(true);
+    try {
+      const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
+      if (res.count === 0) {
+        toast.info("Brak danych dla wybranego zakresu — zmień filtry i spróbuj ponownie.");
+        return;
+      }
+      const lines = res.csv.trim().split("\n").map((l) => l.split(","));
+      const header = lines[0];
+      let rows = lines.slice(1);
+      if (dateFrom || dateTo) {
+        const dateIdx = header.findIndex((h) => /date|created|timestamp/i.test(h));
+        if (dateIdx >= 0) {
+          rows = rows.filter((r) => {
+            const d = (r[dateIdx] || "").slice(0, 10);
+            if (dateFrom && d < dateFrom) return false;
+            if (dateTo && d > dateTo) return false;
+            return true;
+          });
+        }
+      }
+      if (rows.length === 0) {
+        toast.info("Brak danych w wybranym zakresie dat.");
+        return;
+      }
+      const { jsPDF } = await import("jspdf");
+      const autoTable = (await import("jspdf-autotable")).default;
+      const doc = new jsPDF({ orientation: "landscape", unit: "pt" });
+      doc.setFontSize(14);
+      doc.text("Web Vitals — raport RUM (Graftgen)", 40, 40);
+      doc.setFontSize(10);
+      const meta = [
+        `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,
+        `Okno: ${range} dni`,
+        `Metryka: ${expMetric}`,
+        `Urzadzenie: ${expDevice}`,
+        dateFrom || dateTo ? `Daty: ${dateFrom || "—"} -> ${dateTo || "—"}` : "Daty: pelne okno",
+        `Rekordow: ${rows.length}`,
+      ].join("  •  ");
+      doc.text(meta, 40, 58);
+      autoTable(doc, {
+        startY: 76,
+        head: [header],
+        body: rows,
+        styles: { fontSize: 8, cellPadding: 3 },
+        headStyles: { fillColor: [200, 176, 108] },
+        margin: { left: 40, right: 40 },
+      });
+      const filename = res.filename.replace(/\.csv$/i, ".pdf");
+      doc.save(filename);
+      toast.success(`Wyeksportowano ${rows.length} rekordów do PDF`);
+    } catch (e) {
+      toast.error(`Eksport PDF nie powiódł się: ${(e as Error).message}`);
+    } finally {
+      setExportingPdf(false);
     }
   };
 
@@ -250,10 +316,17 @@ function VitalsPage() {
           </div>
           <button
             onClick={handleExport}
-            disabled={exporting}
+            disabled={exporting || exportingPdf}
             className="h-9 px-4 rounded-md bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50"
           >
             {exporting ? "Eksportowanie…" : "Eksportuj CSV"}
+          </button>
+          <button
+            onClick={handleExportPdf}
+            disabled={exporting || exportingPdf}
+            className="h-9 px-4 rounded-md border border-foreground text-foreground text-sm font-medium hover:bg-muted disabled:opacity-50"
+          >
+            {exportingPdf ? "Generowanie PDF…" : "Eksportuj PDF"}
           </button>
         </div>
       </div>
