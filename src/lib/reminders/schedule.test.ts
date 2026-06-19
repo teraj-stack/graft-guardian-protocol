@@ -153,4 +153,41 @@ describe("computeDueItems catch-up + idempotency", () => {
       { subscriptionId: "sub-1", week: 2 },
     ]);
   });
+
+  it("regression: cron silent for 3 weeks delivers weeks 1–3 in one run, then is idempotent", () => {
+    // QA finding scenario taken to the limit: scheduler down from day 7
+    // through day 21, first successful run on day 22. All three weekly
+    // triggers (1, 2, 3) must fire in this single catch-up pass, and any
+    // subsequent run on the same or later day (before day 28) must not
+    // duplicate them — reminder_sends idempotency in action.
+    const triWeekSub = {
+      id: "sub-3w",
+      surgery_date: SURGERY,
+      selected_weeks: [1, 2, 3, 4],
+    };
+    const sent = new Set<string>(); // cron never ran during the outage
+
+    // Day 22 catch-up: floor(22/7) = 3 → weeks 1, 2, 3 all due at once.
+    const catchUp = computeDueItems(dayAfter(22), [triWeekSub], sent);
+    expect(catchUp).toEqual([
+      { subscriptionId: "sub-3w", week: 1 },
+      { subscriptionId: "sub-3w", week: 2 },
+      { subscriptionId: "sub-3w", week: 3 },
+    ]);
+
+    // Persist the catch-up sends (what dispatcher writes to reminder_sends).
+    for (const item of catchUp) sent.add(`${item.subscriptionId}:${item.week}`);
+
+    // Idempotency: re-running on the same day yields nothing — no duplicates.
+    expect(computeDueItems(dayAfter(22), [triWeekSub], sent)).toEqual([]);
+    // Idempotency holds across the rest of the gap until week 4 day.
+    expect(computeDueItems(dayAfter(23), [triWeekSub], sent)).toEqual([]);
+    expect(computeDueItems(dayAfter(27), [triWeekSub], sent)).toEqual([]);
+
+    // Week 4 still fires correctly when its own trigger day arrives, and
+    // the previously-sent weeks 1–3 are not re-emitted.
+    expect(computeDueItems(dayAfter(28), [triWeekSub], sent)).toEqual([
+      { subscriptionId: "sub-3w", week: 4 },
+    ]);
+  });
 });
