@@ -11,7 +11,9 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from "recharts";
-import { getVitalsSummary } from "@/lib/vitals.functions";
+import { getVitalsSummary, exportVitalsCsv } from "@/lib/vitals.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
   head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen" }] }),
