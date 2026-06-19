@@ -70,6 +70,13 @@ function TeamReportStatus() {
     };
   }, [data]);
 
+  function resetFilters() {
+    setStatus("all");
+    setEmail("");
+    setFrom("");
+    setTo("");
+  }
+
   async function handleExport(format: "csv" | "xlsx") {
     setExporting(format);
     try {
@@ -158,6 +165,13 @@ function TeamReportStatus() {
               className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm"
             />
           </div>
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="h-[38px] px-4 rounded-md border border-slate-600 text-slate-300 text-sm font-medium hover:bg-slate-800"
+          >
+            Resetuj filtry
+          </button>
           <button
             type="button"
             onClick={() => handleExport("csv")}
