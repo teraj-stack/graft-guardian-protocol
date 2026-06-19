@@ -673,6 +673,19 @@ function VitalsPage() {
                   <option value="side-by-side">Obok siebie (side-by-side)</option>
                 </select>
               </div>
+              {pdfCompareLayout === "side-by-side" && (
+                <div className="mt-2">
+                  <label className="block text-xs text-muted-foreground mb-1">Skala Y podwykresów</label>
+                  <select
+                    value={pdfCompareYScale}
+                    onChange={(e) => setPdfCompareYScale(e.target.value as "shared" | "independent")}
+                    className="h-9 rounded-md border bg-background px-2 text-sm"
+                  >
+                    <option value="shared">Wspólna (porównywalne)</option>
+                    <option value="independent">Niezależna (per okno)</option>
+                  </select>
+                </div>
+              )}
             </div>
           )}
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
