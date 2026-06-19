@@ -37,18 +37,24 @@ export function Para({ children }: { children: ReactNode }) {
 export function Card({
   title,
   badge,
+  badgeTone = "accent",
   children,
 }: {
   title: string;
   badge?: string;
+  badgeTone?: "accent" | "red";
   children: ReactNode;
 }) {
+  const toneClasses =
+    badgeTone === "red"
+      ? "border-red-400/40 text-red-400"
+      : "border-accent/40 text-accent";
   return (
     <article className="flex flex-col rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8">
       <div className="mb-4 flex items-start justify-between gap-4">
         <h3 className="font-display text-2xl break-words md:text-3xl">{title}</h3>
         {badge && (
-          <span className="shrink-0 rounded-sm border border-accent/40 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-accent">
+          <span className={`shrink-0 rounded-sm border px-2 py-1 text-[10px] font-medium uppercase tracking-wider ${toneClasses}`}>
             {badge}
           </span>
         )}

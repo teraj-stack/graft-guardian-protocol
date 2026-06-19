@@ -200,7 +200,7 @@ export function DayZeroToThree() {
         lead="Instrukcje wzięte bezpośrednio z e-booka Patient Journey. Wykonuj krok po kroku — nie improwizuj."
       />
       <div className="grid gap-6 md:grid-cols-3">
-        <Card title="Dzień 0" badge="Bezpośrednio po zabiegu">
+        <Card title="Dzień 0" badge="Bezpośrednio po zabiegu" badgeTone="red">
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex gap-2"><span className="text-accent">✓</span> Spanie w pozycji pół-siedzącej (30–45°)</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> PBM 650/830 nm, 4–6 J/cm², bezpośrednio po zabiegu</li>
@@ -209,7 +209,7 @@ export function DayZeroToThree() {
           </ul>
           <Mech>Zero dotykania, drapania, mycia strefy biorczej.</Mech>
         </Card>
-        <Card title="Dni 1–2" badge="Krytyczne okno">
+        <Card title="Dni 1–2" badge="Krytyczne okno" badgeTone="red">
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex gap-2"><span className="text-accent">✓</span> Druga sesja HBOT (24 h po pierwszej)</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> PBM co 24 h, 20–30 min</li>
