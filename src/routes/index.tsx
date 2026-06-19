@@ -436,8 +436,11 @@ function HBOT() {
         <img
           src={graftgenLogo.url}
           alt="Graftgen.com"
-          className="mt-2 h-10 w-auto shrink-0 opacity-80 md:mt-0 md:h-12"
+          width={415}
+          height={531}
+          decoding="async"
           loading="lazy"
+          className="mt-2 h-10 w-auto shrink-0 opacity-80 md:mt-0 md:h-12"
         />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
@@ -510,9 +513,9 @@ function LADD() {
           />
           <div className="mt-auto flex flex-wrap items-end gap-3 pt-8">
             {[
-              { src: mscLogo.url, alt: "MSC" },
-              { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions" },
-              { src: mabelLogo.url, alt: "Mabel Hair Clinic" },
+              { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
+              { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
+              { src: mabelLogo.url, alt: "Mabel Hair Clinic", w: 372, h: 370 },
             ].map((logo) => (
               <div
                 key={logo.alt}
@@ -521,7 +524,10 @@ function LADD() {
                 <img
                   src={logo.src}
                   alt={logo.alt}
+                  width={logo.w}
+                  height={logo.h}
                   loading="lazy"
+                  decoding="async"
                   className="max-h-full max-w-full object-contain"
                 />
               </div>
@@ -648,13 +654,13 @@ function Footer() {
           </p>
           <div className="mt-6 grid grid-cols-1 items-center gap-6 sm:grid-cols-3">
             <div className="flex items-center justify-center rounded-md bg-white p-4 h-24">
-              <img src={mscLogo.url} alt="MySkinCode — Technical Support MedTech SaaS" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={mscLogo.url} alt="MySkinCode — Technical Support MedTech SaaS" width={1920} height={1920} className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
             </div>
             <div className="flex items-center justify-center rounded-md bg-black p-4 h-24">
-              <img src={bujokLogo.url} alt="Medical Lasers and STEM Cells Solutions" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={bujokLogo.url} alt="Medical Lasers and STEM Cells Solutions" width={1024} height={1024} className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
             </div>
             <div className="flex items-center justify-center rounded-md bg-[#3f4a73] p-4 h-24">
-              <img src={mabelLogo.url} alt="Mabel Hair — Hair Transplant Clinic" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={mabelLogo.url} alt="Mabel Hair — Hair Transplant Clinic" width={372} height={370} className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
             </div>
           </div>
         </div>
