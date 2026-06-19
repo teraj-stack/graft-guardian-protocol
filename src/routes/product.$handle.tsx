@@ -2,6 +2,7 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
+import { formatMoney } from "@/lib/utils";
 import { Clock, Package, CheckCircle, Calculator, Info } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import {

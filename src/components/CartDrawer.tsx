@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
+import { formatMoney } from "@/lib/utils";
 
 export function CartDrawer() {
   const [open, setOpen] = useState(false);
