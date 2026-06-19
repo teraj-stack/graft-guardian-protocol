@@ -348,15 +348,19 @@ def main() -> int:
 
         ratio = _changed_ratio(diff)
         pct = ratio * 100.0
-        ok = pct <= THRESHOLD_PCT
+        threshold_pct, threshold_source = resolve_threshold(vp, name)
+        ok = pct <= threshold_pct
         if not ok:
             regressions += 1
         images.append({
             "viewport": vp,
             "name": name,
+            "section": _classify_section(name),
             "status": "ok",
             "ok": ok,
             "changed_pct": pct,
+            "threshold_pct": threshold_pct,
+            "threshold_source": threshold_source,
             "baseline": str(baseline_copy.relative_to(DIFF_DIR)),
             "current": str(current_copy.relative_to(DIFF_DIR)),
             "heatmap": str(heat_path.relative_to(DIFF_DIR)),
@@ -364,8 +368,18 @@ def main() -> int:
             "sidebyside": str(side_path.relative_to(DIFF_DIR)),
         })
 
+    # Effective threshold matrix for every (section, viewport) combo we know.
+    viewports = sorted({i["viewport"] for i in images}) or ["desktop", "mobile"]
+    thresholds_effective: dict[str, dict] = {}
+    for section in (*SECTIONS, "default"):
+        for vp in viewports:
+            probe = f"{section}-probe" if section != "default" else "other-probe"
+            pct, src = resolve_threshold(vp, probe)
+            thresholds_effective[f"{section}/{vp}"] = {"pct": pct, "source": src}
+
     report = {
-        "threshold_pct": THRESHOLD_PCT,
+        "threshold_default_pct": THRESHOLD_DEFAULT,
+        "thresholds_effective": thresholds_effective,
         "summary": {
             "total": len(images),
             "regressions": regressions,
@@ -378,8 +392,15 @@ def main() -> int:
 
     print(
         f"diff: {len(images)} pairs, {regressions} regression(s), "
-        f"{missing} missing baseline(s). threshold={THRESHOLD_PCT:.2f}%"
+        f"{missing} missing baseline(s). default threshold={THRESHOLD_DEFAULT:.2f}%"
     )
+    for img in images:
+        if img["status"] == "ok" and not img["ok"]:
+            print(
+                f"  REGRESSION {img['viewport']}/{img['name']}: "
+                f"{img['changed_pct']:.2f}% > {img['threshold_pct']:.2f}% "
+                f"({img['threshold_source']})"
+            )
     if missing and not any(i["status"] == "ok" for i in images):
         print("No baselines committed yet. Run with --update-baselines to seed.")
         return 2
