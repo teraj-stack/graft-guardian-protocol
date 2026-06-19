@@ -10,6 +10,16 @@ import laddPoster from "@/assets/ladd-poster.jpg";
 import { CartDrawer } from "@/components/CartDrawer";
 import { LazyMount } from "@/components/LazyMount";
 import { Section, SectionHeader, Para, Card, Mech } from "@/components/section-primitives";
+import {
+  MicrobiomeSkeleton,
+  TimelineSkeleton,
+  JourneySkeleton,
+  EvidenceBasementSkeleton,
+  PricingSkeleton,
+  FAQSkeleton,
+  CTASkeleton,
+  ContactSkeleton,
+} from "@/components/section-skeletons";
 import { FAQ } from "@/lib/faq-data";
 
 /* ---------- Code-split heavy below-the-fold sections ----------
@@ -100,14 +110,14 @@ function Index() {
         <PBM />
         <HBOT />
         <LADD />
-        <LazyMount minHeight={600}><Microbiome /></LazyMount>
-        <LazyMount minHeight={800}><Timeline /></LazyMount>
-        <LazyMount minHeight={600}><Journey /></LazyMount>
-        <LazyMount minHeight={800}><EvidenceBasement /></LazyMount>
-        <LazyMount minHeight={700}><Pricing /></LazyMount>
-        <LazyMount minHeight={500}><FAQSection /></LazyMount>
-        <LazyMount minHeight={300}><CTA /></LazyMount>
-        <LazyMount minHeight={700}><Contact /></LazyMount>
+        <LazyMount minHeight={900} fallback={<MicrobiomeSkeleton />}><Microbiome /></LazyMount>
+        <LazyMount minHeight={1300} fallback={<TimelineSkeleton />}><Timeline /></LazyMount>
+        <LazyMount minHeight={780} fallback={<JourneySkeleton />}><Journey /></LazyMount>
+        <LazyMount minHeight={2100} fallback={<EvidenceBasementSkeleton />}><EvidenceBasement /></LazyMount>
+        <LazyMount minHeight={1000} fallback={<PricingSkeleton />}><Pricing /></LazyMount>
+        <LazyMount minHeight={1200} fallback={<FAQSkeleton />}><FAQSection /></LazyMount>
+        <LazyMount minHeight={520} fallback={<CTASkeleton />}><CTA /></LazyMount>
+        <LazyMount minHeight={1080} fallback={<ContactSkeleton />}><Contact /></LazyMount>
       </main>
       <Footer />
     </div>

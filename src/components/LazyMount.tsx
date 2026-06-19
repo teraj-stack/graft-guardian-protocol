@@ -7,17 +7,21 @@ import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
  *
  * When `children` is a React.lazy() component, the dynamic import only
  * starts after intersection — i.e. true per-section code splitting.
- * A Suspense boundary is included with `minHeight` as the fallback to
- * prevent layout shift while the chunk is in flight.
+ *
+ * `fallback` is rendered both before intersection AND during Suspense
+ * while the chunk is in flight. Provide a section-shaped skeleton sized
+ * to match the real content so layout shift (CLS) stays at zero.
  */
 export function LazyMount({
   children,
   rootMargin = "400px",
   minHeight = 400,
+  fallback,
 }: {
   children: ReactNode;
   rootMargin?: string;
   minHeight?: number;
+  fallback?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
@@ -46,11 +50,12 @@ export function LazyMount({
     return () => io.disconnect();
   }, [shown, rootMargin]);
 
+  const placeholder =
+    fallback ?? <div style={{ minHeight }} aria-hidden />;
+
   return (
     <div ref={ref} style={shown ? undefined : { minHeight }}>
-      {shown ? (
-        <Suspense fallback={<div style={{ minHeight }} aria-hidden />}>{children}</Suspense>
-      ) : null}
+      {shown ? <Suspense fallback={placeholder}>{children}</Suspense> : placeholder}
     </div>
   );
 }
