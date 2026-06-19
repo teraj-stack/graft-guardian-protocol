@@ -29,27 +29,50 @@ Seeding baselines locally::
 Env:
   VISUAL_OUT          (default: visual-report)
   VISUAL_BASELINES    (default: tests/visual-baselines)
-  VISUAL_DIFF_THRESHOLD                 global default pct (default 1.0)
-  VISUAL_DIFF_THRESHOLD_<SECTION>       per-section override (PBM, HBOT, LADD)
-  VISUAL_DIFF_THRESHOLD_<VIEWPORT>      per-viewport override (DESKTOP, MOBILE)
-  VISUAL_DIFF_THRESHOLD_<SECTION>_<VP>  per-section + per-viewport (highest priority)
+  VISUAL_DIFF_THRESHOLD                            global default pct (default 1.0)
+  VISUAL_DIFF_THRESHOLD_<SECTION>                  per-section override (PBM, HBOT, LADD)
+  VISUAL_DIFF_THRESHOLD_<VIEWPORT>                 per-viewport override (DESKTOP, MOBILE)
+  VISUAL_DIFF_THRESHOLD_<SECTION>_<VP>             per-section + per-viewport
+  VISUAL_DIFF_THRESHOLD_<BRAND>                    per-brand override (GRAFTGEN, MSC)
+  VISUAL_DIFF_THRESHOLD_<BRAND>_<VP>               per-brand + viewport
+  VISUAL_DIFF_THRESHOLD_<BRAND>_<SECTION>          per-brand + section
+  VISUAL_DIFF_THRESHOLD_<BRAND>_<SECTION>_<VP>     per-brand + section + viewport (most specific)
 
   Resolution order (most specific wins):
-    1. env VISUAL_DIFF_THRESHOLD_<SECTION>_<VIEWPORT>
-    2. config thresholds[section][viewport]
-    3. env VISUAL_DIFF_THRESHOLD_<SECTION>
-    4. config thresholds[section]["default"]
-    5. env VISUAL_DIFF_THRESHOLD_<VIEWPORT>
-    6. config thresholds["default"][viewport]
-    7. env VISUAL_DIFF_THRESHOLD  /  config thresholds["default"]["default"]
-    8. built-in default 1.0
+    1.  env VISUAL_DIFF_THRESHOLD_<BRAND>_<SECTION>_<VIEWPORT>
+    2.  config brands[brand][section][viewport]
+    3.  env VISUAL_DIFF_THRESHOLD_<BRAND>_<SECTION>
+    4.  config brands[brand][section][default]
+    5.  env VISUAL_DIFF_THRESHOLD_<BRAND>_<VIEWPORT>
+    6.  config brands[brand][default][viewport]
+    7.  env VISUAL_DIFF_THRESHOLD_<BRAND>
+    8.  config brands[brand][default][default]
+    9.  env VISUAL_DIFF_THRESHOLD_<SECTION>_<VIEWPORT>
+    10. config [section][viewport]
+    11. env VISUAL_DIFF_THRESHOLD_<SECTION>
+    12. config [section][default]
+    13. env VISUAL_DIFF_THRESHOLD_<VIEWPORT>
+    14. config default[viewport]
+    15. env VISUAL_DIFF_THRESHOLD  /  config default[default]
+    16. built-in default 1.0
 
   Optional config: tests/visual-baselines/thresholds.json
     {
       "default": { "default": 1.0, "desktop": 1.0, "mobile": 1.5 },
       "pbm":     { "default": 0.5 },
       "hbot":    { "default": 0.5 },
-      "ladd":    { "desktop": 0.75, "mobile": 1.25 }
+      "ladd":    { "desktop": 0.75, "mobile": 1.25 },
+      "brands": {
+        "graftgen": {
+          "default": { "default": 0.6 },
+          "pbm":     { "desktop": 0.4, "mobile": 0.6 },
+          "hbot":    { "desktop": 0.4, "mobile": 0.6 }
+        },
+        "msc": {
+          "default": { "default": 1.0 },
+          "ladd":    { "desktop": 0.75, "mobile": 1.25 }
+        }
+      }
     }
 """
 
@@ -70,6 +93,15 @@ DIFF_DIR = OUT / "diff"
 THRESHOLD_DEFAULT = float(os.environ.get("VISUAL_DIFF_THRESHOLD", "1.0"))
 THRESHOLD_CONFIG_PATH = BASELINES / "thresholds.json"
 SECTIONS = ("pbm", "hbot", "ladd")
+BRANDS = ("graftgen", "msc")
+
+# Section -> default brand association (used when filename doesn't
+# explicitly carry a brand token).
+SECTION_BRAND: dict[str, str] = {
+    "pbm": "graftgen",
+    "hbot": "graftgen",
+    "ladd": "msc",
+}
 
 # Pixel intensity (0-255) above which a channel-delta counts as "changed".
 PIXEL_NOISE = 12
@@ -96,6 +128,26 @@ def _classify_section(name: str) -> str | None:
     return None
 
 
+def _classify_brand(name: str, section: str | None) -> str | None:
+    """Determine brand from filename keywords, falling back to section mapping."""
+    low = name.lower()
+    # Direct brand keywords in the filename (e.g. product slugs).
+    if "msc" in low or "plazma" in low or "cap" in low or "tulowy" in low or "ladd" in low:
+        return "msc"
+    if (
+        "graftgen" in low
+        or "hbot" in low
+        or "hiperbaryczna" in low
+        or "pbm" in low
+        or "fototerapia" in low
+        or "lllt" in low
+    ):
+        return "graftgen"
+    if section and section in SECTION_BRAND:
+        return SECTION_BRAND[section]
+    return None
+
+
 def _env_threshold(*parts: str) -> float | None:
     key = "VISUAL_DIFF_THRESHOLD_" + "_".join(p.upper() for p in parts)
     v = os.environ.get(key)
@@ -108,19 +160,53 @@ def _env_threshold(*parts: str) -> float | None:
         return None
 
 
-def _cfg_threshold(section: str, viewport: str) -> float | None:
-    s = THRESHOLD_CONFIG.get(section)
-    if not isinstance(s, dict):
-        return None
-    v = s.get(viewport)
-    return float(v) if isinstance(v, (int, float)) else None
+def _cfg_threshold(*path: str) -> float | None:
+    """Walk THRESHOLD_CONFIG by path; return numeric leaf or None."""
+    node: object = THRESHOLD_CONFIG
+    for p in path:
+        if not isinstance(node, dict):
+            return None
+        node = node.get(p)
+        if node is None:
+            return None
+    return float(node) if isinstance(node, (int, float)) else None
 
 
 def resolve_threshold(viewport: str, name: str) -> tuple[float, str]:
     """Return (threshold_pct, source) for a given screenshot."""
     section = _classify_section(name)
+    brand = _classify_brand(name, section)
     vp = viewport.lower()
 
+    # --- Brand-scoped (most specific) ---
+    if brand:
+        if section:
+            v = _env_threshold(brand, section, vp)
+            if v is not None:
+                return v, f"env:{brand}+{section}+{vp}"
+            v = _cfg_threshold("brands", brand, section, vp)
+            if v is not None:
+                return v, f"config:brands.{brand}.{section}.{vp}"
+            v = _env_threshold(brand, section)
+            if v is not None:
+                return v, f"env:{brand}+{section}"
+            v = _cfg_threshold("brands", brand, section, "default")
+            if v is not None:
+                return v, f"config:brands.{brand}.{section}.default"
+        v = _env_threshold(brand, vp)
+        if v is not None:
+            return v, f"env:{brand}+{vp}"
+        v = _cfg_threshold("brands", brand, "default", vp)
+        if v is not None:
+            return v, f"config:brands.{brand}.default.{vp}"
+        v = _env_threshold(brand)
+        if v is not None:
+            return v, f"env:{brand}"
+        v = _cfg_threshold("brands", brand, "default", "default")
+        if v is not None:
+            return v, f"config:brands.{brand}.default.default"
+
+    # --- Section-scoped ---
     if section:
         v = _env_threshold(section, vp)
         if v is not None:
@@ -135,6 +221,7 @@ def resolve_threshold(viewport: str, name: str) -> tuple[float, str]:
         if v is not None:
             return v, f"config:{section}.default"
 
+    # --- Defaults ---
     v = _env_threshold(vp)
     if v is not None:
         return v, f"env:{vp}"
@@ -245,11 +332,16 @@ def render_html(report: dict) -> str:
               <div class="missing">No baseline yet — current screenshot:</div>
               <img src="{rel(r['current'])}" alt="current" />
             """
+        brand_badge = (
+            f"<span class='brand brand-{r.get('brand')}'>{r.get('brand', '-').upper()}</span>"
+            if r.get("brand") else ""
+        )
         rows.append(
             f"""
             <section>
               <header>
                 <h2>{r['viewport']} / {r['name']}</h2>
+                {brand_badge}
                 <span class="badge" style="background:{color}">{status}</span>
                 <span class="meta">changed: {r['changed_pct']:.2f}% · threshold: {r.get('threshold_pct', 0):.2f}% ({r.get('threshold_source', '-')})</span>
               </header>
@@ -274,6 +366,9 @@ def render_html(report: dict) -> str:
   section header {{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }}
   h2 {{ font-size:15px; margin:0; }}
   .badge {{ font-size:11px; padding:3px 8px; border-radius:999px; color:#fff; }}
+  .brand {{ font-size:10px; padding:2px 7px; border-radius:4px; color:#0f1116; font-weight:600; letter-spacing:0.04em; }}
+  .brand-graftgen {{ background:#d4b056; }}
+  .brand-msc {{ background:#7ec8e3; }}
   .meta {{ font-size:12px; color:#8b93a4; margin-left:auto; }}
   img {{ max-width:100%; display:block; border:1px solid #242833; border-radius:6px; }}
   .missing {{ color:#b8852b; margin:6px 0; }}
@@ -287,7 +382,7 @@ def render_html(report: dict) -> str:
     {summary['total']} pairs · {summary['regressions']} regressions ·
     {summary['missing_baselines']} new · default threshold {THRESHOLD_DEFAULT:.2f}%
   </p>
-  <table class="th"><thead><tr><td>section / viewport</td><td>threshold</td><td>source</td></tr></thead><tbody>{th_rows}</tbody></table>
+  <table class="th"><thead><tr><td>brand / section / viewport</td><td>threshold</td><td>source</td></tr></thead><tbody>{th_rows}</tbody></table>
   {''.join(rows)}
 </body></html>"""
 
@@ -316,11 +411,16 @@ def main() -> int:
         current_copy = out_vp / f"{name}.current.png"
         shutil.copy2(current_path, current_copy)
 
+        section = _classify_section(name)
+        brand = _classify_brand(name, section)
+
         if not baseline_path.exists():
             missing += 1
             images.append({
                 "viewport": vp,
                 "name": name,
+                "section": section,
+                "brand": brand,
                 "status": "missing-baseline",
                 "ok": True,
                 "changed_pct": 0.0,
@@ -355,7 +455,8 @@ def main() -> int:
         images.append({
             "viewport": vp,
             "name": name,
-            "section": _classify_section(name),
+            "section": section,
+            "brand": brand,
             "status": "ok",
             "ok": ok,
             "changed_pct": pct,
@@ -368,14 +469,21 @@ def main() -> int:
             "sidebyside": str(side_path.relative_to(DIFF_DIR)),
         })
 
-    # Effective threshold matrix for every (section, viewport) combo we know.
+    # Effective threshold matrix for every (brand, section, viewport) combo.
     viewports = sorted({i["viewport"] for i in images}) or ["desktop", "mobile"]
     thresholds_effective: dict[str, dict] = {}
-    for section in (*SECTIONS, "default"):
-        for vp in viewports:
-            probe = f"{section}-probe" if section != "default" else "other-probe"
-            pct, src = resolve_threshold(vp, probe)
-            thresholds_effective[f"{section}/{vp}"] = {"pct": pct, "source": src}
+    for brand in (*BRANDS, None):
+        for section in (*SECTIONS, "default"):
+            for vp in viewports:
+                # Build a synthetic filename so resolve_threshold picks the
+                # intended brand+section combo even if the section's default
+                # brand mapping disagrees with the chosen brand.
+                brand_tag = brand or ""
+                sec_tag = section if section != "default" else "other"
+                probe = f"{brand_tag}-{sec_tag}-probe"
+                pct, src = resolve_threshold(vp, probe)
+                label = f"{brand or 'auto'}/{section}/{vp}"
+                thresholds_effective[label] = {"pct": pct, "source": src}
 
     report = {
         "threshold_default_pct": THRESHOLD_DEFAULT,
@@ -397,7 +505,8 @@ def main() -> int:
     for img in images:
         if img["status"] == "ok" and not img["ok"]:
             print(
-                f"  REGRESSION {img['viewport']}/{img['name']}: "
+                f"  REGRESSION {img['viewport']}/{img['name']} "
+                f"[brand={img.get('brand') or '-'}]: "
                 f"{img['changed_pct']:.2f}% > {img['threshold_pct']:.2f}% "
                 f"({img['threshold_source']})"
             )
