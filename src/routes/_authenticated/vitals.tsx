@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LineChart,
   Line,
@@ -279,6 +279,49 @@ function VitalsPage() {
     if (!selectedPreset) return;
     persistDefaultPreset(selectedPreset);
     toast.success(`Preset "${selectedPreset}" ustawiony jako domyślny.`);
+  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const json = JSON.parse(String(reader.result));
+        if (!Array.isArray(json)) {
+          toast.error("Plik JSON musi zawierać tablicę presetów.");
+          return;
+        }
+        const valid: PdfPreset[] = [];
+        for (const item of json) {
+          if (
+            typeof item?.name === "string" &&
+            item.name.trim() &&
+            typeof item?.prefs === "object" &&
+            item.prefs !== null
+          ) {
+            valid.push({ name: item.name.trim(), prefs: { ...PDF_DEFAULTS, ...item.prefs } });
+          }
+        }
+        if (valid.length === 0) {
+          toast.error("Nie znaleziono poprawnych presetów w pliku.");
+          return;
+        }
+        const next = [...pdfPresets];
+        for (const v of valid) {
+          const idx = next.findIndex((p) => p.name === v.name);
+          if (idx >= 0) next[idx] = v;
+          else next.push(v);
+        }
+        persistPresets(next);
+        toast.success(`Zaimportowano ${valid.length} presetów.`);
+      } catch {
+        toast.error("Nie udało się sparsować pliku JSON.");
+      } finally {
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
+    };
+    reader.readAsText(file);
   };
   useEffect(() => {
     const def = loadDefaultPreset();
