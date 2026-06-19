@@ -421,7 +421,7 @@ function PBM() {
             potwierdza zgodność z zakresem terapeutycznym opisanym w
             literaturze (m.in. Avci et al. 2014, Hamblin 2016). Sesja
             gabinetowa jest kontynuowana w domu przez pacjenta hełmem LLLT
-            3–4× w tygodniu przez 12 tygodni.
+            2x dziennie/tydz. przez 12 tygodni.
           </p>
           <Mech>
             PBM aktywuje również ścieżkę Wnt/β-katenina w komórkach
