@@ -314,7 +314,6 @@ function ChangelogPanel({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
-}
 
 /* ─── Subcomponents ─── */
 
