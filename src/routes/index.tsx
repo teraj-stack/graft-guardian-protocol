@@ -574,14 +574,6 @@ function LADD() {
         </table>
       </div>
 
-      <div className="mt-6 rounded-sm border border-border/60 bg-card p-5">
-        <div className="flex items-start justify-between gap-4">
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Rozważamy rozszerzenie protokołu o oba urządzenia: laser tulowy do sesji LADD od 4–6 tygodnia (głęboka penetracja minoksydylu i PRP) oraz zimną plazmę do wczesnej fazy gojenia (kontrola mikrobiomu, delikatna stymulacja, brak downtime).
-          </p>
-        </div>
-      </div>
-
     </Section>
   );
 }
