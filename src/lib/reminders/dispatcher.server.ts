@@ -129,48 +129,61 @@ export async function runDispatch({
     error: string | null;
   }> = [];
 
-  for (const sub of subscriptions) {
-    const day = daysBetween(now, sub.surgery_date);
-    const dueWeeks = dueWeeksForDay(day).filter((w) =>
-      sub.selected_weeks.includes(w)
-    );
-    if (dueWeeks.length === 0) continue;
+  // Atomicity contract: collect every (sub, week, channel) attempt in
+  // `logRows` and write the batch in a single multi-row INSERT after the
+  // loop completes (Postgres executes that as one atomic statement —
+  // all-or-nothing). If any sender throws, we abort the run BEFORE issuing
+  // the INSERT, so reminder_sends never sees a partial slice of this pass.
+  try {
+    for (const sub of subscriptions) {
+      const day = daysBetween(now, sub.surgery_date);
+      const dueWeeks = dueWeeksForDay(day).filter((w) =>
+        sub.selected_weeks.includes(w)
+      );
+      if (dueWeeks.length === 0) continue;
 
-    for (const week of dueWeeks) {
-      const channels: Array<"email" | "sms"> = [];
-      if (sub.channel_email) channels.push("email");
-      if (sub.channel_sms && sub.phone) channels.push("sms");
+      for (const week of dueWeeks) {
+        const channels: Array<"email" | "sms"> = [];
+        if (sub.channel_email) channels.push("email");
+        if (sub.channel_sms && sub.phone) channels.push("sms");
 
-      for (const channel of channels) {
-        const key = `${sub.id}:${week}:${channel}`;
-        if (sentKeys.has(key)) continue;
-        processed += 1;
-        const result =
-          channel === "email"
-            ? await send.sendEmailReminder({
-                to: sub.email,
-                week,
-                unsubscribeToken: sub.unsubscribe_token,
-              })
-            : await send.sendSmsReminder({
-                to: sub.phone!,
-                week,
-                unsubscribeToken: sub.unsubscribe_token,
-              });
-        if (result.status === "sent") sentCount += 1;
-        // Reserve the (sub,week,channel) slot immediately so a duplicate
-        // due-week in the same run can't double-send.
-        sentKeys.add(key);
-        logRows.push({
-          subscription_id: sub.id,
-          week,
-          channel,
-          status: result.status,
-          provider_message_id: result.providerMessageId ?? null,
-          error: result.error ?? null,
-        });
+        for (const channel of channels) {
+          const key = `${sub.id}:${week}:${channel}`;
+          if (sentKeys.has(key)) continue;
+          processed += 1;
+          const result =
+            channel === "email"
+              ? await send.sendEmailReminder({
+                  to: sub.email,
+                  week,
+                  unsubscribeToken: sub.unsubscribe_token,
+                })
+              : await send.sendSmsReminder({
+                  to: sub.phone!,
+                  week,
+                  unsubscribeToken: sub.unsubscribe_token,
+                });
+          if (result.status === "sent") sentCount += 1;
+          // Reserve the (sub,week,channel) slot immediately so a duplicate
+          // due-week in the same run can't double-send.
+          sentKeys.add(key);
+          logRows.push({
+            subscription_id: sub.id,
+            week,
+            channel,
+            status: result.status,
+            provider_message_id: result.providerMessageId ?? null,
+            error: result.error ?? null,
+          });
+        }
       }
     }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[reminders.dispatch] sender threw, aborting batch", message);
+    // Abort: do NOT insert any of the collected rows. The next dispatcher
+    // run will see the same due weeks (nothing was logged) and re-attempt.
+    return { ok: false, processed, sent: sentCount, inserted: 0, error: message };
   }
 
   let inserted = 0;
