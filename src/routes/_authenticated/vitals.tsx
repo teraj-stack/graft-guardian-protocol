@@ -264,7 +264,7 @@ function VitalsPage() {
           const chartY = startY + 18;
           doc.setFontSize(11);
           doc.setTextColor(0);
-          doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni)`, chartX, startY + 12);
+          doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni • ${WINDOW_LABEL[pdfWindow]})`, chartX, startY + 12);
           doc.setDrawColor(180);
           doc.rect(chartX, chartY, chartW, chartH);
           const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
