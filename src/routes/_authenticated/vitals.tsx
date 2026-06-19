@@ -793,6 +793,14 @@ function VitalsPage() {
           >
             {exportingPdf ? "Generowanie PDF…" : "Eksportuj PDF"}
           </button>
+          <button
+            onClick={resetPdfSettings}
+            disabled={exporting || exportingPdf}
+            className="h-9 px-3 rounded-md border text-muted-foreground text-sm font-medium hover:text-foreground hover:border-foreground disabled:opacity-50"
+            title="Resetuje zapamiętane w tej sesji ustawienia eksportu PDF do wartości domyślnych"
+          >
+            Resetuj ustawienia PDF
+          </button>
         </div>
       </div>
 
