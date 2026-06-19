@@ -19,8 +19,10 @@ import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
@@ -78,6 +80,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RaportyStatusRoute = RaportyStatusRouteImport.update({
+  id: '/raporty/status',
+  path: '/raporty/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrzypomnieniaWypiszRoute = PrzypomnieniaWypiszRouteImport.update({
   id: '/wypisz',
   path: '/wypisz',
@@ -87,6 +94,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   id: '/product/$handle',
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
+  id: '/raporty',
+  path: '/raporty',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
@@ -140,8 +152,10 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/raporty': typeof AuthenticatedRaportyRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
@@ -160,8 +174,10 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/raporty': typeof AuthenticatedRaportyRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
@@ -182,8 +198,10 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
@@ -204,8 +222,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
+    | '/raporty'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
+    | '/raporty/status'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
@@ -224,8 +244,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
+    | '/raporty'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
+    | '/raporty/status'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
@@ -245,8 +267,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/_authenticated/admin'
+    | '/_authenticated/raporty'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
+    | '/raporty/status'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
@@ -267,6 +291,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SklepRoute: typeof SklepRoute
   ProductHandleRoute: typeof ProductHandleRoute
+  RaportyStatusRoute: typeof RaportyStatusRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
@@ -347,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/raporty/status': {
+      id: '/raporty/status'
+      path: '/raporty/status'
+      fullPath: '/raporty/status'
+      preLoaderRoute: typeof RaportyStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/przypomnienia/wypisz': {
       id: '/przypomnienia/wypisz'
       path: '/wypisz'
@@ -360,6 +392,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/product/$handle'
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/raporty': {
+      id: '/_authenticated/raporty'
+      path: '/raporty'
+      fullPath: '/raporty'
+      preLoaderRoute: typeof AuthenticatedRaportyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
@@ -415,10 +454,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -448,6 +489,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SklepRoute: SklepRoute,
   ProductHandleRoute: ProductHandleRoute,
+  RaportyStatusRoute: RaportyStatusRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
