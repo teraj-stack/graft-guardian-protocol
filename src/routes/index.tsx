@@ -117,6 +117,7 @@ function Index() {
         <Microbiome />
         <Timeline />
         <Journey />
+        <EvidenceBasement />
         <Pricing />
         <FAQSection />
         <CTA />
