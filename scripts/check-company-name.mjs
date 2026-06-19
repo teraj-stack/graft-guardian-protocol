@@ -39,6 +39,17 @@ const CANONICAL_IDS = {
   REGON: CANONICAL_REGON,
 };
 
+// --- Walidatory formatu ---
+function isValidNIP(digits) {
+  return /^\d{10}$/.test(digits);
+}
+function isValidKRS(digits) {
+  return /^\d{6,10}$/.test(digits);
+}
+function isValidREGON(digits) {
+  return /^\d{9}$/.test(digits) || /^\d{14}$/.test(digits);
+}
+
 const ALLOWLIST = new Set([
   "scripts/check-company-name.mjs",
   "src/lib/company.ts",
