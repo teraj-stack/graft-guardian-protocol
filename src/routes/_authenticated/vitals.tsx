@@ -140,15 +140,27 @@ function VitalsPage() {
     "d4-14": "D4–14",
     "m1+": "M1+ (15+ dni)",
   };
-  const filterWindow = (rows: TrendRow[]): TrendRow[] => {
-    if (pdfWindow === "all") return rows;
+  type WinKey = "all" | "d0-3" | "d4-14" | "m1+";
+  const filterByWindow = (rows: TrendRow[], w: WinKey): TrendRow[] => {
+    if (w === "all") return rows;
     const n = rows.length;
     return rows.filter((_, i) => {
       const daysAgo = n - 1 - i;
-      if (pdfWindow === "d0-3") return daysAgo <= 3;
-      if (pdfWindow === "d4-14") return daysAgo >= 4 && daysAgo <= 14;
+      if (w === "d0-3") return daysAgo <= 3;
+      if (w === "d4-14") return daysAgo >= 4 && daysAgo <= 14;
       return daysAgo >= 15; // m1+
     });
+  };
+  const filterWindow = (rows: TrendRow[]): TrendRow[] => filterByWindow(rows, pdfWindow);
+  const [pdfCompare, setPdfCompare] = useState(false);
+  const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(["d0-3", "d4-14"]);
+  const toggleCompareWindow = (w: WinKey) =>
+    setPdfCompareWindows((cur) => (cur.includes(w) ? cur.filter((x) => x !== w) : [...cur, w]));
+  const WINDOW_COLORS: Record<WinKey, [number, number, number]> = {
+    "all": [120, 120, 120],
+    "d0-3": [200, 176, 108],
+    "d4-14": [59, 130, 246],
+    "m1+": [16, 185, 129],
   };
   const toggleMetric = (m: "CLS" | "LCP" | "INP") =>
     setPdfMetrics((cur) => (cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m]));
