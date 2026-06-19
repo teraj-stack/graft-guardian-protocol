@@ -436,7 +436,7 @@ function VitalsPage() {
               const vals = chartData.map((d) => d[m]);
               const yMax = Math.max(t.poor * 1.05, ...vals);
               const n = chartData.length;
-              const yFor = drawAxes(chartX, chartY, t, 0, yMax, m === "CLS");
+              const yFor = drawAxes(chartX, chartY, chartW, chartH, t, 0, yMax, m === "CLS");
               const xFor = (i: number) => chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
               const [r, g, b] = METRIC_COLORS[m];
               doc.setDrawColor(r, g, b);
