@@ -123,4 +123,34 @@ describe("computeDueItems catch-up + idempotency", () => {
     const items = computeDueItems(dayAfter(0), [old], new Set());
     expect(items.map((i) => i.week)).toEqual([1, 2, 4, 8, 12]);
   });
+
+  it("regression: cron skipped on day 7 still delivers week 1 on day 8 (catch-up)", () => {
+    // Exact regression for the QA finding "A missed scheduler run silently
+    // drops that week's reminder forever". Previously the dispatcher only
+    // matched when `day % 7 === 0`, so a cron outage on day 7 would skip
+    // week 1 permanently. With dueWeeksForDay catch-up, day 8 must still
+    // emit week 1 — and only week 1 — because nothing was logged on day 7.
+    const sent = new Set<string>(); // empty: cron never ran on day 7
+
+    // Day 7 itself: under healthy scheduling this is when week 1 fires.
+    const onTime = computeDueItems(dayAfter(7), [sub], new Set());
+    expect(onTime).toEqual([{ subscriptionId: "sub-1", week: 1 }]);
+
+    // Simulate the outage: cron did NOT run on day 7 → nothing persisted.
+    // Next run is on day 8, day count has moved past 7. Week 1 must still
+    // be due (the modulo-7 gate would have dropped it).
+    const dayEight = computeDueItems(dayAfter(8), [sub], sent);
+    expect(dayEight).toEqual([{ subscriptionId: "sub-1", week: 1 }]);
+
+    // After persisting the catch-up send, the very next run on day 8
+    // (or any later day before day 14) must not re-emit week 1.
+    sent.add("sub-1:1");
+    expect(computeDueItems(dayAfter(8), [sub], sent)).toEqual([]);
+    expect(computeDueItems(dayAfter(13), [sub], sent)).toEqual([]);
+
+    // And week 2 still fires correctly when its own trigger day arrives.
+    expect(computeDueItems(dayAfter(14), [sub], sent)).toEqual([
+      { subscriptionId: "sub-1", week: 2 },
+    ]);
+  });
 });
