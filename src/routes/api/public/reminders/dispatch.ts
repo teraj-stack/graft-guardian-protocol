@@ -46,12 +46,9 @@ export const Route = createFileRoute("/api/public/reminders/dispatch")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = request.headers.get("apikey");
-        const expected =
-          process.env.SUPABASE_PUBLISHABLE_KEY ||
-          process.env.SUPABASE_ANON_KEY ||
-          "";
-        if (!expected || apiKey !== expected) {
+        const cronSecret = request.headers.get("x-cron-secret");
+        const expected = process.env.CRON_SECRET;
+        if (!expected || !cronSecret || cronSecret !== expected) {
           return new Response("Unauthorized", { status: 401 });
         }
 
