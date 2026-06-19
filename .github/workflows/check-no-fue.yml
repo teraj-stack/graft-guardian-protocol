@@ -136,6 +136,21 @@ jobs:
             const filesSeries = history.map(h => h.totalFiles);
             const labels = history.map(h => `#${h.runId}`).join(' · ');
 
+            const deltaBar = (label, prevVal, currVal, color) => {
+              const cfg = {
+                type: 'bar',
+                data: {
+                  labels: ['Poprzedni', 'Bieżący'],
+                  datasets: [{ data: [prevVal, currVal], backgroundColor: [color + '88', color], borderColor: color, borderWidth: 1 }]
+                },
+                options: {
+                  plugins: { title: { display: true, text: label }, legend: { display: false } },
+                  scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+              };
+              return `https://quickchart.io/chart?w=320&h=180&bkg=white&c=${encodeURIComponent(JSON.stringify(cfg))}`;
+            };
+
             const chartBlock = `#### Miniwykresy (ostatnie ${history.length} ${history.length === 1 ? 'przebieg' : 'przebiegi'})\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![hits](${quickChart('Łączne wykrycia', hitsSeries, '#d73a49')}) | ![files](${quickChart('Liczba plików', filesSeries, '#0366d6')}) |\n| \`${sparkline(hitsSeries)}\` ${hitsSeries.join(' → ')} | \`${sparkline(filesSeries)}\` ${filesSeries.join(' → ')} |\n\n<sub>Oś X (od najstarszego do najnowszego): ${labels}</sub>\n\n`;
 
             let trendSection;
@@ -155,7 +170,8 @@ jobs:
                 else if (cur !== old) status = 'zmiana';
                 return `| ${f} | ${old} | ${cur} | ${fmtDelta(cur, old)} | ${status} |`;
               }).join('\n');
-              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${chartBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
+              const deltaBlock = `#### Wykres różnicy (delta)\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![delta-hits](${deltaBar('Łączne wykrycia', prev.totalHits, totalHits, '#d73a49')}) | ![delta-files](${deltaBar('Liczba plików', prev.totalFiles, totalFiles, '#0366d6')}) |\n\n`;
+              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${chartBlock}${deltaBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
             }
 
             const state = Buffer.from(JSON.stringify({
