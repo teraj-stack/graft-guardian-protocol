@@ -16,22 +16,49 @@ export interface NotifyResult {
 }
 
 
+export const CONTACT_TOPICS = {
+  konsultacja: {
+    label: "Konsultacja",
+    envKey: "CONTACT_NOTIFY_TO_KONSULTACJA",
+  },
+  zabieg: {
+    label: "Zabieg",
+    envKey: "CONTACT_NOTIFY_TO_ZABIEG",
+  },
+  ladd_prp: {
+    label: "LADD / PRP + minoksydyl",
+    envKey: "CONTACT_NOTIFY_TO_LADD",
+  },
+  inne: {
+    label: "Inne",
+    envKey: "CONTACT_NOTIFY_TO_INNE",
+  },
+} as const;
+
+export type ContactTopic = keyof typeof CONTACT_TOPICS;
+
+function resolveRecipients(topic: ContactTopic | undefined): string[] {
+  const fallback = process.env.CONTACT_NOTIFY_TO || "kontakt@bujokmedical.pl";
+  const topicEnv = topic ? process.env[CONTACT_TOPICS[topic].envKey] : undefined;
+  const raw = (topicEnv && topicEnv.trim().length > 0) ? topicEnv : fallback;
+  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+}
+
 export async function notifyClinicOfContact(args: {
   name: string;
   email: string;
   message: string;
   receivedAt: string;
+  topic?: ContactTopic;
 }): Promise<NotifyResult> {
   const resendKey = process.env.RESEND_API_KEY;
   const lovableKey = process.env.LOVABLE_API_KEY;
-  const toRaw = process.env.CONTACT_NOTIFY_TO || "kontakt@bujokmedical.pl";
-  const recipients = toRaw
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const recipients = resolveRecipients(args.topic);
+  const topicLabel = args.topic ? CONTACT_TOPICS[args.topic].label : "—";
   if (recipients.length === 0) {
     return { status: "skipped", error: "no_recipients" };
   }
+
   if (!resendKey || !lovableKey) {
     return {
       status: "provider_missing",
