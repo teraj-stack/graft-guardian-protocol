@@ -654,13 +654,13 @@ function Footer() {
           </p>
           <div className="mt-6 grid grid-cols-1 items-center gap-6 sm:grid-cols-3">
             <div className="flex items-center justify-center rounded-md bg-white p-4 h-24">
-              <img src={mscLogo.url} alt="MySkinCode — Technical Support MedTech SaaS" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={mscLogo.url} alt="MySkinCode — Technical Support MedTech SaaS" width={1920} height={1920} className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
             </div>
             <div className="flex items-center justify-center rounded-md bg-black p-4 h-24">
-              <img src={bujokLogo.url} alt="Medical Lasers and STEM Cells Solutions" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={bujokLogo.url} alt="Medical Lasers and STEM Cells Solutions" width={1024} height={1024} className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
             </div>
             <div className="flex items-center justify-center rounded-md bg-[#3f4a73] p-4 h-24">
-              <img src={mabelLogo.url} alt="Mabel Hair — Hair Transplant Clinic" className="max-h-full max-w-full object-contain" loading="lazy" />
+              <img src={mabelLogo.url} alt="Mabel Hair — Hair Transplant Clinic" width={372} height={370} className="max-h-full max-w-full object-contain" loading="lazy" decoding="async" />
             </div>
           </div>
         </div>
