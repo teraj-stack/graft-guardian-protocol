@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
 import { useEffect, useRef, useState } from "react";
 import { getPricingOverrides } from "@/lib/pricing.functions";
+import { PRICING } from "@/lib/pricing-data";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
@@ -141,8 +142,7 @@ function Nav() {
     { href: "#hbot", label: "HBOT" },
     { href: "#ladd", label: "LADD" },
     { href: "#protokol", label: "14 dni" },
-    { href: "#cennik", label: "Cennik" },
-    { to: "/sklep", label: "Sklep" },
+    { to: "/sklep", label: "Cennik / Sklep" },
     { to: "/panel", label: "Panel pacjenta" },
     { to: "/przypomnienia", label: "Przypomnienia" },
     { href: "#faq", label: "FAQ" },
@@ -1364,292 +1364,62 @@ function FAQSection() {
   );
 }
 
-/* ---------- Pricing ---------- */
-
-const PRICING: PricingItem[] = [
-  {
-    code: "HBOT",
-    name: "Tlenoterapia hiperbaryczna",
-    params: "60–90 min · 2,0–2,4 ATA · 100% O₂",
-    single: { price: "420 zł", label: "Sesja pojedyncza" },
-    packs: [
-      { sessions: 5, price: "1 995 zł", unitPrice: "399 zł", saving: "5%" },
-      { sessions: 10, price: "3 800 zł", unitPrice: "380 zł", saving: "10%" },
-      { sessions: 20, price: "7 140 zł", unitPrice: "357 zł", saving: "15%" },
-    ],
-    scope: [
-      "Kwalifikacja lekarska przed pierwszą sesją (medycyna hiperbaryczna).",
-      "Sesja w komorze wieloosobowej lub monoplace: 60–90 min przy 2,0–2,4 ATA.",
-      "Tlen 100% pod maską lub kaskiem przez cały czas ekspozycji.",
-      "Pomiar ciśnienia tętniczego przed i po sesji.",
-      "Raport końcowy z rekomendacją liczby sesji w cyklu.",
-    ],
-    note: "Średnia z najwyższych stawek ośrodków premium w Warszawie i Gdańsku (ATAmed, Vimed, Komora-Hiperbaryczna, Regeneracja Gdańsk).",
-  },
-  {
-    code: "LADD",
-    name: "LADD: PRP + minoksydyl",
-
-    params: "Er:YAG / tul · PRP (Magellan/Arthrex) · minoksydyl topowo",
-    single: { price: "2 400 zł", label: "Sesja pojedyncza" },
-    packs: [
-      { sessions: 5, price: "11 400 zł", unitPrice: "2 280 zł", saving: "5%" },
-      { sessions: 10, price: "21 600 zł", unitPrice: "2 160 zł", saving: "10%" },
-      { sessions: 20, price: "40 800 zł", unitPrice: "2 040 zł", saving: "15%" },
-    ],
-    scope: [
-      "Konsultacja trychologiczna i dobór parametrów laserowych do fototypu.",
-      "Przygotowanie skóry głowy: oczyszczenie, dezynfekcja, ewentualna znieczulenie.",
-      "Ablacja laserowa frakcyjna (Er:YAG lub thulium): 5–10 min, głębokość 150–300 µm.",
-      "Aplikacja osocza bogatopłytkowego PRP (8–10 ml, 3–5x stężenie płytek) z minoksydylem.",
-      "Instruktaż domowy: pielęgnacja 48 h po zabiegu, harmonogram następnych sesji.",
-    ],
-    note: "Uśrednienie najwyższych cen PRP premium oraz zabiegów laser-assisted drug delivery w klinikach trychologicznych Warszawy i Gdańska.",
-  },
-  {
-    code: "LADD-CP",
-    name: "LADD: PRP + minoksydyl — zimna plazma",
-    params: "CAP / zimna plazma · PRP (Magellan/Arthrex) · minoksydyl topowo",
-    single: { price: "2 200 zł", label: "Sesja pojedyncza" },
-    packs: [
-      { sessions: 5, price: "10 450 zł", unitPrice: "2 090 zł", saving: "5%" },
-      { sessions: 10, price: "19 800 zł", unitPrice: "1 980 zł", saving: "10%" },
-      { sessions: 20, price: "37 400 zł", unitPrice: "1 870 zł", saving: "15%" },
-    ],
-    scope: [
-      "Konsultacja trychologiczna i ocena tolerancji skóry na zimną plazmę.",
-      "Przygotowanie skóry głowy: oczyszczenie, dezynfekcja, bez znieczulenia miejscowego.",
-      "Aplikacja zimnej plazmy atmosferycznej (CAP): 10–15 min, głębokość ~50–100 µm.",
-      "Aplikacja osocza bogatopłytkowego PRP (8–10 ml, 3–5x stężenie płytek) z minoksydylem.",
-      "Instruktaż domowy: pielęgnacja 48 h po zabiegu, harmonogram następnych sesji.",
-    ],
-    note: "Uśrednienie najwyższych cen zabiegów z zimną plazmą (CAP) w połączeniu z PRP i minoksydylem w klinikach premium Warszawy i Gdańska.",
-  },
-  {
-    code: "PBM",
-    name: "Fototerapia (PBM / LLLT)",
-    params: "630–680 nm · 5 J/cm² · 20–30 min",
-    single: { price: "600 zł", label: "Sesja pojedyncza" },
-    packs: [
-      { sessions: 5, price: "2 850 zł", unitPrice: "570 zł", saving: "5%" },
-      { sessions: 10, price: "4 800 zł", unitPrice: "480 zł", saving: "20%" },
-      { sessions: 20, price: "9 000 zł", unitPrice: "450 zł", saving: "25%" },
-    ],
-    scope: [
-      "Diagnostyka skóry głowy: trichoskopia przed cyklem i co 5 sesji.",
-      "Dobór parametrów świetlnych: długość fali 630–680 nm, dawka ~5 J/cm².",
-      "Sesja LED/PBM: 20–30 min z podziałem na strefy dawcy i biorcy.",
-      "Pomiar temperatury skóry i ewentualna korekta dawki w czasie rzeczywistym.",
-      "Raport z pomiarów: liczba mieszków w fazie anagen, grubość włosa, gęstość.",
-    ],
-    note: "Średnia z górnego przedziału cen klinik premium (Wellclinic, Hairmitage, Trycho-Med) dla zabiegów wykonywanych w gabinecie.",
-  },
-];
-
-const PRICING_FAQ: { q: string; a: string }[] = [
-  {
-    q: "Czym różnią się pakiety 5, 10 i 20 sesji?",
-    a: "Pakiet 5 sesji to forma wprowadzająca — sprawdza się jako uzupełnienie standardowego protokołu pozabiegowego (np. 2 sesje HBOT + 3 LADD). Pakiet 10 sesji to pełny cykl optymalny dla większości pacjentów po DHI, umożliwiający systematyczną rewaskularyzację i biostymulację. Pakiet 20 sesji to program intensywny, zalecany przy dużej liczbie graftów, łączonych terapiach (HBOT + LADD + PBM) lub skłonnościach do wolniejszej angiogenezy.",
-  },
-  {
-    q: "Czy mogę zmienić pakiet w trakcie terapii?",
-    a: "Tak. Jeśli po 3–4 sesjach zdecydujesz się na wyższy pakiet, różnica jest rozliczana według ceny jednostkowej nowego pakietu z wstecznym rabatem. Nie ma kar za przeskok w górę. Przejście w dół (z 20 na 10 sesji) możliwe jest do wykorzystania 50% pierwotnego pakietu.",
-  },
-  {
-    q: "Jak wygląda rozliczenie i płatność?",
-    a: "Rozliczenie odbywa się przed pierwszą sesją (przedpłata za cały pakiet) lub w dwóch równych ratach: 50% przed startem, 50% po realizacji 50% pakietu. Nie wymagamy umów abonamentowych ani automatycznych obciążeń. Wystawiamy fakturę VAT.",
-  },
-  {
-    q: "Czy niewykorzystane sesje przepadają?",
-    a: "Nie. Sesje są ważne 12 miesięcy od daty zakupu. Możesz je zawiesić w dowolnym momencie (np. w przypadku konieczności wyjazdu) lub przekazać innemu pacjentowi po uprzednim uzgodnieniu z rejestracją.",
-  },
-  {
-    q: "Czy pakiety łączą się między kategoriami (np. HBOT + LADD)?",
-    a: "Tak. Przy jednorazowym zakupie pakietów z dwóch lub więcej kategorii stosujemy zniżkę współwystępowania 10% od sumy brutto pakietów. Dotyczy to pakietów 10 i 20 sesji. Pakiety 5 sesji kwalifikują się do zniżki wyłącznie jako dodatek do pakietu 10 lub 20 z innej kategorii.",
-  },
-  {
-    q: "Jakie są zasady odwołania lub zwrotu?",
-    a: "Do 48 h przed pierwszą sesją: zwrot 100% wartości pakietu. Po rozpoczęciu terapii: zwrot proporcjonalny do niewykorzystanych sesji (liczonych według ceny jednostkowej pakietu), pomniejszony o koszt konsultacji kwalifikacyjnej (350–500 zł). Nie pobieramy opłat administracyjnych.",
-  },
-  {
-    q: "Jak umawiać terminy i z jakim wyprzedzeniem?",
-    a: "Terminy umawiane są wyłącznie przez rejestrację kliniczną — telefonicznie, mailowo lub przez panel pacjenta. Pakiety 5 sesji: rezerwacja z 48–72 h wyprzedzenia. Pakiety 10 i 20 sesji: planowanie całego cyklu na starcie z możliwością przesuwania pojedynczych wizyt z 24-godzinnym wyprzedzeniem. W dniu zabiegu przeszczepu DHI nie umawiamy pierwszej sesji wspomagającej wcześniej niż na dobę 3.",
-  },
-  {
-    q: "Jak wygląda harmonogram wizyt w pakietach 5, 10 i 20 sesji?",
-    a: "Pakiet 5 sesji to cykl krótki — zazwyczaj 1 sesja tygodniowo przez 5 tygodni, z opcją zagęszczenia do 2 sesji/tydzień w tygodniach 2–4. Pakiet 10 sesji: standardowo 2 sesje tygodniowo przez 5 tygodni (np. poniedziałek + czwartek), z przerwą w tygodniu 3 jeśli wystąpi zaczerwienenie. Pakiet 20 sesji: intensywny rytm 2–3 sesji/tydzień przez 7–8 tygodni, z obowiązkowym tygodniem przerwy między blokami 1–10 a 11–20. Przerwy między sesjami tej samej kategorii: HBOT min. 24 h, LADD min. 72 h, PBM min. 48 h.",
-  },
-  {
-    q: "Jaka jest polityka spóźnień na wizytę?",
-    a: "Spóźnienie do 10 minut: wizyta realizowana w pełnym zakresie, ale skrócony czas na konsultację przed sesją. Spóźnienie 11–20 minut: skrócenie czasu sesji proporcjonalnie lub przesunięcie na najbliższy wolny termin — decyduje lekarz/koordynator w zależności od kolejki. Spóźnienie powyżej 20 minut: wizyta traktowana jako nieodbyta (no-show) i rozliczana z pakietu, chyba że pacjent zgłosi opóźnienie z wyprzedzeniem min. 30 min i istnieje techniczna możliwość przesunięcia.",
-  },
-  {
-    q: "Jakie są zasady anulowania sesji w pakiecie?",
-    a: "Bezpłatne anulowanie lub zmiana terminu wymaga zgłoszenia min. 24 h przed sesją (w przypadku pakietów 10 i 20 sesji) lub min. 48 h (pakiet 5 sesji). Anulowanie w krótszym terminie: sesja rozliczana z pakietu jako wykorzystana. Nieobecność bez zgłoszenia (no-show): sesja odejmowana z pakietu automatycznie. W sytuacji choroby zakaźnej lub zaburzeń krzepnięcia potwierdzonych dokumentacją lekarską — sesja zawieszana bez utraty z pakietu.",
-  },
-  {
-    q: "Czy spóźniona osoba może dołączyć do sesji w trakcie jej trwania?",
-    a: "Nie. Ze względu na protokół bezpieczeństwa i konieczność pełnej kwalifikacji przedsesyjnej, pacjent spóźniony nie może dołączyć do sesji już rozpoczętej. Jeśli spóźnienie mieści się w tolerancji 10 min, rozpoczynamy pełną sesję z opóźnieniem. W przypadku spóźnienia 11–20 min lekarz/koordynator decyduje o skróceniu czasu sesji lub przesunięciu terminu. Powyżej 20 min sesja jest traktowana jako nieodbyta (no-show).",
-  },
-  {
-    q: "Jak skraca się czas terapii w przypadku spóźnienia?",
-    a: "Przy spóźnieniu 11–20 min czas sesji skraca się proporcjonalnie do opóźnienia, z zachowaniem minimum bezpieczeństwa: HBOT min. 45 min, LADD min. 30 min, PBM min. 15 min. Skrócenie nie obejmuje konsultacji przedsesyjnej — ta jest realizowana w pełnym zakresie lub przesuwana na kolejną wizytę. Przy spóźnieniu do 10 min sesja realizowana jest w pełnym czasie.",
-  },
-  {
-    q: "Kiedy spóźnienie traktowane jest jako no-show?",
-    a: "No-show (nieobecność) rejestruje się automatycznie, gdy pacjent nie stawia się w gabinecie w ciągu 20 minut od umówionego terminu i nie zgłosił opóźnienia z wyprzedzeniem min. 30 min. Sesja w takim przypadku jest odejmowana z pakietu. Wyjątek stanowią sytuacje losowe potwierdzone dokumentacją (wypadek, nagła choroba) — wtedy sesja jest zawieszana bez utraty z pakietu.",
-  },
-  {
-    q: "Jakie są zasady zmiany terminu wizyty w pakietach 5, 10 i 20 sesji oraz ile czasu z wyprzedzeniem mogę przesunąć sesję?",
-    a: "Zmiana terminu jest bezpłatna i nie wpływa na ważność sesji, jeśli zgłoszona z wyprzedzeniem: pakiet 5 sesji — min. 48 h, pakiety 10 i 20 sesji — min. 24 h przed planowaną wizytą. Sesję można przesunąć na najbliższy wolny termin w ciągu 12 miesięcy od daty zakupu pakietu. Zgłoszenia przyjmujemy wyłącznie przez rejestrację kliniczną (telefon, e-mail lub panel pacjenta). Przy braku zgłoszenia w wymaganym czasie sesja jest rozliczana jako wykorzystana. W sytuacjach nagłych (wypadek, nagła choroba) potwierdzonych dokumentacją lekarską — zmiana jest możliwa bez utraty sesji niezależnie od wyprzedzenia.",
-  },
-  {
-    q: "LADD: PRP + minoksydyl — zimna plazma: kto kwalifikuje się do zabiegu?",
-    a: "Kwalifikacja obejmuje konsultację lekarską z oceną fototypu skóry (Fitzpatrick I–IV preferowane), badanie trichoskopowe oraz wywiad dotyczący alergii na minoksydyl, zaburzeń krzepnięcia i aktywnych infekcji skóry głowy. Zabieg jest przeznaczony dla pacjentów po przeszczepie włosów metodą DHI w okresie 4–12 tygodni od zabiegu, a także dla osób z łysieniem androgenowym jako terapia wspomagająca. Wymagana jest stabilizacja ciśnienia tętniczego i brak stosowania fotouczulających leków (tetracykliny, retinoidy) w ciągu ostatnich 4 tygodni.",
-  },
-  {
-    q: "LADD: PRP + minoksydyl — zimna plazma: jakie są przeciwwskazania?",
-    a: "Bezwzględne przeciwwskazania: aktywna infekcja bakteryjna, wirusowa lub grzybicza skóry głowy, ciąża i karmienie piersią, nowotwory skóry (łagodne i złośliwe) w obrębie pola zabiegowego, zaburzenia krzepnięcia (hemofilia, trombocytopenia < 50 000/µl), stosowanie izotretynoiny w ciągu ostatnich 6 miesięcy. Względne: nadwrażliwość na minoksydyl (test łokciowy 48 h przed zabiegiem), nieuregulowana nadczynność tarczycy, aktywna autoimmunologiczna choroba skóry (np. łuszczyca, toczeń). Lekarz podejmuje decyzję o kwalifikacji indywidualnie.",
-  },
-  {
-    q: "LADD: PRP + minoksydyl — zimna plazma: jak przygotować się przed wizytą?",
-    a: "Przed zabiegiem: umyj głowę wieczorem poprzedniego dnia delikatnym szamponem bez silikonów i SLS; nie stosuj odżywek, serum, lakierów ani produktów stylizacyjnych. W dniu zabiegu przyjdź na czczo lub z lekką przekąską 1,5–2 h przed sesją. Zaprzestań stosowania retinoidów, kwasów AHA/BHA, minoksydylu topowego i doustnego przeciwbólowych (poza paracetamolem) na 72 h przed zabiegiem. Zabierz aktualne wyniki morfologii (trombocyty) i współczynnik INR jeśli przyjmujesz leki przeciwzakrzepowe. Nie opalaj skóry głowy przez 14 dni przed zabiegiem (niebezpieczeństwo przebarwień postzapalnych).",
-  },
-];
-
-interface PricingPack {
-  sessions: number;
-  price: string;
-  unitPrice: string;
-  saving: string;
-}
-
-interface PricingItem {
-  code: string;
-  name: string;
-  params: string;
-  single: { price: string; label: string };
-  packs: PricingPack[];
-  scope: string[];
-  note: string;
-  hidden?: boolean;
-}
-
-
-const pricingOverridesQuery = () => ({
-  queryKey: ["pricing-overrides"],
-  queryFn: () => getPricingOverrides(),
-});
+/* ---------- Pricing CTA (full pricing & checkout in /sklep) ---------- */
 
 function Pricing() {
-  const { data: overrides } = useQuery(pricingOverridesQuery());
-  const hiddenMap = new Map((overrides ?? []).map((o) => [o.code, o.hidden]));
-
-  const visiblePricing = PRICING.map((p) => ({
-    ...p,
-    hidden: hiddenMap.has(p.code) ? hiddenMap.get(p.code) : p.hidden,
-  })).filter((p) => !p.hidden);
-
   return (
-    <Section id="cennik" eyebrow="10 — Cennik">
+    <Section id="cennik" eyebrow="10 — Cennik / Sklep">
       <SectionHeader
-        title="Cennik zabiegów wspierających."
+        title="Pełny cennik i zakup pakietów — w sklepie."
         lead={
           <>
-            Ceny uśrednione na podstawie <strong>górnego przedziału stawek klinik premium</strong>{" "}
-            w Warszawie i Gdańsku (stan: 2026). Ostateczna wycena ustalana jest
-            indywidualnie po konsultacji kwalifikacyjnej i zależy od liczby sesji,
-            powierzchni opracowania oraz protokołu łączonego.
+            Cennik zabiegów wspierających przeniesiony do <strong>sklepu Graftgen</strong>.
+            Pakiety 1 / 5 / 10 / 20 sesji z natychmiastową rezerwacją, bezpieczna płatność
+            online, faktura VAT. Ceny uśrednione na podstawie górnego przedziału stawek
+            klinik premium w Warszawie i Gdańsku (stan: 2026).
           </>
         }
       />
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {visiblePricing.map((p) => (
-          <article
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {PRICING.map((p) => (
+          <Link
             key={p.code}
-            className="flex flex-col rounded-sm border border-border bg-card shadow-[var(--shadow-editorial)]"
+            to="/product/$handle"
+            params={{ handle: p.handle }}
+            className="group flex flex-col rounded-sm border border-border bg-card p-6 transition hover:border-accent/60"
           >
-            <div className="p-6 md:p-8">
-              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
-                {p.code}
-              </span>
-              <h3 className="mt-3 font-display text-2xl break-words md:text-3xl">{p.name}</h3>
-              <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
-                {p.params}
-              </p>
+            <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
+              {p.code}
+            </span>
+            <h3 className="mt-3 font-display text-xl break-words md:text-2xl">{p.name}</h3>
+            <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
+              {p.params}
+            </p>
+            <div className="mt-6 flex items-baseline justify-between">
+              <span className="text-xs text-muted-foreground">od</span>
+              <span className="font-display text-2xl text-foreground">{p.single.price}</span>
             </div>
-
-            <div className="mx-6 h-px bg-border md:mx-8" />
-
-            <div className="p-6 md:p-8">
-              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Co obejmuje każda sesja
-              </h4>
-              <ul className="mt-3 space-y-2">
-                {p.scope.map((s, i) => (
-                  <li key={i} className="flex gap-2 text-sm text-foreground/90">
-                    <span className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-accent" />
-                    <span>{s}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mx-6 h-px bg-border md:mx-8" />
-
-            <div className="p-6 md:p-8">
-              <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-sm text-muted-foreground">{p.single.label}</dt>
-                <dd className="font-display text-2xl text-foreground">{p.single.price}</dd>
-              </div>
-
-              <div className="mt-4 space-y-3">
-                {p.packs.map((pk) => (
-                  <div
-                    key={pk.sessions}
-                    className="flex items-center justify-between gap-4 rounded-sm border border-border/60 bg-background/50 px-4 py-3"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-accent/10 text-[10px] font-semibold text-accent">
-                        {pk.sessions}
-                      </span>
-                      <div className="leading-tight">
-                        <span className="block text-sm font-medium">Pakiet {pk.sessions} sesji</span>
-                        <span className="text-[10px] text-muted-foreground">
-                          {pk.unitPrice}/sesja · rabat {pk.saving}
-                        </span>
-                      </div>
-                    </div>
-                    <span className="font-display text-xl text-accent">{pk.price}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-auto p-6 pt-0 md:p-8 md:pt-0">
-              <p className="text-xs leading-relaxed text-muted-foreground">{p.note}</p>
-            </div>
-          </article>
+            <p className="mt-1 text-right text-[11px] text-muted-foreground">
+              pakiet 20: {p.packs[2].unitPrice}/sesja
+            </p>
+            <span className="mt-6 inline-flex items-center text-sm text-accent transition group-hover:translate-x-1">
+              Zobacz w sklepie →
+            </span>
+          </Link>
         ))}
       </div>
 
-      <div className="mt-16">
-        <h3 className="font-display text-2xl break-words md:text-3xl">Pytania o pakiety i rozliczenia</h3>
-        <div className="mt-8 divide-y divide-border border-y border-border">
-          {PRICING_FAQ.map((f) => (
-            <details key={f.q} className="group py-6">
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-                <h4 className="font-display text-xl break-words md:text-2xl">{f.q}</h4>
-                <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 max-w-3xl text-sm text-muted-foreground md:text-base">
-                {f.a}
-              </p>
-            </details>
-          ))}
-        </div>
+      <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-2xl text-sm text-muted-foreground">
+          Pełne opisy pakietów, kalkulator czasu terapii, FAQ rozliczeniowe oraz koszyk
+          z płatnością online znajdziesz na stronie sklepu.
+        </p>
+        <Link
+          to="/sklep"
+          className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
+        >
+          Przejdź do sklepu →
+        </Link>
       </div>
     </Section>
   );
