@@ -888,10 +888,15 @@ function Mech({ children }: { children: React.ReactNode }) {
 
 /* ---------- Contact ---------- */
 
+type NotifySummary = {
+  email: string;
+  sms: string[];
+};
+
 type ContactStatus =
   | { kind: "idle" }
   | { kind: "submitting" }
-  | { kind: "success"; receivedAt: string }
+  | { kind: "success"; receivedAt: string; notifications?: NotifySummary }
   | { kind: "error"; message: string };
 
 function Contact() {
@@ -932,7 +937,11 @@ function Contact() {
         return;
       }
       form.reset();
-      setStatus({ kind: "success", receivedAt: data.receivedAt ?? new Date().toISOString() });
+      setStatus({
+        kind: "success",
+        receivedAt: data.receivedAt ?? new Date().toISOString(),
+        notifications: data.notifications,
+      });
     } catch {
       setStatus({ kind: "error", message: "Błąd połączenia. Spróbuj ponownie." });
     }
@@ -968,6 +977,50 @@ function Contact() {
                 Potwierdzenie przyjęcia: {new Date(status.receivedAt).toLocaleString("pl-PL")}.
                 Sprawdź skrzynkę e-mail (również SPAM) w ciągu 2 dni roboczych.
               </p>
+
+              {status.notifications && (
+                <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
+                  {status.notifications.sms.map((s, i) => (
+                    <span
+                      key={i}
+                      className={`inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 ${
+                        s === "sent"
+                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                          : s === "skipped"
+                            ? "border-muted-foreground/30 bg-secondary/50 text-muted-foreground"
+                            : "border-destructive/40 bg-destructive/10 text-destructive"
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          s === "sent" ? "bg-emerald-400" : s === "skipped" ? "bg-muted-foreground" : "bg-destructive"
+                        }`}
+                      />
+                      SMS {s === "sent" ? "wysłano" : s === "skipped" ? "pominięto" : "błąd"}
+                    </span>
+                  ))}
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 ${
+                      status.notifications.email === "sent"
+                        ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                        : status.notifications.email === "skipped"
+                          ? "border-muted-foreground/30 bg-secondary/50 text-muted-foreground"
+                          : "border-destructive/40 bg-destructive/10 text-destructive"
+                    }`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        status.notifications.email === "sent"
+                          ? "bg-emerald-400"
+                          : status.notifications.email === "skipped"
+                            ? "bg-muted-foreground"
+                            : "bg-destructive"
+                      }`}
+                    />
+                    E-mail {status.notifications.email === "sent" ? "wysłano" : status.notifications.email === "skipped" ? "pominięto" : "błąd"}
+                  </span>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => setStatus({ kind: "idle" })}
