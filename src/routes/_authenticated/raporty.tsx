@@ -37,9 +37,10 @@ function TeamReportStatus() {
   const [email, setEmail] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [exporting, setExporting] = useState(false);
+  const [exporting, setExporting] = useState<null | "csv" | "xlsx">(null);
   const fetchAll = useServerFn(getAllReportSends);
   const exportCsv = useServerFn(exportReportSendsCsv);
+  const exportXlsx = useServerFn(exportReportSendsXlsx);
 
   const toIso = (d: string, end = false) =>
     d ? new Date(d + (end ? "T23:59:59.999Z" : "T00:00:00.000Z")).toISOString() : undefined;
