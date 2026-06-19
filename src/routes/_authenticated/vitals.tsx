@@ -128,6 +128,8 @@ function VitalsPage() {
   const [dateTo, setDateTo] = useState("");
   const [exporting, setExporting] = useState(false);
   const [exportingPdf, setExportingPdf] = useState(false);
+  const [pdfOrientation, setPdfOrientation] = useState<"portrait" | "landscape">("landscape");
+  const [pdfMetadata, setPdfMetadata] = useState(true);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
