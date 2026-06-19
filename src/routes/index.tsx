@@ -713,35 +713,82 @@ function FAQSection() {
 
 /* ---------- Pricing ---------- */
 
-const PRICING = [
+const PRICING: PricingItem[] = [
   {
     code: "HBOT",
     name: "Tlenoterapia hiperbaryczna",
     params: "60–90 min · 2,0–2,4 ATA · 100% O₂",
-    single: "420 zł",
-    pkg: "3 800 zł",
-    pkgLabel: "pakiet 10 sesji",
+    single: { price: "420 zł", label: "Sesja pojedyncza" },
+    packs: [
+      { sessions: 5, price: "1 995 zł", unitPrice: "399 zł", saving: "5%" },
+      { sessions: 10, price: "3 800 zł", unitPrice: "380 zł", saving: "10%" },
+      { sessions: 20, price: "7 140 zł", unitPrice: "357 zł", saving: "15%" },
+    ],
+    scope: [
+      "Kwalifikacja lekarska przed pierwszą sesją (medycyna hiperbaryczna).",
+      "Sesja w komorze wieloosobowej lub monoplace: 60–90 min przy 2,0–2,4 ATA.",
+      "Tlen 100% pod maską lub kaskiem przez cały czas ekspozycji.",
+      "Pomiar ciśnienia tętniczego przed i po sesji.",
+      "Raport końcowy z rekomendacją liczby sesji w cyklu.",
+    ],
     note: "Średnia z najwyższych stawek ośrodków premium w Warszawie i Gdańsku (ATAmed, Vimed, Komora-Hiperbaryczna, Regeneracja Gdańsk).",
   },
   {
     code: "LADD",
     name: "LADD: PRP + minoksydyl",
     params: "Er:YAG / tul · PRP (Magellan/Arthrex) · minoksydyl topowo",
-    single: "2 400 zł",
-    pkg: "6 600 zł",
-    pkgLabel: "pakiet 3 sesji",
+    single: { price: "2 400 zł", label: "Sesja pojedyncza" },
+    packs: [
+      { sessions: 5, price: "11 400 zł", unitPrice: "2 280 zł", saving: "5%" },
+      { sessions: 10, price: "21 600 zł", unitPrice: "2 160 zł", saving: "10%" },
+      { sessions: 20, price: "40 800 zł", unitPrice: "2 040 zł", saving: "15%" },
+    ],
+    scope: [
+      "Konsultacja trychologiczna i dobór parametrów laserowych do fototypu.",
+      "Przygotowanie skóry głowy: oczyszczenie, dezynfekcja, ewentualna znieczulenie.",
+      "Ablacja laserowa frakcyjna (Er:YAG lub thulium): 5–10 min, głębokość 150–300 µm.",
+      "Aplikacja osocza bogatopłytkowego PRP (8–10 ml, 3–5x stężenie płytek) z minoksydylem.",
+      "Instruktaż domowy: pielęgnacja 48 h po zabiegu, harmonogram następnych sesji.",
+    ],
     note: "Uśrednienie najwyższych cen PRP premium oraz zabiegów laser-assisted drug delivery w klinikach trychologicznych Warszawy i Gdańska.",
   },
   {
     code: "PBM",
     name: "Fototerapia (PBM / LLLT)",
     params: "630–680 nm · 5 J/cm² · 20–30 min",
-    single: "600 zł",
-    pkg: "4 800 zł",
-    pkgLabel: "pakiet 10 sesji",
+    single: { price: "600 zł", label: "Sesja pojedyncza" },
+    packs: [
+      { sessions: 5, price: "2 850 zł", unitPrice: "570 zł", saving: "5%" },
+      { sessions: 10, price: "4 800 zł", unitPrice: "480 zł", saving: "20%" },
+      { sessions: 20, price: "9 000 zł", unitPrice: "450 zł", saving: "25%" },
+    ],
+    scope: [
+      "Diagnostyka skóry głowy: trichoskopia przed cyklem i co 5 sesji.",
+      "Dobór parametrów świetlnych: długość fali 630–680 nm, dawka ~5 J/cm².",
+      "Sesja LED/PBM: 20–30 min z podziałem na strefy dawcy i biorcy.",
+      "Pomiar temperatury skóry i ewentualna korekta dawki w czasie rzeczywistym.",
+      "Raport z pomiarów: liczba mieszków w fazie anagen, grubość włosa, gęstość.",
+    ],
     note: "Średnia z górnego przedziału cen klinik premium (Wellclinic, Hairmitage, Trycho-Med) dla zabiegów wykonywanych w gabinecie.",
   },
-] as const;
+];
+
+interface PricingPack {
+  sessions: number;
+  price: string;
+  unitPrice: string;
+  saving: string;
+}
+
+interface PricingItem {
+  code: string;
+  name: string;
+  params: string;
+  single: { price: string; label: string };
+  packs: PricingPack[];
+  scope: string[];
+  note: string;
+}
 
 function Pricing() {
   return (
@@ -761,29 +808,68 @@ function Pricing() {
         {PRICING.map((p) => (
           <article
             key={p.code}
-            className="flex flex-col rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8"
+            className="flex flex-col rounded-sm border border-border bg-card shadow-[var(--shadow-editorial)]"
           >
-            <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
-              {p.code}
-            </span>
-            <h3 className="mt-3 font-display text-2xl md:text-3xl">{p.name}</h3>
-            <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
-              {p.params}
-            </p>
-            <div className="my-6 h-px bg-border" />
-            <dl className="space-y-3 text-sm">
+            <div className="p-6 md:p-8">
+              <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-accent">
+                {p.code}
+              </span>
+              <h3 className="mt-3 font-display text-2xl md:text-3xl">{p.name}</h3>
+              <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
+                {p.params}
+              </p>
+            </div>
+
+            <div className="mx-6 h-px bg-border md:mx-8" />
+
+            <div className="p-6 md:p-8">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                Co obejmuje każda sesja
+              </h4>
+              <ul className="mt-3 space-y-2">
+                {p.scope.map((s, i) => (
+                  <li key={i} className="flex gap-2 text-sm text-foreground/90">
+                    <span className="mt-1.5 block h-1 w-1 shrink-0 rounded-full bg-accent" />
+                    <span>{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mx-6 h-px bg-border md:mx-8" />
+
+            <div className="p-6 md:p-8">
               <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-muted-foreground">Sesja pojedyncza</dt>
-                <dd className="font-display text-2xl text-foreground">{p.single}</dd>
+                <dt className="text-sm text-muted-foreground">{p.single.label}</dt>
+                <dd className="font-display text-2xl text-foreground">{p.single.price}</dd>
               </div>
-              <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-muted-foreground">{p.pkgLabel}</dt>
-                <dd className="font-display text-xl text-accent">{p.pkg}</dd>
+
+              <div className="mt-4 space-y-3">
+                {p.packs.map((pk) => (
+                  <div
+                    key={pk.sessions}
+                    className="flex items-center justify-between gap-4 rounded-sm border border-border/60 bg-background/50 px-4 py-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-accent/10 text-[10px] font-semibold text-accent">
+                        {pk.sessions}
+                      </span>
+                      <div className="leading-tight">
+                        <span className="block text-sm font-medium">Pakiet {pk.sessions} sesji</span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {pk.unitPrice}/sesja · rabat {pk.saving}
+                        </span>
+                      </div>
+                    </div>
+                    <span className="font-display text-xl text-accent">{pk.price}</span>
+                  </div>
+                ))}
               </div>
-            </dl>
-            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
-              {p.note}
-            </p>
+            </div>
+
+            <div className="mt-auto p-6 pt-0 md:p-8 md:pt-0">
+              <p className="text-xs leading-relaxed text-muted-foreground">{p.note}</p>
+            </div>
           </article>
         ))}
       </div>
