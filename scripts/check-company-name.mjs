@@ -39,6 +39,17 @@ const CANONICAL_IDS = {
   REGON: CANONICAL_REGON,
 };
 
+// --- Walidatory formatu ---
+function isValidNIP(digits) {
+  return /^\d{10}$/.test(digits);
+}
+function isValidKRS(digits) {
+  return /^\d{6,10}$/.test(digits);
+}
+function isValidREGON(digits) {
+  return /^\d{9}$/.test(digits) || /^\d{14}$/.test(digits);
+}
+
 const ALLOWLIST = new Set([
   "scripts/check-company-name.mjs",
   "src/lib/company.ts",
@@ -105,6 +116,17 @@ for (const rel of listFiles()) {
       const label = m[1].toUpperCase();
       const digits = m[2].replace(/[\s-]/g, "");
       const expected = CANONICAL_IDS[label];
+
+      const formatOk =
+        label === "NIP" ? isValidNIP(digits) :
+        label === "KRS" ? isValidKRS(digits) :
+        label === "REGON" ? isValidREGON(digits) : false;
+
+      if (!formatOk) {
+        report(rel, ln, `${label.toLowerCase()}-format`, line, `poprawny format ${label}`);
+        continue;
+      }
+
       if (digits !== expected) {
         report(rel, ln, label.toLowerCase(), line, expected);
       }
