@@ -38,7 +38,7 @@ export const CONTACT_TOPICS = {
 export type ContactTopic = keyof typeof CONTACT_TOPICS;
 
 function resolveRecipients(topic: ContactTopic | undefined): string[] {
-  const fallback = process.env.CONTACT_NOTIFY_TO || "kontakt@bujokmedical.pl";
+  const fallback = process.env.CONTACT_NOTIFY_TO || "kontakt@graftgen.com";
   const topicEnv = topic ? process.env[CONTACT_TOPICS[topic].envKey] : undefined;
   const raw = (topicEnv && topicEnv.trim().length > 0) ? topicEnv : fallback;
   return raw.split(",").map((s) => s.trim()).filter(Boolean);
