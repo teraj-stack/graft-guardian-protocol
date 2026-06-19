@@ -140,7 +140,7 @@ export const MATERIALS: Material[] = [
     id: "m12",
     title: "Komora hiperbaryczna od środka — wideo z sesji",
     description:
-      "Pełen przebieg 90-minutowej sesji 2,0 ATA. Wyrównywanie uszu, oddychanie maską, rytm pracy operatora.",
+      "Pełen przebieg 90-minutowej sesji 3,0 ATA. Wyrównywanie uszu, oddychanie maską, rytm pracy operatora.",
     category: "HBOT",
     type: "Wideo",
     weeks: [1, 2],
