@@ -773,6 +773,33 @@ const PRICING: PricingItem[] = [
   },
 ];
 
+const PRICING_FAQ: { q: string; a: string }[] = [
+  {
+    q: "Czym różnią się pakiety 5, 10 i 20 sesji?",
+    a: "Pakiet 5 sesji to forma wprowadzająca — sprawdza się jako uzupełnienie standardowego protokołu pozabiegowego (np. 2 sesje HBOT + 3 LADD). Pakiet 10 sesji to pełny cykl optymalny dla większości pacjentów po DHI, umożliwiający systematyczną rewaskularyzację i biostymulację. Pakiet 20 sesji to program intensywny, zalecany przy dużej liczbie graftów, łączonych terapiach (HBOT + LADD + PBM) lub skłonnościach do wolniejszej angiogenezy.",
+  },
+  {
+    q: "Czy mogę zmienić pakiet w trakcie terapii?",
+    a: "Tak. Jeśli po 3–4 sesjach zdecydujesz się na wyższy pakiet, różnica jest rozliczana według ceny jednostkowej nowego pakietu z wstecznym rabatem. Nie ma kar za przeskok w górę. Przejście w dół (z 20 na 10 sesji) możliwe jest do wykorzystania 50% pierwotnego pakietu.",
+  },
+  {
+    q: "Jak wygląda rozliczenie i płatność?",
+    a: "Rozliczenie odbywa się przed pierwszą sesją (przedpłata za cały pakiet) lub w dwóch równych ratach: 50% przed startem, 50% po realizacji 50% pakietu. Nie wymagamy umów abonamentowych ani automatycznych obciążeń. Wystawiamy fakturę VAT.",
+  },
+  {
+    q: "Czy niewykorzystane sesje przepadają?",
+    a: "Nie. Sesje są ważne 12 miesięcy od daty zakupu. Możesz je zawiesić w dowolnym momencie (np. w przypadku konieczności wyjazdu) lub przekazać innemu pacjentowi po uprzednim uzgodnieniu z rejestracją.",
+  },
+  {
+    q: "Czy pakiety łączą się między kategoriami (np. HBOT + LADD)?",
+    a: "Tak. Przy jednorazowym zakupie pakietów z dwóch lub więcej kategorii stosujemy zniżkę współwystępowania 10% od sumy brutto pakietów. Dotyczy to pakietów 10 i 20 sesji. Pakiety 5 sesji kwalifikują się do zniżki wyłącznie jako dodatek do pakietu 10 lub 20 z innej kategorii.",
+  },
+  {
+    q: "Jakie są zasady odwołania lub zwrotu?",
+    a: "Do 48 h przed pierwszą sesją: zwrot 100% wartości pakietu. Po rozpoczęciu terapii: zwrot proporcjonalny do niewykorzystanych sesji (liczonych według ceny jednostkowej pakietu), pomniejszony o koszt konsultacji kwalifikacyjnej (350–500 zł). Nie pobieramy opłat administracyjnych.",
+  },
+];
+
 interface PricingPack {
   sessions: number;
   price: string;
@@ -882,6 +909,25 @@ function Pricing() {
         zestawienie ma charakter informacyjny i nie stanowi oferty w rozumieniu
         art. 66 §1 Kodeksu cywilnego.
       </p>
+
+      <div className="mt-16">
+        <h3 className="font-display text-2xl md:text-3xl">Pytania o pakiety i rozliczenia</h3>
+        <div className="mt-8 divide-y divide-border border-y border-border">
+          {PRICING_FAQ.map((f) => (
+            <details key={f.q} className="group py-6">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
+                <h4 className="font-display text-xl md:text-2xl">{f.q}</h4>
+                <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <p className="mt-4 max-w-3xl text-sm text-muted-foreground md:text-base">
+                {f.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </div>
     </Section>
   );
 }
