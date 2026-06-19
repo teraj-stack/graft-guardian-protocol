@@ -116,9 +116,13 @@ export const Route = createFileRoute("/api/public/reminders/dispatch")({
 
         for (const sub of subscriptions) {
           const day = daysBetween(now, sub.surgery_date);
-          const week = weekTriggeredOnDay(day);
-          if (week === null) continue;
-          if (!sub.selected_weeks.includes(week)) continue;
+          const dueWeeks = dueWeeksForDay(day).filter((w) =>
+            sub.selected_weeks.includes(w)
+          );
+          if (dueWeeks.length === 0) continue;
+
+          for (const week of dueWeeks) {
+
 
           const channels: Array<"email" | "sms"> = [];
           if (sub.channel_email) channels.push("email");
