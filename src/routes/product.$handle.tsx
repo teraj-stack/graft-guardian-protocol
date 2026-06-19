@@ -131,6 +131,8 @@ function ProductPage() {
       {product && <SessionPlans product={product} currentVariant={currentVariant} />}
     </div>
   );
+}
+
 interface SessionPlan {
   sessions: number;
   label: string;
