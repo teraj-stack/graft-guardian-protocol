@@ -132,6 +132,10 @@ function VitalsPage() {
     setExporting(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
+      if (res.count === 0) {
+        toast.info("Brak danych dla wybranego zakresu — zmień filtry i spróbuj ponownie.");
+        return;
+      }
       const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
