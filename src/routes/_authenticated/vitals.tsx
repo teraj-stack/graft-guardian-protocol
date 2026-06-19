@@ -659,6 +659,17 @@ function VitalsPage() {
                   </label>
                 ))}
               </div>
+              <div className="mt-2">
+                <label className="block text-xs text-muted-foreground mb-1">Układ porównania</label>
+                <select
+                  value={pdfCompareLayout}
+                  onChange={(e) => setPdfCompareLayout(e.target.value as "overlay" | "side-by-side")}
+                  className="h-9 rounded-md border bg-background px-2 text-sm"
+                >
+                  <option value="overlay">Nałożone (overlay)</option>
+                  <option value="side-by-side">Obok siebie (side-by-side)</option>
+                </select>
+              </div>
             </div>
           )}
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
