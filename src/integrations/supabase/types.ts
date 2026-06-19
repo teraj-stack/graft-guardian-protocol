@@ -124,6 +124,27 @@ export type Database = {
         }
         Relationships: []
       }
+      security_watch_snapshots: {
+        Row: {
+          created_at: string
+          findings: Json
+          fingerprint: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          findings: Json
+          fingerprint: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          findings?: Json
+          fingerprint?: string
+          id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -163,6 +184,7 @@ export type Database = {
         Returns: boolean
       }
       reminder_weeks_valid: { Args: { weeks: number[] }; Returns: boolean }
+      security_watch_check: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
