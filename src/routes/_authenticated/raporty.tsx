@@ -35,11 +35,25 @@ function fmt(iso: string | null) {
 function TeamReportStatus() {
   const [status, setStatus] = useState<string>("all");
   const [email, setEmail] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [exporting, setExporting] = useState(false);
   const fetchAll = useServerFn(getAllReportSends);
+  const exportCsv = useServerFn(exportReportSendsCsv);
+
+  const toIso = (d: string, end = false) =>
+    d ? new Date(d + (end ? "T23:59:59.999Z" : "T00:00:00.000Z")).toISOString() : undefined;
+
+  const filters = {
+    status,
+    email: email || undefined,
+    from: toIso(from),
+    to: toIso(to, true),
+  };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["report-sends", status, email],
-    queryFn: () => fetchAll({ data: { status, email: email || undefined } }),
+    queryKey: ["report-sends", status, email, from, to],
+    queryFn: () => fetchAll({ data: filters }),
   });
 
   const stats = useMemo(() => {
@@ -54,6 +68,24 @@ function TeamReportStatus() {
       failed: by("bounced") + by("rejected") + by("failed"),
     };
   }, [data]);
+
+  async function handleExport() {
+    setExporting(true);
+    try {
+      const res = await exportCsv({ data: filters });
+      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#0c121b] text-slate-100 px-4 py-10">
@@ -73,21 +105,53 @@ function TeamReportStatus() {
           <StatCard label="Błędy" value={stats.failed} accent="text-red-300" />
         </div>
 
-        <div className="flex flex-wrap gap-3 items-center mb-4">
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm"
+        <div className="flex flex-wrap gap-3 items-end mb-4">
+          <div className="flex flex-col">
+            <label className="text-xs text-slate-500 mb-1">Status</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm"
+            >
+              {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-xs text-slate-500 mb-1">Od</label>
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-xs text-slate-500 mb-1">Do</label>
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+          <div className="flex flex-col flex-1 min-w-[220px]">
+            <label className="text-xs text-slate-500 mb-1">E-mail</label>
+            <input
+              type="search"
+              placeholder="Filtruj po e-mailu…"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleExport}
+            disabled={exporting}
+            className="h-[38px] px-4 rounded-md bg-[#c9a96a] text-[#0c121b] text-sm font-medium hover:bg-[#d8bb7c] disabled:opacity-50"
           >
-            {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-          </select>
-          <input
-            type="search"
-            placeholder="Filtruj po e-mailu…"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm flex-1 min-w-[220px]"
-          />
+            {exporting ? "Eksport…" : "Eksportuj CSV"}
+          </button>
         </div>
 
         {isLoading ? (
