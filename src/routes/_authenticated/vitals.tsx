@@ -358,6 +358,50 @@ function VitalsPage() {
     };
     reader.readAsText(file);
   };
+  const downloadSamplePreset = () => {
+    const sample = [
+      {
+        name: "Przykładowy preset — raport kliniczny (landscape, wykres + tabela)",
+        prefs: {
+          orientation: "landscape",
+          metadata: true,
+          mode: "both",
+          percentile: 75,
+          metrics: ["CLS", "LCP", "INP"],
+          window: "all",
+          compare: true,
+          compareWindows: ["d0-3", "d4-14"],
+          compareLayout: "side-by-side",
+          compareYScale: "shared",
+        },
+      },
+      {
+        name: "Przykładowy preset — szybki podgląd (portrait, tabela)",
+        prefs: {
+          orientation: "portrait",
+          metadata: false,
+          mode: "table",
+          percentile: 75,
+          metrics: ["LCP", "INP"],
+          window: "d0-3",
+          compare: false,
+          compareWindows: ["d0-3", "d4-14"],
+          compareLayout: "overlay",
+          compareYScale: "shared",
+        },
+      },
+    ];
+    const blob = new Blob([JSON.stringify(sample, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "graftgen-presety-przyklad.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast.success("Pobrano przykładowy plik z presetami.");
+  };
   useEffect(() => {
     const def = loadDefaultPreset();
     if (def) {
@@ -1038,6 +1082,14 @@ function VitalsPage() {
               className="hidden"
               onChange={handleImportFile}
             />
+            <button
+              onClick={downloadSamplePreset}
+              disabled={exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Pobierz przykładowy plik JSON z poprawnym schematem presetów"
+            >
+              Pobierz przykład JSON
+            </button>
           </div>
         </div>
       </div>
