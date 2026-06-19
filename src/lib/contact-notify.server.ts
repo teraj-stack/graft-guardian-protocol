@@ -11,7 +11,10 @@ export interface NotifyResult {
   status: "sent" | "skipped" | "error" | "provider_missing";
   providerMessageId?: string;
   error?: string;
+  attempts?: number;
+  to?: string;
 }
+
 
 export async function notifyClinicOfContact(args: {
   name: string;
@@ -127,43 +130,64 @@ export async function smsNotifyClinicOfContact(args: {
     320
   );
 
+  const MAX_ATTEMPTS = Number(process.env.SMS_MAX_ATTEMPTS || 3);
+  const BASE_DELAY_MS = Number(process.env.SMS_RETRY_BASE_MS || 400);
+  const isRetriableStatus = (s: number) => s === 408 || s === 429 || s >= 500;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  const sendOne = async (to: string): Promise<NotifyResult> => {
+    let lastError = "unknown";
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      try {
+        const resp = await fetch(
+          "https://connector-gateway.lovable.dev/twilio/Messages.json",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${lovableKey}`,
+              "X-Connection-Api-Key": twilioKey,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({ To: to, From: fromNumber, Body: body }),
+          }
+        );
+        const text = await resp.text();
+        if (resp.ok) {
+          let sid: string | undefined;
+          try {
+            sid = (JSON.parse(text) as { sid?: string }).sid;
+          } catch {
+            /* ignore */
+          }
+          return {
+            status: "sent",
+            providerMessageId: sid,
+            attempts: attempt,
+            to,
+          };
+        }
+        lastError = `twilio_${resp.status}_${text.slice(0, 200)}`;
+        if (!isRetriableStatus(resp.status) || attempt === MAX_ATTEMPTS) {
+          return { status: "error", error: lastError, attempts: attempt, to };
+        }
+      } catch (e) {
+        lastError = `fetch_failed_${(e as Error).message}`;
+        if (attempt === MAX_ATTEMPTS) {
+          return { status: "error", error: lastError, attempts: attempt, to };
+        }
+      }
+      // Exponential backoff with jitter
+      const delay = BASE_DELAY_MS * 2 ** (attempt - 1) + Math.random() * 100;
+      await sleep(delay);
+    }
+    return { status: "error", error: lastError, attempts: MAX_ATTEMPTS, to };
+  };
+
   const results: NotifyResult[] = [];
   for (const to of recipients) {
-    try {
-      const resp = await fetch(
-        "https://connector-gateway.lovable.dev/twilio/Messages.json",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${lovableKey}`,
-            "X-Connection-Api-Key": twilioKey,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({ To: to, From: fromNumber, Body: body }),
-        }
-      );
-      const text = await resp.text();
-      if (!resp.ok) {
-        results.push({
-          status: "error",
-          error: `twilio_${resp.status}_${text.slice(0, 200)}`,
-        });
-        continue;
-      }
-      let sid: string | undefined;
-      try {
-        sid = (JSON.parse(text) as { sid?: string }).sid;
-      } catch {
-        /* ignore */
-      }
-      results.push({ status: "sent", providerMessageId: sid });
-    } catch (e) {
-      results.push({
-        status: "error",
-        error: `fetch_failed_${(e as Error).message}`,
-      });
-    }
+    results.push(await sendOne(to));
   }
   return results;
 }
+
 

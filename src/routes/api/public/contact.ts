@@ -56,7 +56,9 @@ export const Route = createFileRoute("/api/public/contact")({
 
         // Fire-and-await clinic notifications (email + SMS); don't block patient on provider errors.
         let emailResult: { status: string } | undefined;
-        let smsResults: { status: string }[] | undefined;
+        let smsResults:
+          | { status: string; attempts?: number; to?: string; error?: string }[]
+          | undefined;
         try {
           const { notifyClinicOfContact, smsNotifyClinicOfContact } =
             await import("@/lib/contact-notify.server");
@@ -82,11 +84,16 @@ export const Route = createFileRoute("/api/public/contact")({
             receivedAt,
             notifications: {
               email: emailResult?.status ?? "unknown",
-              sms: smsResults?.map((r) => r.status) ?? [],
+              sms:
+                smsResults?.map((r) => ({
+                  status: r.status,
+                  attempts: r.attempts ?? 0,
+                })) ?? [],
             },
           },
           { status: 200, headers: corsHeaders() }
         );
+
 
       },
     },
