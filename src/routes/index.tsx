@@ -145,7 +145,15 @@ function Nav() {
     <header className="relative z-20 border-b border-border/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
-          <img src={graftgenLogo.url} alt="Graftgen.com" className="h-10 w-auto md:h-12" />
+          <img
+            src={graftgenLogo.url}
+            alt="Graftgen.com"
+            width={415}
+            height={531}
+            decoding="async"
+            fetchPriority="high"
+            className="h-10 w-auto md:h-12"
+          />
         </a>
 
         <nav className="hidden gap-7 text-sm text-muted-foreground md:flex">
