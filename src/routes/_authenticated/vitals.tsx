@@ -155,6 +155,7 @@ function VitalsPage() {
   const [pdfCompare, setPdfCompare] = useState(false);
   const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(["d0-3", "d4-14"]);
   const [pdfCompareLayout, setPdfCompareLayout] = useState<"overlay" | "side-by-side">("overlay");
+  const [pdfCompareYScale, setPdfCompareYScale] = useState<"shared" | "independent">("shared");
   const toggleCompareWindow = (w: WinKey) =>
     setPdfCompareWindows((cur) => (cur.includes(w) ? cur.filter((x) => x !== w) : [...cur, w]));
   const WINDOW_COLORS: Record<WinKey, [number, number, number]> = {
