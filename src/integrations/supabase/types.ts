@@ -124,6 +124,68 @@ export type Database = {
         }
         Relationships: []
       }
+      report_sends: {
+        Row: {
+          confirmed_at: string | null
+          created_at: string
+          delivered_at: string | null
+          document_hash: string | null
+          error: string | null
+          id: string
+          opened_at: string | null
+          provider_message_id: string | null
+          recipient_email: string
+          sent_at: string | null
+          status: string
+          subscription_id: string | null
+          template_version: string
+          updated_at: string
+          week: number
+        }
+        Insert: {
+          confirmed_at?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          document_hash?: string | null
+          error?: string | null
+          id?: string
+          opened_at?: string | null
+          provider_message_id?: string | null
+          recipient_email: string
+          sent_at?: string | null
+          status?: string
+          subscription_id?: string | null
+          template_version: string
+          updated_at?: string
+          week: number
+        }
+        Update: {
+          confirmed_at?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          document_hash?: string | null
+          error?: string | null
+          id?: string
+          opened_at?: string | null
+          provider_message_id?: string | null
+          recipient_email?: string
+          sent_at?: string | null
+          status?: string
+          subscription_id?: string | null
+          template_version?: string
+          updated_at?: string
+          week?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_sends_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "reminder_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       security_watch_snapshots: {
         Row: {
           created_at: string
