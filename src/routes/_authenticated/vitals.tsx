@@ -14,6 +14,7 @@ import {
 import { getVitalsSummary, exportVitalsCsv } from "@/lib/vitals.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
   head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen" }] }),
