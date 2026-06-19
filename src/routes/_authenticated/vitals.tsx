@@ -1,5 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+  ResponsiveContainer,
+} from "recharts";
 import { getVitalsSummary } from "@/lib/vitals.functions";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
@@ -12,12 +23,12 @@ export const Route = createFileRoute("/_authenticated/vitals")({
   component: VitalsPage,
 });
 
-const THRESHOLDS: Record<string, { good: number; poor: number; unit: string }> = {
-  CLS: { good: 0.1, poor: 0.25, unit: "" },
-  LCP: { good: 2500, poor: 4000, unit: " ms" },
-  INP: { good: 200, poor: 500, unit: " ms" },
-  FCP: { good: 1800, poor: 3000, unit: " ms" },
-  TTFB: { good: 800, poor: 1800, unit: " ms" },
+const THRESHOLDS: Record<string, { good: number; poor: number }> = {
+  CLS: { good: 0.1, poor: 0.25 },
+  LCP: { good: 2500, poor: 4000 },
+  INP: { good: 200, poor: 500 },
+  FCP: { good: 1800, poor: 3000 },
+  TTFB: { good: 800, poor: 1800 },
 };
 
 function fmt(metric: string, v: number) {
@@ -34,11 +45,82 @@ function badge(metric: string, v: number) {
   return "text-red-600 font-semibold";
 }
 
+type TrendRow = { date: string; CLS: number | null; LCP: number | null; INP: number | null; samples: number };
+
+function TrendChart({
+  metric,
+  data,
+  unit,
+}: {
+  metric: "CLS" | "LCP" | "INP";
+  data: TrendRow[];
+  unit: string;
+}) {
+  const t = THRESHOLDS[metric];
+  const values = data.map((d) => d[metric]).filter((v): v is number => v != null);
+  const max = Math.max(t.poor * 1.05, ...values);
+  const hasData = values.length > 0;
+
+  return (
+    <div className="rounded-md border bg-card p-4">
+      <div className="flex items-baseline justify-between mb-2">
+        <h3 className="text-sm font-semibold tracking-wide">
+          {metric} <span className="text-xs text-muted-foreground font-normal">(p75 dziennie{unit ? `, ${unit}` : ""})</span>
+        </h3>
+        <span className="text-xs text-muted-foreground">
+          próg good ≤ {metric === "CLS" ? t.good.toFixed(2) : `${t.good} ms`}
+        </span>
+      </div>
+      <div style={{ width: "100%", height: 180 }}>
+        {hasData ? (
+          <ResponsiveContainer>
+            <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+              <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 10 }}
+                tickFormatter={(v: string) => v.slice(5)}
+              />
+              <YAxis
+                tick={{ fontSize: 10 }}
+                domain={[0, Math.ceil(max)]}
+                width={40}
+              />
+              <Tooltip
+                formatter={(v: number) => fmt(metric, v)}
+                labelFormatter={(l: string) => l}
+                contentStyle={{ fontSize: 12 }}
+              />
+              <ReferenceLine y={t.good} stroke="#10b981" strokeDasharray="4 4" />
+              <ReferenceLine y={t.poor} stroke="#ef4444" strokeDasharray="4 4" />
+              <Line
+                type="monotone"
+                dataKey={metric}
+                stroke="#c8b06c"
+                strokeWidth={2}
+                dot={{ r: 2 }}
+                connectNulls
+                isAnimationActive={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+            Brak danych w wybranym oknie
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function VitalsPage() {
   const { data } = useSuspenseQuery({
     queryKey: ["vitals-summary"],
     queryFn: () => getVitalsSummary(),
   });
+  const [range, setRange] = useState<7 | 28>(7);
+  const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -48,6 +130,29 @@ function VitalsPage() {
         Łączna liczba próbek: <strong>{data.total}</strong>
       </p>
 
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-lg font-semibold">Trend p75</h2>
+        <div className="inline-flex rounded-md border overflow-hidden text-sm">
+          {[7, 28].map((d) => (
+            <button
+              key={d}
+              onClick={() => setRange(d as 7 | 28)}
+              className={`px-3 py-1.5 ${
+                range === d ? "bg-foreground text-background" : "bg-background hover:bg-muted"
+              }`}
+            >
+              {d} dni
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="grid gap-4 md:grid-cols-3 mb-10">
+        <TrendChart metric="CLS" data={trend} unit="" />
+        <TrendChart metric="LCP" data={trend} unit="ms" />
+        <TrendChart metric="INP" data={trend} unit="ms" />
+      </div>
+
+      <h2 className="text-lg font-semibold mb-2">Tabela p75 (28 dni)</h2>
       {data.total === 0 ? (
         <div className="rounded-md border p-6 text-sm text-muted-foreground">
           Brak danych. Po opublikowaniu kolejnej wersji ruch produkcyjny zacznie
@@ -90,8 +195,6 @@ function VitalsPage() {
         <code className="px-1.5 py-0.5 rounded bg-muted">
           node scripts/lighthouse-vs-crux.mjs https://graftgen.com
         </code>
-        . Skrypt pobiera dane lab (Lighthouse) i field (CrUX) z PageSpeed
-        Insights i wypisuje porównanie CLS / LCP / INP w jednej tabeli.
       </p>
     </main>
   );
