@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SklepRouteImport } from './routes/sklep'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RaportRouteImport } from './routes/raport'
 import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
 import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
 import { Route as PanelRouteImport } from './routes/panel'
@@ -36,6 +37,11 @@ const SklepRoute = SklepRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RaportRoute = RaportRouteImport.update({
+  id: '/raport',
+  path: '/raport',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrzypomnieniaRoute = PrzypomnieniaRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
+  '/raport': typeof RaportRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
+  '/raport': typeof RaportRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
+  '/raport': typeof RaportRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/panel'
     | '/prywatnosc'
     | '/przypomnienia'
+    | '/raport'
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/panel'
     | '/prywatnosc'
     | '/przypomnienia'
+    | '/raport'
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/panel'
     | '/prywatnosc'
     | '/przypomnienia'
+    | '/raport'
     | '/sitemap.xml'
     | '/sklep'
     | '/_authenticated/admin'
@@ -251,6 +263,7 @@ export interface RootRouteChildren {
   PanelRoute: typeof PanelRoute
   PrywatnoscRoute: typeof PrywatnoscRoute
   PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
+  RaportRoute: typeof RaportRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SklepRoute: typeof SklepRoute
   ProductHandleRoute: typeof ProductHandleRoute
@@ -276,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/raport': {
+      id: '/raport'
+      path: '/raport'
+      fullPath: '/raport'
+      preLoaderRoute: typeof RaportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/przypomnienia': {
@@ -424,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   PanelRoute: PanelRoute,
   PrywatnoscRoute: PrywatnoscRoute,
   PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
+  RaportRoute: RaportRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SklepRoute: SklepRoute,
   ProductHandleRoute: ProductHandleRoute,
