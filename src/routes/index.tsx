@@ -14,6 +14,7 @@ import {
   MicrobiomeSkeleton,
   TimelineSkeleton,
   JourneySkeleton,
+  DayZeroToThreeSkeleton,
   EvidenceBasementSkeleton,
   PricingSkeleton,
   FAQSkeleton,
