@@ -513,9 +513,9 @@ function LADD() {
           />
           <div className="mt-auto flex flex-wrap items-end gap-3 pt-8">
             {[
-              { src: mscLogo.url, alt: "MSC" },
-              { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions" },
-              { src: mabelLogo.url, alt: "Mabel Hair Clinic" },
+              { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
+              { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
+              { src: mabelLogo.url, alt: "Mabel Hair Clinic", w: 372, h: 370 },
             ].map((logo) => (
               <div
                 key={logo.alt}
@@ -524,7 +524,10 @@ function LADD() {
                 <img
                   src={logo.src}
                   alt={logo.alt}
+                  width={logo.w}
+                  height={logo.h}
                   loading="lazy"
+                  decoding="async"
                   className="max-h-full max-w-full object-contain"
                 />
               </div>
