@@ -63,19 +63,25 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
       },
 
       POST: async ({ request }) => {
-        let body: unknown;
-        try {
-          body = await request.json();
-        } catch {
-          return Response.json(
-            { ok: false, status: "invalid_json" },
-            { status: 400, headers: corsHeaders() }
-          );
+        // RFC 8058 one-click: mail providers POST with body
+        // "List-Unsubscribe=One-Click" and the token in the URL query.
+        // The in-app confirmation page POSTs JSON { token }. Accept both.
+        const url = new URL(request.url);
+        let tokenRaw = url.searchParams.get("token") ?? "";
+        if (!tokenRaw) {
+          try {
+            const ct = request.headers.get("content-type") ?? "";
+            if (ct.includes("application/json")) {
+              const body = (await request.json()) as { token?: unknown };
+              tokenRaw = String(body?.token ?? "");
+            } else {
+              const form = await request.formData();
+              tokenRaw = String(form.get("token") ?? "");
+            }
+          } catch {
+            /* tokenRaw stays "" — handled by validation below */
+          }
         }
-        const tokenRaw =
-          typeof body === "object" && body !== null && "token" in body
-            ? String((body as { token: unknown }).token ?? "")
-            : "";
         const parsed = tokenSchema.safeParse(tokenRaw);
         if (!parsed.success) {
           return Response.json(

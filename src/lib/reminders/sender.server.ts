@@ -63,8 +63,11 @@ export async function sendEmailReminder(args: {
   }
   const origin = siteOrigin();
   const panelUrl = `${origin}/panel?week=${args.week}`;
-  const unsubscribeUrl = `${origin}/przypomnienia/wypisz?token=${args.unsubscribeToken}`;
-  const html = buildEmailHtml({ week: args.week, materials, unsubscribeUrl, panelUrl });
+  // RFC 8058 one-click target: mail providers POST here directly. Must be the API,
+  // not the human confirmation page. Page link for humans is in the email body footer.
+  const unsubscribeUrl = `${origin}/api/public/reminders/unsubscribe?token=${args.unsubscribeToken}`;
+  const unsubscribePageUrl = `${origin}/przypomnienia/wypisz?token=${args.unsubscribeToken}`;
+  const html = buildEmailHtml({ week: args.week, materials, unsubscribeUrl: unsubscribePageUrl, panelUrl });
   const subject = `Tydzień ${args.week} po zabiegu — ${materials.length} materiałów dla Ciebie`;
 
   // Resend connector gateway (uses LOVABLE_API_KEY + RESEND_API_KEY).
