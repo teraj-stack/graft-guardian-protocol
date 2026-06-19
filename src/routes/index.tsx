@@ -524,7 +524,7 @@ function LADD() {
             ].map((logo) => (
               <div
                 key={logo.alt}
-                className="flex h-20 w-20 items-center justify-center rounded-sm border border-border/60 bg-card p-2 md:h-24 md:w-24"
+                className="flex h-[104px] w-[104px] items-center justify-center rounded-sm border border-border/60 bg-card p-2 md:h-[125px] md:w-[125px]"
               >
                 <img
                   src={logo.src}
