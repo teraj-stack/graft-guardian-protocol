@@ -137,4 +137,28 @@ export const PRICING_FAQ: { q: string; a: string }[] = [
     q: "Co oznacza przekreślona cena w kolumnie 'Katalog'?",
     a: "To cena referencyjna ustalona w systemie Shopify jako 'compareAtPrice' — odpowiada standardowej stawce za pojedynczą sesję lub pakiet w rozliczeniu 'pay-as-you-go', bez rabatu za zobowiązanie do większej liczby zabiegów. Cena obok ('Pakiet') to rzeczywista kwota do zapłaty po rabacie. Jeśli w danym wariancie nie ma ceny katalogowej, wyświetlamy myślnik ('—') — oznacza to, że pakiet jest oferowany wyłącznie w cenie promocyjnej lub jest to produkt nowy, dla którego jeszcze nie ustaliliśmy referencyjnej stawki.",
   },
+  {
+    q: "Co dokładnie obejmuje jedna sesja tlenoterapii hiperbarycznej (HBOT)?",
+    a: "Każda sesja rozpoczyna się od kwalifikacji lekarskiej (przy pierwszej wizycie) i pomiaru ciśnienia tętniczego. Pacjent przebywa w komorze hiperbarycznej (wieloosobowej lub monoplace) przez 60–90 minut przy ciśnieniu 2,0–2,4 ATA, oddychając tlenem 100% pod maską lub kaskiem. Po sesji wykonywany jest ponowny pomiar ciśnienia oraz wydawany jest krótki raport z rekomendacją dalszej liczby zabiegów. Całkowity czas pobytu w ośrodku to około 1,5–2 h.",
+  },
+  {
+    q: "Co dokładnie obejmuje jedna sesja LADD — laser tulowy (thulium)?",
+    a: "Sesja trwa około 60 min. Zaczyna się od konsultacji trychologicznej i doboru parametrów lasera do fototypu skóry. Skóra głowy jest oczyszczana i dezynfekowana; w razie potrzeby stosowane jest znieczulenie miejscowe. Następnie wykonywana jest ablacja laserowa frakcyjna (Er:YAG lub thulium) na głębokość 150–300 µm przez około 5–10 min. Bezpośrednio po ablacji aplikowane jest osocze bogatopłytkowe PRP (8–10 ml, stężenie 3–5x) wymieszane z minoksydylem. Na koniec pacjent otrzymuje instruktaż pielęgnacji domowej na najbliższe 48 h oraz wstępny harmonogram kolejnych sesji.",
+  },
+  {
+    q: "Co dokładnie obejmuje jedna sesja LADD — zimna plazma (CAP)?",
+    a: "Sesja trwa około 60–75 min. Rozpoczyna się konsultacją trychologiczną i oceną tolerancji skóry na zimną plazmę. Skóra głowy jest oczyszczana i dezynfekowana — znieczulenie zazwyczaj nie jest konieczne. Aplikacja zimnej plazmy atmosferycznej (CAP) trwa 10–15 min i penetruje około 50–100 µm, przygotowując kanały transdermalne. Następnie nakładane jest osocze bogatopłytkowe PRP (8–10 ml, stężenie 3–5x) z minoksydylem. Pacjent dostaje instruktaż pielęgnacji domowej na 48 h oraz plan kolejnych wizyt.",
+  },
+  {
+    q: "Co dokładnie obejmuje jedna sesja fototerapii PBM / LLLT?",
+    a: "Sesja trwa 20–30 min. Przed cyklem (i co 5 sesji) wykonywana jest trichoskopia diagnostyczna. Terapeuta dobiera parametry świetlne: długość fali 630–680 nm, dawka około 5 J/cm². Światło LED jest aplikowane naprzemiennie na strefę dawcy i biorcy. W trakcie sesji monitorowana jest temperatura skóry; dawka jest korygowana w czasie rzeczywistym, jeśli skóra reaguje nadwrażliwością. Po cyklu pacjent otrzymuje raport z liczbą mieszków w fazie anagen, grubością włosa i gęstością.",
+  },
+  {
+    q: "Jaka jest różnica między zakupem 1, 5, 10 a 20 sesji poza ceną?",
+    a: "Pojedyncza sesja (1) to elastyczna forma 'pay-as-you-go' — rezerwujesz termin bez zobowiązań, ale bez rabatu. Pakiet 5 sesji to tzw. forma wprowadzająca: z góry rezerwujesz 5 terminów, otrzymujesz niewielki rabat (około 5%) i priorytet w kalendarzu. Pakiet 10 sesji to pełny cykl terapeutyczny z dedykowanym harmonogramem (np. 2x HBOT + 3x LADD + 5x PBM), rabatem rzędu 10% oraz opieką koordynatora. Pakiet 20 sesji to program intensywny z najwyższym rabatem (15–25%), stałymi slotami czasowymi, cotygodniowymi raportami postępu i bezpośrednim numerem do koordynatora. Im większy pakiet, tym niższy koszt jednostkowy i wyższy priorytet rezerwacji.",
+  },
+  {
+    q: "Czy pakiet 1 sesji to to samo, co pojedyncza wizyta bez zobowiązania?",
+    a: "Tak. Wariant '1 sesja' odpowiada standardowej wizycie 'pay-as-you-go'. Nie ma rabatu, ale też nie ma zobowiązania do kolejnych wizyt. Cena jest identyczna ze stawką katalogową (compareAtPrice). Jeśli po pierwszej sesji zdecydujesz się na pakiet 5, 10 lub 20, różnica jest rozliczana z wstecznym rabatem, jak przy przeskoku między pakietami.",
+  },
 ];
