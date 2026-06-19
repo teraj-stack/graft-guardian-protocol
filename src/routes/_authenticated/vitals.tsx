@@ -274,23 +274,25 @@ function VitalsPage() {
         const pdfTrendRaw = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
         const chartW = pageW - 100;
         const chartH = 170;
-        const drawAxes = (chartX: number, chartY: number, t: { good: number; poor: number }, yMin: number, yMax: number, isCLS: boolean) => {
-          const yFor = (v: number) => chartY + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
+        const drawAxes = (chartX: number, chartY: number, w: number, h: number, t: { good: number; poor: number }, yMin: number, yMax: number, isCLS: boolean, showRightLabels = true) => {
+          const yFor = (v: number) => chartY + h - ((v - yMin) / (yMax - yMin)) * h;
           doc.setDrawColor(180);
-          doc.rect(chartX, chartY, chartW, chartH);
+          doc.rect(chartX, chartY, w, h);
           doc.setDrawColor(16, 185, 129);
           doc.setLineDashPattern([3, 3], 0);
-          doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
+          doc.line(chartX, yFor(t.good), chartX + w, yFor(t.good));
           doc.setDrawColor(239, 68, 68);
-          doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
+          doc.line(chartX, yFor(t.poor), chartX + w, yFor(t.poor));
           doc.setLineDashPattern([], 0);
           doc.setFontSize(7);
           doc.setTextColor(110);
           const fmtY = (v: number) => (isCLS ? v.toFixed(2) : `${Math.round(v)}`);
           doc.text(fmtY(yMax), chartX - 4, chartY + 8, { align: "right" });
-          doc.text(fmtY(yMin), chartX - 4, chartY + chartH, { align: "right" });
-          doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
-          doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
+          doc.text(fmtY(yMin), chartX - 4, chartY + h, { align: "right" });
+          if (showRightLabels) {
+            doc.text(`good ${fmtY(t.good)}`, chartX + w + 2, yFor(t.good) + 3);
+            doc.text(`poor ${fmtY(t.poor)}`, chartX + w + 2, yFor(t.poor) + 3);
+          }
           doc.setTextColor(0);
           return yFor;
         };
