@@ -260,5 +260,76 @@ describe("POST /api/public/hooks/pricing-auto-restore — idempotency", () => {
       expect(call.values).toEqual({ hidden: false });
       expect(call.lteCol).toBe("restore_at");
     }
+});
+
+describe("POST /api/public/hooks/pricing-auto-restore — atomicity", () => {
+  const originalSecret = process.env.CRON_SECRET;
+
+  beforeEach(() => {
+    process.env.CRON_SECRET = "test-secret-value";
+    updateCalls.length = 0;
+    tablesTouched.length = 0;
+    updateError = null;
   });
+
+  afterEach(() => {
+    simulatedRows = null;
+    updateError = null;
+    if (originalSecret === undefined) delete process.env.CRON_SECRET;
+    else process.env.CRON_SECRET = originalSecret;
+  });
+
+  const validRequest = () =>
+    new Request(ENDPOINT, {
+      method: "POST",
+      headers: { "x-cron-secret": "test-secret-value" },
+    });
+
+  it("does not leave partial changes when the DB update fails", async () => {
+    const past = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const future = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    simulatedRows = [
+      { code: "LADD-CAP", hidden: true, restore_at: past },
+      { code: "LADD-THULIUM", hidden: true, restore_at: future },
+      { code: "PERMANENT-HIDDEN", hidden: true, restore_at: null },
+    ];
+    const snapshotBefore = JSON.parse(JSON.stringify(simulatedRows));
+
+    updateError = { message: "connection reset" };
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const res = await handler({ request: validRequest() });
+    expect(res.status).toBe(500);
+
+    // No row may have been mutated — even the eligible "LADD-CAP" row must
+    // remain hidden=true because the whole statement rolled back.
+    expect(simulatedRows).toEqual(snapshotBefore);
+    expect(tablesTouched).toEqual(["pricing_overrides"]);
+    expect(updateCalls).toHaveLength(1);
+
+    errSpy.mockRestore();
+  });
+
+  it("recovers cleanly on the next call after a transient DB error", async () => {
+    const past = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    simulatedRows = [
+      { code: "LADD-CAP", hidden: true, restore_at: past },
+    ];
+
+    // First call: DB error → no partial mutation.
+    updateError = { message: "transient" };
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const fail = await handler({ request: validRequest() });
+    expect(fail.status).toBe(500);
+    expect(simulatedRows[0].hidden).toBe(true);
+
+    // Second call: DB healthy → full restore applied.
+    updateError = null;
+    const ok = await handler({ request: validRequest() });
+    expect(ok.status).toBe(200);
+    expect(simulatedRows[0].hidden).toBe(false);
+
+    errSpy.mockRestore();
+  });
+});
 });
