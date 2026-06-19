@@ -521,6 +521,7 @@ function LADD() {
               { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
               { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
               { src: mabelLogo.url, alt: "Mabel Hair Clinic", w: 372, h: 370 },
+              { src: graftgenLogo.url, alt: "Graftgen.com — Post-Transplant Care", w: 415, h: 531 },
             ].map((logo) => (
               <div
                 key={logo.alt}
