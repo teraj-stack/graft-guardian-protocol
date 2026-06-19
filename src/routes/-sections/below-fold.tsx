@@ -202,9 +202,9 @@ export function DayZeroToThree() {
       <div className="grid gap-6 md:grid-cols-3">
         <Card title="Dzień 0" badge="Bezpośrednio po zabiegu" badgeTone="red">
           <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–2,0 ATA w ciągu 6 h</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> Spanie w pozycji pół-siedzącej (30–45°)</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> PBM 650/830 nm, 4–6 J/cm², bezpośrednio po zabiegu</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–2,0 ATA w ciągu 6 h</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> Lód na czoło (nie na strefę biorczą)</li>
           </ul>
           <Mech>Zero dotykania, drapania, mycia strefy biorczej.</Mech>
