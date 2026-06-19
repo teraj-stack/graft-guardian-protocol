@@ -29,7 +29,28 @@ Seeding baselines locally::
 Env:
   VISUAL_OUT          (default: visual-report)
   VISUAL_BASELINES    (default: tests/visual-baselines)
-  VISUAL_DIFF_THRESHOLD pct, default 1.0
+  VISUAL_DIFF_THRESHOLD                 global default pct (default 1.0)
+  VISUAL_DIFF_THRESHOLD_<SECTION>       per-section override (PBM, HBOT, LADD)
+  VISUAL_DIFF_THRESHOLD_<VIEWPORT>      per-viewport override (DESKTOP, MOBILE)
+  VISUAL_DIFF_THRESHOLD_<SECTION>_<VP>  per-section + per-viewport (highest priority)
+
+  Resolution order (most specific wins):
+    1. env VISUAL_DIFF_THRESHOLD_<SECTION>_<VIEWPORT>
+    2. config thresholds[section][viewport]
+    3. env VISUAL_DIFF_THRESHOLD_<SECTION>
+    4. config thresholds[section]["default"]
+    5. env VISUAL_DIFF_THRESHOLD_<VIEWPORT>
+    6. config thresholds["default"][viewport]
+    7. env VISUAL_DIFF_THRESHOLD  /  config thresholds["default"]["default"]
+    8. built-in default 1.0
+
+  Optional config: tests/visual-baselines/thresholds.json
+    {
+      "default": { "default": 1.0, "desktop": 1.0, "mobile": 1.5 },
+      "pbm":     { "default": 0.5 },
+      "hbot":    { "default": 0.5 },
+      "ladd":    { "desktop": 0.75, "mobile": 1.25 }
+    }
 """
 
 from __future__ import annotations
@@ -46,10 +67,84 @@ from PIL import Image, ImageChops, ImageFilter
 OUT = Path(os.environ.get("VISUAL_OUT", "visual-report"))
 BASELINES = Path(os.environ.get("VISUAL_BASELINES", "tests/visual-baselines"))
 DIFF_DIR = OUT / "diff"
-THRESHOLD_PCT = float(os.environ.get("VISUAL_DIFF_THRESHOLD", "1.0"))
+THRESHOLD_DEFAULT = float(os.environ.get("VISUAL_DIFF_THRESHOLD", "1.0"))
+THRESHOLD_CONFIG_PATH = BASELINES / "thresholds.json"
+SECTIONS = ("pbm", "hbot", "ladd")
 
 # Pixel intensity (0-255) above which a channel-delta counts as "changed".
 PIXEL_NOISE = 12
+
+
+def _load_threshold_config() -> dict:
+    if not THRESHOLD_CONFIG_PATH.exists():
+        return {}
+    try:
+        return json.loads(THRESHOLD_CONFIG_PATH.read_text())
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"warning: failed to read {THRESHOLD_CONFIG_PATH}: {e}", file=sys.stderr)
+        return {}
+
+
+THRESHOLD_CONFIG = _load_threshold_config()
+
+
+def _classify_section(name: str) -> str | None:
+    low = name.lower()
+    for s in SECTIONS:
+        if s in low:
+            return s
+    return None
+
+
+def _env_threshold(*parts: str) -> float | None:
+    key = "VISUAL_DIFF_THRESHOLD_" + "_".join(p.upper() for p in parts)
+    v = os.environ.get(key)
+    if v is None:
+        return None
+    try:
+        return float(v)
+    except ValueError:
+        print(f"warning: {key}={v!r} is not a number, ignoring", file=sys.stderr)
+        return None
+
+
+def _cfg_threshold(section: str, viewport: str) -> float | None:
+    s = THRESHOLD_CONFIG.get(section)
+    if not isinstance(s, dict):
+        return None
+    v = s.get(viewport)
+    return float(v) if isinstance(v, (int, float)) else None
+
+
+def resolve_threshold(viewport: str, name: str) -> tuple[float, str]:
+    """Return (threshold_pct, source) for a given screenshot."""
+    section = _classify_section(name)
+    vp = viewport.lower()
+
+    if section:
+        v = _env_threshold(section, vp)
+        if v is not None:
+            return v, f"env:{section}+{vp}"
+        v = _cfg_threshold(section, vp)
+        if v is not None:
+            return v, f"config:{section}.{vp}"
+        v = _env_threshold(section)
+        if v is not None:
+            return v, f"env:{section}"
+        v = _cfg_threshold(section, "default")
+        if v is not None:
+            return v, f"config:{section}.default"
+
+    v = _env_threshold(vp)
+    if v is not None:
+        return v, f"env:{vp}"
+    v = _cfg_threshold("default", vp)
+    if v is not None:
+        return v, f"config:default.{vp}"
+    v = _cfg_threshold("default", "default")
+    if v is not None:
+        return v, "config:default.default"
+    return THRESHOLD_DEFAULT, "default"
 
 
 def _normalize(a: Image.Image, b: Image.Image) -> tuple[Image.Image, Image.Image]:
