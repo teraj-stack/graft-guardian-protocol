@@ -218,6 +218,10 @@ function VitalsPage() {
       toast.error("W trybie porównania wybierz co najmniej 2 okna.");
       return;
     }
+    if (pdfCompareYScale === "independent" && pdfCompareLayout !== "side-by-side") {
+      toast.error("Skala Y 'Niezależna' działa tylko w układzie 'Obok siebie'. Zmień układ lub skalę.");
+      return;
+    }
     setExportingPdf(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
