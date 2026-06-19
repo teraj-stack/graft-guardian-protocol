@@ -58,10 +58,10 @@ function CookiesPage() {
             />
             <CategoryCard
               title="Analityczne"
-              purpose="Anonimowe statystyki ruchu i jakości treści (zagregowane, bez identyfikacji pacjenta)."
-              examples="Liczniki wizyt sekcji protokołu (aktywowane wyłącznie po zgodzie)."
-              retention="Do 14 miesięcy."
-              provider="First-party; w razie wdrożenia narzędzi zewnętrznych — informacja zostanie zaktualizowana."
+              purpose="Anonimowe statystyki ruchu i jakości treści protokołu. Ładowane wyłącznie po zgodzie; po jej wycofaniu skrypt jest usuwany, a powiązane cookies czyszczone."
+              examples="Google Analytics 4 (gtag.js) — cookies _ga, _ga_{ID}. IP anonimizowane, ad_storage = denied."
+              retention="_ga: 24 miesiące, _ga_{ID}: 24 miesiące. Usuwane natychmiast po wycofaniu zgody."
+              provider="Google Ireland Ltd. (transfer do USA na podstawie SCC + DPF). Aktywne tylko gdy administrator skonfiguruje Measurement ID."
             />
             <CategoryCard
               title="Funkcjonalne"
