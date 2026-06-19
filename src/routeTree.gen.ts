@@ -16,6 +16,7 @@ import { Route as PanelRouteImport } from './routes/panel'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
+import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
@@ -55,6 +56,11 @@ const PrzypomnieniaWypiszRoute = PrzypomnieniaWypiszRouteImport.update({
   path: '/wypisz',
   getParentRoute: () => PrzypomnieniaRoute,
 } as any)
+const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
+  id: '/api/public/contact',
+  path: '/api/public/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicRemindersUnsubscribeRoute =
   ApiPublicRemindersUnsubscribeRouteImport.update({
     id: '/api/public/reminders/unsubscribe',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/przypomnienia'
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
+    | '/api/public/contact'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/przypomnienia'
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
+    | '/api/public/contact'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/przypomnienia'
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
+    | '/api/public/contact'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   PrywatnoscRoute: typeof PrywatnoscRoute
   PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
@@ -213,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrzypomnieniaWypiszRouteImport
       parentRoute: typeof PrzypomnieniaRoute
     }
+    '/api/public/contact': {
+      id: '/api/public/contact'
+      path: '/api/public/contact'
+      fullPath: '/api/public/contact'
+      preLoaderRoute: typeof ApiPublicContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/reminders/unsubscribe': {
       id: '/api/public/reminders/unsubscribe'
       path: '/api/public/reminders/unsubscribe'
@@ -256,6 +276,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrywatnoscRoute: PrywatnoscRoute,
   PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
