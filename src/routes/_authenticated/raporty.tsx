@@ -167,6 +167,13 @@ function TeamReportStatus() {
           </div>
           <button
             type="button"
+            onClick={resetFilters}
+            className="h-[38px] px-4 rounded-md border border-slate-600 text-slate-300 text-sm font-medium hover:bg-slate-800"
+          >
+            Resetuj filtry
+          </button>
+          <button
+            type="button"
             onClick={() => handleExport("csv")}
             disabled={exporting !== null}
             className="h-[38px] px-4 rounded-md bg-[#c9a96a] text-[#0c121b] text-sm font-medium hover:bg-[#d8bb7c] disabled:opacity-50"
