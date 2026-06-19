@@ -1432,7 +1432,26 @@ function Contact() {
                 />
               </Field>
 
+              <Field label="Temat" name="topic" error={fieldErrors.topic}>
+                <select
+                  id="contact-topic"
+                  name="topic"
+                  required
+                  defaultValue=""
+                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-accent"
+                >
+                  <option value="" disabled>
+                    Wybierz temat…
+                  </option>
+                  <option value="konsultacja">Konsultacja</option>
+                  <option value="zabieg">Zabieg</option>
+                  <option value="ladd_prp">LADD / PRP + minoksydyl</option>
+                  <option value="inne">Inne</option>
+                </select>
+              </Field>
+
               <Field label="Wiadomość" name="message" error={fieldErrors.message}>
+
                 <textarea
                   id="contact-message"
                   name="message"
