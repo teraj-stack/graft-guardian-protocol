@@ -134,7 +134,7 @@ export const PRICING_FAQ: { q: string; a: string }[] = [
     a: "Każdy wariant (1, 5, 10, 20 sesji) ma osobną cenę katalogową i osobną cenę pakietową. Przy większych pakietach koszt jednostkowy sesji spada bardziej — klinika zyskuje efekt skali: mniejsza liczba przygotowań sali, powtarzalność zabiegu i dłuższa relacja terapeutyczna. Dlatego zazwyczaj rabat rośnie wraz z liczbą sesji. Ponadto różne modalności (HBOT, LADD, PBM) mają inne struktury kosztów materiałowych i czasowych, więc ten sam pakiet 10 sesji może mieć inny procent rabatu dla tlenoterapii niż dla lasera tulowego.",
   },
   {
-    q: "Co oznacza przekreślona cena w kolumnie „Katalog"?",
+    q: "Co oznacza przekreślona cena w kolumnie 'Katalog'?",
     a: "To cena referencyjna ustalona w systemie Shopify jako „compareAtPrice" — odpowiada standardowej stawce za pojedynczą sesję lub pakiet w rozliczeniu „pay-as-you-go", bez rabatu za zobowiązanie do większej liczby zabiegów. Cena obok („Pakiet") to rzeczywista kwota do zapłaty po rabacie. Jeśli w danym wariancie nie ma ceny katalogowej, wyświetlamy myślnik („—") — oznacza to, że pakiet jest oferowany wyłącznie w cenie promocyjnej lub jest to produkt nowy, dla którego jeszcze nie ustaliliśmy referencyjnej stawki.",
   },
 ];
