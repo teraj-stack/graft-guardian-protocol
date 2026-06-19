@@ -12,6 +12,7 @@ import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
 import { CartDrawer } from "@/components/CartDrawer";
+import { LazyMount } from "@/components/LazyMount";
 
 const TITLE = "Protokół po przeszczepie włosów — DHI, PBM, HBOT, LADD";
 const DESCRIPTION =
@@ -116,14 +117,14 @@ function Index() {
         <PBM />
         <HBOT />
         <LADD />
-        <Microbiome />
-        <Timeline />
-        <Journey />
-        <EvidenceBasement />
-        <Pricing />
-        <FAQSection />
-        <CTA />
-        <Contact />
+        <LazyMount minHeight={600}><Microbiome /></LazyMount>
+        <LazyMount minHeight={800}><Timeline /></LazyMount>
+        <LazyMount minHeight={600}><Journey /></LazyMount>
+        <LazyMount minHeight={800}><EvidenceBasement /></LazyMount>
+        <LazyMount minHeight={700}><Pricing /></LazyMount>
+        <LazyMount minHeight={500}><FAQSection /></LazyMount>
+        <LazyMount minHeight={300}><CTA /></LazyMount>
+        <LazyMount minHeight={700}><Contact /></LazyMount>
       </main>
       <Footer />
 
