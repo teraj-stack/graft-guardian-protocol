@@ -41,8 +41,31 @@ jobs:
             } catch (e) {
               report = { ok: false, hits: [] };
             }
-            const lines = report.hits.map(h => `- \`${h.file}:${h.line}\` — ${h.text}`).join('\n');
-            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\nSkan znalezion **${report.hits.length}** wystąpień \`FUE\`. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.\n\n### Lista wystąpień:\n${lines || '(brak szczegółów)'}\n\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+
+            const branch = context.payload.pull_request.head.ref;
+            const baseUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${branch}`;
+            const enc = (p) => p.split('/').map(encodeURIComponent).join('/');
+
+            const byFile = {};
+            for (const h of report.hits) {
+              (byFile[h.file] ||= []).push(h);
+            }
+            const files = Object.keys(byFile).sort();
+            const totalFiles = files.length;
+            const totalHits = report.hits.length;
+
+            let detailsBlocks = '';
+            for (const file of files) {
+              const hits = byFile[file];
+              const lines = hits.map(h => {
+                const url = `${baseUrl}/${enc(file)}#L${h.line}`;
+                return `- [L${h.line}](${url}) — \`${h.text.replace(/`/g, '\\`')}\``;
+              }).join('\n');
+              detailsBlocks += `<details>\n<summary><strong>📄 ${file}</strong> — ${hits.length} ${hits.length === 1 ? 'wystąpienie' : 'wystąpienia'}</summary>\n\n${lines}\n\n</details>\n\n`;
+            }
+
+            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
