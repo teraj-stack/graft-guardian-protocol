@@ -13,7 +13,7 @@ export function Microbiome() {
   return (
     <Section id="mikrobiom" eyebrow="06 — Mikrobiom i strefa dawcza">
       <SectionHeader
-        title="Antyseptyka, która nie zabija graftu."
+        title="Antyseptyka, która nie uszkadza graftu."
         lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
       />
       <div className="grid gap-6 md:grid-cols-2">
