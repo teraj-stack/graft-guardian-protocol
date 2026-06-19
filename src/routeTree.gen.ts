@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SklepRouteImport } from './routes/sklep'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
 import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
@@ -18,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
+import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
@@ -25,6 +27,11 @@ import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/pu
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
 import { Route as ApiPublicHooksPricingAutoRestoreRouteImport } from './routes/api/public/hooks/pricing-auto-restore'
 
+const SklepRoute = SklepRouteImport.update({
+  id: '/sklep',
+  path: '/sklep',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -69,6 +76,11 @@ const PrzypomnieniaWypiszRoute = PrzypomnieniaWypiszRouteImport.update({
   path: '/wypisz',
   getParentRoute: () => PrzypomnieniaRoute,
 } as any)
+const ProductHandleRoute = ProductHandleRouteImport.update({
+  id: '/product/$handle',
+  path: '/product/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -112,7 +124,9 @@ export interface FileRoutesByFullPath {
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
@@ -128,7 +142,9 @@ export interface FileRoutesByTo {
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
@@ -146,7 +162,9 @@ export interface FileRoutesById {
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
@@ -164,7 +182,9 @@ export interface FileRouteTypes {
     | '/prywatnosc'
     | '/przypomnienia'
     | '/sitemap.xml'
+    | '/sklep'
     | '/admin'
+    | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
@@ -180,7 +200,9 @@ export interface FileRouteTypes {
     | '/prywatnosc'
     | '/przypomnienia'
     | '/sitemap.xml'
+    | '/sklep'
     | '/admin'
+    | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
@@ -197,7 +219,9 @@ export interface FileRouteTypes {
     | '/prywatnosc'
     | '/przypomnienia'
     | '/sitemap.xml'
+    | '/sklep'
     | '/_authenticated/admin'
+    | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
@@ -215,6 +239,8 @@ export interface RootRouteChildren {
   PrywatnoscRoute: typeof PrywatnoscRoute
   PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SklepRoute: typeof SklepRoute
+  ProductHandleRoute: typeof ProductHandleRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
@@ -224,6 +250,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sklep': {
+      id: '/sklep'
+      path: '/sklep'
+      fullPath: '/sklep'
+      preLoaderRoute: typeof SklepRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -286,6 +319,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/przypomnienia/wypisz'
       preLoaderRoute: typeof PrzypomnieniaWypiszRouteImport
       parentRoute: typeof PrzypomnieniaRoute
+    }
+    '/product/$handle': {
+      id: '/product/$handle'
+      path: '/product/$handle'
+      fullPath: '/product/$handle'
+      preLoaderRoute: typeof ProductHandleRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
@@ -364,6 +404,8 @@ const rootRouteChildren: RootRouteChildren = {
   PrywatnoscRoute: PrywatnoscRoute,
   PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SklepRoute: SklepRoute,
+  ProductHandleRoute: ProductHandleRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,

@@ -9,6 +9,7 @@ import graftgenLogo from "@/assets/graftgen-logo.jpeg.asset.json";
 
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
+import { CartDrawer } from "@/components/CartDrawer";
 
 const TITLE = "Protokół po przeszczepie włosów — DHI, PBM, HBOT, LADD";
 const DESCRIPTION =
@@ -138,6 +139,7 @@ function Nav() {
     { href: "#ladd", label: "LADD" },
     { href: "#protokol", label: "14 dni" },
     { href: "#cennik", label: "Cennik" },
+    { to: "/sklep", label: "Sklep" },
     { to: "/panel", label: "Panel pacjenta" },
     { to: "/przypomnienia", label: "Przypomnienia" },
     { href: "#faq", label: "FAQ" },
@@ -162,6 +164,7 @@ function Nav() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <CartDrawer />
           <a
             href="#konsultacja"
             className="hidden md:inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
