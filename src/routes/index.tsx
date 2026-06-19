@@ -47,6 +47,9 @@ const FAQSection = lazy(() =>
 const EbookLeadMagnet = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.EbookLeadMagnet })),
 );
+const DayZeroToThree = lazy(() =>
+  import("./-sections/below-fold").then((m) => ({ default: m.DayZeroToThree })),
+);
 const CTA = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.CTA })),
 );
