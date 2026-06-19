@@ -158,7 +158,16 @@ jobs:
               return `**${label}** — Poprzedni: \`${prevVal}\` → Bieżący: \`${currVal}\` (${arrow} ${sign}${d})`;
             };
 
-            const chartBlock = `#### Miniwykresy (ostatnie ${history.length} ${history.length === 1 ? 'przebieg' : 'przebiegi'})\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![hits](${quickChart('Łączne wykrycia', hitsSeries, '#d73a49')}) | ![files](${quickChart('Liczba plików', filesSeries, '#0366d6')}) |\n| \`${sparkline(hitsSeries)}\` ${hitsSeries.join(' → ')} | \`${sparkline(filesSeries)}\` ${filesSeries.join(' → ')} |\n\n<sub>Oś X (od najstarszego do najnowszego): ${labels}</sub>\n\n`;
+            const quickChartToggleMarker = '<!-- quickchart-toggle -->';
+            let useQuickChart = true;
+            if (existing && existing.body) {
+              const toggleMatch = existing.body.match(/- \[(x| )\] Szybkie wykresy \(QuickChart\)/);
+              if (toggleMatch) useQuickChart = toggleMatch[1] === 'x';
+            }
+
+            const chartBlock = useQuickChart
+              ? `#### Miniwykresy (ostatnie ${history.length} ${history.length === 1 ? 'przebieg' : 'przebiegi'})\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![hits](${quickChart('Łączne wykrycia', hitsSeries, '#d73a49')}) | ![files](${quickChart('Liczba plików', filesSeries, '#0366d6')}) |\n| \`${sparkline(hitsSeries)}\` ${hitsSeries.join(' → ')} | \`${sparkline(filesSeries)}\` ${filesSeries.join(' → ')} |\n\n<sub>Oś X (od najstarszego do najnowszego): ${labels}</sub>\n\n`
+              : `#### Miniwykresy (wyłączone)\n\n_Wykresy QuickChart są obecnie wyłączone. Zaznacz checkbox poniżej, aby je włączyć._\n\n`;
 
             let trendSection;
             if (!prev) {
@@ -177,7 +186,9 @@ jobs:
                 else if (cur !== old) status = 'zmiana';
                 return `| ${f} | ${old} | ${cur} | ${fmtDelta(cur, old)} | ${status} |`;
               }).join('\n');
-              const deltaBlock = `#### Wykres różnicy (delta)\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![delta-hits](${deltaBar('Łączne wykrycia', prev.totalHits, totalHits, '#d73a49')}) | ![delta-files](${deltaBar('Liczba plików', prev.totalFiles, totalFiles, '#0366d6')}) |\n\n**Fallback (tekstowy):**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`;
+              const deltaBlock = useQuickChart
+                ? `#### Wykres różnicy (delta)\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![delta-hits](${deltaBar('Łączne wykrycia', prev.totalHits, totalHits, '#d73a49')}) | ![delta-files](${deltaBar('Liczba plików', prev.totalFiles, totalFiles, '#0366d6')}) |\n\n**Fallback (tekstowy):**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`
+                : `#### Wykres różnicy (wyłączony)\n\n_Wykresy delta QuickChart są obecnie wyłączone. Zaznacz checkbox poniżej, aby je włączyć._\n\n**Tekstowe podsumowanie:**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`;
               trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${chartBlock}${deltaBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
             }
 
