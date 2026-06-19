@@ -1,8 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  DEFAULT_COORDINATOR,
+  REPORT_TEMPLATE_CHANGELOG,
+  REPORT_TEMPLATE_RELEASED,
+  REPORT_TEMPLATE_VERSION,
+} from "@/lib/report-template";
 
 const TITLE = "Przykładowy cotygodniowy raport postępu — Tydzień 3";
 const DESCRIPTION =
   "Szablon raportu cotygodniowego dla pacjenta po przeszczepie włosów DHI. Parametry biometryczne, tolerancja skóry, trend gojenia i zalecenia kliniczne.";
+
+const REPORT_ID = "GGP-2026-0615-0042-W03";
+const DOCUMENT_HASH = "sha256:8f4a…2c91";
 
 export const Route = createFileRoute("/raport")({
   head: () => ({
@@ -20,24 +30,54 @@ export const Route = createFileRoute("/raport")({
 });
 
 function RaportPage() {
+  const [showChangelog, setShowChangelog] = useState(false);
+  const handleDownloadPdf = () => {
+    if (typeof window !== "undefined") window.print();
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border/60">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+      <PrintStyles />
+      <header className="border-b border-border/60 print:hidden">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
           <Link to="/" className="flex items-baseline gap-2">
             <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">raport przykładowy</span>
           </Link>
-          <Link
-            to="/"
-            className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
-          >
-            ← Strona główna
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowChangelog((v) => !v)}
+              className="hidden sm:inline-flex items-center rounded-sm border border-border px-3 py-2 text-xs uppercase tracking-wider text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+              title="Historia wersji szablonu"
+            >
+              v{REPORT_TEMPLATE_VERSION}
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              className="inline-flex items-center gap-2 rounded-sm border border-accent/40 bg-accent/10 px-4 py-2 text-sm text-accent transition hover:bg-accent/20"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Pobierz PDF
+            </button>
+            <Link
+              to="/"
+              className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
+            >
+              ← Strona główna
+            </Link>
+          </div>
         </div>
+        {showChangelog && <ChangelogPanel onClose={() => setShowChangelog(false)} />}
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-12 md:py-20">
+      <main className="mx-auto max-w-5xl px-6 py-12 md:py-20 print:py-6">
+
         {/* Header block */}
         <div className="flex flex-col gap-4 border-b border-border pb-8 md:flex-row md:items-end md:justify-between">
           <div>
@@ -174,13 +214,103 @@ function RaportPage() {
           </div>
         </section>
 
-        {/* Footer note */}
-        <div className="mt-12 border-t border-border pt-8 text-xs text-muted-foreground">
+        {/* Signature block */}
+        <SignatureBlock />
+
+        {/* Footer note + version */}
+        <div className="mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
           <p>
             Raport ma charakter edukacyjny i przykładowy. Rzeczywiste dane pacjenta są przechowywane w zabezpieczonym panelu klinicznym i udostępniane wyłącznie upoważnionemu personelowi medycznemu. Powyższy szablon nie zastępuje konsultacji lekarskiej.
           </p>
+          <div className="mt-4 flex flex-col gap-1 border-t border-border/40 pt-4 font-mono text-[10px] uppercase tracking-wider md:flex-row md:items-center md:justify-between">
+            <span>Szablon raportu v{REPORT_TEMPLATE_VERSION} · wydano {REPORT_TEMPLATE_RELEASED}</span>
+            <span>Dokument: {REPORT_ID} · {DOCUMENT_HASH}</span>
+          </div>
         </div>
       </main>
+    </div>
+  );
+}
+
+/* ─── Signature, Print, Changelog ─── */
+
+function SignatureBlock() {
+  const c = DEFAULT_COORDINATOR;
+  const signedAt = "22 czerwca 2026, 14:32";
+  return (
+    <section className="mt-14 rounded-sm border border-border bg-card p-6 md:p-8 print:break-inside-avoid">
+      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.25em] text-accent">Podpis koordynatora</p>
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            Raport zweryfikowany i zatwierdzony przez koordynatora medycznego prowadzącego pacjenta w programie potransplantacyjnym.
+          </p>
+        </div>
+          <div className="text-right">
+            <p
+              className="text-3xl text-foreground md:text-4xl"
+              style={{ fontFamily: '"Brush Script MT", "Segoe Script", "Lucida Handwriting", cursive' }}
+            >
+              {c.signatureScript}
+            </p>
+          <div className="mt-2 border-t border-border pt-2">
+            <p className="text-sm font-medium text-foreground">{c.name}</p>
+            <p className="text-xs text-muted-foreground">{c.title}</p>
+            <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              {c.license} · podpisano {signedAt}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PrintStyles() {
+  return (
+    <style>{`
+      @media print {
+        @page { size: A4; margin: 14mm 12mm; }
+        html, body { background: #fff !important; color: #111 !important; }
+        .print\\:hidden { display: none !important; }
+        a[href]:after { content: ""; }
+        section, .rounded-sm { break-inside: avoid; page-break-inside: avoid; }
+        h1, h2 { break-after: avoid; page-break-after: avoid; }
+      }
+    `}</style>
+  );
+}
+
+function ChangelogPanel({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="border-t border-border/60 bg-card/60">
+      <div className="mx-auto max-w-5xl px-6 py-4">
+        <div className="flex items-center justify-between">
+          <p className="text-xs uppercase tracking-[0.25em] text-accent">Historia wersji szablonu</p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+          >
+            zamknij ×
+          </button>
+        </div>
+        <ul className="mt-3 space-y-3">
+          {REPORT_TEMPLATE_CHANGELOG.map((entry) => (
+            <li key={entry.version} className="rounded-sm border border-border bg-background/40 p-3">
+              <div className="flex items-baseline gap-3">
+                <span className="font-mono text-sm text-accent">v{entry.version}</span>
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{entry.date}</span>
+              </div>
+              <ul className="mt-2 list-disc pl-5 text-xs text-muted-foreground">
+                {entry.changes.map((ch, i) => (
+                  <li key={i}>{ch}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
