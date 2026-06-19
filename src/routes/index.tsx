@@ -1613,15 +1613,6 @@ function Pricing() {
           </article>
         ))}
       </div>
-      <p className="mt-10 max-w-3xl text-xs leading-relaxed text-muted-foreground">
-        Metodologia: dla każdej kategorii pobrano publicznie dostępne cenniki
-        klinik klasy premium w Warszawie i Gdańsku, odfiltrowano oferty
-        wprowadzające i pakiety rabatowe Booksy, a następnie uśredniono najwyższy
-        zakres cen (75.–100. percentyl). Ceny nie zawierają konsultacji
-        kwalifikacyjnej (350–500 zł) ani preparatów dodatkowych. Niniejsze
-        zestawienie ma charakter informacyjny i nie stanowi oferty w rozumieniu
-        art. 66 §1 Kodeksu cywilnego.
-      </p>
 
       <div className="mt-16">
         <h3 className="font-display text-2xl break-words md:text-3xl">Pytania o pakiety i rozliczenia</h3>
