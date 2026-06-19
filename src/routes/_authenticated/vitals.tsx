@@ -267,12 +267,36 @@ function VitalsPage() {
       if (pdfMode !== "table") {
         const trendKey = `trend${range}${pdfPercentile === 75 ? "" : `_p${pdfPercentile}`}` as keyof typeof data;
         const pdfTrendRaw = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
-        const pdfTrend = filterWindow(pdfTrendRaw);
         const chartW = pageW - 100;
         const chartH = 170;
+        const drawAxes = (chartX: number, chartY: number, t: { good: number; poor: number }, yMin: number, yMax: number, isCLS: boolean) => {
+          const yFor = (v: number) => chartY + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
+          doc.setDrawColor(180);
+          doc.rect(chartX, chartY, chartW, chartH);
+          doc.setDrawColor(16, 185, 129);
+          doc.setLineDashPattern([3, 3], 0);
+          doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
+          doc.setDrawColor(239, 68, 68);
+          doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
+          doc.setLineDashPattern([], 0);
+          doc.setFontSize(7);
+          doc.setTextColor(110);
+          const fmtY = (v: number) => (isCLS ? v.toFixed(2) : `${Math.round(v)}`);
+          doc.text(fmtY(yMax), chartX - 4, chartY + 8, { align: "right" });
+          doc.text(fmtY(yMin), chartX - 4, chartY + chartH, { align: "right" });
+          doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
+          doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
+          doc.setTextColor(0);
+          return yFor;
+        };
+        const calcPct = (vals: number[], p: number) => {
+          if (!vals.length) return 0;
+          const s = [...vals].sort((a, b) => a - b);
+          return s[Math.min(s.length - 1, Math.floor(s.length * p))];
+        };
 
         for (const m of pdfMetrics) {
-          if (startY + chartH + 40 > pageH - 40) {
+          if (startY + chartH + 60 > pageH - 40) {
             doc.addPage();
             startY = 40;
           }
@@ -280,56 +304,104 @@ function VitalsPage() {
           const chartY = startY + 18;
           doc.setFontSize(11);
           doc.setTextColor(0);
-          doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni • ${WINDOW_LABEL[pdfWindow]})`, chartX, startY + 12);
-          doc.setDrawColor(180);
-          doc.rect(chartX, chartY, chartW, chartH);
-          const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
-          if (chartData.length === 0) {
-            doc.setFontSize(9);
-            doc.setTextColor(120);
-            doc.text("Brak danych w wybranym oknie", chartX + chartW / 2 - 60, chartY + chartH / 2);
-            doc.setTextColor(0);
-          } else {
-            const t = THRESHOLDS[m];
-            const vals = chartData.map((d) => d[m]);
-            const yMax = Math.max(t.poor * 1.05, ...vals);
-            const yMin = 0;
-            const n = chartData.length;
-            const xFor = (i: number) =>
-              chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
-            const yFor = (v: number) =>
-              chartY + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
-            doc.setDrawColor(16, 185, 129);
-            doc.setLineDashPattern([3, 3], 0);
-            doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
-            doc.setDrawColor(239, 68, 68);
-            doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
-            doc.setLineDashPattern([], 0);
-            doc.setFontSize(7);
-            doc.setTextColor(110);
-            const fmtY = (v: number) => (m === "CLS" ? v.toFixed(2) : `${Math.round(v)}`);
-            doc.text(fmtY(yMax), chartX - 4, chartY + 8, { align: "right" });
-            doc.text(fmtY(yMin), chartX - 4, chartY + chartH, { align: "right" });
-            doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
-            doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
-            const [r, g, b] = METRIC_COLORS[m];
-            doc.setDrawColor(r, g, b);
-            doc.setFillColor(r, g, b);
-            doc.setLineWidth(1.2);
-            for (let i = 1; i < n; i++) {
-              doc.line(xFor(i - 1), yFor(chartData[i - 1][m]), xFor(i), yFor(chartData[i][m]));
-            }
-            const step = Math.max(1, Math.ceil(n / 8));
-            for (let i = 0; i < n; i++) {
-              doc.circle(xFor(i), yFor(chartData[i][m]), 1.6, "F");
-              if (i % step === 0 || i === n - 1) {
-                doc.text(chartData[i].date.slice(5), xFor(i), chartY + chartH + 12, { align: "center" });
+          const title = pdfCompare
+            ? `Porównanie okien — ${m} (p${pdfPercentile}, ${range} dni)`
+            : `Trend p${pdfPercentile} — ${m} (${range} dni • ${WINDOW_LABEL[pdfWindow]})`;
+          doc.text(title, chartX, startY + 12);
+
+          if (pdfCompare) {
+            const series = pdfCompareWindows.map((w) => {
+              const win = filterByWindow(pdfTrendRaw, w);
+              const pts = win.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
+              return { w, pts, vals: pts.map((d) => d[m]) };
+            });
+            const allVals = series.flatMap((s) => s.vals);
+            if (allVals.length === 0) {
+              doc.setDrawColor(180);
+              doc.rect(chartX, chartY, chartW, chartH);
+              doc.setFontSize(9);
+              doc.setTextColor(120);
+              doc.text("Brak danych w wybranych oknach", chartX + chartW / 2 - 70, chartY + chartH / 2);
+              doc.setTextColor(0);
+            } else {
+              const t = THRESHOLDS[m];
+              const yMax = Math.max(t.poor * 1.05, ...allVals);
+              const yFor = drawAxes(chartX, chartY, t, 0, yMax, m === "CLS");
+              const fmtV = (v: number) => (m === "CLS" ? v.toFixed(3) : `${Math.round(v)}`);
+              for (const s of series) {
+                const n = s.pts.length;
+                if (n === 0) continue;
+                const [r, g, b] = WINDOW_COLORS[s.w];
+                doc.setDrawColor(r, g, b);
+                doc.setFillColor(r, g, b);
+                doc.setLineWidth(1.2);
+                const xFor = (i: number) => chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
+                for (let i = 1; i < n; i++) {
+                  doc.line(xFor(i - 1), yFor(s.pts[i - 1][m]), xFor(i), yFor(s.pts[i][m]));
+                }
+                for (let i = 0; i < n; i++) {
+                  doc.circle(xFor(i), yFor(s.pts[i][m]), 1.6, "F");
+                }
+              }
+              doc.setLineWidth(0.2);
+              // Legend with avg + p{percentile}
+              doc.setFontSize(8);
+              let lx = chartX;
+              const ly = chartY + chartH + 16;
+              for (const s of series) {
+                const [r, g, b] = WINDOW_COLORS[s.w];
+                doc.setFillColor(r, g, b);
+                doc.rect(lx, ly - 6, 8, 8, "F");
+                doc.setTextColor(0);
+                const avg = s.vals.length ? s.vals.reduce((a, b2) => a + b2, 0) / s.vals.length : 0;
+                const pct = calcPct(s.vals, pdfPercentile / 100);
+                const label = `${WINDOW_LABEL[s.w]}  avg ${fmtV(avg)}  p${pdfPercentile} ${fmtV(pct)}  (n=${s.vals.length})`;
+                doc.text(label, lx + 12, ly);
+                lx += doc.getTextWidth(label) + 28;
+                if (lx > chartX + chartW - 100) {
+                  lx = chartX;
+                }
               }
             }
-            doc.setTextColor(0);
-            doc.setLineWidth(0.2);
+            startY = chartY + chartH + 36;
+          } else {
+            const pdfTrend = filterWindow(pdfTrendRaw);
+            const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
+            if (chartData.length === 0) {
+              doc.setDrawColor(180);
+              doc.rect(chartX, chartY, chartW, chartH);
+              doc.setFontSize(9);
+              doc.setTextColor(120);
+              doc.text("Brak danych w wybranym oknie", chartX + chartW / 2 - 60, chartY + chartH / 2);
+              doc.setTextColor(0);
+            } else {
+              const t = THRESHOLDS[m];
+              const vals = chartData.map((d) => d[m]);
+              const yMax = Math.max(t.poor * 1.05, ...vals);
+              const n = chartData.length;
+              const yFor = drawAxes(chartX, chartY, t, 0, yMax, m === "CLS");
+              const xFor = (i: number) => chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
+              const [r, g, b] = METRIC_COLORS[m];
+              doc.setDrawColor(r, g, b);
+              doc.setFillColor(r, g, b);
+              doc.setLineWidth(1.2);
+              for (let i = 1; i < n; i++) {
+                doc.line(xFor(i - 1), yFor(chartData[i - 1][m]), xFor(i), yFor(chartData[i][m]));
+              }
+              const step = Math.max(1, Math.ceil(n / 8));
+              doc.setFontSize(7);
+              doc.setTextColor(110);
+              for (let i = 0; i < n; i++) {
+                doc.circle(xFor(i), yFor(chartData[i][m]), 1.6, "F");
+                if (i % step === 0 || i === n - 1) {
+                  doc.text(chartData[i].date.slice(5), xFor(i), chartY + chartH + 12, { align: "center" });
+                }
+              }
+              doc.setTextColor(0);
+              doc.setLineWidth(0.2);
+            }
+            startY = chartY + chartH + 28;
           }
-          startY = chartY + chartH + 28;
         }
       }
 
