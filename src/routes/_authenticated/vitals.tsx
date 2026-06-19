@@ -199,6 +199,24 @@ function VitalsPage() {
   const PDF_PRESETS_KEY = "vitals.pdfExportPresets.v1";
   const PDF_DEFAULT_PRESET_KEY = "vitals.pdfExportDefaultPreset.v1";
   type PdfPreset = { name: string; prefs: PdfPrefs };
+  const winKeySchema = z.enum(["all", "d0-3", "d4-14", "m1+"]);
+  const pdfPrefsSchema = z.object({
+    orientation: z.enum(["portrait", "landscape"]),
+    metadata: z.boolean(),
+    mode: z.enum(["table", "chart", "both"]),
+    percentile: z.union([z.literal(50), z.literal(75), z.literal(90)]),
+    metrics: z.array(z.enum(["CLS", "LCP", "INP"])),
+    window: winKeySchema,
+    compare: z.boolean(),
+    compareWindows: z.array(winKeySchema),
+    compareLayout: z.enum(["overlay", "side-by-side"]),
+    compareYScale: z.enum(["shared", "independent"]),
+  });
+  const presetSchema = z.object({
+    name: z.string().min(1, "Nazwa presetu nie może być pusta"),
+    prefs: pdfPrefsSchema,
+  });
+  const presetsArraySchema = z.array(presetSchema);
   const loadPresets = (): PdfPreset[] => {
     if (typeof window === "undefined") return [];
     try {
