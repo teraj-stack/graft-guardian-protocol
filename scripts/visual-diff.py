@@ -251,13 +251,18 @@ def render_html(report: dict) -> str:
               <header>
                 <h2>{r['viewport']} / {r['name']}</h2>
                 <span class="badge" style="background:{color}">{status}</span>
-                <span class="meta">changed: {r['changed_pct']:.2f}%</span>
+                <span class="meta">changed: {r['changed_pct']:.2f}% · threshold: {r.get('threshold_pct', 0):.2f}% ({r.get('threshold_source', '-')})</span>
               </header>
               {cells}
             </section>
             """
         )
     summary = report["summary"]
+    th = report.get("thresholds_effective", {})
+    th_rows = "".join(
+        f"<tr><td>{k}</td><td>{v['pct']:.2f}%</td><td>{v['source']}</td></tr>"
+        for k, v in sorted(th.items())
+    )
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8" />
 <title>Visual logo diff report</title>
@@ -272,13 +277,17 @@ def render_html(report: dict) -> str:
   .meta {{ font-size:12px; color:#8b93a4; margin-left:auto; }}
   img {{ max-width:100%; display:block; border:1px solid #242833; border-radius:6px; }}
   .missing {{ color:#b8852b; margin:6px 0; }}
+  table.th {{ border-collapse:collapse; margin:0 0 24px; font-size:12px; }}
+  table.th td {{ border:1px solid #242833; padding:4px 10px; color:#a9b0bd; }}
+  table.th td:first-child {{ color:#e7e9ee; font-family:ui-monospace,monospace; }}
 </style></head>
 <body>
   <h1>Visual logo diff</h1>
   <p class="summary">
     {summary['total']} pairs · {summary['regressions']} regressions ·
-    {summary['missing_baselines']} new · threshold {THRESHOLD_PCT:.2f}%
+    {summary['missing_baselines']} new · default threshold {THRESHOLD_DEFAULT:.2f}%
   </p>
+  <table class="th"><thead><tr><td>section / viewport</td><td>threshold</td><td>source</td></tr></thead><tbody>{th_rows}</tbody></table>
   {''.join(rows)}
 </body></html>"""
 
