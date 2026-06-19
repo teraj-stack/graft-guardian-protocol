@@ -795,8 +795,6 @@ const PRICING: PricingItem[] = [
   {
     code: "LADD",
     name: "LADD: PRP + minoksydyl",
-    // Tymczasowo ukryte w cenniku — protokół z laserem tulowym wraca za ~2 tygodnie.
-    hidden: true,
 
     params: "Er:YAG / tul · PRP (Magellan/Arthrex) · minoksydyl topowo",
     single: { price: "2 400 zł", label: "Sesja pojedyncza" },
