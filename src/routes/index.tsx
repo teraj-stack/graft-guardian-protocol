@@ -145,6 +145,7 @@ function Nav() {
           <Link to="/panel" className="hover:text-foreground">Panel pacjenta</Link>
           <Link to="/przypomnienia" className="hover:text-foreground">Przypomnienia</Link>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
+          <a href="#kontakt" className="hover:text-foreground">Kontakt</a>
         </nav>
         <a
           href="#konsultacja"
