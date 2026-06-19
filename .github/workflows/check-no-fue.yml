@@ -177,7 +177,7 @@ jobs:
                 else if (cur !== old) status = 'zmiana';
                 return `| ${f} | ${old} | ${cur} | ${fmtDelta(cur, old)} | ${status} |`;
               }).join('\n');
-              const deltaBlock = `#### Wykres różnicy (delta)\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![delta-hits](${deltaBar('Łączne wykrycia', prev.totalHits, totalHits, '#d73a49')}) | ![delta-files](${deltaBar('Liczba plików', prev.totalFiles, totalFiles, '#0366d6')}) |\n\n`;
+              const deltaBlock = `#### Wykres różnicy (delta)\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![delta-hits](${deltaBar('Łączne wykrycia', prev.totalHits, totalHits, '#d73a49')}) | ![delta-files](${deltaBar('Liczba plików', prev.totalFiles, totalFiles, '#0366d6')}) |\n\n**Fallback (tekstowy):**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`;
               trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${chartBlock}${deltaBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
             }
 
