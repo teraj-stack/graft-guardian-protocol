@@ -82,11 +82,31 @@ function ProductPage() {
             </div>
             <div>
               <h1 className="font-serif text-3xl md:text-4xl">{product.title}</h1>
-              <p className="mt-4 text-xl font-semibold">
-                {currentVariant
-                  ? `${parseFloat(currentVariant.price.amount).toFixed(2)} ${currentVariant.price.currencyCode}`
-                  : `${parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)} ${product.priceRange.minVariantPrice.currencyCode}`}
-              </p>
+              {(() => {
+                const price = currentVariant?.price ?? product.priceRange.minVariantPrice;
+                const compare = currentVariant?.compareAtPrice;
+                const priceN = parseFloat(price.amount);
+                const compareN = compare ? parseFloat(compare.amount) : 0;
+                const hasDiscount = compareN > priceN;
+                const pct = hasDiscount ? Math.round((1 - priceN / compareN) * 100) : 0;
+                return (
+                  <div className="mt-4 flex flex-wrap items-baseline gap-3">
+                    <span className="text-xl font-semibold">
+                      {priceN.toFixed(2)} {price.currencyCode}
+                    </span>
+                    {hasDiscount && (
+                      <>
+                        <span className="text-base text-muted-foreground line-through">
+                          {compareN.toFixed(2)} {compare!.currencyCode}
+                        </span>
+                        <span className="rounded-sm bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent">
+                          −{pct}% • oszczędzasz {(compareN - priceN).toFixed(2)} {price.currencyCode}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                );
+              })()}
               <p className="mt-6 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                 {product.description}
               </p>
