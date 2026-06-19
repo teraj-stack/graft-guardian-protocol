@@ -54,10 +54,29 @@ export const Route = createFileRoute("/api/public/contact")({
           messageLength: message.length,
         });
 
+        // Fire-and-await clinic notification, but don't block patient on provider errors.
+        try {
+          const { notifyClinicOfContact } = await import(
+            "@/lib/contact-notify.server"
+          );
+          const result = await notifyClinicOfContact({
+            name,
+            email,
+            message,
+            receivedAt,
+          });
+          if (result.status !== "sent") {
+            console.warn("[contact] clinic notification not sent", result);
+          }
+        } catch (e) {
+          console.error("[contact] notify exception", (e as Error).message);
+        }
+
         return Response.json(
           { ok: true, receivedAt },
           { status: 200, headers: corsHeaders() }
         );
+
       },
     },
   },
