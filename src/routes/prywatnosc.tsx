@@ -70,7 +70,7 @@ function PrivacyPage() {
       <Section id="administrator" title="1. Administrator danych">
         <p>
           Współadministratorem danych osobowych pacjentów korzystających z serwisu jest{" "}
-          <strong>Bujok Medical Sp. z o.o.</strong> — w pełnym zakresie operacyjnym (kwalifikacja
+          <strong>Medical Lasers and STEM Cells Solutions Sp. z o.o.</strong> — w pełnym zakresie operacyjnym (kwalifikacja
           medyczna, prowadzenie protokołu pozabiegowego, kontakt z pacjentem).
         </p>
         <ul className="text-sm text-muted-foreground list-none space-y-1 mt-3">
