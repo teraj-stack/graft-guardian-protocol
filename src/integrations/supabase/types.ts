@@ -14,6 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      ebook_chapters: {
+        Row: {
+          body_md: string
+          created_at: string
+          day_from: number
+          day_label: string
+          day_to: number
+          id: string
+          order_idx: number
+          published: boolean
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body_md?: string
+          created_at?: string
+          day_from: number
+          day_label: string
+          day_to: number
+          id?: string
+          order_idx?: number
+          published?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body_md?: string
+          created_at?: string
+          day_from?: number
+          day_label?: string
+          day_to?: number
+          id?: string
+          order_idx?: number
+          published?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ebook_leads: {
+        Row: {
+          access_token: string
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          ip: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          access_token: string
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          ip?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          access_token?: string
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          ip?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       pricing_overrides: {
         Row: {
           code: string
