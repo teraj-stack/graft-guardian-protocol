@@ -904,6 +904,7 @@ function StatusBadge({ status, label, value, source, message }: { status: "ok" |
     not_found: "border-red-500/40 bg-red-500/10 text-red-300",
     error: "border-amber-500/40 bg-amber-500/10 text-amber-300",
     loading: "border-muted-foreground/30 bg-muted/20 text-muted-foreground",
+    skipped: "border-muted-foreground/30 bg-muted/20 text-muted-foreground",
   };
   const icon = status === "ok" ? "✓" : status === "not_found" ? "✗" : status === "error" ? "!" : "…";
   const title =
