@@ -110,14 +110,14 @@ function Index() {
         <PBM />
         <HBOT />
         <LADD />
-        <LazyMount minHeight={600} fallback={<MicrobiomeSkeleton />}><Microbiome /></LazyMount>
-        <LazyMount minHeight={800} fallback={<TimelineSkeleton />}><Timeline /></LazyMount>
-        <LazyMount minHeight={600} fallback={<JourneySkeleton />}><Journey /></LazyMount>
-        <LazyMount minHeight={800} fallback={<EvidenceBasementSkeleton />}><EvidenceBasement /></LazyMount>
-        <LazyMount minHeight={700} fallback={<PricingSkeleton />}><Pricing /></LazyMount>
-        <LazyMount minHeight={500} fallback={<FAQSkeleton />}><FAQSection /></LazyMount>
-        <LazyMount minHeight={300} fallback={<CTASkeleton />}><CTA /></LazyMount>
-        <LazyMount minHeight={700} fallback={<ContactSkeleton />}><Contact /></LazyMount>
+        <LazyMount minHeight={900} fallback={<MicrobiomeSkeleton />}><Microbiome /></LazyMount>
+        <LazyMount minHeight={1300} fallback={<TimelineSkeleton />}><Timeline /></LazyMount>
+        <LazyMount minHeight={780} fallback={<JourneySkeleton />}><Journey /></LazyMount>
+        <LazyMount minHeight={2100} fallback={<EvidenceBasementSkeleton />}><EvidenceBasement /></LazyMount>
+        <LazyMount minHeight={1000} fallback={<PricingSkeleton />}><Pricing /></LazyMount>
+        <LazyMount minHeight={1200} fallback={<FAQSkeleton />}><FAQSection /></LazyMount>
+        <LazyMount minHeight={520} fallback={<CTASkeleton />}><CTA /></LazyMount>
+        <LazyMount minHeight={1080} fallback={<ContactSkeleton />}><Contact /></LazyMount>
       </main>
       <Footer />
     </div>
