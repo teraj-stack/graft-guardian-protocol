@@ -320,6 +320,26 @@ function VitalsPage() {
               className="h-9 rounded-md border bg-background px-3 text-sm"
             />
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Układ PDF</label>
+            <select
+              value={pdfOrientation}
+              onChange={(e) => setPdfOrientation(e.target.value as "portrait" | "landscape")}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="landscape">Landscape</option>
+              <option value="portrait">Portrait</option>
+            </select>
+          </div>
+          <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={pdfMetadata}
+              onChange={(e) => setPdfMetadata(e.target.checked)}
+              className="rounded border bg-background"
+            />
+            Metadane w PDF
+          </label>
           <button
             onClick={handleExport}
             disabled={exporting || exportingPdf}
