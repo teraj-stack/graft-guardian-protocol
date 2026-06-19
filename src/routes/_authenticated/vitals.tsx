@@ -265,6 +265,23 @@ function VitalsPage() {
     }
   };
 
+  const resetPdfSettings = () => {
+    if (typeof window !== "undefined") {
+      try { window.sessionStorage.removeItem(PDF_PREFS_KEY); } catch { /* ignore */ }
+    }
+    setPdfOrientation(PDF_DEFAULTS.orientation);
+    setPdfMetadata(PDF_DEFAULTS.metadata);
+    setPdfMode(PDF_DEFAULTS.mode);
+    setPdfPercentile(PDF_DEFAULTS.percentile);
+    setPdfMetrics(PDF_DEFAULTS.metrics);
+    setPdfWindow(PDF_DEFAULTS.window);
+    setPdfCompare(PDF_DEFAULTS.compare);
+    setPdfCompareWindows(PDF_DEFAULTS.compareWindows);
+    setPdfCompareLayout(PDF_DEFAULTS.compareLayout);
+    setPdfCompareYScale(PDF_DEFAULTS.compareYScale);
+    toast.info("Ustawienia eksportu PDF zostały zresetowane do domyślnych.");
+  };
+
   const handleExportPdf = async () => {
     if (!validateRange()) return;
     if (pdfMode !== "table" && pdfMetrics.length === 0) {
@@ -775,6 +792,14 @@ function VitalsPage() {
             className="h-9 px-4 rounded-md border border-foreground text-foreground text-sm font-medium hover:bg-muted disabled:opacity-50"
           >
             {exportingPdf ? "Generowanie PDF…" : "Eksportuj PDF"}
+          </button>
+          <button
+            onClick={resetPdfSettings}
+            disabled={exporting || exportingPdf}
+            className="h-9 px-3 rounded-md border text-muted-foreground text-sm font-medium hover:text-foreground hover:border-foreground disabled:opacity-50"
+            title="Resetuje zapamiętane w tej sesji ustawienia eksportu PDF do wartości domyślnych"
+          >
+            Resetuj ustawienia PDF
           </button>
         </div>
       </div>
