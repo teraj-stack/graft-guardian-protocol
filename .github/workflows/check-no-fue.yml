@@ -159,19 +159,40 @@ jobs:
             };
 
             const quickChartToggleMarker = '<!-- quickchart-toggle -->';
-            let useQuickChart = true;
+            let mode = 'Auto';
             if (existing && existing.body) {
-              const toggleMatch = existing.body.match(/- \[(x| )\] Szybkie wykresy \(QuickChart\)/);
-              if (toggleMatch) useQuickChart = toggleMatch[1] === 'x';
+              const autoMatch = existing.body.match(/- \[(x| )\] Auto/);
+              const onMatch = existing.body.match(/- \[(x| )\] Zawsze włączone/);
+              const offMatch = existing.body.match(/- \[(x| )\] Wyłączone/);
+              if (onMatch && onMatch[1] === 'x') mode = 'On';
+              else if (offMatch && offMatch[1] === 'x') mode = 'Off';
+              else if (autoMatch && autoMatch[1] === 'x') mode = 'Auto';
             }
+
+            let qcAvailable = false;
+            if (mode !== 'Off') {
+              try {
+                const testCfg = JSON.stringify({ type: 'bar', data: { labels: ['t'], datasets: [{ data: [1] }] } });
+                const testUrl = `https://quickchart.io/chart?w=10&h=10&c=${encodeURIComponent(testCfg)}`;
+                const res = await fetch(testUrl, { method: 'HEAD' });
+                qcAvailable = res.ok;
+              } catch {}
+            }
+            const useQuickChart = mode === 'On' || (mode === 'Auto' && qcAvailable);
+
+            const autoStatus = mode === 'Auto'
+              ? (qcAvailable
+                  ? '> ℹ️ Tryb **Auto**: QuickChart działa — wyświetlam wykresy.\n\n'
+                  : '> ⚠️ Tryb **Auto**: QuickChart jest niedostępny — pokazuję tekstowy fallback.\n\n')
+              : '';
 
             const chartBlock = useQuickChart
               ? `#### Miniwykresy (ostatnie ${history.length} ${history.length === 1 ? 'przebieg' : 'przebiegi'})\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![hits](${quickChart('Łączne wykrycia', hitsSeries, '#d73a49')}) | ![files](${quickChart('Liczba plików', filesSeries, '#0366d6')}) |\n| \`${sparkline(hitsSeries)}\` ${hitsSeries.join(' → ')} | \`${sparkline(filesSeries)}\` ${filesSeries.join(' → ')} |\n\n<sub>Oś X (od najstarszego do najnowszego): ${labels}</sub>\n\n`
-              : `#### Miniwykresy (wyłączone)\n\n_Wykresy QuickChart są obecnie wyłączone. Zaznacz checkbox poniżej, aby je włączyć._\n\n`;
+              : `#### Miniwykresy (wyłączone / niedostępne)\n\n_Wykresy QuickChart są wyłączone lub serwis nie odpowiada. Użyj przełącznika poniżej, aby wymusić włączenie._\n\n`;
 
             let trendSection;
             if (!prev) {
-              trendSection = `### 📈 Trend wykryć\n\n_Brak poprzedniego przebiegu do porównania — to pierwszy raport na tym PR._\n\n${chartBlock}`;
+              trendSection = `### 📈 Trend wykryć\n\n_Brak poprzedniego przebiegu do porównania — to pierwszy raport na tym PR._\n\n${autoStatus}${chartBlock}`;
             } else {
               const hitsDelta = fmtDelta(totalHits, prev.totalHits);
               const filesDelta = fmtDelta(totalFiles, prev.totalFiles);
@@ -188,8 +209,8 @@ jobs:
               }).join('\n');
               const deltaBlock = useQuickChart
                 ? `#### Wykres różnicy (delta)\n\n| Łączne wykrycia | Liczba plików |\n|---|---|\n| ![delta-hits](${deltaBar('Łączne wykrycia', prev.totalHits, totalHits, '#d73a49')}) | ![delta-files](${deltaBar('Liczba plików', prev.totalFiles, totalFiles, '#0366d6')}) |\n\n**Fallback (tekstowy):**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`
-                : `#### Wykres różnicy (wyłączony)\n\n_Wykresy delta QuickChart są obecnie wyłączone. Zaznacz checkbox poniżej, aby je włączyć._\n\n**Tekstowe podsumowanie:**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`;
-              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${chartBlock}${deltaBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
+                : `#### Wykres różnicy (wyłączony / niedostępny)\n\n_Wykresy delta QuickChart są wyłączone lub serwis nie odpowiada._\n\n**Tekstowe podsumowanie:**\n- ${textDeltaSummary(prev.totalHits, totalHits, 'Łączne wykrycia')}\n- ${textDeltaSummary(prev.totalFiles, totalFiles, 'Liczba plików')}\n\n`;
+              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n${autoStatus}${chartBlock}${deltaBlock}| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
             }
 
             const state = Buffer.from(JSON.stringify({
@@ -200,8 +221,10 @@ jobs:
               history,
             })).toString('base64');
             const stateBlock = `<!-- fue-state: ${state} -->`;
-            const checkboxState = useQuickChart ? 'x' : ' ';
-            const toggleBlock = `${quickChartToggleMarker}\n- [${checkboxState}] Szybkie wykresy (QuickChart)`;
+            const autoCheck = mode === 'Auto' ? 'x' : ' ';
+            const onCheck  = mode === 'On'  ? 'x' : ' ';
+            const offCheck = mode === 'Off' ? 'x' : ' ';
+            const toggleBlock = `${quickChartToggleMarker}\n**Tryb wykresów QuickChart**\n- [${autoCheck}] Auto (włącz, jeśli QuickChart działa; w przeciwnym razie fallback tekstowy)\n- [${onCheck}] Zawsze włączone\n- [${offCheck}] Wyłączone`;
 
 
             const body = `${marker}\n${stateBlock}\n${toggleBlock}\n\n## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia`\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}${runLink}\n\n_Ostatnia aktualizacja: ${new Date().toISOString()} (run #${context.runId})._\n\n${trendSection}### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
