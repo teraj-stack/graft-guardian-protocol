@@ -67,8 +67,9 @@ export const Route = createFileRoute("/api/public/contact")({
           const { notifyClinicOfContact, smsNotifyClinicOfContact } =
             await import("@/lib/contact-notify.server");
           [emailResult, smsResults] = await Promise.all([
-            notifyClinicOfContact({ name, email, message, receivedAt }),
-            smsNotifyClinicOfContact({ name, email, message }),
+            notifyClinicOfContact({ name, email, message, topic, receivedAt }),
+            smsNotifyClinicOfContact({ name, email, message, topic }),
+
           ]);
           if (emailResult.status !== "sent") {
             console.warn("[contact] email notification not sent", emailResult);
