@@ -196,21 +196,25 @@ function VitalsPage() {
       }
       const { jsPDF } = await import("jspdf");
       const autoTable = (await import("jspdf-autotable")).default;
-      const doc = new jsPDF({ orientation: "landscape", unit: "pt" });
-      doc.setFontSize(14);
-      doc.text("Web Vitals — raport RUM (Graftgen)", 40, 40);
-      doc.setFontSize(10);
-      const meta = [
-        `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,
-        `Okno: ${range} dni`,
-        `Metryka: ${expMetric}`,
-        `Urzadzenie: ${expDevice}`,
-        dateFrom || dateTo ? `Daty: ${dateFrom || "—"} -> ${dateTo || "—"}` : "Daty: pelne okno",
-        `Rekordow: ${rows.length}`,
-      ].join("  •  ");
-      doc.text(meta, 40, 58);
+      const doc = new jsPDF({ orientation: pdfOrientation, unit: "pt" });
+      let startY = 40;
+      if (pdfMetadata) {
+        doc.setFontSize(14);
+        doc.text("Web Vitals — raport RUM (Graftgen)", 40, 40);
+        doc.setFontSize(10);
+        const meta = [
+          `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,
+          `Okno: ${range} dni`,
+          `Metryka: ${expMetric}`,
+          `Urzadzenie: ${expDevice}`,
+          dateFrom || dateTo ? `Daty: ${dateFrom || "—"} → ${dateTo || "—"}` : "Daty: pełne okno",
+          `Rekordów: ${rows.length}`,
+        ].join("  •  ");
+        doc.text(meta, 40, 58);
+        startY = 76;
+      }
       autoTable(doc, {
-        startY: 76,
+        startY,
         head: [header],
         body: rows,
         styles: { fontSize: 8, cellPadding: 3 },
