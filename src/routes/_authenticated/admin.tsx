@@ -197,10 +197,12 @@ function PricingRow({
 }) {
   const [hidden, setHidden] = useState<boolean>(current?.hidden ?? false);
   const [restoreAt, setRestoreAt] = useState<string>(toDateInputValue(current?.restore_at ?? null));
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     setHidden(current?.hidden ?? false);
     setRestoreAt(toDateInputValue(current?.restore_at ?? null));
+    setValidationError(null);
   }, [current?.hidden, current?.restore_at]);
 
   return (
@@ -230,7 +232,7 @@ function PricingRow({
         </label>
 
         <label className="flex flex-col text-xs text-muted-foreground">
-          <span className="uppercase tracking-wider">Auto-przywrócenie (opcjonalne)</span>
+          <span className="uppercase tracking-wider">Auto-przywrócenie</span>
           <input
             type="datetime-local"
             value={restoreAt}
@@ -238,17 +240,32 @@ function PricingRow({
             disabled={!hidden}
             className="mt-1 rounded-sm border border-border bg-background px-2 py-1.5 text-sm text-foreground disabled:opacity-50"
           />
+          {validationError && (
+            <span className="mt-1 text-xs text-destructive">{validationError}</span>
+          )}
         </label>
 
         <div className="flex items-end gap-2">
           <button
-            onClick={() =>
+            onClick={() => {
+              setValidationError(null);
+              if (hidden) {
+                if (!restoreAt) {
+                  setValidationError("Ustaw datę auto-przywrócenia.");
+                  return;
+                }
+                const d = new Date(restoreAt);
+                if (Number.isNaN(d.getTime()) || d.getTime() <= Date.now()) {
+                  setValidationError("Data auto-przywrócenia musi być w przyszłości.");
+                  return;
+                }
+              }
               onSave({
                 code,
                 hidden,
                 restore_at: hidden ? fromDateInputValue(restoreAt) : null,
-              })
-            }
+              });
+            }}
             disabled={saving}
             className="rounded-sm border border-foreground bg-foreground px-3 py-1.5 text-sm text-background hover:bg-foreground/90 disabled:opacity-50"
           >
