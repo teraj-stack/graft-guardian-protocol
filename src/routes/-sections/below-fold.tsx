@@ -78,7 +78,7 @@ export function Timeline() {
       title: "Faza proliferacji — zarządzanie mikrobiomem",
       bullets: [
         "Mycie skóry głowy HOCI lub szamponem pH 5,5 bez SLS, bez tarcia",
-        "Domowa fototerapia LLLT (hełm) 3–4×/tydz., 20 min na sesję",
+        "Domowa fototerapia LLLT (hełm) 2x dziennie/tydz., 20 min na sesję",
         "Od 8. doby: miękki masaż usuwający strupy + botaniki (arnika, centella)",
         "Optycznie: ocena erytemy, ewentualna sesja CAP nad strefą dawczą",
       ],
