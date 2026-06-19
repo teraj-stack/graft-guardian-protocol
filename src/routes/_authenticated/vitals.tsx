@@ -218,6 +218,10 @@ function VitalsPage() {
       toast.error("W trybie porównania wybierz co najmniej 2 okna.");
       return;
     }
+    if (pdfCompareYScale === "independent" && pdfCompareLayout !== "side-by-side") {
+      toast.error("Skala Y 'Niezależna' działa tylko w układzie 'Obok siebie'. Zmień układ lub skalę.");
+      return;
+    }
     setExportingPdf(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
@@ -666,7 +670,11 @@ function VitalsPage() {
                 <label className="block text-xs text-muted-foreground mb-1">Układ porównania</label>
                 <select
                   value={pdfCompareLayout}
-                  onChange={(e) => setPdfCompareLayout(e.target.value as "overlay" | "side-by-side")}
+                  onChange={(e) => {
+                    const v = e.target.value as "overlay" | "side-by-side";
+                    setPdfCompareLayout(v);
+                    if (v !== "side-by-side") setPdfCompareYScale("shared");
+                  }}
                   className="h-9 rounded-md border bg-background px-2 text-sm"
                 >
                   <option value="overlay">Nałożone (overlay)</option>
