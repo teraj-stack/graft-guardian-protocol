@@ -754,9 +754,21 @@ function Journey() {
 /* ---------- Evidence Basement Medicine ---------- */
 
 function EvidenceBasement() {
+  const [audit, setAudit] = useState(false);
   return (
     <Section id="evidence" eyebrow="09 — Evidence Basement Medicine">
       <SectionHeader title="Udokumentowana fotobiomodulacja jako terapia wspomagająca." />
+      <div className="mb-6 flex items-center justify-end gap-3 text-xs">
+        <span className="text-muted-foreground">Tryb audytu dowodów</span>
+        <button
+          type="button"
+          onClick={() => setAudit((v) => !v)}
+          aria-pressed={audit}
+          className={`rounded-sm border px-2 py-0.5 uppercase tracking-wide ${audit ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+        >
+          {audit ? "Włączony" : "Wyłączony"}
+        </button>
+      </div>
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="Przeżywalność graftów">
           <p>
@@ -793,8 +805,182 @@ function EvidenceBasement() {
           </p>
         </Card>
         <SourcesCard />
+        {audit && <EvidenceAuditCard />}
       </div>
     </Section>
+  );
+}
+
+/* ---------- Evidence audit: claims ↔ sources mapping with gap analysis ---------- */
+
+type EvidenceLevel = "direct" | "indirect" | "interpretive";
+
+type EvidenceClaim = {
+  id: string;
+  metric: string;
+  value: string;
+  timeframe: string;
+  population: string;
+  refs: string[];
+  level: EvidenceLevel;
+  rationale: string;
+  gaps: string[];
+};
+
+const CLAIMS: EvidenceClaim[] = [
+  {
+    id: "c-survival",
+    metric: "Przeżywalność graftów (baseline)",
+    value: "90–95%",
+    timeframe: "12 miesięcy po zabiegu",
+    population: "Nowoczesne FU / DHI w renomowanych klinikach",
+    refs: ["[1]"],
+    level: "direct",
+    rationale: "Zakres bezpośrednio raportowany w przeglądzie Parsley & Perez-Meza 2010 dla techniki FU.",
+    gaps: ["Brak współczesnego head-to-head RCT porównującego DHI vs. FUE z zaślepioną oceną przeżywalności."],
+  },
+  {
+    id: "c-llt-ex-vivo",
+    metric: "Zysk przeżywalności po LLLT ex vivo",
+    value: "5–8%",
+    timeframe: "Ocena gęstości 4–6 miesięcy po zabiegu",
+    population: "Split-scalp RCT (Tabaie 2016, n=10)",
+    refs: ["[2]"],
+    level: "interpretive",
+    rationale: "Pojedynczy mały RCT split-scalp; wartość 5–8% to konserwatywna interpretacja kierunkowa, nie liczba z abstraktu.",
+    gaps: [
+      "Brak replikacji w niezależnym ośrodku.",
+      "n=10 — moc statystyczna niska, szerokie przedziały ufności.",
+      "Brak head-to-head dla DHI (oryginał: FUT/FUE).",
+    ],
+  },
+  {
+    id: "c-anagen",
+    metric: "Przyspieszenie wejścia w anagen",
+    value: "3–4 tygodnie wcześniej",
+    timeframe: "Pierwsze 3–4 miesiące po zabiegu",
+    population: "Pacjenci AGA leczeni 655 nm (Lanzafame 2013)",
+    refs: ["[3]"],
+    level: "interpretive",
+    rationale: "Lanzafame 2013 raportuje +35% liczby włosów vs. sham w 16 tyg.; „3–4 tyg. szybciej w anagenie” to wnioskowanie z krzywej wzrostu, nie punkt końcowy badania.",
+    gaps: [
+      "Brak bezpośredniego pomiaru momentu wejścia w anagen w cytowanym RCT.",
+      "Populacja AGA, nie pacjenci po DHI.",
+    ],
+  },
+  {
+    id: "c-shock-loss",
+    metric: "Redukcja shock loss w okolicy biorczej",
+    value: "20–30%",
+    timeframe: "Tygodnie 2–8 po zabiegu",
+    population: "Ekstrapolacja z RCT PBM w AGA (Lanzafame 2013; Jimenez 2014)",
+    refs: ["[3]", "[4]"],
+    level: "interpretive",
+    rationale: "Brak pierwotnego RCT mierzącego „shock loss” po DHI z PBM; wartość 20–30% to ostrożna ekstrapolacja z efektu PBM na utrzymanie włosa w anagenie w AGA.",
+    gaps: [
+      "Brak head-to-head RCT: DHI + PBM vs. DHI + sham z punktem końcowym „shock loss”.",
+      "Brak standaryzowanej definicji „shock loss” w cytowanych pracach.",
+    ],
+  },
+  {
+    id: "c-erythema",
+    metric: "Szybsza redukcja rumienia pozabiegowego",
+    value: "30–40%",
+    timeframe: "Pierwsze 14 dni po zabiegu",
+    population: "Split-face RCT po ablacji frakcyjnej (Couto 2024)",
+    refs: ["[5]"],
+    level: "direct",
+    rationale: "Couto 2024 raportuje istotnie szybszą redukcję rumienia po PBM (red+blue+NIR) w pierwszych dniach gojenia po urazie ablacyjnym.",
+    gaps: [
+      "Model: ablacja frakcyjna skóry twarzy, nie nakłucia DHI skóry głowy — podobna kaskada zapalna, ale nieidentyczna.",
+      "Brak replikacji w populacji po przeszczepie włosów.",
+    ],
+  },
+  {
+    id: "c-diameter",
+    metric: "Przyrost średnicy łodygi włosa",
+    value: "10–15%",
+    timeframe: "12 miesięcy ciągłej terapii",
+    population: "RCT PBM w AGA (Lanzafame 2013; Jimenez 2014)",
+    refs: ["[3]", "[4]"],
+    level: "indirect",
+    rationale: "Cytowane RCT mierzyły gęstość/liczbę włosów; przyrost średnicy 10–15% to dolny zakres metaanaliz PBM w AGA.",
+    gaps: [
+      "Brak pomiaru średnicy łodygi w protokole pierwotnym Jimenez 2014 (punkt końcowy: hair count).",
+      "Brak danych ≥24 mies. dla utrzymania efektu po odstawieniu PBM.",
+    ],
+  },
+  {
+    id: "c-dosing",
+    metric: "Parametry dawkowania PBM",
+    value: "630–680 nm · 3–5 J/cm² · 2–3×/tydz.",
+    timeframe: "15–20 min/sesja, kuracja ≥6 mies.",
+    population: "Przegląd Pillai & Mysore 2021",
+    refs: ["[6]"],
+    level: "direct",
+    rationale: "Zakres parametrów bezpośrednio rekomendowany w przeglądzie roli LLLT w AGA.",
+    gaps: ["Brak konsensusu między urządzeniami (czapki vs. lampy panelowe) co do dawki na cm² docierającej do brodawki włosa."],
+  },
+];
+
+function EvidenceAuditCard() {
+  const summary = CLAIMS.reduce(
+    (acc, c) => {
+      acc[c.level] += 1;
+      return acc;
+    },
+    { direct: 0, indirect: 0, interpretive: 0 } as Record<EvidenceLevel, number>,
+  );
+  const levelStyle: Record<EvidenceLevel, string> = {
+    direct: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
+    indirect: "border-amber-500/40 bg-amber-500/10 text-amber-300",
+    interpretive: "border-red-500/40 bg-red-500/10 text-red-300",
+  };
+  const levelLabel: Record<EvidenceLevel, string> = {
+    direct: "Bezpośrednie",
+    indirect: "Pośrednie",
+    interpretive: "Interpretacyjne",
+  };
+  return (
+    <Card title="Audyt dowodów — mapowanie liczb na źródła i luki">
+      <p className="text-xs italic text-muted-foreground">
+        Każda wartość procentowa i okres czasu z sekcji wyżej została zmapowana do konkretnego źródła oraz oznaczona poziomem dowodu:
+        <strong className="ml-1 text-emerald-300">Bezpośredni</strong> (liczba z wyniku),
+        <strong className="ml-1 text-amber-300">Pośredni</strong> (ekstrapolacja z pokrewnego punktu końcowego),
+        <strong className="ml-1 text-red-300">Interpretacyjny</strong> (wnioskowanie kliniczne — wymaga replikacji).
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2 text-[10px] uppercase tracking-wide">
+        <span className="rounded-sm border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-emerald-300">Bezpośrednie: {summary.direct}</span>
+        <span className="rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-300">Pośrednie: {summary.indirect}</span>
+        <span className="rounded-sm border border-red-500/40 bg-red-500/10 px-2 py-0.5 text-red-300">Interpretacyjne: {summary.interpretive}</span>
+      </div>
+      <ol className="mt-4 space-y-4 text-xs">
+        {CLAIMS.map((c) => (
+          <li key={c.id} className="border-l-2 border-border pl-3">
+            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <strong className="text-foreground">{c.value}</strong>
+              <span className="text-muted-foreground">— {c.metric}</span>
+              <span className={`ml-auto rounded-sm border px-1.5 py-0.5 text-[10px] uppercase tracking-wide ${levelStyle[c.level]}`}>
+                {levelLabel[c.level]}
+              </span>
+            </div>
+            <div className="mt-1 text-[11px] text-muted-foreground">
+              Okres: {c.timeframe} · Populacja: {c.population} · Źródła: <span className="text-accent">{c.refs.join(", ")}</span>
+            </div>
+            <div className="mt-1.5">{c.rationale}</div>
+            <ul className="mt-1.5 list-disc space-y-0.5 pl-4 text-amber-300/90">
+              {c.gaps.map((g, i) => (
+                <li key={i}>{g}</li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+      <div className="mt-5 rounded-sm border border-amber-500/30 bg-amber-500/5 p-3 text-[11px] text-amber-200/90">
+        <strong className="block text-amber-300">Kluczowa luka systemowa:</strong>
+        Brak prospektywnego, head-to-head RCT „DHI + PBM/HBOT/LADD” vs. „DHI + standardowa opieka” z zaślepioną oceną przeżywalności graftów, czasu ustępowania rumienia i shock loss. Większość liczb prezentowanych powyżej to synteza z populacji AGA i okołozabiegowego gojenia po ablacji frakcyjnej. Komunikujemy je z pełną świadomością tego ograniczenia.
+      </div>
+    </Card>
   );
 }
 
