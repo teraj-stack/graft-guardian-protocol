@@ -132,6 +132,14 @@ function VitalsPage() {
   const [pdfMetadata, setPdfMetadata] = useState(true);
   const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
   const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
+  const [pdfMetrics, setPdfMetrics] = useState<Array<"CLS" | "LCP" | "INP">>(["CLS", "LCP", "INP"]);
+  const toggleMetric = (m: "CLS" | "LCP" | "INP") =>
+    setPdfMetrics((cur) => (cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m]));
+  const METRIC_COLORS: Record<"CLS" | "LCP" | "INP", [number, number, number]> = {
+    CLS: [200, 176, 108],
+    LCP: [59, 130, 246],
+    INP: [16, 185, 129],
+  };
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
