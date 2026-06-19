@@ -80,6 +80,16 @@ function TeamReportStatus() {
     };
   }, [data]);
 
+  const rows = data ?? [];
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const pageRows = useMemo(
+    () => rows.slice((safePage - 1) * pageSize, safePage * pageSize),
+    [rows, safePage, pageSize],
+  );
+  const rangeStart = rows.length === 0 ? 0 : (safePage - 1) * pageSize + 1;
+  const rangeEnd = Math.min(rows.length, safePage * pageSize);
+
   function resetFilters() {
     setStatus("all");
     setEmail("");
