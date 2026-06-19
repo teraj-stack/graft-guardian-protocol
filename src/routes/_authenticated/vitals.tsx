@@ -196,6 +196,7 @@ function VitalsPage() {
 
   // Presets — named bundles of PDF export settings, stored per browser session.
   const PDF_PRESETS_KEY = "vitals.pdfExportPresets.v1";
+  const PDF_DEFAULT_PRESET_KEY = "vitals.pdfExportDefaultPreset.v1";
   type PdfPreset = { name: string; prefs: PdfPrefs };
   const loadPresets = (): PdfPreset[] => {
     if (typeof window === "undefined") return [];
@@ -204,12 +205,25 @@ function VitalsPage() {
       return raw ? (JSON.parse(raw) as PdfPreset[]) : [];
     } catch { return []; }
   };
+  const loadDefaultPreset = (): string => {
+    if (typeof window === "undefined") return "";
+    try {
+      return window.sessionStorage.getItem(PDF_DEFAULT_PRESET_KEY) || "";
+    } catch { return ""; }
+  };
   const [pdfPresets, setPdfPresets] = useState<PdfPreset[]>(loadPresets);
   const [selectedPreset, setSelectedPreset] = useState<string>("");
+  const [defaultPreset, setDefaultPreset] = useState<string>(loadDefaultPreset);
   const persistPresets = (list: PdfPreset[]) => {
     setPdfPresets(list);
     if (typeof window !== "undefined") {
       try { window.sessionStorage.setItem(PDF_PRESETS_KEY, JSON.stringify(list)); } catch { /* ignore */ }
+    }
+  };
+  const persistDefaultPreset = (name: string) => {
+    setDefaultPreset(name);
+    if (typeof window !== "undefined") {
+      try { window.sessionStorage.setItem(PDF_DEFAULT_PRESET_KEY, name); } catch { /* ignore */ }
     }
   };
   const currentPrefs = (): PdfPrefs => ({
@@ -243,9 +257,39 @@ function VitalsPage() {
   const deleteSelectedPreset = () => {
     if (!selectedPreset) return;
     persistPresets(pdfPresets.filter((p) => p.name !== selectedPreset));
+    if (defaultPreset === selectedPreset) persistDefaultPreset("");
     toast.info(`Usunięto preset "${selectedPreset}".`);
     setSelectedPreset("");
   };
+  const renameSelectedPreset = () => {
+    if (!selectedPreset) return;
+    const newName = (typeof window !== "undefined" ? window.prompt("Nowa nazwa presetu:", selectedPreset)?.trim() : "") || "";
+    if (!newName || newName === selectedPreset) return;
+    if (pdfPresets.some((p) => p.name === newName)) {
+      toast.error(`Preset o nazwie "${newName}" już istnieje.`);
+      return;
+    }
+    const next = pdfPresets.map((p) => (p.name === selectedPreset ? { ...p, name: newName } : p));
+    persistPresets(next);
+    setSelectedPreset(newName);
+    if (defaultPreset === selectedPreset) persistDefaultPreset(newName);
+    toast.success(`Zmieniono nazwę presetu na "${newName}".`);
+  };
+  const setSelectedAsDefault = () => {
+    if (!selectedPreset) return;
+    persistDefaultPreset(selectedPreset);
+    toast.success(`Preset "${selectedPreset}" ustawiony jako domyślny.`);
+  };
+  useEffect(() => {
+    const def = loadDefaultPreset();
+    if (def) {
+      const preset = loadPresets().find((p) => p.name === def);
+      if (preset) {
+        setSelectedPreset(def);
+        applyPrefs({ ...PDF_DEFAULTS, ...preset.prefs });
+      }
+    }
+  }, []);
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -859,12 +903,14 @@ function VitalsPage() {
             <select
               value={selectedPreset}
               onChange={(e) => applyPresetByName(e.target.value)}
-              className="h-9 px-2 rounded-md border bg-background text-sm min-w-[140px]"
+              className="h-9 px-2 rounded-md border bg-background text-sm min-w-[160px]"
               title="Szybkie przywracanie zapisanych zestawów ustawień"
             >
               <option value="">— wybierz preset —</option>
               {pdfPresets.map((p) => (
-                <option key={p.name} value={p.name}>{p.name}</option>
+                <option key={p.name} value={p.name}>
+                  {p.name}{defaultPreset === p.name ? " ★" : ""}
+                </option>
               ))}
             </select>
             <button
@@ -874,6 +920,22 @@ function VitalsPage() {
               title="Zapisz bieżące ustawienia jako nowy preset (lub nadpisz istniejący o tej samej nazwie)"
             >
               Zapisz preset
+            </button>
+            <button
+              onClick={renameSelectedPreset}
+              disabled={!selectedPreset || exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Zmień nazwę wybranego presetu"
+            >
+              Zmień nazwę
+            </button>
+            <button
+              onClick={setSelectedAsDefault}
+              disabled={!selectedPreset || exporting || exportingPdf}
+              className={`h-9 px-3 rounded-md border text-sm font-medium disabled:opacity-50 ${defaultPreset === selectedPreset ? "bg-amber-100 text-amber-800 border-amber-300" : "text-muted-foreground hover:text-foreground"}`}
+              title={defaultPreset === selectedPreset ? "Ten preset jest ustawiony jako domyślny" : "Ustaw wybrany preset jako domyślny dla tej sesji"}
+            >
+              {defaultPreset === selectedPreset ? "Domyślny ★" : "Ustaw jako domyślny"}
             </button>
             <button
               onClick={deleteSelectedPreset}
