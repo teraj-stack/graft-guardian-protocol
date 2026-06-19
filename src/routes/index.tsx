@@ -479,7 +479,7 @@ function HBOT() {
 
 function LADD() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [showDeleted, setShowDeleted] = useState(false);
+  
 
   useEffect(() => {
     const video = videoRef.current;
@@ -574,31 +574,13 @@ function LADD() {
         </table>
       </div>
 
-      {showDeleted ? (
-        <div className="mt-6 rounded-sm border border-border/60 bg-card p-5">
-          <div className="flex items-start justify-between gap-4">
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Rozważamy rozszerzenie protokołu o oba urządzenia: laser tulowy do sesji LADD od 4–6 tygodnia (głęboka penetracja minoksydylu i PRP) oraz zimną plazmę do wczesnej fazy gojenia (kontrola mikrobiomu, delikatna stymulacja, brak downtime).
-            </p>
-            <button
-              onClick={() => setShowDeleted(false)}
-              className="shrink-0 rounded-sm border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-              type="button"
-            >
-              Usuń
-            </button>
-          </div>
+      <div className="mt-6 rounded-sm border border-border/60 bg-card p-5">
+        <div className="flex items-start justify-between gap-4">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Rozważamy rozszerzenie protokołu o oba urządzenia: laser tulowy do sesji LADD od 4–6 tygodnia (głęboka penetracja minoksydylu i PRP) oraz zimną plazmę do wczesnej fazy gojenia (kontrola mikrobiomu, delikatna stymulacja, brak downtime).
+          </p>
         </div>
-      ) : (
-        <button
-          onClick={() => setShowDeleted(true)}
-          className="mt-6 flex items-center gap-2 rounded-sm border border-border/60 bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-          type="button"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 13"/></svg>
-          Przywróć usunięty akapit
-        </button>
-      )}
+      </div>
 
     </Section>
   );
