@@ -107,8 +107,11 @@ function ProductPage() {
                       </>
                     )}
                     {sessions > 0 && (
-                      <span className="text-sm text-muted-foreground">
+                      <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                         <span className="font-medium text-foreground">{(perSession).toFixed(2)} {price.currencyCode}</span> / sesja
+                        <span title={`Cena za 1 sesję = cena pakietu (${priceN.toFixed(2)} ${price.currencyCode}) ÷ ${sessions} sesji`}>
+                          <Info className="h-3.5 w-3.5 cursor-help text-muted-foreground/70" />
+                        </span>
                       </span>
                     )}
                   </div>
