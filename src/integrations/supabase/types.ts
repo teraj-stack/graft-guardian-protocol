@@ -150,6 +150,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      deactivate_and_rotate_subscription: {
+        Args: { _token: string }
+        Returns: boolean
+      }
       generate_unsubscribe_token: { Args: never; Returns: string }
       has_role: {
         Args: {
