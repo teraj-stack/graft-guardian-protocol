@@ -12,6 +12,7 @@ import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
 import { CartDrawer } from "@/components/CartDrawer";
+import { LazyMount } from "@/components/LazyMount";
 
 const TITLE = "Protokół po przeszczepie włosów — DHI, PBM, HBOT, LADD";
 const DESCRIPTION =
