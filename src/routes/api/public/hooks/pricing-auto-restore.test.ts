@@ -16,7 +16,8 @@ vi.mock("@/integrations/supabase/client.server", () => {
             tablesTouched.push(table);
             updateCalls.push({ values, lteCol: col, lteVal: val });
             if (simulatedRows) {
-              for (const row of simulatedRows) {
+              const rows: Row[] = simulatedRows;
+              for (const row of rows) {
                 if (row.restore_at !== null && row.restore_at <= val) {
                   Object.assign(row, values);
                 }
@@ -174,5 +175,88 @@ describe("POST /api/public/hooks/pricing-auto-restore — happy path", () => {
     expect(body).toEqual({ success: false, error: "boom" });
 
     errSpy.mockRestore();
+  });
+});
+
+describe("POST /api/public/hooks/pricing-auto-restore — idempotency", () => {
+  const originalSecret = process.env.CRON_SECRET;
+
+  beforeEach(() => {
+    process.env.CRON_SECRET = "test-secret-value";
+    updateCalls.length = 0;
+    tablesTouched.length = 0;
+    updateError = null;
+  });
+
+  afterEach(() => {
+    simulatedRows = null;
+    if (originalSecret === undefined) delete process.env.CRON_SECRET;
+    else process.env.CRON_SECRET = originalSecret;
+  });
+
+  const validRequest = () =>
+    new Request(ENDPOINT, {
+      method: "POST",
+      headers: { "x-cron-secret": "test-secret-value" },
+    });
+
+  it("does not flip hidden=false for rows whose restore_at is still in the future", async () => {
+    const future = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    const past = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    simulatedRows = [
+      { code: "LADD-THULIUM", hidden: true, restore_at: future },
+      { code: "LADD-CAP", hidden: true, restore_at: past },
+      { code: "PERMANENT-HIDDEN", hidden: true, restore_at: null },
+    ];
+
+    const res = await handler({ request: validRequest() });
+    expect(res.status).toBe(200);
+
+    const byCode = Object.fromEntries(simulatedRows.map((r) => [r.code, r]));
+    // Future restore_at must remain hidden.
+    expect(byCode["LADD-THULIUM"].hidden).toBe(true);
+    // Past restore_at must be restored.
+    expect(byCode["LADD-CAP"].hidden).toBe(false);
+    // restore_at = null must NOT be touched (permanent hide).
+    expect(byCode["PERMANENT-HIDDEN"].hidden).toBe(true);
+
+    expect(tablesTouched).toEqual(["pricing_overrides"]);
+  });
+
+  it("is idempotent: repeated calls with the same payload leave the final state unchanged", async () => {
+    const future = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    const past = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    simulatedRows = [
+      { code: "LADD-THULIUM", hidden: true, restore_at: future },
+      { code: "LADD-CAP", hidden: true, restore_at: past },
+      { code: "ALREADY-VISIBLE", hidden: false, restore_at: past },
+      { code: "PERMANENT-HIDDEN", hidden: true, restore_at: null },
+    ];
+
+    const res1 = await handler({ request: validRequest() });
+    expect(res1.status).toBe(200);
+    const snapshotAfterFirst = JSON.parse(JSON.stringify(simulatedRows));
+
+    // Second and third calls with the same payload.
+    const res2 = await handler({ request: validRequest() });
+    expect(res2.status).toBe(200);
+    const res3 = await handler({ request: validRequest() });
+    expect(res3.status).toBe(200);
+
+    expect(simulatedRows).toEqual(snapshotAfterFirst);
+
+    // Sanity: the expected end state.
+    const byCode = Object.fromEntries(simulatedRows.map((r) => [r.code, r]));
+    expect(byCode["LADD-THULIUM"].hidden).toBe(true);
+    expect(byCode["LADD-CAP"].hidden).toBe(false);
+    expect(byCode["ALREADY-VISIBLE"].hidden).toBe(false);
+    expect(byCode["PERMANENT-HIDDEN"].hidden).toBe(true);
+
+    // Three calls = three UPDATEs issued, but no extra rows were affected.
+    expect(updateCalls).toHaveLength(3);
+    for (const call of updateCalls) {
+      expect(call.values).toEqual({ hidden: false });
+      expect(call.lteCol).toBe("restore_at");
+    }
   });
 });
