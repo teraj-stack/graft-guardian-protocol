@@ -133,6 +133,7 @@ export async function smsNotifyClinicOfContact(args: {
   name: string;
   email: string;
   message: string;
+  topic?: ContactTopic;
 }): Promise<NotifyResult[]> {
   const twilioKey = process.env.TWILIO_API_KEY;
   const lovableKey = process.env.LOVABLE_API_KEY;
@@ -154,10 +155,12 @@ export async function smsNotifyClinicOfContact(args: {
     ];
   }
 
+  const topicLabel = args.topic ? CONTACT_TOPICS[args.topic].label : "—";
   const body = truncate(
-    `Nowa wiadomosc (Protokol): ${args.name} <${args.email}> — ${args.message}`,
+    `[${topicLabel}] Nowa wiadomosc (Protokol): ${args.name} <${args.email}> — ${args.message}`,
     320
   );
+
 
   const MAX_ATTEMPTS = Number(process.env.SMS_MAX_ATTEMPTS || 3);
   const BASE_DELAY_MS = Number(process.env.SMS_RETRY_BASE_MS || 400);
