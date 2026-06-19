@@ -214,15 +214,106 @@ function RaportPage() {
           </div>
         </section>
 
-        {/* Footer note */}
-        <div className="mt-12 border-t border-border pt-8 text-xs text-muted-foreground">
+        {/* Signature block */}
+        <SignatureBlock />
+
+        {/* Footer note + version */}
+        <div className="mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
           <p>
             Raport ma charakter edukacyjny i przykładowy. Rzeczywiste dane pacjenta są przechowywane w zabezpieczonym panelu klinicznym i udostępniane wyłącznie upoważnionemu personelowi medycznemu. Powyższy szablon nie zastępuje konsultacji lekarskiej.
           </p>
+          <div className="mt-4 flex flex-col gap-1 border-t border-border/40 pt-4 font-mono text-[10px] uppercase tracking-wider md:flex-row md:items-center md:justify-between">
+            <span>Szablon raportu v{REPORT_TEMPLATE_VERSION} · wydano {REPORT_TEMPLATE_RELEASED}</span>
+            <span>Dokument: {REPORT_ID} · {DOCUMENT_HASH}</span>
+          </div>
         </div>
       </main>
     </div>
   );
+}
+
+/* ─── Signature, Print, Changelog ─── */
+
+function SignatureBlock() {
+  const c = DEFAULT_COORDINATOR;
+  const signedAt = "22 czerwca 2026, 14:32";
+  return (
+    <section className="mt-14 rounded-sm border border-border bg-card p-6 md:p-8 print:break-inside-avoid">
+      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.25em] text-accent">Podpis koordynatora</p>
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            Raport zweryfikowany i zatwierdzony przez koordynatora medycznego prowadzącego pacjenta w programie potransplantacyjnym.
+          </p>
+        </div>
+          <div className="text-right">
+            <p
+              className="text-3xl text-foreground md:text-4xl"
+              style={{ fontFamily: '"Brush Script MT", "Segoe Script", "Lucida Handwriting", cursive' }}
+            >
+              {c.signatureScript}
+            </p>
+          <div className="mt-2 border-t border-border pt-2">
+            <p className="text-sm font-medium text-foreground">{c.name}</p>
+            <p className="text-xs text-muted-foreground">{c.title}</p>
+            <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              {c.license} · podpisano {signedAt}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PrintStyles() {
+  return (
+    <style>{`
+      @media print {
+        @page { size: A4; margin: 14mm 12mm; }
+        html, body { background: #fff !important; color: #111 !important; }
+        .print\\:hidden { display: none !important; }
+        a[href]:after { content: ""; }
+        section, .rounded-sm { break-inside: avoid; page-break-inside: avoid; }
+        h1, h2 { break-after: avoid; page-break-after: avoid; }
+      }
+    `}</style>
+  );
+}
+
+function ChangelogPanel({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="border-t border-border/60 bg-card/60">
+      <div className="mx-auto max-w-5xl px-6 py-4">
+        <div className="flex items-center justify-between">
+          <p className="text-xs uppercase tracking-[0.25em] text-accent">Historia wersji szablonu</p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+          >
+            zamknij ×
+          </button>
+        </div>
+        <ul className="mt-3 space-y-3">
+          {REPORT_TEMPLATE_CHANGELOG.map((entry) => (
+            <li key={entry.version} className="rounded-sm border border-border bg-background/40 p-3">
+              <div className="flex items-baseline gap-3">
+                <span className="font-mono text-sm text-accent">v{entry.version}</span>
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{entry.date}</span>
+              </div>
+              <ul className="mt-2 list-disc pl-5 text-xs text-muted-foreground">
+                {entry.changes.map((ch, i) => (
+                  <li key={i}>{ch}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
 }
 
 /* ─── Subcomponents ─── */
