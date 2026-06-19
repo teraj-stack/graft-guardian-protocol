@@ -132,6 +132,14 @@ function VitalsPage() {
   const [pdfMetadata, setPdfMetadata] = useState(true);
   const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
   const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
+  const [pdfMetrics, setPdfMetrics] = useState<Array<"CLS" | "LCP" | "INP">>(["CLS", "LCP", "INP"]);
+  const toggleMetric = (m: "CLS" | "LCP" | "INP") =>
+    setPdfMetrics((cur) => (cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m]));
+  const METRIC_COLORS: Record<"CLS" | "LCP" | "INP", [number, number, number]> = {
+    CLS: [200, 176, 108],
+    LCP: [59, 130, 246],
+    INP: [16, 185, 129],
+  };
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
@@ -171,8 +179,8 @@ function VitalsPage() {
 
   const handleExportPdf = async () => {
     if (!validateRange()) return;
-    if (pdfMode !== "table" && (expMetric === "all" || expMetric === "FCP" || expMetric === "TTFB")) {
-      toast.error("Wykres trendu dostępny dla pojedynczej metryki: CLS, LCP lub INP.");
+    if (pdfMode !== "table" && pdfMetrics.length === 0) {
+      toast.error("Wybierz przynajmniej jedną metrykę do wykresu trendu (CLS, LCP lub INP).");
       return;
     }
     setExportingPdf(true);
@@ -204,6 +212,7 @@ function VitalsPage() {
       const autoTable = (await import("jspdf-autotable")).default;
       const doc = new jsPDF({ orientation: pdfOrientation, unit: "pt" });
       const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
       let startY = 40;
       if (pdfMetadata) {
         doc.setFontSize(14);
@@ -212,79 +221,84 @@ function VitalsPage() {
         const meta = [
           `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,
           `Okno: ${range} dni`,
-          `Metryka: ${expMetric}`,
+          `Metryka (CSV): ${expMetric}`,
           `Urzadzenie: ${expDevice}`,
           dateFrom || dateTo ? `Daty: ${dateFrom || "—"} → ${dateTo || "—"}` : "Daty: pełne okno",
           `Rekordów: ${rows.length}`,
-        ].join("  •  ");
+          pdfMode !== "table" ? `Wykres: p${pdfPercentile} • ${pdfMetrics.join(", ")}` : "",
+        ].filter(Boolean).join("  •  ");
         doc.text(meta, 40, 58);
         startY = 76;
       }
 
       if (pdfMode !== "table") {
-        const m = expMetric as "CLS" | "LCP" | "INP";
         const trendKey = `trend${range}${pdfPercentile === 75 ? "" : `_p${pdfPercentile}`}` as keyof typeof data;
         const pdfTrend = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
-        const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
-        const chartX = 40;
-        const chartW = pageW - 80;
-        const chartH = 200;
-        const chartY = startY;
-        doc.setFontSize(11);
-        doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni)`, chartX, chartY - 4);
-        // axes box
-        doc.setDrawColor(180);
-        doc.rect(chartX, chartY + 6, chartW, chartH);
-        if (chartData.length === 0) {
-          doc.setFontSize(9);
-          doc.setTextColor(120);
-          doc.text("Brak danych w wybranym oknie", chartX + chartW / 2 - 60, chartY + chartH / 2);
-          doc.setTextColor(0);
-        } else {
-          const t = THRESHOLDS[m];
-          const vals = chartData.map((d) => d[m]);
-          const yMax = Math.max(t.poor * 1.05, ...vals);
-          const yMin = 0;
-          const n = chartData.length;
-          const xFor = (i: number) =>
-            chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
-          const yFor = (v: number) =>
-            chartY + 6 + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
-          // threshold lines
-          doc.setDrawColor(16, 185, 129);
-          doc.setLineDashPattern([3, 3], 0);
-          doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
-          doc.setDrawColor(239, 68, 68);
-          doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
-          doc.setLineDashPattern([], 0);
-          // y-axis labels
-          doc.setFontSize(7);
-          doc.setTextColor(110);
-          const fmtY = (v: number) => (m === "CLS" ? v.toFixed(2) : `${Math.round(v)}`);
-          doc.text(fmtY(yMax), chartX - 4, chartY + 10, { align: "right" });
-          doc.text(fmtY(yMin), chartX - 4, chartY + 6 + chartH, { align: "right" });
-          doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
-          doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
-          // data polyline
-          doc.setDrawColor(200, 176, 108);
-          doc.setLineWidth(1.2);
-          for (let i = 1; i < n; i++) {
-            doc.line(xFor(i - 1), yFor(chartData[i - 1][m]), xFor(i), yFor(chartData[i][m]));
+        const chartW = pageW - 100;
+        const chartH = 170;
+
+        for (const m of pdfMetrics) {
+          if (startY + chartH + 40 > pageH - 40) {
+            doc.addPage();
+            startY = 40;
           }
-          // dots + sparse x labels
-          doc.setFillColor(200, 176, 108);
-          const step = Math.max(1, Math.ceil(n / 8));
-          for (let i = 0; i < n; i++) {
-            doc.circle(xFor(i), yFor(chartData[i][m]), 1.6, "F");
-            if (i % step === 0 || i === n - 1) {
-              doc.text(chartData[i].date.slice(5), xFor(i), chartY + chartH + 18, { align: "center" });
+          const chartX = 50;
+          const chartY = startY + 18;
+          doc.setFontSize(11);
+          doc.setTextColor(0);
+          doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni)`, chartX, startY + 12);
+          doc.setDrawColor(180);
+          doc.rect(chartX, chartY, chartW, chartH);
+          const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
+          if (chartData.length === 0) {
+            doc.setFontSize(9);
+            doc.setTextColor(120);
+            doc.text("Brak danych w wybranym oknie", chartX + chartW / 2 - 60, chartY + chartH / 2);
+            doc.setTextColor(0);
+          } else {
+            const t = THRESHOLDS[m];
+            const vals = chartData.map((d) => d[m]);
+            const yMax = Math.max(t.poor * 1.05, ...vals);
+            const yMin = 0;
+            const n = chartData.length;
+            const xFor = (i: number) =>
+              chartX + (n === 1 ? chartW / 2 : (i * chartW) / (n - 1));
+            const yFor = (v: number) =>
+              chartY + chartH - ((v - yMin) / (yMax - yMin)) * chartH;
+            doc.setDrawColor(16, 185, 129);
+            doc.setLineDashPattern([3, 3], 0);
+            doc.line(chartX, yFor(t.good), chartX + chartW, yFor(t.good));
+            doc.setDrawColor(239, 68, 68);
+            doc.line(chartX, yFor(t.poor), chartX + chartW, yFor(t.poor));
+            doc.setLineDashPattern([], 0);
+            doc.setFontSize(7);
+            doc.setTextColor(110);
+            const fmtY = (v: number) => (m === "CLS" ? v.toFixed(2) : `${Math.round(v)}`);
+            doc.text(fmtY(yMax), chartX - 4, chartY + 8, { align: "right" });
+            doc.text(fmtY(yMin), chartX - 4, chartY + chartH, { align: "right" });
+            doc.text(`good ${fmtY(t.good)}`, chartX + chartW + 2, yFor(t.good) + 3);
+            doc.text(`poor ${fmtY(t.poor)}`, chartX + chartW + 2, yFor(t.poor) + 3);
+            const [r, g, b] = METRIC_COLORS[m];
+            doc.setDrawColor(r, g, b);
+            doc.setFillColor(r, g, b);
+            doc.setLineWidth(1.2);
+            for (let i = 1; i < n; i++) {
+              doc.line(xFor(i - 1), yFor(chartData[i - 1][m]), xFor(i), yFor(chartData[i][m]));
             }
+            const step = Math.max(1, Math.ceil(n / 8));
+            for (let i = 0; i < n; i++) {
+              doc.circle(xFor(i), yFor(chartData[i][m]), 1.6, "F");
+              if (i % step === 0 || i === n - 1) {
+                doc.text(chartData[i].date.slice(5), xFor(i), chartY + chartH + 12, { align: "center" });
+              }
+            }
+            doc.setTextColor(0);
+            doc.setLineWidth(0.2);
           }
-          doc.setTextColor(0);
-          doc.setLineWidth(0.2);
+          startY = chartY + chartH + 28;
         }
-        startY = chartY + chartH + 36;
       }
+
 
       if (pdfMode !== "chart") {
         autoTable(doc, {
@@ -429,6 +443,21 @@ function VitalsPage() {
               <option value={75}>p75</option>
               <option value={90}>p90</option>
             </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Metryki wykresu PDF</label>
+            <div className="h-9 inline-flex items-center gap-3 rounded-md border bg-background px-3 text-sm">
+              {(["CLS", "LCP", "INP"] as const).map((m) => (
+                <label key={m} className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={pdfMetrics.includes(m)}
+                    onChange={() => toggleMetric(m)}
+                  />
+                  {m}
+                </label>
+              ))}
+            </div>
           </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
             <input
