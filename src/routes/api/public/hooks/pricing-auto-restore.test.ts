@@ -80,3 +80,87 @@ describe("POST /api/public/hooks/pricing-auto-restore — auth", () => {
     expect(res.status).toBe(401);
   });
 });
+
+describe("POST /api/public/hooks/pricing-auto-restore — happy path", () => {
+  const originalSecret = process.env.CRON_SECRET;
+
+  beforeEach(() => {
+    process.env.CRON_SECRET = "test-secret-value";
+    updateCalls.length = 0;
+    updateError = null;
+  });
+
+  afterEach(() => {
+    if (originalSecret === undefined) delete process.env.CRON_SECRET;
+    else process.env.CRON_SECRET = originalSecret;
+  });
+
+  it("returns 200 with success payload when secret matches", async () => {
+    const res = await handler({
+      request: new Request(ENDPOINT, {
+        method: "POST",
+        headers: { "x-cron-secret": "test-secret-value" },
+      }),
+    });
+
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      success: boolean;
+      restored_at: string;
+    };
+    expect(body.success).toBe(true);
+    expect(typeof body.restored_at).toBe("string");
+    expect(new Date(body.restored_at).toString()).not.toBe("Invalid Date");
+  });
+
+  it("issues UPDATE hidden=false on pricing_overrides for restore_at <= now", async () => {
+    const before = new Date().toISOString();
+    const res = await handler({
+      request: new Request(ENDPOINT, {
+        method: "POST",
+        headers: { "x-cron-secret": "test-secret-value" },
+      }),
+    });
+    expect(res.status).toBe(200);
+
+    expect(updateCalls).toHaveLength(1);
+    const call = updateCalls[0];
+    expect(call.values).toEqual({ hidden: false });
+    expect(call.lteCol).toBe("restore_at");
+    expect(call.lteVal >= before).toBe(true);
+    expect(call.lteVal <= new Date().toISOString()).toBe(true);
+  });
+
+  it("ignores unrelated body content when secret is valid", async () => {
+    const res = await handler({
+      request: new Request(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "x-cron-secret": "test-secret-value",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ arbitrary: "payload" }),
+      }),
+    });
+    expect(res.status).toBe(200);
+    expect(updateCalls).toHaveLength(1);
+  });
+
+  it("returns 500 with error message when the DB update fails", async () => {
+    updateError = { message: "boom" };
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const res = await handler({
+      request: new Request(ENDPOINT, {
+        method: "POST",
+        headers: { "x-cron-secret": "test-secret-value" },
+      }),
+    });
+
+    expect(res.status).toBe(500);
+    const body = (await res.json()) as { success: boolean; error: string };
+    expect(body).toEqual({ success: false, error: "boom" });
+
+    errSpy.mockRestore();
+  });
+});
