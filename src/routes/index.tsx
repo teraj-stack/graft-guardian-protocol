@@ -941,19 +941,97 @@ function EvidenceAuditCard() {
     indirect: "Pośrednie",
     interpretive: "Interpretacyjne",
   };
+  const exportCSV = () => {
+    const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    const header = ["ID", "Metryka", "Wartość", "Okres", "Populacja", "Źródła", "Poziom dowodu", "Uzasadnienie", "Luki"];
+    const rows = CLAIMS.map((c) =>
+      [c.id, c.metric, c.value, c.timeframe, c.population, c.refs.join(" "), levelLabel[c.level], c.rationale, c.gaps.join(" | ")].map(esc).join(","),
+    );
+    const csv = "\uFEFF" + [header.map(esc).join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `audyt-dowodow-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  const exportPDF = () => {
+    const date = new Date().toLocaleString("pl-PL");
+    const esc = (s: string) =>
+      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const rowsHtml = CLAIMS.map(
+      (c) => `
+        <tr>
+          <td><strong>${esc(c.value)}</strong><br/><span class="muted">${esc(c.metric)}</span></td>
+          <td>${esc(c.timeframe)}</td>
+          <td>${esc(c.population)}</td>
+          <td>${esc(c.refs.join(", "))}</td>
+          <td><span class="lvl ${c.level}">${levelLabel[c.level]}</span></td>
+          <td>${esc(c.rationale)}<ul>${c.gaps.map((g) => `<li>${esc(g)}</li>`).join("")}</ul></td>
+        </tr>`,
+    ).join("");
+    const html = `<!doctype html><html lang="pl"><head><meta charset="utf-8"/>
+<title>Audyt dowodów — Graftgen</title>
+<style>
+  *{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Inter,sans-serif;color:#111;margin:32px;font-size:11px;line-height:1.45}
+  h1{font-size:18px;margin:0 0 4px}.meta{color:#666;font-size:10px;margin-bottom:16px}
+  .summary{display:flex;gap:8px;margin:8px 0 16px}.chip{border:1px solid #ccc;padding:2px 8px;border-radius:3px;font-size:10px;text-transform:uppercase}
+  .chip.direct{border-color:#059669;color:#059669;background:#ecfdf5}
+  .chip.indirect{border-color:#d97706;color:#d97706;background:#fffbeb}
+  .chip.interpretive{border-color:#dc2626;color:#dc2626;background:#fef2f2}
+  table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:6px;text-align:left;vertical-align:top}
+  th{background:#f5f5f5;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+  .lvl{padding:2px 6px;border:1px solid;border-radius:3px;font-size:10px;text-transform:uppercase;white-space:nowrap}
+  .lvl.direct{border-color:#059669;color:#059669;background:#ecfdf5}
+  .lvl.indirect{border-color:#d97706;color:#d97706;background:#fffbeb}
+  .lvl.interpretive{border-color:#dc2626;color:#dc2626;background:#fef2f2}
+  ul{margin:6px 0 0 16px;padding:0;color:#92400e}.muted{color:#666}
+  .gap-note{margin-top:18px;padding:10px;border:1px solid #f59e0b;background:#fffbeb;font-size:10px;color:#78350f}
+  @media print{body{margin:14mm}}
+</style></head><body>
+<h1>Audyt dowodów — Evidence Basement Medicine</h1>
+<div class="meta">Graftgen · Wygenerowano: ${esc(date)}</div>
+<div class="summary">
+  <span class="chip direct">Bezpośrednie: ${summary.direct}</span>
+  <span class="chip indirect">Pośrednie: ${summary.indirect}</span>
+  <span class="chip interpretive">Interpretacyjne: ${summary.interpretive}</span>
+</div>
+<table><thead><tr><th>Wartość / metryka</th><th>Okres</th><th>Populacja</th><th>Źródła</th><th>Poziom</th><th>Uzasadnienie i luki</th></tr></thead>
+<tbody>${rowsHtml}</tbody></table>
+<div class="gap-note"><strong>Kluczowa luka systemowa:</strong> Brak prospektywnego, head-to-head RCT „DHI + PBM/HBOT/LADD” vs. „DHI + standardowa opieka” z zaślepioną oceną przeżywalności graftów, czasu ustępowania rumienia i shock loss.</div>
+<script>window.addEventListener("load",()=>{setTimeout(()=>window.print(),250)});</script>
+</body></html>`;
+    const w = window.open("", "_blank", "noopener,noreferrer");
+    if (!w) return;
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  };
   return (
     <Card title="Audyt dowodów — mapowanie liczb na źródła i luki">
-      <p className="text-xs italic text-muted-foreground">
-        Każda wartość procentowa i okres czasu z sekcji wyżej została zmapowana do konkretnego źródła oraz oznaczona poziomem dowodu:
-        <strong className="ml-1 text-emerald-300">Bezpośredni</strong> (liczba z wyniku),
-        <strong className="ml-1 text-amber-300">Pośredni</strong> (ekstrapolacja z pokrewnego punktu końcowego),
-        <strong className="ml-1 text-red-300">Interpretacyjny</strong> (wnioskowanie kliniczne — wymaga replikacji).
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <p className="max-w-2xl text-xs italic text-muted-foreground">
+          Każda wartość procentowa i okres czasu z sekcji wyżej została zmapowana do konkretnego źródła oraz oznaczona poziomem dowodu:
+          <strong className="ml-1 text-emerald-300">Bezpośredni</strong> (liczba z wyniku),
+          <strong className="ml-1 text-amber-300">Pośredni</strong> (ekstrapolacja z pokrewnego punktu końcowego),
+          <strong className="ml-1 text-red-300">Interpretacyjny</strong> (wnioskowanie kliniczne — wymaga replikacji).
+        </p>
+        <div className="flex shrink-0 gap-2 text-[10px] uppercase tracking-wide">
+          <button type="button" onClick={exportCSV} className="rounded-sm border border-border px-2 py-1 hover:border-accent hover:text-accent">
+            Eksport CSV
+          </button>
+          <button type="button" onClick={exportPDF} className="rounded-sm border border-accent bg-accent/10 px-2 py-1 text-accent hover:bg-accent/20">
+            Eksport PDF
+          </button>
+        </div>
+      </div>
       <div className="mt-3 flex flex-wrap gap-2 text-[10px] uppercase tracking-wide">
         <span className="rounded-sm border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-emerald-300">Bezpośrednie: {summary.direct}</span>
         <span className="rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-amber-300">Pośrednie: {summary.indirect}</span>
         <span className="rounded-sm border border-red-500/40 bg-red-500/10 px-2 py-0.5 text-red-300">Interpretacyjne: {summary.interpretive}</span>
       </div>
+
       <ol className="mt-4 space-y-4 text-xs">
         {CLAIMS.map((c) => (
           <li key={c.id} className="border-l-2 border-border pl-3">
