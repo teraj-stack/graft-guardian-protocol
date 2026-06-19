@@ -826,6 +826,10 @@ const PRICING_FAQ: { q: string; a: string }[] = [
     q: "Kiedy spóźnienie traktowane jest jako no-show?",
     a: "No-show (nieobecność) rejestruje się automatycznie, gdy pacjent nie stawia się w gabinecie w ciągu 20 minut od umówionego terminu i nie zgłosił opóźnienia z wyprzedzeniem min. 30 min. Sesja w takim przypadku jest odejmowana z pakietu. Wyjątek stanowią sytuacje losowe potwierdzone dokumentacją (wypadek, nagła choroba) — wtedy sesja jest zawieszana bez utraty z pakietu.",
   },
+  {
+    q: "Jakie są zasady zmiany terminu wizyty w pakietach 5, 10 i 20 sesji oraz ile czasu z wyprzedzeniem mogę przesunąć sesję?",
+    a: "Zmiana terminu jest bezpłatna i nie wpływa na ważność sesji, jeśli zgłoszona z wyprzedzeniem: pakiet 5 sesji — min. 48 h, pakiety 10 i 20 sesji — min. 24 h przed planowaną wizytą. Sesję można przesunąć na najbliższy wolny termin w ciągu 12 miesięcy od daty zakupu pakietu. Zgłoszenia przyjmujemy wyłącznie przez rejestrację kliniczną (telefon, e-mail lub panel pacjenta). Przy braku zgłoszenia w wymaganym czasie sesja jest rozliczana jako wykorzystana. W sytuacjach nagłych (wypadek, nagła choroba) potwierdzonych dokumentacją lekarską — zmiana jest możliwa bez utraty sesji niezależnie od wyprzedzenia.",
+  },
 ];
 
 interface PricingPack {
