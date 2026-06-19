@@ -190,6 +190,66 @@ export function Journey() {
   );
 }
 
+/* ---------- Day 0–3 Quick Guide ---------- */
+
+export function DayZeroToThree() {
+  return (
+    <Section id="dzien-0-3" eyebrow="08a — Twój plan: Dzień 0–3">
+      <SectionHeader
+        title="Pierwsze 72 h decydują o przeżywalności graftów."
+        lead="Instrukcje wzięte bezpośrednio z e-booka Patient Journey. Wykonuj krok po kroku — nie improwizuj."
+      />
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card title="Dzień 0" badge="Bezpośrednio po zabiegu">
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex gap-2"><span className="text-accent">✓</span> Spanie w pozycji pół-siedzącej (30–45°)</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> PBM 650/830 nm, 4–6 J/cm², bezpośrednio po zabiegu</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–2,0 ATA w ciągu 6 h</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Lód na czoło (nie na strefę biorczą)</li>
+          </ul>
+          <Mech>Zero dotykania, drapania, mycia strefy biorczej.</Mech>
+        </Card>
+        <Card title="Dni 1–2" badge="Krytyczne okno">
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex gap-2"><span className="text-accent">✓</span> Druga sesja HBOT (24 h po pierwszej)</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> PBM co 24 h, 20–30 min</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Spray HOCl 0,01–0,02% na strefę dawczą</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Spanie z głową uniesioną na 2 poduszkach</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Nawodnienie ≥ 2,5 l wody / dobę</li>
+          </ul>
+          <Mech>Alkohol, palenie i kofeina obniżają perfuzję — absolutnie zakazane.</Mech>
+        </Card>
+        <Card title="Dni 3–4" badge="Pierwsze mycie">
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsze mycie wg instrukcji koordynatora (pH 5,5, bez SLS)</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Spray HOCl 2× dziennie</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Żele z arniką / centellą na strefę dawczą</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Kontynuacja PBM co 24 h</li>
+          </ul>
+          <Mech>Nie zrywaj strupków — myj delikatnie, bez tarcia.</Mech>
+        </Card>
+      </div>
+      <div className="mt-10 rounded-sm border border-border bg-card p-6">
+        <h3 className="font-display text-xl">Checklista „czego unikać” — Dzień 0–14</h3>
+        <div className="mt-4 grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
+          <div className="space-y-2">
+            <p><span className="text-red-400">✗</span> Alkohol, palenie (vasokonstrykcja)</p>
+            <p><span className="text-red-400">✗</span> Aspiryna, ibuprofen (pierwsze 48 h)</p>
+            <p><span className="text-red-400">✗</span> Sauna, basen, słońce</p>
+            <p><span className="text-red-400">✗</span> Intensywny trening, podnoszenie ciężarów</p>
+          </div>
+          <div className="space-y-2">
+            <p><span className="text-red-400">✗</span> Czapki, kaski, hełmy ściskające skórę głowy</p>
+            <p><span className="text-red-400">✗</span> Drapanie, zrywanie strupków</p>
+            <p><span className="text-emerald-400">✓</span> Dieta bogata w białko, żelazo, cynk, witaminy B</p>
+            <p><span className="text-emerald-400">✓</span> Regularny kontakt z koordynatorem</p>
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
 /* ---------- Evidence Basement Medicine ---------- */
 
 type EvidenceLevel = "direct" | "indirect" | "interpretive";
