@@ -30,24 +30,54 @@ export const Route = createFileRoute("/raport")({
 });
 
 function RaportPage() {
+  const [showChangelog, setShowChangelog] = useState(false);
+  const handleDownloadPdf = () => {
+    if (typeof window !== "undefined") window.print();
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border/60">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+      <PrintStyles />
+      <header className="border-b border-border/60 print:hidden">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
           <Link to="/" className="flex items-baseline gap-2">
             <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">raport przykładowy</span>
           </Link>
-          <Link
-            to="/"
-            className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
-          >
-            ← Strona główna
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowChangelog((v) => !v)}
+              className="hidden sm:inline-flex items-center rounded-sm border border-border px-3 py-2 text-xs uppercase tracking-wider text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+              title="Historia wersji szablonu"
+            >
+              v{REPORT_TEMPLATE_VERSION}
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              className="inline-flex items-center gap-2 rounded-sm border border-accent/40 bg-accent/10 px-4 py-2 text-sm text-accent transition hover:bg-accent/20"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Pobierz PDF
+            </button>
+            <Link
+              to="/"
+              className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
+            >
+              ← Strona główna
+            </Link>
+          </div>
         </div>
+        {showChangelog && <ChangelogPanel onClose={() => setShowChangelog(false)} />}
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-12 md:py-20">
+      <main className="mx-auto max-w-5xl px-6 py-12 md:py-20 print:py-6">
+
         {/* Header block */}
         <div className="flex flex-col gap-4 border-b border-border pb-8 md:flex-row md:items-end md:justify-between">
           <div>
