@@ -129,10 +129,10 @@ function BackButton() {
   if (pathname === "/") return null;
 
   return (
-    <div className="fixed left-4 top-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 sm:left-4 sm:top-4 sm:bottom-auto sm:right-auto">
       <Link
         to="/"
-        className="inline-flex items-center gap-2 rounded-full bg-[#0c121b]/80 px-4 py-2 text-sm font-medium text-[#c8b06c] backdrop-blur-sm ring-1 ring-[#c8b06c]/20 transition-all hover:bg-[#0c121b] hover:ring-[#c8b06c]/40"
+        className="inline-flex items-center gap-1.5 rounded-full bg-[#0c121b]/80 px-2.5 py-2 text-xs font-medium text-[#c8b06c] backdrop-blur-sm ring-1 ring-[#c8b06c]/20 transition-all hover:bg-[#0c121b] hover:ring-[#c8b06c]/40 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +147,7 @@ function BackButton() {
         >
           <path d="m15 18-6-6 6-6" />
         </svg>
-        Powrót
+        <span className="hidden sm:inline">Powrót</span>
       </Link>
     </div>
   );
