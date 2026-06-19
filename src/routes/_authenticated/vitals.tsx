@@ -474,6 +474,7 @@ function VitalsPage() {
               <option value="d4-14">D4–14</option>
               <option value="m1+">M1+ (15+ dni)</option>
             </select>
+          </div>
           <div>
             <label className="block text-xs text-muted-foreground mb-1">Metryki wykresu PDF</label>
             <div className="h-9 inline-flex items-center gap-3 rounded-md border bg-background px-3 text-sm">
