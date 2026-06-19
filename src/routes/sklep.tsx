@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useCartStore } from "@/stores/cartStore";
 import { formatMoney } from "@/lib/utils";
 import { CartDrawer } from "@/components/CartDrawer";
+import placeholderLogo from "@/assets/graftgen-product-placeholder.png.asset.json";
 import {
   STOREFRONT_PRODUCTS_QUERY,
   storefrontApiRequest,
   type ShopifyProduct,
 } from "@/lib/shopify";
+
 
 const TITLE = "Sklep — kosmetyki i akcesoria po przeszczepie włosów";
 const DESCRIPTION =
@@ -126,8 +128,16 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
               loading="lazy"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">—</div>
+            <div className="flex h-full w-full items-center justify-center p-8">
+              <img
+                src={placeholderLogo.url}
+                alt={product.node.title}
+                className="max-h-full max-w-full object-contain opacity-90 transition duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+            </div>
           )}
+
         </div>
       </Link>
       <div className="flex flex-1 flex-col p-5">
