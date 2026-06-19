@@ -133,6 +133,23 @@ function VitalsPage() {
   const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
   const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
   const [pdfMetrics, setPdfMetrics] = useState<Array<"CLS" | "LCP" | "INP">>(["CLS", "LCP", "INP"]);
+  const [pdfWindow, setPdfWindow] = useState<"all" | "d0-3" | "d4-14" | "m1+">("all");
+  const WINDOW_LABEL: Record<typeof pdfWindow, string> = {
+    "all": "całe okno",
+    "d0-3": "D0–3 (ostatnie 4 dni)",
+    "d4-14": "D4–14",
+    "m1+": "M1+ (15+ dni)",
+  };
+  const filterWindow = (rows: TrendRow[]): TrendRow[] => {
+    if (pdfWindow === "all") return rows;
+    const n = rows.length;
+    return rows.filter((_, i) => {
+      const daysAgo = n - 1 - i;
+      if (pdfWindow === "d0-3") return daysAgo <= 3;
+      if (pdfWindow === "d4-14") return daysAgo >= 4 && daysAgo <= 14;
+      return daysAgo >= 15; // m1+
+    });
+  };
   const toggleMetric = (m: "CLS" | "LCP" | "INP") =>
     setPdfMetrics((cur) => (cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m]));
   const METRIC_COLORS: Record<"CLS" | "LCP" | "INP", [number, number, number]> = {
