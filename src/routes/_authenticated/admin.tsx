@@ -54,6 +54,10 @@ function AdminPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [forbidden, setForbidden] = useState(false);
+  const [undo, setUndo] = useState<
+    | { code: string; name: string; snapshot: AdminPricingOverride; remaining: number }
+    | null
+  >(null);
 
   const { data: overrides, isLoading, error } = useQuery({
     queryKey: ["admin-pricing-overrides"],
@@ -67,6 +71,19 @@ function AdminPage() {
     }
   }, [error]);
 
+  // 10-sekundowy countdown dla bannera Cofnij
+  useEffect(() => {
+    if (!undo) return;
+    if (undo.remaining <= 0) {
+      setUndo(null);
+      return;
+    }
+    const t = setTimeout(() => {
+      setUndo((u) => (u ? { ...u, remaining: u.remaining - 1 } : null));
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [undo]);
+
   const upsert = useMutation({
     mutationFn: (input: { code: string; hidden: boolean; restore_at: string | null }) =>
       adminUpsertPricingOverride({ data: input }),
@@ -77,17 +94,30 @@ function AdminPage() {
   });
 
   const del = useMutation({
-    mutationFn: (code: string) => adminDeletePricingOverride({ data: { code } }),
-    onSuccess: () => {
+    mutationFn: (vars: { code: string; name: string; snapshot: AdminPricingOverride }) =>
+      adminDeletePricingOverride({ data: { code: vars.code } }),
+    onSuccess: (_data, vars) => {
       queryClient.invalidateQueries({ queryKey: ["admin-pricing-overrides"] });
       queryClient.invalidateQueries({ queryKey: ["pricing-overrides"] });
+      setUndo({ code: vars.code, name: vars.name, snapshot: vars.snapshot, remaining: 10 });
     },
   });
+
+  function handleUndo() {
+    if (!undo) return;
+    upsert.mutate({
+      code: undo.snapshot.code,
+      hidden: undo.snapshot.hidden,
+      restore_at: undo.snapshot.restore_at,
+    });
+    setUndo(null);
+  }
 
   async function signOut() {
     await supabase.auth.signOut();
     navigate({ to: "/auth" });
   }
+
 
   if (forbidden) {
     return (
@@ -161,9 +191,11 @@ function AdminPage() {
                 name={item.name}
                 current={current}
                 onSave={(payload) => upsert.mutate(payload)}
-                onClear={() => del.mutate(item.code)}
+                onClear={() =>
+                  current && del.mutate({ code: item.code, name: item.name, snapshot: current })
+                }
                 saving={upsert.isPending && upsert.variables?.code === item.code}
-                clearing={del.isPending && del.variables === item.code}
+                clearing={del.isPending && del.variables?.code === item.code}
               />
             );
           })}
@@ -174,9 +206,35 @@ function AdminPage() {
           Skasowanie wpisu (przycisk <em>Usuń override</em>) przywraca domyślne zachowanie.
         </p>
       </div>
+
+      {undo && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-4 rounded-sm border border-border bg-card px-4 py-3 text-sm shadow-[var(--shadow-editorial)]"
+        >
+          <span className="text-foreground">
+            Usunięto wpis <strong>{undo.name}</strong>.
+          </span>
+          <button
+            onClick={handleUndo}
+            className="rounded-sm border border-foreground bg-foreground px-3 py-1.5 text-xs text-background hover:bg-foreground/90"
+          >
+            Cofnij ({undo.remaining}s)
+          </button>
+          <button
+            onClick={() => setUndo(null)}
+            aria-label="Zamknij"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </main>
   );
 }
+
 
 function PricingRow({
   code,
