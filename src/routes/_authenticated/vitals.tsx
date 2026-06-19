@@ -131,6 +131,7 @@ function VitalsPage() {
   const [pdfOrientation, setPdfOrientation] = useState<"portrait" | "landscape">("landscape");
   const [pdfMetadata, setPdfMetadata] = useState(true);
   const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
+  const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
@@ -222,13 +223,15 @@ function VitalsPage() {
 
       if (pdfMode !== "table") {
         const m = expMetric as "CLS" | "LCP" | "INP";
-        const chartData = trend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
+        const trendKey = `trend${range}${pdfPercentile === 75 ? "" : `_p${pdfPercentile}`}` as keyof typeof data;
+        const pdfTrend = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
+        const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
         const chartX = 40;
         const chartW = pageW - 80;
         const chartH = 200;
         const chartY = startY;
         doc.setFontSize(11);
-        doc.text(`Trend p75 — ${m} (${range} dni)`, chartX, chartY - 4);
+        doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni)`, chartX, chartY - 4);
         // axes box
         doc.setDrawColor(180);
         doc.rect(chartX, chartY + 6, chartW, chartH);
@@ -413,6 +416,18 @@ function VitalsPage() {
               <option value="table">Tabela</option>
               <option value="chart">Wykres trendu</option>
               <option value="both">Wykres + tabela</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Percentyl</label>
+            <select
+              value={pdfPercentile}
+              onChange={(e) => setPdfPercentile(Number(e.target.value) as 50 | 75 | 90)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value={50}>p50</option>
+              <option value={75}>p75</option>
+              <option value={90}>p90</option>
             </select>
           </div>
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">

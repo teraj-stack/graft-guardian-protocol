@@ -4,11 +4,15 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type Row = { metric: string; value: number; device: string; page: string; created_at: string };
 
-function p75(values: number[]): number {
+function calcPercentile(values: number[], pct: number): number {
   if (!values.length) return 0;
   const s = [...values].sort((a, b) => a - b);
-  const i = Math.min(s.length - 1, Math.floor(s.length * 0.75));
+  const i = Math.min(s.length - 1, Math.floor(s.length * pct));
   return s[i];
+}
+
+function p75(values: number[]): number {
+  return calcPercentile(values, 0.75);
 }
 
 const TRACKED = ["CLS", "LCP", "INP"] as const;
@@ -18,7 +22,7 @@ function dayKey(iso: string): string {
   return iso.slice(0, 10); // YYYY-MM-DD UTC
 }
 
-function buildSeries(rows: Row[], days: number) {
+function buildSeries(rows: Row[], days: number, percentile = 0.75) {
   const cutoff = Date.now() - days * 24 * 3600 * 1000;
   const bucket: Record<string, Record<TrackedMetric, number[]>> = {};
   for (const r of rows) {
@@ -36,9 +40,9 @@ function buildSeries(rows: Row[], days: number) {
     const b = bucket[d];
     series.push({
       date: d,
-      CLS: b && b.CLS.length ? Number(p75(b.CLS).toFixed(3)) : null,
-      LCP: b && b.LCP.length ? Math.round(p75(b.LCP)) : null,
-      INP: b && b.INP.length ? Math.round(p75(b.INP)) : null,
+      CLS: b && b.CLS.length ? Number(calcPercentile(b.CLS, percentile).toFixed(3)) : null,
+      LCP: b && b.LCP.length ? Math.round(calcPercentile(b.LCP, percentile)) : null,
+      INP: b && b.INP.length ? Math.round(calcPercentile(b.INP, percentile)) : null,
       samples: b ? b.CLS.length + b.LCP.length + b.INP.length : 0,
     });
   }
@@ -89,6 +93,10 @@ export const getVitalsSummary = createServerFn({ method: "GET" })
       summary,
       trend7: buildSeries(rows, 7),
       trend28: buildSeries(rows, 28),
+      trend7_p50: buildSeries(rows, 7, 0.5),
+      trend7_p90: buildSeries(rows, 7, 0.9),
+      trend28_p50: buildSeries(rows, 28, 0.5),
+      trend28_p90: buildSeries(rows, 28, 0.9),
     };
   });
 
