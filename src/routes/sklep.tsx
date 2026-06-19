@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCartStore } from "@/stores/cartStore";
 import { formatMoney } from "@/lib/utils";
 import { CartDrawer } from "@/components/CartDrawer";
-import placeholderLogo from "@/assets/graftgen-product-placeholder.png.asset.json";
+import placeholderLogo from "@/assets/msc-logo.jpeg.asset.json";
 import {
   STOREFRONT_PRODUCTS_QUERY,
   storefrontApiRequest,
