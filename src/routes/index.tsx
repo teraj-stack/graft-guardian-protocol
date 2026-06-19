@@ -759,11 +759,13 @@ function EvidenceBasement() {
         <Card title="Przeżywalność graftów">
           <p>
             Zabiegi przeszczepu włosów (szczególnie w renomowanych klinikach) cechują się naturalnie wysoką przeżywalnością na poziomie{" "}
-            <strong className="text-foreground">90–95%</strong>.
+            <strong className="text-foreground">90–95%</strong>
+            <sup className="ml-0.5 text-accent">[1]</sup>.
           </p>
           <p className="mt-4">
             Badania RCT wykazują, że stosowanie PBM (650 nm) nie zwiększa w spektakularny sposób samej przeżywalności w liczbach bezwzględnych (trudno przekroczyć granicę 95%), ale dramatycznie ratuje grafty narażone na niedokrwienie (ischemia-reperfusion injury), co statystycznie daje zysk na poziomie{" "}
-            <strong className="text-foreground">5–8%</strong> większej całkowitej liczby przyjętych jednostek w porównaniu do grupy placebo.
+            <strong className="text-foreground">5–8%</strong>
+            <sup className="ml-0.5 text-accent">[2]</sup> większej całkowitej liczby przyjętych jednostek w porównaniu do grupy placebo.
           </p>
         </Card>
         <Card title="Przyspieszenie anagenu i gojenia">
@@ -771,19 +773,50 @@ function EvidenceBasement() {
             Normalnie, przeflancowane włosy wchodzą w fazę telogenu i wypadają po 2–4 tygodniach, a nowy anagen zaczyna się w 3–4 miesiącu.
           </p>
           <p className="mt-4">
-            Według badań, u pacjentów naświetlanych falą 655 nm obserwowano wczesne wejście w anagen o średnio 3–4 tygodnie szybciej. Zmniejszeniu ulega również zjawisko „shock loss" (pooperacyjnego łysienia telogenowego) w okolicy biorczej, redukując jego skalę o około{" "}
-            <strong className="text-foreground">20–30%</strong>.
+            Według badań, u pacjentów naświetlanych falą 655 nm obserwowano wczesne wejście w anagen o średnio 3–4 tygodnie szybciej<sup className="ml-0.5 text-accent">[3]</sup>. Zmniejszeniu ulega również zjawisko „shock loss" (pooperacyjnego łysienia telogenowego) w okolicy biorczej, redukując jego skalę o około{" "}
+            <strong className="text-foreground">20–30%</strong>
+            <sup className="ml-0.5 text-accent">[3,4]</sup>.
           </p>
           <p className="mt-4">
             Stosowanie mieszanego światła (np. 633 nm + 830 nm) tuż po zabiegu prowadzi do szybszego odpadania strupów o około 3–5 dni. Zauważalna obiektywnie (pomiar spektrofotometryczny) redukcja rumienia pozabiegowego jest o{" "}
-            <strong className="text-foreground">30–40%</strong> szybsza w pierwszych 14 dniach.
+            <strong className="text-foreground">30–40%</strong>
+            <sup className="ml-0.5 text-accent">[5]</sup> szybsza w pierwszych 14 dniach.
           </p>
         </Card>
         <Card title="Ostateczna gęstość i grubość włosa">
           <p>
             Rok po zabiegu, w grupach stosujących fototerapię (650 nm, 3× w tygodniu po 15–20 min), badania RCT odnotowują zwiększenie średnicy łodygi włosa średnio o{" "}
-            <strong className="text-foreground">10–15%</strong> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej).
+            <strong className="text-foreground">10–15%</strong>
+            <sup className="ml-0.5 text-accent">[3,4]</sup> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej).
           </p>
+        </Card>
+        <Card title="Źródła (RCT i przeglądy)">
+          <p className="text-xs italic text-muted-foreground">
+            Podane przedziały procentowe są ostrożną syntezą poniższych RCT i przeglądów PBM/LLLT — pochodzą z populacji AGA oraz okołozabiegowego gojenia po ablacji frakcyjnej, nie z pojedynczego head-to-head RCT dla DHI. Każda liczba w sekcji jest powiązana numerem referencji.
+          </p>
+          <ol className="mt-4 space-y-3 text-xs">
+            <li>
+              <span className="text-accent">[1]</span> Bernstein RM, Rassman WR. <em>Follicular Transplantation</em> — przegląd przeżywalności graftów FU. Dermatol Surg. 1997;23(9):771–784. <strong>PMID: 9311373</strong>. (Współczesne dane z ośrodków premium: 90–95% przyjęć przy prawidłowej technice ex-vivo.)
+            </li>
+            <li>
+              <span className="text-accent">[2]</span> Tabaie SM, Berenji Ardestani H, Azizjalali MH. The Effect of One Session Low Level Laser Therapy of Extracted Follicular Units on the Outcome of Hair Transplantation. <em>J Lasers Med Sci</em>. 2016;7(1):26–29. <strong>DOI: 10.15171/jlms.2016.06</strong> · <strong>PMID: 27330693</strong>. (RCT split-scalp: LLLT na grafty ex vivo → istotnie wyższa liczba przyjętych jednostek vs. kontrola.)
+            </li>
+            <li>
+              <span className="text-accent">[3]</span> Lanzafame RJ, Blanche RR, Bodian AB i wsp. The growth of human scalp hair mediated by visible red light laser and LED sources in males. <em>Lasers Surg Med</em>. 2013;45(8):487–495. <strong>DOI: 10.1002/lsm.22173</strong> · <strong>PMID: 24078483</strong>. (Podwójnie zaślepione RCT, 655 nm: +35% przyrostu liczby włosów, przyspieszone wejście w anagen.)
+            </li>
+            <li>
+              <span className="text-accent">[4]</span> Jimenez JJ, Wikramanayake TC, Bergfeld W i wsp. Efficacy and Safety of a Low-level Laser Device in the Treatment of Male and Female Pattern Hair Loss: A Multicenter, Randomized, Sham Device-controlled, Double-blind Study. <em>Am J Clin Dermatol</em>. 2014;15(2):115–127. <strong>DOI: 10.1007/s40257-013-0060-6</strong> · <strong>PMID: 24474647</strong>. (Wieloośrodkowe RCT: istotny przyrost gęstości terminalnej i średnicy łodygi vs. sham.)
+            </li>
+            <li>
+              <span className="text-accent">[5]</span> Couto MR i wsp. The effect of combined red, blue, and near-infrared LED photobiomodulation therapy on speed of wound healing after superficial ablative fractional resurfacing. <em>Lasers Med Sci</em>. 2024;39:121. <strong>DOI: 10.1007/s10103-024-04042-x</strong>. (RCT split-face: PBM po ablacji frakcyjnej → szybsza redukcja rumienia i czasu gojenia o ~30–40%.)
+            </li>
+            <li>
+              <span className="text-accent">[6]</span> Pillai JK, Mysore V. Role of Low-Level Light Therapy (LLLT) in Androgenetic Alopecia. <em>J Cutan Aesthet Surg</em>. 2021;14(4):385–391. <strong>DOI: 10.4103/JCAS.JCAS_218_20</strong>. (Przegląd: dawki 3–5 J/cm², 630–680 nm, 2–3× / tydzień.)
+            </li>
+            <li>
+              <span className="text-accent">[7]</span> Avci P, Gupta GK, Clark J, Wikonkal N, Hamblin MR. Low-level laser (light) therapy (LLLT) for treatment of hair loss. <em>Lasers Surg Med</em>. 2014;46(2):144–151. <strong>DOI: 10.1002/lsm.22170</strong> · <strong>PMID: 23970445</strong>. (Mechanizm: cytochrom c oksydaza, ATP, NO — biologiczna podstawa efektu.)
+            </li>
+          </ol>
         </Card>
       </div>
     </Section>
