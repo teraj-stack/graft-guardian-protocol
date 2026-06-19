@@ -753,7 +753,7 @@ function FAQSection() {
         {FAQ.map((f) => (
           <details key={f.q} className="group py-6">
             <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-              <h3 className="font-display text-xl md:text-2xl">{f.q}</h3>
+              <h3 className="font-display text-xl break-words md:text-2xl">{f.q}</h3>
               <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
                 +
               </span>
@@ -1036,7 +1036,7 @@ function Pricing() {
           {PRICING_FAQ.map((f) => (
             <details key={f.q} className="group py-6">
               <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-                <h4 className="font-display text-xl md:text-2xl">{f.q}</h4>
+                <h4 className="font-display text-xl break-words md:text-2xl">{f.q}</h4>
                 <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
                   +
                 </span>
@@ -1079,7 +1079,7 @@ function CTA() {
           <div className="md:col-span-4">
             <a
               href="mailto:kontakt@protokol.example"
-              className="inline-flex w-full items-center justify-center rounded-sm bg-accent px-6 py-4 text-base font-medium text-accent-foreground transition hover:opacity-90"
+              className="flex w-full items-center justify-center rounded-sm bg-accent px-6 py-4 text-base font-medium text-accent-foreground transition hover:opacity-90"
             >
               Umów konsultację →
             </a>
