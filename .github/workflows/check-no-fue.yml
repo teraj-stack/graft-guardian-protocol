@@ -10,6 +10,8 @@ jobs:
   check-no-fue:
     name: Verify no FUE references (post-DHI migration)
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,4 +22,36 @@ jobs:
           node-version: 20
 
       - name: Run FUE guard
-        run: node scripts/check-no-fue.mjs
+        id: guard
+        run: |
+          set +e
+          node scripts/check-no-fue.mjs --json > fue-report.json
+          echo "exitcode=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Comment PR with FUE findings
+        if: github.event_name == 'pull_request' && steps.guard.outputs.exitcode != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report;
+            try {
+              report = JSON.parse(fs.readFileSync('fue-report.json', 'utf8'));
+            } catch (e) {
+              report = { ok: false, hits: [] };
+            }
+            const lines = report.hits.map(h => `- \`${h.file}:${h.line}\` — ${h.text}`).join('\n');
+            const body = `## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\nSkan znalezion **${report.hits.length}** wystąpień \`FUE\`. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.\n\n### Lista wystąpień:\n${lines || '(brak szczegółów)'}\n\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+      - name: Fail on FUE findings
+        if: steps.guard.outputs.exitcode != '0'
+        run: |
+          cat fue-report.json
+          exit 1
