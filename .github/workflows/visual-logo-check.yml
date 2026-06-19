@@ -17,6 +17,8 @@ on:
       - 'src/assets/graftgen-logo*'
       - 'src/assets/msc-logo*'
       - 'scripts/visual-logo-check.py'
+      - 'scripts/visual-diff.py'
+      - 'tests/visual-baselines/**'
       - '.github/workflows/visual-logo-check.yml'
       - 'package.json'
       - 'bun.lockb'
@@ -41,7 +43,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python deps
-        run: pip install playwright==1.48.0
+        run: pip install playwright==1.48.0 Pillow==10.4.0
 
       - name: Install Playwright Chromium
         run: python -m playwright install --with-deps chromium
@@ -65,10 +67,31 @@ jobs:
           echo "preview failed to start"; tail -n 200 preview.log; exit 1
 
       - name: Run visual logo check
+        id: logo_check
         env:
           BASE_URL: http://127.0.0.1:8080
           VISUAL_OUT: visual-report
+        # Continue on failure so the diff step still runs and the artifact
+        # uploads heatmaps/overlays for inspection on the PR.
+        continue-on-error: true
         run: python scripts/visual-logo-check.py
+
+      - name: Generate visual diff (heatmap + overlay)
+        if: always()
+        env:
+          VISUAL_OUT: visual-report
+          VISUAL_BASELINES: tests/visual-baselines
+          VISUAL_DIFF_THRESHOLD: '1.0'
+        # Exit 2 = no baselines yet (soft pass). Anything else propagates.
+        run: |
+          set +e
+          python scripts/visual-diff.py
+          code=$?
+          if [ "$code" = "2" ]; then
+            echo "::warning::No visual baselines committed yet. Seed them with: python scripts/visual-diff.py --update-baselines"
+            exit 0
+          fi
+          exit $code
 
       - name: Stop preview server
         if: always()
@@ -81,3 +104,9 @@ jobs:
         with:
           name: visual-logo-report
           path: visual-report
+
+      - name: Fail job if logo assertions failed
+        if: steps.logo_check.outcome == 'failure'
+        run: |
+          echo "Visual logo assertions failed — see visual-logo-report artifact (diff/index.html)."
+          exit 1

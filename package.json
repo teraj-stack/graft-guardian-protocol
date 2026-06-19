@@ -12,6 +12,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:visual": "python3 scripts/visual-logo-check.py",
+    "test:visual:diff": "python3 scripts/visual-diff.py",
+    "test:visual:update": "python3 scripts/visual-diff.py --update-baselines",
     "prepare": "husky"
   },
   "dependencies": {
