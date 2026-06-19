@@ -67,7 +67,7 @@ export function Timeline() {
       title: "Faza ostrego zapalenia — walka z niedokrwieniem i obrzękiem",
       bullets: [
         "PBM 650 + 830 nm, 20 min, bezpośrednio po zabiegu, dalej co 24 h",
-        "HBOT 1,5–2,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
+        "HBOT 1,5–3,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
         "Strefa dawcza zabezpieczona maścią barierową bez konserwantów",
         "Bezdotykowe spłukiwanie obszaru biorczego HOCI od 48 h",
         "Spanie w pozycji półsiedzącej (≥30°) przez 5 dni",
@@ -203,7 +203,7 @@ export function DayZeroToThree() {
         <Card title="Doba zero" badge="Bezpośrednio po zabiegu" badgeTone="red">
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex gap-2"><span className="text-accent">✓</span> PBM 650/830 nm, 4–6 J/cm², bezpośrednio po zabiegu</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–2,0 ATA w ciągu 6 h</li>
+            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–3,0 ATA w ciągu 6 h</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> Spanie w pozycji pół-siedzącej (30–45°)</li>
             <li className="flex gap-2"><span className="text-accent">✓</span> Lód na czoło (nie na strefę biorczą)</li>
           </ul>

@@ -48,7 +48,7 @@ export const MATERIALS: Material[] = [
   },
   {
     id: "m03",
-    title: "Protokół HBOT 1,5–2,0 ATA — pełna dokumentacja",
+    title: "Protokół HBOT 1,5–3,0 ATA — pełna dokumentacja",
     description:
       "Sesje 1–4, kwalifikacja, przeciwwskazania (odma, ucho środkowe, POChP), wyrównywanie ciśnienia, co zabrać do komory.",
     category: "HBOT",
@@ -98,7 +98,7 @@ export const MATERIALS: Material[] = [
   },
   {
     id: "m08",
-    title: "Reintrodukcja aktywności: sport, sauna, basen, słońce",
+    title: "Powrót do aktywności: sport, sauna, basen, słońce",
     description:
       "Tabela tydzień po tygodniu — kiedy można wrócić do siłowni, biegania, sauny IR, kąpieli w morzu, ekspozycji UV.",
     category: "Pielęgnacja",
@@ -140,7 +140,7 @@ export const MATERIALS: Material[] = [
     id: "m12",
     title: "Komora hiperbaryczna od środka — wideo z sesji",
     description:
-      "Pełen przebieg 90-minutowej sesji 2,0 ATA. Wyrównywanie uszu, oddychanie maską, rytm pracy operatora.",
+      "Pełen przebieg 90-minutowej sesji 3,0 ATA. Wyrównywanie uszu, oddychanie maską, rytm pracy operatora.",
     category: "HBOT",
     type: "Wideo",
     weeks: [1, 2],

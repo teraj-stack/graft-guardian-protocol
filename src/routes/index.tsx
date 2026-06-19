@@ -264,7 +264,7 @@ function Hero() {
             Pierwsze 14 dni decyduje o przeżywalności graftów. Zamiast soli
             fizjologicznej i pasywnego gojenia — zintegrowany plan oparty
             na transplantologicznych płynach ochronnych, fotobiomodulacji
-            650/830 nm, tlenoterapii hiperbarycznej 1,5–2,0 ATA oraz
+            650/830 nm, tlenoterapii hiperbarycznej 1,5–3,0 ATA oraz
             laserowo wspomaganym dostarczaniu leków (LADD).
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
@@ -289,7 +289,7 @@ function Hero() {
             </p>
             <dl className="mt-6 space-y-5">
               <Stat k="650 / 830 nm" v="długości fal PBM stosowane bezpośrednio po zabiegu" />
-              <Stat k="1,5–2,0 ATA" v="ciśnienie sesji HBOT w dobie 1. i 2." />
+              <Stat k="1,5–3,0 ATA" v="ciśnienie sesji HBOT w dobie 0. i 1." />
               <Stat k="4 °C" v="docelowa temperatura roztworu HypoThermosol + ATP-v" />
               <Stat k="48–72 h" v="okno krytycznego niedokrwienia graftu przed rewaskularyzacją" />
             </dl>
@@ -441,7 +441,7 @@ function HBOT() {
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
           title="Tlen dociera tam, gdzie krwinki czerwone jeszcze nie mogą dotrzeć."
-          lead="Pod ciśnieniem 1,5–2,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w surowicy krwi (prawo Henry'ego) dyfunduje do przeszczepionych cebulek zanim zostanie odtworzona ich sieć kapilarna."
+          lead="Pod ciśnieniem 1,5–3,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w surowicy krwi (prawo Henry'ego) dyfunduje do przeszczepionych cebulek zanim zostanie odtworzona ich sieć kapilarna."
         />
         <img
           src={graftgenLogo.url}
@@ -454,10 +454,10 @@ function HBOT() {
         />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Protokół sesji" badge="1,5–2,0 ATA">
+        <Card title="Protokół sesji" badge="1,5–3,0 ATA">
           <ul className="space-y-2 text-sm">
-            <li>• Sesja 1: doba 1 po zabiegu, 60–90 min, 1,5–2,0 ATA</li>
-            <li>• Sesja 2: doba 2 po zabiegu, 60–90 min</li>
+            <li>• Sesja 1: Doba "Zero" po zabiegu, 60–90 min, 1,5–3,0 ATA</li>
+            <li>• Sesja 2: doba 1 po zabiegu, 60–90 min</li>
             <li>• Opcjonalne sesje uzupełniające: doba 4 i 7</li>
             <li>• Kwalifikacja: brak czynnej infekcji ucha, brak nieleczonej odmy, brak ciężkiej POChP</li>
           </ul>
