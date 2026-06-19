@@ -305,7 +305,7 @@ function Stat({ k, v }: { k: string; v: string }) {
 function Why() {
   return (
     <Section id="dlaczego" eyebrow="01 — Dlaczego pierwsze 14 dni">
-      <SectionHeader title="Okno, w którym decyduje się los każdego graftu." />
+      <SectionHeader title="Okno, w którym decyduje się los każdego przeszczepionego włosa." />
       <div className="grid gap-8 md:grid-cols-3">
         <Para>
           Po ekstrakcji metodą DHI graft jest tkanką niedokrwioną. Od momentu
