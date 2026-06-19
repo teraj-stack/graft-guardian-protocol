@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -128,19 +128,56 @@ function VitalsPage() {
   const [dateTo, setDateTo] = useState("");
   const [exporting, setExporting] = useState(false);
   const [exportingPdf, setExportingPdf] = useState(false);
-  const [pdfOrientation, setPdfOrientation] = useState<"portrait" | "landscape">("landscape");
-  const [pdfMetadata, setPdfMetadata] = useState(true);
-  const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
-  const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
-  const [pdfMetrics, setPdfMetrics] = useState<Array<"CLS" | "LCP" | "INP">>(["CLS", "LCP", "INP"]);
-  const [pdfWindow, setPdfWindow] = useState<"all" | "d0-3" | "d4-14" | "m1+">("all");
-  const WINDOW_LABEL: Record<typeof pdfWindow, string> = {
+  // Persist PDF export settings for the same browser session.
+  const PDF_PREFS_KEY = "vitals.pdfExportPrefs.v1";
+  type WinKey = "all" | "d0-3" | "d4-14" | "m1+";
+  type PdfPrefs = {
+    orientation: "portrait" | "landscape";
+    metadata: boolean;
+    mode: "table" | "chart" | "both";
+    percentile: 50 | 75 | 90;
+    metrics: Array<"CLS" | "LCP" | "INP">;
+    window: WinKey;
+    compare: boolean;
+    compareWindows: WinKey[];
+    compareLayout: "overlay" | "side-by-side";
+    compareYScale: "shared" | "independent";
+  };
+  const PDF_DEFAULTS: PdfPrefs = {
+    orientation: "landscape",
+    metadata: true,
+    mode: "table",
+    percentile: 75,
+    metrics: ["CLS", "LCP", "INP"],
+    window: "all",
+    compare: false,
+    compareWindows: ["d0-3", "d4-14"],
+    compareLayout: "overlay",
+    compareYScale: "shared",
+  };
+  const loadPdfPrefs = (): PdfPrefs => {
+    if (typeof window === "undefined") return PDF_DEFAULTS;
+    try {
+      const raw = window.sessionStorage.getItem(PDF_PREFS_KEY);
+      if (!raw) return PDF_DEFAULTS;
+      return { ...PDF_DEFAULTS, ...(JSON.parse(raw) as Partial<PdfPrefs>) };
+    } catch {
+      return PDF_DEFAULTS;
+    }
+  };
+  const initialPdfPrefs = loadPdfPrefs();
+  const [pdfOrientation, setPdfOrientation] = useState<PdfPrefs["orientation"]>(initialPdfPrefs.orientation);
+  const [pdfMetadata, setPdfMetadata] = useState(initialPdfPrefs.metadata);
+  const [pdfMode, setPdfMode] = useState<PdfPrefs["mode"]>(initialPdfPrefs.mode);
+  const [pdfPercentile, setPdfPercentile] = useState<PdfPrefs["percentile"]>(initialPdfPrefs.percentile);
+  const [pdfMetrics, setPdfMetrics] = useState<PdfPrefs["metrics"]>(initialPdfPrefs.metrics);
+  const [pdfWindow, setPdfWindow] = useState<WinKey>(initialPdfPrefs.window);
+  const WINDOW_LABEL: Record<WinKey, string> = {
     "all": "całe okno",
     "d0-3": "D0–3 (ostatnie 4 dni)",
     "d4-14": "D4–14",
     "m1+": "M1+ (15+ dni)",
   };
-  type WinKey = "all" | "d0-3" | "d4-14" | "m1+";
   const filterByWindow = (rows: TrendRow[], w: WinKey): TrendRow[] => {
     if (w === "all") return rows;
     const n = rows.length;
@@ -152,10 +189,30 @@ function VitalsPage() {
     });
   };
   const filterWindow = (rows: TrendRow[]): TrendRow[] => filterByWindow(rows, pdfWindow);
-  const [pdfCompare, setPdfCompare] = useState(false);
-  const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(["d0-3", "d4-14"]);
-  const [pdfCompareLayout, setPdfCompareLayout] = useState<"overlay" | "side-by-side">("overlay");
-  const [pdfCompareYScale, setPdfCompareYScale] = useState<"shared" | "independent">("shared");
+  const [pdfCompare, setPdfCompare] = useState(initialPdfPrefs.compare);
+  const [pdfCompareWindows, setPdfCompareWindows] = useState<WinKey[]>(initialPdfPrefs.compareWindows);
+  const [pdfCompareLayout, setPdfCompareLayout] = useState<PdfPrefs["compareLayout"]>(initialPdfPrefs.compareLayout);
+  const [pdfCompareYScale, setPdfCompareYScale] = useState<PdfPrefs["compareYScale"]>(initialPdfPrefs.compareYScale);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const prefs: PdfPrefs = {
+        orientation: pdfOrientation,
+        metadata: pdfMetadata,
+        mode: pdfMode,
+        percentile: pdfPercentile,
+        metrics: pdfMetrics,
+        window: pdfWindow,
+        compare: pdfCompare,
+        compareWindows: pdfCompareWindows,
+        compareLayout: pdfCompareLayout,
+        compareYScale: pdfCompareYScale,
+      };
+      window.sessionStorage.setItem(PDF_PREFS_KEY, JSON.stringify(prefs));
+    } catch {
+      /* sessionStorage unavailable — ignore */
+    }
+  }, [pdfOrientation, pdfMetadata, pdfMode, pdfPercentile, pdfMetrics, pdfWindow, pdfCompare, pdfCompareWindows, pdfCompareLayout, pdfCompareYScale]);
   const toggleCompareWindow = (w: WinKey) =>
     setPdfCompareWindows((cur) => (cur.includes(w) ? cur.filter((x) => x !== w) : [...cur, w]));
   const WINDOW_COLORS: Record<WinKey, [number, number, number]> = {
