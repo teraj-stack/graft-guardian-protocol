@@ -85,16 +85,27 @@ export const Route = createFileRoute("/api/public/hooks/security-watch")({
         const fingerprint = createHash("sha256").update(fpInput).digest("hex");
 
         // 4. Load previous snapshot
-        const { data: prev } = await supabaseAdmin
-          .from("security_watch_snapshots" as never)
+        const prevRes = await (supabaseAdmin as unknown as {
+          from: (t: string) => {
+            select: (c: string) => {
+              order: (c: string, o: { ascending: boolean }) => {
+                limit: (n: number) => {
+                  maybeSingle: () => Promise<{
+                    data: { findings: Findings & { env_issues?: string[] }; fingerprint: string } | null;
+                  }>;
+                };
+              };
+            };
+          };
+        })
+          .from("security_watch_snapshots")
           .select("findings,fingerprint")
           .order("created_at", { ascending: false })
           .limit(1)
           .maybeSingle();
 
-        const prevFindings = (prev?.findings ?? null) as Findings & {
-          env_issues?: string[];
-        } | null;
+        const prev = prevRes.data;
+        const prevFindings = prev?.findings ?? null;
         const changed = !prev || prev.fingerprint !== fingerprint;
 
         // 5. Compute regressions (new items compared to previous)
