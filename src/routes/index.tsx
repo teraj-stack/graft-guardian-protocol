@@ -1499,6 +1499,14 @@ function Contact() {
                 </dd>
               </div>
               <div>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Telefon</dt>
+                <dd className="mt-1">
+                  <a href="tel:+48510432361" className="underline underline-offset-2">
+                    +48 510 432 361
+                  </a>
+                </dd>
+              </div>
+              <div>
                 <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Czas odpowiedzi</dt>
                 <dd className="mt-1 text-muted-foreground">do 2 dni roboczych</dd>
               </div>
