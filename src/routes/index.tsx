@@ -814,6 +814,18 @@ const PRICING_FAQ: { q: string; a: string }[] = [
     q: "Jakie są zasady anulowania sesji w pakiecie?",
     a: "Bezpłatne anulowanie lub zmiana terminu wymaga zgłoszenia min. 24 h przed sesją (w przypadku pakietów 10 i 20 sesji) lub min. 48 h (pakiet 5 sesji). Anulowanie w krótszym terminie: sesja rozliczana z pakietu jako wykorzystana. Nieobecność bez zgłoszenia (no-show): sesja odejmowana z pakietu automatycznie. W sytuacji choroby zakaźnej lub zaburzeń krzepnięcia potwierdzonych dokumentacją lekarską — sesja zawieszana bez utraty z pakietu.",
   },
+  {
+    q: "Czy spóźniona osoba może dołączyć do sesji w trakcie jej trwania?",
+    a: "Nie. Ze względu na protokół bezpieczeństwa i konieczność pełnej kwalifikacji przedsesyjnej, pacjent spóźniony nie może dołączyć do sesji już rozpoczętej. Jeśli spóźnienie mieści się w tolerancji 10 min, rozpoczynamy pełną sesję z opóźnieniem. W przypadku spóźnienia 11–20 min lekarz/koordynator decyduje o skróceniu czasu sesji lub przesunięciu terminu. Powyżej 20 min sesja jest traktowana jako nieodbyta (no-show).",
+  },
+  {
+    q: "Jak skraca się czas terapii w przypadku spóźnienia?",
+    a: "Przy spóźnieniu 11–20 min czas sesji skraca się proporcjonalnie do opóźnienia, z zachowaniem minimum bezpieczeństwa: HBOT min. 45 min, LADD min. 30 min, PBM min. 15 min. Skrócenie nie obejmuje konsultacji przedsesyjnej — ta jest realizowana w pełnym zakresie lub przesuwana na kolejną wizytę. Przy spóźnieniu do 10 min sesja realizowana jest w pełnym czasie.",
+  },
+  {
+    q: "Kiedy spóźnienie traktowane jest jako no-show?",
+    a: "No-show (nieobecność) rejestruje się automatycznie, gdy pacjent nie stawia się w gabinecie w ciągu 20 minut od umówionego terminu i nie zgłosił opóźnienia z wyprzedzeniem min. 30 min. Sesja w takim przypadku jest odejmowana z pakietu. Wyjątek stanowią sytuacje losowe potwierdzone dokumentacją (wypadek, nagła choroba) — wtedy sesja jest zawieszana bez utraty z pakietu.",
+  },
 ];
 
 interface PricingPack {
