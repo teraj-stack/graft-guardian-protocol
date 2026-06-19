@@ -70,14 +70,15 @@ function PrivacyPage() {
       <Section id="administrator" title="1. Administrator danych">
         <p>
           Współadministratorem danych osobowych pacjentów korzystających z serwisu jest{" "}
-          <strong>Bujok Medical</strong> — w pełnym zakresie operacyjnym (kwalifikacja
+          <strong>Bujok Medical Sp. z o.o.</strong> — w pełnym zakresie operacyjnym (kwalifikacja
           medyczna, prowadzenie protokołu pozabiegowego, kontakt z pacjentem).
         </p>
-        <p className="text-sm text-muted-foreground">
-          Pełne dane rejestrowe administratora (firma, adres, NIP) zostaną uzupełnione
-          po przekazaniu ich przez podmiot. Do czasu uzupełnienia w sprawach RODO
-          należy korzystać z kontaktu wskazanego w sekcji 2.
-        </p>
+        <ul className="text-sm text-muted-foreground list-none space-y-1 mt-3">
+          <li>KRS: 0000791172</li>
+          <li>NIP: 6423218241</li>
+          <li>REGON: 383695904</li>
+          <li>Adres: ul. Kard. Bolesława Kominka 44, 44-217 Rybnik</li>
+        </ul>
       </Section>
 
       <Section id="iod" title="2. Kontakt w sprawach RODO">
