@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      pricing_overrides: {
+        Row: {
+          code: string
+          hidden: boolean
+          restore_at: string | null
+        }
+        Insert: {
+          code: string
+          hidden?: boolean
+          restore_at?: string | null
+        }
+        Update: {
+          code?: string
+          hidden?: boolean
+          restore_at?: string | null
+        }
+        Relationships: []
+      }
       reminder_sends: {
         Row: {
           channel: string
