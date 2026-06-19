@@ -72,10 +72,10 @@ function CookiesPage() {
             />
             <CategoryCard
               title="Marketingowe"
-              purpose="Pomiar skuteczności kampanii edukacyjnych. Obecnie nieaktywne — nie ustawiamy żadnych cookies marketingowych."
-              examples="Brak aktywnych dostawców."
-              retention="Nie dotyczy."
-              provider="Brak."
+              purpose="Pomiar skuteczności kampanii edukacyjnych. Ładowane wyłącznie po wyrażeniu zgody; po jej wycofaniu skrypty są usuwane, a powiązane cookies czyszczone."
+              examples="Meta Pixel (fbevents.js, cookies _fbp, _fbc) — aktywny tylko gdy skonfigurowany przez administratora."
+              retention="_fbp: 90 dni, _fbc: 90 dni. Usuwane natychmiast po wycofaniu zgody."
+              provider="Meta Platforms Ireland Ltd. (transfer do USA na podstawie SCC + DPF)."
             />
           </div>
         </section>
