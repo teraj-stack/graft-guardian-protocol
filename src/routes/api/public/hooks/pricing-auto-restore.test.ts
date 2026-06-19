@@ -3,14 +3,25 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 const updateCalls: Array<{ values: unknown; lteCol: string; lteVal: string }> =
   [];
 let updateError: { message: string } | null = null;
+type Row = { code: string; hidden: boolean; restore_at: string | null };
+let simulatedRows: Row[] | null = null;
+const tablesTouched: string[] = [];
 
 vi.mock("@/integrations/supabase/client.server", () => {
   return {
     supabaseAdmin: {
-      from: (_table: string) => ({
-        update: (values: unknown) => ({
+      from: (table: string) => ({
+        update: (values: Partial<Row>) => ({
           lte: (col: string, val: string) => {
+            tablesTouched.push(table);
             updateCalls.push({ values, lteCol: col, lteVal: val });
+            if (simulatedRows) {
+              for (const row of simulatedRows) {
+                if (row.restore_at !== null && row.restore_at <= val) {
+                  Object.assign(row, values);
+                }
+              }
+            }
             return Promise.resolve({ error: updateError });
           },
         }),
@@ -18,6 +29,7 @@ vi.mock("@/integrations/supabase/client.server", () => {
     },
   };
 });
+
 
 import { Route } from "./pricing-auto-restore";
 
