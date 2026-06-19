@@ -849,6 +849,18 @@ const PRICING_FAQ: { q: string; a: string }[] = [
     q: "Jakie są zasady zmiany terminu wizyty w pakietach 5, 10 i 20 sesji oraz ile czasu z wyprzedzeniem mogę przesunąć sesję?",
     a: "Zmiana terminu jest bezpłatna i nie wpływa na ważność sesji, jeśli zgłoszona z wyprzedzeniem: pakiet 5 sesji — min. 48 h, pakiety 10 i 20 sesji — min. 24 h przed planowaną wizytą. Sesję można przesunąć na najbliższy wolny termin w ciągu 12 miesięcy od daty zakupu pakietu. Zgłoszenia przyjmujemy wyłącznie przez rejestrację kliniczną (telefon, e-mail lub panel pacjenta). Przy braku zgłoszenia w wymaganym czasie sesja jest rozliczana jako wykorzystana. W sytuacjach nagłych (wypadek, nagła choroba) potwierdzonych dokumentacją lekarską — zmiana jest możliwa bez utraty sesji niezależnie od wyprzedzenia.",
   },
+  {
+    q: "LADD: PRP + minoksydyl — zimna plazma: kto kwalifikuje się do zabiegu?",
+    a: "Kwalifikacja obejmuje konsultację lekarską z oceną fototypu skóry (Fitzpatrick I–IV preferowane), badanie trichoskopowe oraz wywiad dotyczący alergii na minoksydyl, zaburzeń krzepnięcia i aktywnych infekcji skóry głowy. Zabieg jest przeznaczony dla pacjentów po przeszczepie włosów metodą DHI w okresie 4–12 tygodni od zabiegu, a także dla osób z łysieniem androgenowym jako terapia wspomagająca. Wymagana jest stabilizacja ciśnienia tętniczego i brak stosowania fotouczulających leków (tetracykliny, retinoidy) w ciągu ostatnich 4 tygodni.",
+  },
+  {
+    q: "LADD: PRP + minoksydyl — zimna plazma: jakie są przeciwwskazania?",
+    a: "Bezwzględne przeciwwskazania: aktywna infekcja bakteryjna, wirusowa lub grzybicza skóry głowy, ciąża i karmienie piersią, nowotwory skóry (łagodne i złośliwe) w obrębie pola zabiegowego, zaburzenia krzepnięcia (hemofilia, trombocytopenia < 50 000/µl), stosowanie izotretynoiny w ciągu ostatnich 6 miesięcy. Względne: nadwrażliwość na minoksydyl (test łokciowy 48 h przed zabiegiem), nieuregulowana nadczynność tarczycy, aktywna autoimmunologiczna choroba skóry (np. łuszczyca, toczeń). Lekarz podejmuje decyzję o kwalifikacji indywidualnie.",
+  },
+  {
+    q: "LADD: PRP + minoksydyl — zimna plazma: jak przygotować się przed wizytą?",
+    a: "Przed zabiegiem: umyj głowę wieczorem poprzedniego dnia delikatnym szamponem bez silikonów i SLS; nie stosuj odżywek, serum, lakierów ani produktów stylizacyjnych. W dniu zabiegu przyjdź na czczo lub z lekką przekąską 1,5–2 h przed sesją. Zaprzestań stosowania retinoidów, kwasów AHA/BHA, minoksydylu topowego i doustnego przeciwbólowych (poza paracetamolem) na 72 h przed zabiegiem. Zabierz aktualne wyniki morfologii (trombocyty) i współczynnik INR jeśli przyjmujesz leki przeciwzakrzepowe. Nie opalaj skóry głowy przez 14 dni przed zabiegiem (niebezpieczeństwo przebarwień postzapalnych).",
+  },
 ];
 
 interface PricingPack {
