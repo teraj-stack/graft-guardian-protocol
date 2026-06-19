@@ -89,7 +89,7 @@ jobs:
             const runLink = `\n\n🔗 [Przejdź do przebiegu workflow #${context.runId} — logi i artefakty](${runUrl})`;
 
             const marker = '<!-- fue-terminology-check-comment -->';
-            const body = `${marker}\n## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}${runLink}\n\n_Ostatnia aktualizacja: ${new Date().toISOString()} (run #${context.runId})._\n\n### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+            const stateRe = /<!-- fue-state: (.+?) -->/;
 
             const { data: comments } = await github.rest.issues.listComments({
               issue_number: context.issue.number,
@@ -98,6 +98,51 @@ jobs:
               per_page: 100,
             });
             const existing = comments.find(c => c.body && c.body.includes(marker));
+
+            let prev = null;
+            if (existing) {
+              const m = existing.body.match(stateRe);
+              if (m) { try { prev = JSON.parse(Buffer.from(m[1], 'base64').toString('utf8')); } catch {} }
+            }
+
+            const currentPerFile = Object.fromEntries(files.map(f => [f, byFile[f].length]));
+            const fmtDelta = (cur, old) => {
+              const d = cur - (old ?? 0);
+              if (d > 0) return `🔺 +${d}`;
+              if (d < 0) return `🔻 ${d}`;
+              return `➖ 0`;
+            };
+
+            let trendSection;
+            if (!prev) {
+              trendSection = `### 📈 Trend wykryć\n\n_Brak poprzedniego przebiegu do porównania — to pierwszy raport na tym PR._\n\n`;
+            } else {
+              const hitsDelta = fmtDelta(totalHits, prev.totalHits);
+              const filesDelta = fmtDelta(totalFiles, prev.totalFiles);
+              const prevFiles = prev.perFile || {};
+              const allFiles = Array.from(new Set([...Object.keys(prevFiles), ...Object.keys(currentPerFile)])).sort();
+              const rows = allFiles.map(f => {
+                const cur = currentPerFile[f] ?? 0;
+                const old = prevFiles[f] ?? 0;
+                let status = 'bez zmian';
+                if (old === 0 && cur > 0) status = '🆕 nowy';
+                else if (cur === 0 && old > 0) status = '✅ usunięty';
+                else if (cur !== old) status = 'zmiana';
+                return `| ${f} | ${old} | ${cur} | ${fmtDelta(cur, old)} | ${status} |`;
+              }).join('\n');
+              trendSection = `### 📈 Trend wykryć (vs run #${prev.runId})\n\n- **Łącznie wykryć:** ${prev.totalHits} → ${totalHits} (${hitsDelta})\n- **Plików z wykryciami:** ${prev.totalFiles} → ${totalFiles} (${filesDelta})\n\n| Plik | Poprzednio | Teraz | Δ | Status |\n|------|-----------:|------:|---|--------|\n${rows}\n\n`;
+            }
+
+            const state = Buffer.from(JSON.stringify({
+              runId: context.runId,
+              totalHits,
+              totalFiles,
+              perFile: currentPerFile,
+            })).toString('base64');
+            const stateBlock = `<!-- fue-state: ${state} -->`;
+
+            const body = `${marker}\n${stateBlock}\n## 🔍 FUE Terminology Check — wykryto niedozwolone wystąpienia\n\n**Podsumowanie:** znaleziono **${totalHits}** ${totalHits === 1 ? 'wystąpienie' : 'wystąpień'} \`FUE\` w **${totalFiles}** ${totalFiles === 1 ? 'pliku' : 'plikach'}. Po migracji na DHI wszystkie odniesienia powinny używać nowej terminologii.${artifactLink}${runLink}\n\n_Ostatnia aktualizacja: ${new Date().toISOString()} (run #${context.runId})._\n\n${trendSection}### Liczba wykryć per plik\n\n| Plik | Wykrycia |\n|------|----------|\n${perFileSummary}\n\n### Szczegóły per plik:\n\n${detailsBlocks}\n> Aby zignorować plik, dopisz go do \`ALLOWLIST\` w \`scripts/check-no-fue.mjs\`.`;
+
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
