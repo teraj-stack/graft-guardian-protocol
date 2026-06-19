@@ -753,6 +753,25 @@ const PRICING: PricingItem[] = [
     note: "Uśrednienie najwyższych cen PRP premium oraz zabiegów laser-assisted drug delivery w klinikach trychologicznych Warszawy i Gdańska.",
   },
   {
+    code: "LADD-CP",
+    name: "LADD: PRP + minoksydyl — zimna plazma",
+    params: "CAP / zimna plazma · PRP (Magellan/Arthrex) · minoksydyl topowo",
+    single: { price: "2 200 zł", label: "Sesja pojedyncza" },
+    packs: [
+      { sessions: 5, price: "10 450 zł", unitPrice: "2 090 zł", saving: "5%" },
+      { sessions: 10, price: "19 800 zł", unitPrice: "1 980 zł", saving: "10%" },
+      { sessions: 20, price: "37 400 zł", unitPrice: "1 870 zł", saving: "15%" },
+    ],
+    scope: [
+      "Konsultacja trychologiczna i ocena tolerancji skóry na zimną plazmę.",
+      "Przygotowanie skóry głowy: oczyszczenie, dezynfekcja, bez znieczulenia miejscowego.",
+      "Aplikacja zimnej plazmy atmosferycznej (CAP): 10–15 min, głębokość ~50–100 µm.",
+      "Aplikacja osocza bogatopłytkowego PRP (8–10 ml, 3–5x stężenie płytek) z minoksydylem.",
+      "Instruktaż domowy: pielęgnacja 48 h po zabiegu, harmonogram następnych sesji.",
+    ],
+    note: "Uśrednienie najwyższych cen zabiegów z zimną plazmą (CAP) w połączeniu z PRP i minoksydylem w klinikach premium Warszawy i Gdańska.",
+  },
+  {
     code: "PBM",
     name: "Fototerapia (PBM / LLLT)",
     params: "630–680 nm · 5 J/cm² · 20–30 min",
@@ -863,7 +882,7 @@ function Pricing() {
           </>
         }
       />
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {PRICING.map((p) => (
           <article
             key={p.code}
