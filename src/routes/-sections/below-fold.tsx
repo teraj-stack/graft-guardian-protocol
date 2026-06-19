@@ -841,6 +841,155 @@ export function Pricing() {
 
 /* ---------- CTA ---------- */
 
+/* ---------- E-book "Patient Journey" lead magnet ---------- */
+
+type EbookStatus =
+  | { kind: "idle" }
+  | { kind: "submitting" }
+  | { kind: "success"; accessUrl: string }
+  | { kind: "error"; message: string };
+
+export function EbookLeadMagnet() {
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState(""); // honeypot
+  const [status, setStatus] = useState<EbookStatus>({ kind: "idle" });
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!consent) {
+      setStatus({ kind: "error", message: "Zaznacz zgodę, aby otrzymać e-book." });
+      return;
+    }
+    setStatus({ kind: "submitting" });
+    try {
+      const res = await fetch("/api/public/ebook-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, consent, website }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.accessUrl) {
+        throw new Error(data?.error ?? "request_failed");
+      }
+      setStatus({ kind: "success", accessUrl: data.accessUrl });
+    } catch (err) {
+      setStatus({
+        kind: "error",
+        message:
+          (err as Error).message === "validation_failed"
+            ? "Sprawdź poprawność adresu e-mail."
+            : "Nie udało się wysłać formularza. Spróbuj ponownie.",
+      });
+    }
+  }
+
+  return (
+    <Section id="ebook" eyebrow="08 — Patient Journey">
+      <div className="grid gap-12 md:grid-cols-12 md:items-start">
+        <div className="md:col-span-7">
+          <SectionHeader
+            title="Pobierz e-book „Patient Journey" — pierwsze 14 dni po zabiegu DHI."
+            lead="Konkretny protokół dzień-po-dniu: HBOT, PBM, mikrobiom, mycie, sen, dieta, czego unikać. Bez lania wody — same instrukcje i twarde parametry."
+          />
+          <ul className="mt-2 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
+            <li>· 8 rozdziałów (Dzień 0 → Dzień 14)</li>
+            <li>· Parametry kliniczne (nm, J/cm², ATA)</li>
+            <li>· Checklista: czego unikać 14 dni</li>
+            <li>· Wersja do druku / PDF</li>
+          </ul>
+        </div>
+
+        <div className="md:col-span-5">
+          {status.kind === "success" ? (
+            <div className="rounded-sm border border-accent/40 bg-accent/5 p-6">
+              <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                Dostęp przyznany
+              </p>
+              <h3 className="mt-2 font-display text-2xl">
+                E-book jest gotowy.
+              </h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Twój prywatny link dostępu — zachowaj go, aby wrócić do treści.
+              </p>
+              <a
+                href={status.accessUrl}
+                className="mt-5 inline-flex w-full items-center justify-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background hover:bg-foreground/90"
+              >
+                Otwórz e-book →
+              </a>
+            </div>
+          ) : (
+            <form
+              onSubmit={onSubmit}
+              className="rounded-sm border border-border bg-card p-6"
+            >
+              <label className="block">
+                <span className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">
+                  Adres e-mail
+                </span>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="ty@przyklad.pl"
+                  className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm"
+                />
+              </label>
+
+              {/* honeypot */}
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className="hidden"
+                aria-hidden="true"
+              />
+
+              <label className="mt-4 flex items-start gap-2 text-xs text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-0.5"
+                  required
+                />
+                <span>
+                  Wyrażam zgodę na przetwarzanie adresu e-mail w celu
+                  udostępnienia e-booka „Patient Journey" (
+                  <Link to="/prywatnosc" className="underline">
+                    polityka prywatności
+                  </Link>
+                  ).
+                </span>
+              </label>
+
+              {status.kind === "error" && (
+                <p className="mt-3 rounded-sm border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">
+                  {status.message}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={status.kind === "submitting"}
+                className="mt-5 inline-flex w-full items-center justify-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90 disabled:opacity-50"
+              >
+                {status.kind === "submitting"
+                  ? "Wysyłanie…"
+                  : "Pobierz e-book →"}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
 export function CTA() {
   return (
     <section
