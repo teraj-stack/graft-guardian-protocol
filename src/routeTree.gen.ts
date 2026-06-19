@@ -20,6 +20,7 @@ import { Route as ApiPublicContactRouteImport } from './routes/api/public/contac
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
+import { Route as ApiPublicHooksPricingAutoRestoreRouteImport } from './routes/api/public/hooks/pricing-auto-restore'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -79,6 +80,12 @@ const ApiPublicRemindersDispatchRoute =
     path: '/api/public/reminders/dispatch',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksPricingAutoRestoreRoute =
+  ApiPublicHooksPricingAutoRestoreRouteImport.update({
+    id: '/api/public/hooks/pricing-auto-restore',
+    path: '/api/public/hooks/pricing-auto-restore',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -102,6 +110,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -116,6 +125,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
+  '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
+    | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
+    | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -157,6 +169,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
+    | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -170,6 +183,7 @@ export interface RootRouteChildren {
   PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
+  ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
@@ -254,6 +268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/pricing-auto-restore': {
+      id: '/api/public/hooks/pricing-auto-restore'
+      path: '/api/public/hooks/pricing-auto-restore'
+      fullPath: '/api/public/hooks/pricing-auto-restore'
+      preLoaderRoute: typeof ApiPublicHooksPricingAutoRestoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -277,6 +298,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
+  ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,

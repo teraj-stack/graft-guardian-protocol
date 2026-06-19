@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { getPricingOverrides } from "@/lib/pricing.functions";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
@@ -942,7 +944,20 @@ interface PricingItem {
 }
 
 
+const pricingOverridesQuery = () => ({
+  queryKey: ["pricing-overrides"],
+  queryFn: () => getPricingOverrides(),
+});
+
 function Pricing() {
+  const { data: overrides } = useQuery(pricingOverridesQuery());
+  const hiddenMap = new Map((overrides ?? []).map((o) => [o.code, o.hidden]));
+
+  const visiblePricing = PRICING.map((p) => ({
+    ...p,
+    hidden: hiddenMap.has(p.code) ? hiddenMap.get(p.code) : p.hidden,
+  })).filter((p) => !p.hidden);
+
   return (
     <Section id="cennik" eyebrow="10 — Cennik">
       <SectionHeader
@@ -957,7 +972,7 @@ function Pricing() {
         }
       />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {PRICING.filter((p) => !p.hidden).map((p) => (
+        {visiblePricing.map((p) => (
           <article
             key={p.code}
             className="flex flex-col rounded-sm border border-border bg-card shadow-[var(--shadow-editorial)]"
