@@ -884,3 +884,229 @@ function Mech({ children }: { children: React.ReactNode }) {
     </p>
   );
 }
+
+/* ---------- Contact ---------- */
+
+type ContactStatus =
+  | { kind: "idle" }
+  | { kind: "submitting" }
+  | { kind: "success"; receivedAt: string }
+  | { kind: "error"; message: string };
+
+function Contact() {
+  const [status, setStatus] = useState<ContactStatus>({ kind: "idle" });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFieldErrors({});
+    setStatus({ kind: "submitting" });
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      message: String(fd.get("message") ?? ""),
+      consent: fd.get("consent") === "on",
+      website: String(fd.get("website") ?? ""),
+    };
+    try {
+      const res = await fetch("/api/public/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (data?.error === "validation_failed" && data?.details?.fieldErrors) {
+          const errs: Record<string, string> = {};
+          for (const [k, v] of Object.entries(data.details.fieldErrors)) {
+            if (Array.isArray(v) && v[0]) errs[k] = String(v[0]);
+          }
+          setFieldErrors(errs);
+          setStatus({ kind: "error", message: "Sprawdź zaznaczone pola." });
+          return;
+        }
+        setStatus({ kind: "error", message: "Nie udało się wysłać wiadomości. Spróbuj ponownie." });
+        return;
+      }
+      form.reset();
+      setStatus({ kind: "success", receivedAt: data.receivedAt ?? new Date().toISOString() });
+    } catch {
+      setStatus({ kind: "error", message: "Błąd połączenia. Spróbuj ponownie." });
+    }
+  }
+
+  return (
+    <Section id="kontakt" eyebrow="11 — Kontakt">
+      <SectionHeader
+        title="Napisz do nas"
+        lead={
+          <>
+            Masz pytanie o protokół, kwalifikację do HBOT lub LADD, albo chcesz
+            zaprosić nas do współpracy? Wyślij wiadomość — odpowiadamy w ciągu
+            2 dni roboczych.
+          </>
+        }
+      />
+      <div className="grid gap-10 md:grid-cols-12">
+        <div className="md:col-span-7">
+          {status.kind === "success" ? (
+            <div
+              role="status"
+              aria-live="polite"
+              className="rounded-sm border border-accent/40 bg-secondary/40 p-6 md:p-8"
+            >
+              <p className="text-xs uppercase tracking-[0.25em] text-accent">
+                Wiadomość wysłana
+              </p>
+              <h3 className="mt-3 font-display text-2xl md:text-3xl">
+                Dziękujemy — odezwiemy się.
+              </h3>
+              <p className="mt-3 text-sm text-muted-foreground md:text-base">
+                Potwierdzenie przyjęcia: {new Date(status.receivedAt).toLocaleString("pl-PL")}.
+                Sprawdź skrzynkę e-mail (również SPAM) w ciągu 2 dni roboczych.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStatus({ kind: "idle" })}
+                className="mt-6 inline-flex items-center rounded-sm border border-border px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground transition hover:bg-secondary"
+              >
+                Wyślij kolejną wiadomość
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={onSubmit} noValidate className="space-y-5">
+              {/* Honeypot */}
+              <div className="hidden" aria-hidden="true">
+                <label>
+                  Strona WWW
+                  <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+                </label>
+              </div>
+
+              <Field label="Imię i nazwisko" name="name" error={fieldErrors.name}>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  required
+                  maxLength={100}
+                  autoComplete="name"
+                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-accent"
+                />
+              </Field>
+
+              <Field label="E-mail" name="email" error={fieldErrors.email}>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={255}
+                  autoComplete="email"
+                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-accent"
+                />
+              </Field>
+
+              <Field label="Wiadomość" name="message" error={fieldErrors.message}>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  required
+                  minLength={10}
+                  maxLength={2000}
+                  rows={6}
+                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-accent"
+                />
+              </Field>
+
+              <label className="flex items-start gap-3 text-sm text-muted-foreground">
+                <input
+                  type="checkbox"
+                  name="consent"
+                  required
+                  className="mt-1 h-4 w-4 rounded-sm border-border accent-[color:var(--accent)]"
+                />
+                <span>
+                  Wyrażam zgodę na przetwarzanie moich danych w celu odpowiedzi na
+                  zapytanie zgodnie z{" "}
+                  <Link to="/prywatnosc" className="underline underline-offset-2 hover:text-foreground">
+                    Polityką prywatności
+                  </Link>
+                  .
+                </span>
+              </label>
+              {fieldErrors.consent && (
+                <p className="text-xs text-destructive">{fieldErrors.consent}</p>
+              )}
+
+              {status.kind === "error" && (
+                <p role="alert" className="text-sm text-destructive">
+                  {status.message}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={status.kind === "submitting"}
+                className="inline-flex items-center rounded-sm bg-accent px-6 py-3 text-sm font-medium uppercase tracking-[0.2em] text-accent-foreground transition hover:opacity-90 disabled:opacity-60"
+              >
+                {status.kind === "submitting" ? "Wysyłanie…" : "Wyślij wiadomość"}
+              </button>
+            </form>
+          )}
+        </div>
+
+        <aside className="md:col-span-5">
+          <div className="rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8">
+            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+              Kontakt bezpośredni
+            </p>
+            <p className="mt-4 font-display text-2xl">Bujok Medical Sp. z o.o.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              ul. Kard. Bolesława Kominka 44<br />
+              44-217 Rybnik
+            </p>
+            <dl className="mt-6 space-y-3 text-sm">
+              <div>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">E-mail</dt>
+                <dd className="mt-1">
+                  <a href="mailto:mila.skrzynska@gmail.com" className="underline underline-offset-2">
+                    mila.skrzynska@gmail.com
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Czas odpowiedzi</dt>
+                <dd className="mt-1 text-muted-foreground">do 2 dni roboczych</dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </Section>
+  );
+}
+
+function Field({
+  label,
+  name,
+  error,
+  children,
+}: {
+  label: string;
+  name: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label htmlFor={`contact-${name}`} className="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        {label}
+      </label>
+      {children}
+      {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+    </div>
+  );
+}
