@@ -585,6 +585,32 @@ function VitalsPage() {
           <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
             <input
               type="checkbox"
+              checked={pdfCompare}
+              onChange={(e) => setPdfCompare(e.target.checked)}
+              className="rounded border bg-background"
+            />
+            Porównanie okien
+          </label>
+          {pdfCompare && (
+            <div>
+              <label className="block text-xs text-muted-foreground mb-1">Okna do porównania</label>
+              <div className="h-9 inline-flex items-center gap-3 rounded-md border bg-background px-3 text-sm">
+                {(["d0-3", "d4-14", "m1+", "all"] as const).map((w) => (
+                  <label key={w} className="flex items-center gap-1.5 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={pdfCompareWindows.includes(w)}
+                      onChange={() => toggleCompareWindow(w)}
+                    />
+                    {w === "all" ? "Całe" : w.toUpperCase()}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+          <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input
+              type="checkbox"
               checked={pdfMetadata}
               onChange={(e) => setPdfMetadata(e.target.checked)}
               className="rounded border bg-background"
