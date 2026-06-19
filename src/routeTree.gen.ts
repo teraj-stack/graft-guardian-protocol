@@ -25,6 +25,7 @@ import { Route as ApiPublicContactRouteImport } from './routes/api/public/contac
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
+import { Route as ApiPublicHooksSecurityWatchRouteImport } from './routes/api/public/hooks/security-watch'
 import { Route as ApiPublicHooksPricingAutoRestoreRouteImport } from './routes/api/public/hooks/pricing-auto-restore'
 
 const SklepRoute = SklepRouteImport.update({
@@ -109,6 +110,12 @@ const ApiPublicRemindersDispatchRoute =
     path: '/api/public/reminders/dispatch',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksSecurityWatchRoute =
+  ApiPublicHooksSecurityWatchRouteImport.update({
+    id: '/api/public/hooks/security-watch',
+    path: '/api/public/hooks/security-watch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksPricingAutoRestoreRoute =
   ApiPublicHooksPricingAutoRestoreRouteImport.update({
     id: '/api/public/hooks/pricing-auto-restore',
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
+  '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -148,6 +156,7 @@ export interface FileRoutesByTo {
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
+  '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -168,6 +177,7 @@ export interface FileRoutesById {
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
+  '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
+    | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
+    | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -225,6 +237,7 @@ export interface FileRouteTypes {
     | '/przypomnienia/wypisz'
     | '/api/public/contact'
     | '/api/public/hooks/pricing-auto-restore'
+    | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -243,6 +256,7 @@ export interface RootRouteChildren {
   ProductHandleRoute: typeof ProductHandleRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
+  ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
@@ -362,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/security-watch': {
+      id: '/api/public/hooks/security-watch'
+      path: '/api/public/hooks/security-watch'
+      fullPath: '/api/public/hooks/security-watch'
+      preLoaderRoute: typeof ApiPublicHooksSecurityWatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/pricing-auto-restore': {
       id: '/api/public/hooks/pricing-auto-restore'
       path: '/api/public/hooks/pricing-auto-restore'
@@ -408,6 +429,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductHandleRoute: ProductHandleRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
+  ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
