@@ -160,11 +160,19 @@ function TeamReportStatus() {
           </div>
           <button
             type="button"
-            onClick={handleExport}
-            disabled={exporting}
+            onClick={() => handleExport("csv")}
+            disabled={exporting !== null}
             className="h-[38px] px-4 rounded-md bg-[#c9a96a] text-[#0c121b] text-sm font-medium hover:bg-[#d8bb7c] disabled:opacity-50"
           >
-            {exporting ? "Eksport…" : "Eksportuj CSV"}
+            {exporting === "csv" ? "Eksport…" : "Eksportuj CSV"}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleExport("xlsx")}
+            disabled={exporting !== null}
+            className="h-[38px] px-4 rounded-md border border-[#c9a96a] text-[#c9a96a] text-sm font-medium hover:bg-[#c9a96a]/10 disabled:opacity-50"
+          >
+            {exporting === "xlsx" ? "Eksport…" : "Eksportuj XLSX"}
           </button>
         </div>
 
