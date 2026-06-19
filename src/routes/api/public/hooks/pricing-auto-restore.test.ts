@@ -15,7 +15,9 @@ vi.mock("@/integrations/supabase/client.server", () => {
           lte: (col: string, val: string) => {
             tablesTouched.push(table);
             updateCalls.push({ values, lteCol: col, lteVal: val });
-            if (simulatedRows) {
+            // Simulate Postgres atomicity: if the statement errors, NO row
+            // mutations are committed. Only apply mutations on success.
+            if (simulatedRows && !updateError) {
               const rows: Row[] = simulatedRows;
               for (const row of rows) {
                 if (row.restore_at !== null && row.restore_at <= val) {
