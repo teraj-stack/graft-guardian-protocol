@@ -5,6 +5,8 @@ import { useCartStore } from "@/stores/cartStore";
 import { formatMoney } from "@/lib/utils";
 import { Clock, Package, CheckCircle, Calculator, Info } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
+import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
 import {
   STOREFRONT_PRODUCT_BY_HANDLE_QUERY,
   storefrontApiRequest,
