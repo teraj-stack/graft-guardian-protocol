@@ -495,7 +495,7 @@ function LADD() {
           />
           <div className="mt-auto flex flex-wrap items-end gap-3 pt-8">
             {[
-              { src: mscLogo.url, alt: "MySkinCode" },
+              { src: mscLogo.url, alt: "MSC" },
               { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions" },
               { src: mabelLogo.url, alt: "Mabel Hair Clinic" },
             ].map((logo) => (
