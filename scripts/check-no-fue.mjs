@@ -76,12 +76,12 @@ const asJson = process.argv.includes("--json");
 if (asJson) {
   process.stdout.write(JSON.stringify({ ok: hits.length === 0, hits }, null, 2) + "\n");
 } else if (hits.length === 0) {
-  console.log("✓ Brak wystąpień „FUE" — terminologia DHI spójna.");
+  console.log("OK: brak wystapien 'FUE' - terminologia DHI spojna.");
 } else {
-  console.error(`✗ Znaleziono ${hits.length} wystąpień „FUE":\n`);
+  console.error(`BLAD: znaleziono ${hits.length} wystapien 'FUE':\n`);
   for (const h of hits) {
     console.error(`  ${h.file}:${h.line}  ${h.text}`);
   }
-  console.error("\nPodmień na „DHI" lub dopisz plik do ALLOWLIST w scripts/check-no-fue.mjs.");
+  console.error("\nPodmien na 'DHI' lub dopisz plik do ALLOWLIST w scripts/check-no-fue.mjs.");
 }
 process.exit(hits.length === 0 ? 0 : 1);
