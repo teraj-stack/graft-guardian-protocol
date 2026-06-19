@@ -95,7 +95,7 @@ function Shop() {
           )}
         </div>
 
-        <PricingSummary />
+        <PricingSummary products={data ?? []} />
         <PricingFaq />
       </section>
     </div>
