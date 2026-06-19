@@ -135,6 +135,6 @@ export const PRICING_FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Co oznacza przekreślona cena w kolumnie 'Katalog'?",
-    a: "To cena referencyjna ustalona w systemie Shopify jako „compareAtPrice" — odpowiada standardowej stawce za pojedynczą sesję lub pakiet w rozliczeniu „pay-as-you-go", bez rabatu za zobowiązanie do większej liczby zabiegów. Cena obok („Pakiet") to rzeczywista kwota do zapłaty po rabacie. Jeśli w danym wariancie nie ma ceny katalogowej, wyświetlamy myślnik („—") — oznacza to, że pakiet jest oferowany wyłącznie w cenie promocyjnej lub jest to produkt nowy, dla którego jeszcze nie ustaliliśmy referencyjnej stawki.",
+    a: "To cena referencyjna ustalona w systemie Shopify jako 'compareAtPrice' — odpowiada standardowej stawce za pojedynczą sesję lub pakiet w rozliczeniu 'pay-as-you-go', bez rabatu za zobowiązanie do większej liczby zabiegów. Cena obok ('Pakiet') to rzeczywista kwota do zapłaty po rabacie. Jeśli w danym wariancie nie ma ceny katalogowej, wyświetlamy myślnik ('—') — oznacza to, że pakiet jest oferowany wyłącznie w cenie promocyjnej lub jest to produkt nowy, dla którego jeszcze nie ustaliliśmy referencyjnej stawki.",
   },
 ];
