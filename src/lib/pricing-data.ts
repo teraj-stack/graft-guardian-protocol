@@ -127,7 +127,7 @@ export const PRICING_FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Skąd bierze się rabat obok ceny i jak jest liczony?",
-    a: "Rabat wyliczamy automatycznie na podstawie pola „cena katalogowa" (compareAtPrice) z naszego sklepu Shopify. Wzór jest prosty: (cena katalogowa − cena pakietu) ÷ cena katalogowa × 100. Przykład: jeśli katalogowa cena 5 sesji HBOT to 2 100 zł, a pakiet kosztuje 1 995 zł, rabat wynosi (2 100 − 1 995) ÷ 2 100 × 100 = 5%. To wartość procentowa, nie stała kwota — dlatego przy wyższych pakietach rabat wydaje się większy, bo różnica względem katalogu rośnie bezwzględnie.",
+    a: "Rabat wyliczamy automatycznie na podstawie pola 'cena katalogowa' (compareAtPrice) z naszego sklepu Shopify. Wzór jest prosty: (cena katalogowa − cena pakietu) ÷ cena katalogowa × 100. Przykład: jeśli katalogowa cena 5 sesji HBOT to 2 100 zł, a pakiet kosztuje 1 995 zł, rabat wynosi (2 100 − 1 995) ÷ 2 100 × 100 = 5%. To wartość procentowa, nie stała kwota — dlatego przy wyższych pakietach rabat wydaje się większy, bo różnica względem katalogu rośnie bezwzględnie.",
   },
   {
     q: "Dlaczego rabat procentowy różni się między wariantami (np. 5 vs 20 sesji)?",
