@@ -70,22 +70,35 @@ function TeamReportStatus() {
     };
   }, [data]);
 
-  async function handleExport() {
-    setExporting(true);
+  async function handleExport(format: "csv" | "xlsx") {
+    setExporting(format);
     try {
-      const res = await exportCsv({ data: filters });
-      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = res.filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      if (format === "csv") {
+        const res = await exportCsv({ data: filters });
+        const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
+        triggerDownload(blob, res.filename);
+      } else {
+        const res = await exportXlsx({ data: filters });
+        const bytes = Uint8Array.from(atob(res.base64), (c) => c.charCodeAt(0));
+        const blob = new Blob([bytes], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        triggerDownload(blob, res.filename);
+      }
     } finally {
-      setExporting(false);
+      setExporting(null);
     }
+  }
+
+  function triggerDownload(blob: Blob, filename: string) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 
   return (
