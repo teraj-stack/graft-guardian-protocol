@@ -213,43 +213,70 @@ function TeamReportStatus() {
         {isLoading ? (
           <p className="text-slate-400">Wczytuję…</p>
         ) : (
-          <div className="overflow-x-auto rounded-lg border border-slate-800">
-            <table className="w-full text-sm">
-              <thead className="bg-slate-900/60 text-slate-400">
-                <tr>
-                  <th className="text-left px-3 py-2 font-medium">Odbiorca</th>
-                  <th className="text-left px-3 py-2 font-medium">Tydz.</th>
-                  <th className="text-left px-3 py-2 font-medium">Status</th>
-                  <th className="text-left px-3 py-2 font-medium">Wysłano</th>
-                  <th className="text-left px-3 py-2 font-medium">Dostarczono</th>
-                  <th className="text-left px-3 py-2 font-medium">Otwarto</th>
-                  <th className="text-left px-3 py-2 font-medium">Potwierdzono</th>
-                  <th className="text-left px-3 py-2 font-medium">Wersja</th>
-                  <th className="text-left px-3 py-2 font-medium">Msg ID / Błąd</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(data ?? []).length === 0 && (
-                  <tr><td colSpan={9} className="px-3 py-6 text-center text-slate-500">Brak wyników.</td></tr>
-                )}
-                {(data ?? []).map((r) => (
-                  <tr key={r.id} className="border-t border-slate-800/80 hover:bg-slate-900/40">
-                    <td className="px-3 py-2">{r.recipient_email}</td>
-                    <td className="px-3 py-2 font-medium">T{r.week}</td>
-                    <td className="px-3 py-2"><ReportStatusBadge status={r.status} /></td>
-                    <td className="px-3 py-2 text-slate-400">{fmt(r.sent_at)}</td>
-                    <td className="px-3 py-2 text-slate-400">{fmt(r.delivered_at)}</td>
-                    <td className="px-3 py-2 text-slate-400">{fmt(r.opened_at)}</td>
-                    <td className="px-3 py-2 text-slate-400">{fmt(r.confirmed_at)}</td>
-                    <td className="px-3 py-2 text-slate-500 text-xs">v{r.template_version}</td>
-                    <td className="px-3 py-2 text-xs text-slate-500 max-w-[260px] truncate" title={r.error ?? r.provider_message_id ?? ""}>
-                      {r.error ? <span className="text-red-300">{r.error}</span> : r.provider_message_id ?? "—"}
-                    </td>
+          <>
+            <div className={`overflow-x-auto rounded-lg border border-slate-800 transition-opacity ${isFetching ? "opacity-70" : "opacity-100"}`}>
+              <table className="w-full text-sm">
+                <thead className="bg-slate-900/60 text-slate-400">
+                  <tr>
+                    <th className="text-left px-3 py-2 font-medium">Odbiorca</th>
+                    <th className="text-left px-3 py-2 font-medium">Tydz.</th>
+                    <th className="text-left px-3 py-2 font-medium">Status</th>
+                    <th className="text-left px-3 py-2 font-medium">Wysłano</th>
+                    <th className="text-left px-3 py-2 font-medium">Dostarczono</th>
+                    <th className="text-left px-3 py-2 font-medium">Otwarto</th>
+                    <th className="text-left px-3 py-2 font-medium">Potwierdzono</th>
+                    <th className="text-left px-3 py-2 font-medium">Wersja</th>
+                    <th className="text-left px-3 py-2 font-medium">Msg ID / Błąd</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {pageRows.length === 0 && (
+                    <tr><td colSpan={9} className="px-3 py-6 text-center text-slate-500">Brak wyników.</td></tr>
+                  )}
+                  {pageRows.map((r) => (
+                    <tr key={r.id} className="border-t border-slate-800/80 hover:bg-slate-900/40">
+                      <td className="px-3 py-2">{r.recipient_email}</td>
+                      <td className="px-3 py-2 font-medium">T{r.week}</td>
+                      <td className="px-3 py-2"><ReportStatusBadge status={r.status} /></td>
+                      <td className="px-3 py-2 text-slate-400">{fmt(r.sent_at)}</td>
+                      <td className="px-3 py-2 text-slate-400">{fmt(r.delivered_at)}</td>
+                      <td className="px-3 py-2 text-slate-400">{fmt(r.opened_at)}</td>
+                      <td className="px-3 py-2 text-slate-400">{fmt(r.confirmed_at)}</td>
+                      <td className="px-3 py-2 text-slate-500 text-xs">v{r.template_version}</td>
+                      <td className="px-3 py-2 text-xs text-slate-500 max-w-[260px] truncate" title={r.error ?? r.provider_message_id ?? ""}>
+                        {r.error ? <span className="text-red-300">{r.error}</span> : r.provider_message_id ?? "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-400">
+              <div>
+                {rows.length === 0
+                  ? "0 wyników"
+                  : <>Pokazuję <span className="text-slate-200">{rangeStart}–{rangeEnd}</span> z <span className="text-slate-200">{rows.length}</span></>}
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-xs text-slate-500">Na stronę</label>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="bg-slate-900 border border-slate-700 rounded-md px-2 py-1 text-sm"
+                >
+                  {[25, 50, 100, 200].map((n) => <option key={n} value={n}>{n}</option>)}
+                </select>
+                <div className="ml-3 flex items-center gap-1">
+                  <PagerBtn onClick={() => setPage(1)} disabled={safePage === 1}>« Pierwsza</PagerBtn>
+                  <PagerBtn onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage === 1}>‹ Poprzednia</PagerBtn>
+                  <span className="px-2 text-slate-300">{safePage} / {totalPages}</span>
+                  <PagerBtn onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={safePage === totalPages}>Następna ›</PagerBtn>
+                  <PagerBtn onClick={() => setPage(totalPages)} disabled={safePage === totalPages}>Ostatnia »</PagerBtn>
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </main>
