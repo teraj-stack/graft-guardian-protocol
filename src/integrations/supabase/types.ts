@@ -183,6 +183,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      internal_cron_secret: { Args: never; Returns: string }
       reminder_weeks_valid: { Args: { weeks: number[] }; Returns: boolean }
       security_watch_check: { Args: never; Returns: Json }
     }
