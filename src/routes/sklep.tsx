@@ -98,12 +98,24 @@ function Shop() {
   );
 }
 
+function productPlaceholder(product: ShopifyProduct) {
+  const t = product.node.title.toLowerCase();
+  if (t.includes("hiperbaryczn") || t.includes("hbot") || t.includes("fototerap") || t.includes("pbm") || t.includes("lllt")) {
+    return { src: graftgenLogo.url, alt: "Graftgen.com" };
+  }
+  if (t.includes("ladd") || t.includes("plazm") || t.includes("cap") || t.includes("tul")) {
+    return { src: mscLogo.url, alt: "MSC" };
+  }
+  return { src: graftgenLogo.url, alt: "Graftgen.com" };
+}
+
 function ProductCard({ product }: { product: ShopifyProduct }) {
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
   const variant = product.node.variants.edges[0]?.node;
   const img = product.node.images.edges[0]?.node;
   const price = product.node.priceRange.minVariantPrice;
+  const placeholder = productPlaceholder(product);
 
   const onAdd = async () => {
     if (!variant) return;
@@ -131,8 +143,8 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
           ) : (
             <div className="flex h-full w-full items-center justify-center p-8">
               <img
-                src={placeholderLogo.url}
-                alt={product.node.title}
+                src={placeholder.src}
+                alt={placeholder.alt}
                 className="max-h-full max-w-full object-contain opacity-90 transition duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
