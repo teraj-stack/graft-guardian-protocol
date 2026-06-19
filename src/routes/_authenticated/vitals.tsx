@@ -854,6 +854,36 @@ function VitalsPage() {
           >
             Resetuj ustawienia PDF
           </button>
+          <div className="flex items-center gap-2 ml-2 pl-2 border-l">
+            <label className="text-xs text-muted-foreground">Preset:</label>
+            <select
+              value={selectedPreset}
+              onChange={(e) => applyPresetByName(e.target.value)}
+              className="h-9 px-2 rounded-md border bg-background text-sm min-w-[140px]"
+              title="Szybkie przywracanie zapisanych zestawów ustawień"
+            >
+              <option value="">— wybierz preset —</option>
+              {pdfPresets.map((p) => (
+                <option key={p.name} value={p.name}>{p.name}</option>
+              ))}
+            </select>
+            <button
+              onClick={saveCurrentAsPreset}
+              disabled={exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium hover:bg-muted disabled:opacity-50"
+              title="Zapisz bieżące ustawienia jako nowy preset (lub nadpisz istniejący o tej samej nazwie)"
+            >
+              Zapisz preset
+            </button>
+            <button
+              onClick={deleteSelectedPreset}
+              disabled={!selectedPreset || exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Usuń wybrany preset"
+            >
+              Usuń
+            </button>
+          </div>
         </div>
       </div>
 
