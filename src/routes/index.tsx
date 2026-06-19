@@ -145,7 +145,15 @@ function Nav() {
     <header className="relative z-20 border-b border-border/60">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-3" aria-label="Graftgen.com">
-          <img src={graftgenLogo.url} alt="Graftgen.com" className="h-10 w-auto md:h-12" />
+          <img
+            src={graftgenLogo.url}
+            alt="Graftgen.com"
+            width={415}
+            height={531}
+            decoding="async"
+            fetchPriority="high"
+            className="h-10 w-auto md:h-12"
+          />
         </a>
 
         <nav className="hidden gap-7 text-sm text-muted-foreground md:flex">
@@ -193,7 +201,14 @@ function Nav() {
       {open && (
         <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
           <div className="mb-4 flex justify-center">
-            <img src={graftgenLogo.url} alt="Graftgen.com" className="h-14 w-auto" />
+            <img
+              src={graftgenLogo.url}
+              alt="Graftgen.com"
+              width={415}
+              height={531}
+              decoding="async"
+              className="h-14 w-auto"
+            />
           </div>
           <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
             {navLinks.map((l) =>
@@ -367,8 +382,11 @@ function PBM() {
         <img
           src={graftgenLogo.url}
           alt="Graftgen.com"
-          className="mt-2 h-10 w-auto shrink-0 opacity-80 md:mt-0 md:h-12"
+          width={415}
+          height={531}
+          decoding="async"
           loading="lazy"
+          className="mt-2 h-10 w-auto shrink-0 opacity-80 md:mt-0 md:h-12"
         />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
