@@ -367,10 +367,18 @@ function ExVivo() {
 function PBM() {
   return (
     <Section id="pbm" eyebrow="03 — Fotobiomodulacja (PBM / LLLT)">
-      <SectionHeader
-        title="Światło 650 i 830 nm jako narzędzie bioenergetyczne."
-        lead="Fotony o długości fali w oknie optycznym skóry (600–1100 nm) są absorbowane przez oksydazę c-cytochromową — kompleks IV mitochondrialnego łańcucha oddechowego. Efekt: wzrost produkcji ATP, krótkotrwała generacja RONS jako sygnał redoks, modulacja ekspresji genów odpowiedzialnych za przejście telogen → anagen."
-      />
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+        <SectionHeader
+          title="Światło 650 i 830 nm jako narzędzie bioenergetyczne."
+          lead="Fotony o długości fali w oknie optycznym skóry (600–1100 nm) są absorbowane przez oksydazę c-cytochromową — kompleks IV mitochondrialnego łańcucha oddechowego. Efekt: wzrost produkcji ATP, krótkotrwała generacja RONS jako sygnał redoks, modulacja ekspresji genów odpowiedzialnych za przejście telogen → anagen."
+        />
+        <img
+          src={graftgenLogo.url}
+          alt="Graftgen.com"
+          className="mt-2 h-10 w-auto shrink-0 opacity-80 md:mt-0 md:h-12"
+          loading="lazy"
+        />
+      </div>
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="Parametry sesji pozabiegowej" badge="20 min">
           <ul className="space-y-2 text-sm">
