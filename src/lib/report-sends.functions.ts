@@ -64,14 +64,16 @@ export const getMyReportSends = createServerFn({ method: "POST" })
     return { email: sub.email, sends: (sends ?? []) as ReportSendRow[] };
   });
 
-/** Zespół (admin): pełna lista ostatnich wysyłek z opcjonalnym filtrem statusu / e-maila. */
+/** Zespół (admin): pełna lista ostatnich wysyłek z opcjonalnym filtrem statusu / e-maila / zakresu dat. */
 export const getAllReportSends = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { status?: string; email?: string }) =>
+  .inputValidator((d: { status?: string; email?: string; from?: string; to?: string }) =>
     z
       .object({
         status: z.string().optional(),
         email: z.string().optional(),
+        from: z.string().optional(),
+        to: z.string().optional(),
       })
       .parse(d ?? {}),
   )
@@ -91,8 +93,92 @@ export const getAllReportSends = createServerFn({ method: "POST" })
       .limit(500);
     if (data.status && data.status !== "all") q = q.eq("status", data.status);
     if (data.email) q = q.ilike("recipient_email", `%${data.email}%`);
+    if (data.from) q = q.gte("created_at", data.from);
+    if (data.to) q = q.lte("created_at", data.to);
 
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
     return (rows ?? []) as ReportSendRow[];
+  });
+
+/** Zespół (admin): eksport CSV historii wysyłek (status + zakres dat + e-mail). Limit 10 000 wierszy. */
+export const exportReportSendsCsv = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { status?: string; email?: string; from?: string; to?: string }) =>
+    z
+      .object({
+        status: z.string().optional(),
+        email: z.string().optional(),
+        from: z.string().optional(),
+        to: z.string().optional(),
+      })
+      .parse(d ?? {}),
+  )
+  .handler(async ({ data, context }): Promise<{ filename: string; csv: string; count: number }> => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+
+    let q = context.supabase
+      .from("report_sends")
+      .select(
+        "id, recipient_email, week, template_version, document_hash, status, provider_message_id, error, sent_at, delivered_at, opened_at, confirmed_at, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .limit(10000);
+    if (data.status && data.status !== "all") q = q.eq("status", data.status);
+    if (data.email) q = q.ilike("recipient_email", `%${data.email}%`);
+    if (data.from) q = q.gte("created_at", data.from);
+    if (data.to) q = q.lte("created_at", data.to);
+
+    const { data: rows, error } = await q;
+    if (error) throw new Error(error.message);
+
+    const headers = [
+      "id",
+      "recipient_email",
+      "week",
+      "status",
+      "template_version",
+      "document_hash",
+      "provider_message_id",
+      "error",
+      "created_at",
+      "sent_at",
+      "delivered_at",
+      "opened_at",
+      "confirmed_at",
+    ];
+    const esc = (v: unknown) => {
+      if (v === null || v === undefined) return "";
+      const s = String(v);
+      return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const lines = [headers.join(",")];
+    for (const r of (rows ?? []) as ReportSendRow[]) {
+      lines.push(
+        [
+          r.id,
+          r.recipient_email,
+          r.week,
+          r.status,
+          r.template_version,
+          r.document_hash,
+          r.provider_message_id,
+          r.error,
+          r.created_at,
+          r.sent_at,
+          r.delivered_at,
+          r.opened_at,
+          r.confirmed_at,
+        ]
+          .map(esc)
+          .join(","),
+      );
+    }
+    const csv = "\uFEFF" + lines.join("\r\n") + "\r\n";
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    return { filename: `report-sends_${stamp}.csv`, csv, count: rows?.length ?? 0 };
   });
