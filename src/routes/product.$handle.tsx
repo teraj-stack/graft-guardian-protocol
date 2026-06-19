@@ -155,8 +155,11 @@ function ProductPage() {
                             {p.toFixed(0)} {v.node.price.currencyCode}
                             {pct > 0 && <span className="ml-1 line-through opacity-70">{c.toFixed(0)}</span>}
                             {vSessions > 0 && (
-                              <span className={`ml-1.5 text-[10px] ${active ? "text-background/70" : "text-muted-foreground/70"}`}>
+                              <span className={`ml-1.5 inline-flex items-center gap-0.5 text-[10px] ${active ? "text-background/70" : "text-muted-foreground/70"}`}>
                                 ({vPerSession.toFixed(0)}/sesja)
+                                <span title={`Cena za 1 sesję = cena pakietu (${p.toFixed(2)} ${v.node.price.currencyCode}) ÷ ${vSessions} sesji`}>
+                                  <Info className="h-3 w-3 cursor-help opacity-70" />
+                                </span>
                               </span>
                             )}
                           </span>
