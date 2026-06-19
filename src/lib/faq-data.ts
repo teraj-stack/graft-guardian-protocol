@@ -35,4 +35,8 @@ export const FAQ: { q: string; a: string }[] = [
     q: "Kiedy zobaczę finalny efekt?",
     a: "Shock loss przeszczepionych włosów: tydzień 2–6. Wejście w anagen: miesiąc 3–4. Pierwsze widoczne zagęszczenie: miesiąc 6. Efekt końcowy: 12–15 miesięcy od zabiegu.",
   },
+  {
+    q: "Jak stosować domową fototerapię LLLT 2x dziennie i co robić, gdy pominę sesję?",
+    a: "Hełm LLLT załóż na czystą, suchą skórę głowy. Jedna sesja to 20 minut w pozycji siedzącej lub leżącej. Wykonuj rano i wieczorem (np. 8:00 i 20:00) z zachowaniem co najmniej 6-godzinnej przerwy między naświetlaniami. Jeśli pominiesz sesję — nie podwajaj dawki w kolejnej. Po prostu wznów plan zgodnie z harmonogramem. Pominięcie pojedynczej sesji nie zaburza kumulacji efektu, systematyczność ma znaczenie w skali tygodni.",
+  },
 ];
