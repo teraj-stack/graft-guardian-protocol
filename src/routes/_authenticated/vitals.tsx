@@ -988,6 +988,21 @@ function VitalsPage() {
             >
               Usuń
             </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={exporting || exportingPdf}
+              className="h-9 px-3 rounded-md border text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+              title="Importuj presety z pliku JSON"
+            >
+              Importuj z JSON
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="hidden"
+              onChange={handleImportFile}
+            />
           </div>
         </div>
       </div>
