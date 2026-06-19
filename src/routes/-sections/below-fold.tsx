@@ -67,7 +67,7 @@ export function Timeline() {
       title: "Faza ostrego zapalenia — walka z niedokrwieniem i obrzękiem",
       bullets: [
         "PBM 650 + 830 nm, 20 min, bezpośrednio po zabiegu, dalej co 24 h",
-        "HBOT 1,5–2,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
+        "HBOT 1,5–3,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
         "Strefa dawcza zabezpieczona maścią barierową bez konserwantów",
         "Bezdotykowe spłukiwanie obszaru biorczego HOCI od 48 h",
         "Spanie w pozycji półsiedzącej (≥30°) przez 5 dni",
