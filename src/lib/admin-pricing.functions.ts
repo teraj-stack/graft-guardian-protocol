@@ -37,7 +37,15 @@ export const adminUpsertPricingOverride = createServerFn({ method: "POST" })
       throw new Error("code is required");
     }
     if (typeof input.hidden !== "boolean") throw new Error("hidden must be boolean");
-    if (input.restore_at !== null && typeof input.restore_at !== "string") {
+    if (input.hidden) {
+      if (!input.restore_at || typeof input.restore_at !== "string") {
+        throw new Error("restore_at is required when item is hidden");
+      }
+      const d = new Date(input.restore_at);
+      if (Number.isNaN(d.getTime())) throw new Error("restore_at must be a valid date");
+      if (d.getTime() <= Date.now()) throw new Error("restore_at must be in the future");
+    }
+    if (!input.hidden && input.restore_at !== null && typeof input.restore_at !== "string") {
       throw new Error("restore_at must be ISO string or null");
     }
     return input;
