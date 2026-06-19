@@ -935,7 +935,9 @@ interface PricingItem {
   packs: PricingPack[];
   scope: string[];
   note: string;
+  hidden?: boolean;
 }
+
 
 function Pricing() {
   return (
