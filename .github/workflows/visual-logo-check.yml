@@ -1,10 +1,28 @@
 name: Visual Logo Check
 
 on:
-  push:
-    branches: ['**']
+  # Always run on every pull request (any branch, any path)
   pull_request:
     branches: ['**']
+
+  # On push, only run when relevant sections / assets / test infra change.
+  # PBM, HBOT and LADD sections live in src/routes/index.tsx and the product
+  # pages; brand logos live in src/assets; the check itself is in scripts/.
+  push:
+    branches: ['**']
+    paths:
+      - 'src/routes/index.tsx'
+      - 'src/routes/sklep.tsx'
+      - 'src/routes/product.$handle.tsx'
+      - 'src/assets/graftgen-logo*'
+      - 'src/assets/msc-logo*'
+      - 'scripts/visual-logo-check.py'
+      - '.github/workflows/visual-logo-check.yml'
+      - 'package.json'
+      - 'bun.lockb'
+
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
 
 jobs:
   visual-logo-check:
