@@ -128,6 +128,8 @@ function VitalsPage() {
   const [dateTo, setDateTo] = useState("");
   const [exporting, setExporting] = useState(false);
   const [exportingPdf, setExportingPdf] = useState(false);
+  const [pdfOrientation, setPdfOrientation] = useState<"portrait" | "landscape">("landscape");
+  const [pdfMetadata, setPdfMetadata] = useState(true);
   const exportFn = useServerFn(exportVitalsCsv);
   const trend = (range === 7 ? data.trend7 : data.trend28) as TrendRow[];
 
@@ -194,21 +196,25 @@ function VitalsPage() {
       }
       const { jsPDF } = await import("jspdf");
       const autoTable = (await import("jspdf-autotable")).default;
-      const doc = new jsPDF({ orientation: "landscape", unit: "pt" });
-      doc.setFontSize(14);
-      doc.text("Web Vitals — raport RUM (Graftgen)", 40, 40);
-      doc.setFontSize(10);
-      const meta = [
-        `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,
-        `Okno: ${range} dni`,
-        `Metryka: ${expMetric}`,
-        `Urzadzenie: ${expDevice}`,
-        dateFrom || dateTo ? `Daty: ${dateFrom || "—"} -> ${dateTo || "—"}` : "Daty: pelne okno",
-        `Rekordow: ${rows.length}`,
-      ].join("  •  ");
-      doc.text(meta, 40, 58);
+      const doc = new jsPDF({ orientation: pdfOrientation, unit: "pt" });
+      let startY = 40;
+      if (pdfMetadata) {
+        doc.setFontSize(14);
+        doc.text("Web Vitals — raport RUM (Graftgen)", 40, 40);
+        doc.setFontSize(10);
+        const meta = [
+          `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,
+          `Okno: ${range} dni`,
+          `Metryka: ${expMetric}`,
+          `Urzadzenie: ${expDevice}`,
+          dateFrom || dateTo ? `Daty: ${dateFrom || "—"} → ${dateTo || "—"}` : "Daty: pełne okno",
+          `Rekordów: ${rows.length}`,
+        ].join("  •  ");
+        doc.text(meta, 40, 58);
+        startY = 76;
+      }
       autoTable(doc, {
-        startY: 76,
+        startY,
         head: [header],
         body: rows,
         styles: { fontSize: 8, cellPadding: 3 },
@@ -314,6 +320,26 @@ function VitalsPage() {
               className="h-9 rounded-md border bg-background px-3 text-sm"
             />
           </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Układ PDF</label>
+            <select
+              value={pdfOrientation}
+              onChange={(e) => setPdfOrientation(e.target.value as "portrait" | "landscape")}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="landscape">Landscape</option>
+              <option value="portrait">Portrait</option>
+            </select>
+          </div>
+          <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={pdfMetadata}
+              onChange={(e) => setPdfMetadata(e.target.checked)}
+              className="rounded border bg-background"
+            />
+            Metadane w PDF
+          </label>
           <button
             onClick={handleExport}
             disabled={exporting || exportingPdf}
