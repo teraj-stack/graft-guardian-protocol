@@ -289,7 +289,7 @@ function Hero() {
             </p>
             <dl className="mt-6 space-y-5">
               <Stat k="650 / 830 nm" v="długości fal PBM stosowane bezpośrednio po zabiegu" />
-              <Stat k="1,5–2,0 ATA" v="ciśnienie sesji HBOT w dobie 1. i 2." />
+              <Stat k="1,5–3,0 ATA" v="ciśnienie sesji HBOT w dobie 0. i 1." />
               <Stat k="4 °C" v="docelowa temperatura roztworu HypoThermosol + ATP-v" />
               <Stat k="48–72 h" v="okno krytycznego niedokrwienia graftu przed rewaskularyzacją" />
             </dl>
