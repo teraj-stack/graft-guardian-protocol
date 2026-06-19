@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
-import { getAllReportSends, exportReportSendsCsv, type ReportSendStatus } from "@/lib/report-sends.functions";
+import { getAllReportSends, exportReportSendsCsv, exportReportSendsXlsx, type ReportSendStatus } from "@/lib/report-sends.functions";
 import { ReportStatusBadge } from "@/components/ReportStatusBadge";
 
 export const Route = createFileRoute("/_authenticated/raporty")({
@@ -37,9 +37,10 @@ function TeamReportStatus() {
   const [email, setEmail] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [exporting, setExporting] = useState(false);
+  const [exporting, setExporting] = useState<null | "csv" | "xlsx">(null);
   const fetchAll = useServerFn(getAllReportSends);
   const exportCsv = useServerFn(exportReportSendsCsv);
+  const exportXlsx = useServerFn(exportReportSendsXlsx);
 
   const toIso = (d: string, end = false) =>
     d ? new Date(d + (end ? "T23:59:59.999Z" : "T00:00:00.000Z")).toISOString() : undefined;
@@ -69,22 +70,35 @@ function TeamReportStatus() {
     };
   }, [data]);
 
-  async function handleExport() {
-    setExporting(true);
+  async function handleExport(format: "csv" | "xlsx") {
+    setExporting(format);
     try {
-      const res = await exportCsv({ data: filters });
-      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = res.filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      if (format === "csv") {
+        const res = await exportCsv({ data: filters });
+        const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
+        triggerDownload(blob, res.filename);
+      } else {
+        const res = await exportXlsx({ data: filters });
+        const bytes = Uint8Array.from(atob(res.base64), (c) => c.charCodeAt(0));
+        const blob = new Blob([bytes], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        triggerDownload(blob, res.filename);
+      }
     } finally {
-      setExporting(false);
+      setExporting(null);
     }
+  }
+
+  function triggerDownload(blob: Blob, filename: string) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -146,11 +160,19 @@ function TeamReportStatus() {
           </div>
           <button
             type="button"
-            onClick={handleExport}
-            disabled={exporting}
+            onClick={() => handleExport("csv")}
+            disabled={exporting !== null}
             className="h-[38px] px-4 rounded-md bg-[#c9a96a] text-[#0c121b] text-sm font-medium hover:bg-[#d8bb7c] disabled:opacity-50"
           >
-            {exporting ? "Eksport…" : "Eksportuj CSV"}
+            {exporting === "csv" ? "Eksport…" : "Eksportuj CSV"}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleExport("xlsx")}
+            disabled={exporting !== null}
+            className="h-[38px] px-4 rounded-md border border-[#c9a96a] text-[#c9a96a] text-sm font-medium hover:bg-[#c9a96a]/10 disabled:opacity-50"
+          >
+            {exporting === "xlsx" ? "Eksport…" : "Eksportuj XLSX"}
           </button>
         </div>
 
