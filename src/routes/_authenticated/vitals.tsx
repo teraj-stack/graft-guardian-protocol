@@ -212,6 +212,10 @@ function VitalsPage() {
       toast.error("Wybierz przynajmniej jedną metrykę do wykresu trendu (CLS, LCP lub INP).");
       return;
     }
+    if (pdfMode !== "table" && pdfCompare && pdfCompareWindows.length < 2) {
+      toast.error("W trybie porównania wybierz co najmniej 2 okna.");
+      return;
+    }
     setExportingPdf(true);
     try {
       const res = await exportFn({ data: { days: range, metric: expMetric, device: expDevice } });
