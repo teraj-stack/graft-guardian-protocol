@@ -165,7 +165,7 @@ function Nav() {
           </span>
         </a>
 
-        <nav className="hidden gap-7 text-sm text-muted-foreground md:flex">
+        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
           {navLinks.map((l) =>
             "to" in l ? (
               <Link key={l.to} to={l.to} className="hover:text-foreground">{l.label}</Link>
