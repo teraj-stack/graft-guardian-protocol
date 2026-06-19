@@ -98,7 +98,7 @@ export const MATERIALS: Material[] = [
   },
   {
     id: "m08",
-    title: "Reintrodukcja aktywności: sport, sauna, basen, słońce",
+    title: "Powrót do aktywności: sport, sauna, basen, słońce",
     description:
       "Tabela tydzień po tygodniu — kiedy można wrócić do siłowni, biegania, sauny IR, kąpieli w morzu, ekspozycji UV.",
     category: "Pielęgnacja",
