@@ -206,9 +206,35 @@ function AdminPage() {
           Skasowanie wpisu (przycisk <em>Usuń override</em>) przywraca domyślne zachowanie.
         </p>
       </div>
+
+      {undo && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-4 rounded-sm border border-border bg-card px-4 py-3 text-sm shadow-[var(--shadow-editorial)]"
+        >
+          <span className="text-foreground">
+            Usunięto wpis <strong>{undo.name}</strong>.
+          </span>
+          <button
+            onClick={handleUndo}
+            className="rounded-sm border border-foreground bg-foreground px-3 py-1.5 text-xs text-background hover:bg-foreground/90"
+          >
+            Cofnij ({undo.remaining}s)
+          </button>
+          <button
+            onClick={() => setUndo(null)}
+            aria-label="Zamknij"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </main>
   );
 }
+
 
 function PricingRow({
   code,
