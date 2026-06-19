@@ -17,6 +17,7 @@ const ALLOWLIST = new Set([
   // np. "docs/historia.md" — dodaj tu pliki, w których FUE musi pozostać
   "scripts/check-no-fue.mjs",
   "src/__tests__/no-fue.test.ts",
+  ".github/workflows/check-no-fue.yml",
 ]);
 const EXCLUDE_DIRS = [
   "node_modules", ".git", "dist", "build", ".output", ".vinxi",
