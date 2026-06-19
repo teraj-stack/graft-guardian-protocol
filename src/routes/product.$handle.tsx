@@ -91,7 +91,14 @@ function ProductPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex aspect-square items-center justify-center text-muted-foreground">—</div>
+                (() => {
+                  const ph = product ? productPlaceholder(product) : { src: graftgenLogo.url, alt: "Graftgen.com" };
+                  return (
+                    <div className="flex aspect-square items-center justify-center p-12">
+                      <img src={ph.src} alt={ph.alt} className="max-h-full max-w-full object-contain opacity-90" loading="lazy" />
+                    </div>
+                  );
+                })()
               )}
             </div>
             <div>
