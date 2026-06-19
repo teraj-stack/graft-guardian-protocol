@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-const tokenSchema = z.string().uuid();
+// 256-bit random token encoded as URL-safe base64 (43 chars, no padding).
+// Accept the legacy UUID format too so links already sent keep working until rotation.
+const tokenSchema = z
+  .string()
+  .min(36)
+  .max(64)
+  .regex(/^[A-Za-z0-9_-]+$/, "invalid_token_format");
 
 function corsHeaders(): Record<string, string> {
   return {
@@ -16,6 +22,9 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
     handlers: {
       OPTIONS: async () =>
         new Response(null, { status: 204, headers: corsHeaders() }),
+
+      // GET only confirms whether the token is currently valid.
+      // It MUST NOT leak any subscription data (email, phone, surgery date, weeks).
       GET: async ({ request }) => {
         const url = new URL(request.url);
         const tokenRaw = url.searchParams.get("token") ?? "";
@@ -26,10 +35,13 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
             { status: 400, headers: corsHeaders() }
           );
         }
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { supabaseAdmin } = await import(
+          "@/integrations/supabase/client.server"
+        );
+        // Project only the active flag — never select PII through a token-only check.
         const { data, error } = await supabaseAdmin
           .from("reminder_subscriptions")
-          .select("id, active, email")
+          .select("active")
           .eq("unsubscribe_token", parsed.data)
           .maybeSingle();
         if (error) {
@@ -45,14 +57,11 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
           );
         }
         return Response.json(
-          {
-            ok: true,
-            status: data.active ? "active" : "already_unsubscribed",
-            emailHint: maskEmail(data.email),
-          },
+          { ok: true, status: data.active ? "active" : "already_unsubscribed" },
           { headers: corsHeaders() }
         );
       },
+
       POST: async ({ request }) => {
         let body: unknown;
         try {
@@ -74,13 +83,16 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
             { status: 400, headers: corsHeaders() }
           );
         }
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { data, error } = await supabaseAdmin
-          .from("reminder_subscriptions")
-          .update({ active: false })
-          .eq("unsubscribe_token", parsed.data)
-          .select("id")
-          .maybeSingle();
+        const { supabaseAdmin } = await import(
+          "@/integrations/supabase/client.server"
+        );
+
+        // Atomically deactivate AND rotate the token so the link cannot be replayed.
+        // generate_unsubscribe_token() returns a fresh 256-bit URL-safe base64 string.
+        const { data, error } = await supabaseAdmin.rpc(
+          "deactivate_and_rotate_subscription",
+          { _token: parsed.data }
+        );
         if (error) {
           return Response.json(
             { ok: false, status: "error", message: error.message },
@@ -93,15 +105,11 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
             { status: 404, headers: corsHeaders() }
           );
         }
-        return Response.json({ ok: true, status: "unsubscribed" }, { headers: corsHeaders() });
+        return Response.json(
+          { ok: true, status: "unsubscribed" },
+          { headers: corsHeaders() }
+        );
       },
     },
   },
 });
-
-function maskEmail(email: string): string {
-  const [user, domain] = email.split("@");
-  if (!user || !domain) return "***";
-  const head = user.length <= 2 ? user[0] : user.slice(0, 2);
-  return `${head}***@${domain}`;
-}
