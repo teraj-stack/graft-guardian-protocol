@@ -313,7 +313,7 @@ function Why() {
           dzięki dyfuzji tlenu z osocza otaczającego miejsce przeszczepu.
           Pierwsze naczynia włosowate dochodzą do brodawki włosa zwykle między
           48. a 96. godziną. Dla niedotlenionej cebulki włosa to krytyczny
-          okres, który determinuje okres w
+          okres, który determinuje przyjęcie ostateczny efekt zabiegu.
         </Para>
         <Para>
           W tym czasie komórki macierzyste wybrzuszenia (bulge) i komórki
