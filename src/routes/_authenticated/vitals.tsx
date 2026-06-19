@@ -335,15 +335,17 @@ function VitalsPage() {
               doc.setTextColor(0);
               startY = chartY + chartH + 36;
             } else if (pdfCompareLayout === "side-by-side") {
-              // Shared yMax across windows so subplots are comparable
-              const yMax = Math.max(t.poor * 1.05, ...allVals);
+              const sharedYMax = Math.max(t.poor * 1.05, ...allVals);
               const N = series.length;
               const gap = 18;
               const subW = (chartW - gap * (N - 1)) / N;
               for (let si = 0; si < N; si++) {
                 const s = series[si];
                 const subX = chartX + si * (subW + gap);
-                const yFor = drawAxes(subX, chartY, subW, chartH, t, 0, yMax, m === "CLS", si === N - 1);
+                const subYMax = pdfCompareYScale === "independent"
+                  ? Math.max(t.poor * 1.05, ...(s.vals.length ? s.vals : [t.poor]))
+                  : sharedYMax;
+                const yFor = drawAxes(subX, chartY, subW, chartH, t, 0, subYMax, m === "CLS", si === N - 1);
                 // Subplot title (window label)
                 doc.setFontSize(8);
                 doc.setTextColor(60);
