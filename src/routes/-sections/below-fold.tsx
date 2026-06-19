@@ -54,7 +54,7 @@ export function Microbiome() {
 export function Timeline() {
   const phases: { tag: string; title: string; bullets: string[] }[] = [
     {
-      tag: "Śródzabiegowo",
+      tag: "Podczas zabiegu",
       title: "Faza Ex Vivo — prewencja uszkodzeń",
       bullets: [
         "Pobieranie graftów bezpośrednio do HypoThermosol FRS + ATP-v, schłodzonego do 4 °C",
