@@ -133,6 +133,23 @@ function VitalsPage() {
   const [pdfMode, setPdfMode] = useState<"table" | "chart" | "both">("table");
   const [pdfPercentile, setPdfPercentile] = useState<50 | 75 | 90>(75);
   const [pdfMetrics, setPdfMetrics] = useState<Array<"CLS" | "LCP" | "INP">>(["CLS", "LCP", "INP"]);
+  const [pdfWindow, setPdfWindow] = useState<"all" | "d0-3" | "d4-14" | "m1+">("all");
+  const WINDOW_LABEL: Record<typeof pdfWindow, string> = {
+    "all": "całe okno",
+    "d0-3": "D0–3 (ostatnie 4 dni)",
+    "d4-14": "D4–14",
+    "m1+": "M1+ (15+ dni)",
+  };
+  const filterWindow = (rows: TrendRow[]): TrendRow[] => {
+    if (pdfWindow === "all") return rows;
+    const n = rows.length;
+    return rows.filter((_, i) => {
+      const daysAgo = n - 1 - i;
+      if (pdfWindow === "d0-3") return daysAgo <= 3;
+      if (pdfWindow === "d4-14") return daysAgo >= 4 && daysAgo <= 14;
+      return daysAgo >= 15; // m1+
+    });
+  };
   const toggleMetric = (m: "CLS" | "LCP" | "INP") =>
     setPdfMetrics((cur) => (cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m]));
   const METRIC_COLORS: Record<"CLS" | "LCP" | "INP", [number, number, number]> = {
@@ -225,7 +242,7 @@ function VitalsPage() {
           `Urzadzenie: ${expDevice}`,
           dateFrom || dateTo ? `Daty: ${dateFrom || "—"} → ${dateTo || "—"}` : "Daty: pełne okno",
           `Rekordów: ${rows.length}`,
-          pdfMode !== "table" ? `Wykres: p${pdfPercentile} • ${pdfMetrics.join(", ")}` : "",
+          pdfMode !== "table" ? `Wykres: p${pdfPercentile} • ${pdfMetrics.join(", ")} • okno ${WINDOW_LABEL[pdfWindow]}` : "",
         ].filter(Boolean).join("  •  ");
         doc.text(meta, 40, 58);
         startY = 76;
@@ -233,7 +250,8 @@ function VitalsPage() {
 
       if (pdfMode !== "table") {
         const trendKey = `trend${range}${pdfPercentile === 75 ? "" : `_p${pdfPercentile}`}` as keyof typeof data;
-        const pdfTrend = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
+        const pdfTrendRaw = ((data as Record<string, unknown>)[trendKey] as TrendRow[]) || trend;
+        const pdfTrend = filterWindow(pdfTrendRaw);
         const chartW = pageW - 100;
         const chartH = 170;
 
@@ -246,7 +264,7 @@ function VitalsPage() {
           const chartY = startY + 18;
           doc.setFontSize(11);
           doc.setTextColor(0);
-          doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni)`, chartX, startY + 12);
+          doc.text(`Trend p${pdfPercentile} — ${m} (${range} dni • ${WINDOW_LABEL[pdfWindow]})`, chartX, startY + 12);
           doc.setDrawColor(180);
           doc.rect(chartX, chartY, chartW, chartH);
           const chartData = pdfTrend.filter((d) => d[m] != null) as Array<TrendRow & Record<typeof m, number>>;
@@ -442,6 +460,19 @@ function VitalsPage() {
               <option value={50}>p50</option>
               <option value={75}>p75</option>
               <option value={90}>p90</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">Okno wykresu PDF</label>
+            <select
+              value={pdfWindow}
+              onChange={(e) => setPdfWindow(e.target.value as typeof pdfWindow)}
+              className="h-9 rounded-md border bg-background px-3 text-sm"
+            >
+              <option value="all">Całe okno</option>
+              <option value="d0-3">D0–3 (ostatnie 4 dni)</option>
+              <option value="d4-14">D4–14</option>
+              <option value="m1+">M1+ (15+ dni)</option>
             </select>
           </div>
           <div>
