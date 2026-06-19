@@ -436,7 +436,7 @@ function HBOT() {
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
           title="Tlen dociera tam, gdzie krwinki czerwone jeszcze nie mogą dotrzeć."
-          lead="Pod ciśnieniem 1,5–2,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w plazmie (prawo Henry'ego) dyfunduje do graftów zanim zostanie odtworzona ich sieć kapilarna."
+          lead="Pod ciśnieniem 1,5–2,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w surowicy krwi (prawo Henry'ego) dyfunduje do przeszczepionych cebulek zanim zostanie odtworzona ich sieć kapilarna."
         />
         <img
           src={graftgenLogo.url}
