@@ -316,10 +316,17 @@ function VitalsPage() {
           </div>
           <button
             onClick={handleExport}
-            disabled={exporting}
+            disabled={exporting || exportingPdf}
             className="h-9 px-4 rounded-md bg-foreground text-background text-sm font-medium hover:opacity-90 disabled:opacity-50"
           >
             {exporting ? "Eksportowanie…" : "Eksportuj CSV"}
+          </button>
+          <button
+            onClick={handleExportPdf}
+            disabled={exporting || exportingPdf}
+            className="h-9 px-4 rounded-md border border-foreground text-foreground text-sm font-medium hover:bg-muted disabled:opacity-50"
+          >
+            {exportingPdf ? "Generowanie PDF…" : "Eksportuj PDF"}
           </button>
         </div>
       </div>
