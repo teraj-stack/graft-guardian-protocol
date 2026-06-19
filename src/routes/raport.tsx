@@ -1,8 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  DEFAULT_COORDINATOR,
+  REPORT_TEMPLATE_CHANGELOG,
+  REPORT_TEMPLATE_RELEASED,
+  REPORT_TEMPLATE_VERSION,
+} from "@/lib/report-template";
 
 const TITLE = "Przykładowy cotygodniowy raport postępu — Tydzień 3";
 const DESCRIPTION =
   "Szablon raportu cotygodniowego dla pacjenta po przeszczepie włosów DHI. Parametry biometryczne, tolerancja skóry, trend gojenia i zalecenia kliniczne.";
+
+const REPORT_ID = "GGP-2026-0615-0042-W03";
+const DOCUMENT_HASH = "sha256:8f4a…2c91";
 
 export const Route = createFileRoute("/raport")({
   head: () => ({
