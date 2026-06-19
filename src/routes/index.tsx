@@ -793,40 +793,227 @@ function EvidenceBasement() {
           </p>
         </Card>
         <Card title="Źródła (RCT i przeglądy) — z weryfikacją zgodności">
-          <p className="text-xs italic text-muted-foreground">
-            Każdy DOI/PMID poniżej został zweryfikowany w PubMed / Crossref. Dla pełnej uczciwości oznaczamy, w jakim stopniu liczba w tekście jest <em>bezpośrednio</em> wynikiem cytowanego RCT, a w jakim — ekstrapolacją z populacji AGA lub gojenia po ablacji frakcyjnej (brak head-to-head RCT dla DHI + PBM).
-          </p>
-          <ol className="mt-4 space-y-3 text-xs">
-            <li>
-              <span className="text-accent">[1]</span> Parsley WM, Perez-Meza D. Review of Factors Affecting the Growth and Survival of Follicular Grafts. <em>J Cutan Aesthet Surg</em>. 2010;3(2):69–75. <strong>DOI: 10.4103/0974-2077.69014</strong> · <strong>PMCID: PMC2956960</strong> · <strong>PMID: 21031062</strong>. <span className="text-muted-foreground">Wspiera: <strong>90–95%</strong> przeżywalności graftów (zakres raportowany w przeglądzie dla nowoczesnej techniki FU).</span>
-            </li>
-            <li>
-              <span className="text-accent">[2]</span> Tabaie SM, Berenji Ardestani H, Azizjalali MH. The Effect of One Session Low Level Laser Therapy of Extracted Follicular Units on the Outcome of Hair Transplantation. <em>J Lasers Med Sci</em>. 2016;7(1):26–29. <strong>DOI: 10.15171/jlms.2016.06</strong> · <strong>PMCID: PMC4908985</strong>. <span className="text-muted-foreground">Wspiera: kierunkowo <strong>5–8%</strong> zysku przeżywalności po LLLT ex vivo (RCT split-scalp, n=10; istotnie wyższa liczba przyjętych jednostek vs. kontrola; dokładna wartość 5–8% to ostrożna interpretacja, nie cytat z abstraktu).</span>
-            </li>
-            <li>
-              <span className="text-accent">[3]</span> Lanzafame RJ, Blanche RR, Bodian AB i wsp. The growth of human scalp hair mediated by visible red light laser and LED sources in males. <em>Lasers Surg Med</em>. 2013;45(8):487–495. <strong>DOI: 10.1002/lsm.22173</strong> · <strong>PMID: 24078483</strong>. <span className="text-muted-foreground">Wspiera: przyspieszenie anagenu (mechanistycznie 3–4 tyg.) oraz <strong>10–15%</strong> przyrostu średnicy/gęstości (RCT 655 nm wykazał +35% liczby włosów vs. sham; nasz przedział 10–15% to konserwatywne przeniesienie efektu na populację po DHI).</span>
-            </li>
-            <li>
-              <span className="text-accent">[4]</span> Jimenez JJ, Wikramanayake TC, Bergfeld W i wsp. Efficacy and Safety of a Low-level Laser Device in the Treatment of Male and Female Pattern Hair Loss: A Multicenter, Randomized, Sham Device-controlled, Double-blind Study. <em>Am J Clin Dermatol</em>. 2014;15(2):115–127. <strong>DOI: 10.1007/s40257-013-0060-6</strong> · <strong>PMID: 24474647</strong>. <span className="text-muted-foreground">Wspiera: <strong>20–30%</strong> redukcji „shock loss" oraz <strong>10–15%</strong> przyrostu gęstości (wieloośrodkowy RCT, n=128/141, sham-controlled: istotny przyrost gęstości terminalnej; redukcja telogenowego wypadania to ekstrapolacja kliniczna, nie bezpośredni punkt końcowy badania).</span>
-            </li>
-            <li>
-              <span className="text-accent">[5]</span> Couto MR, Gomes A, Nogueira A i wsp. The effect of combined red, blue, and near-infrared LED photobiomodulation therapy on speed of wound healing after superficial ablative fractional resurfacing. <em>Lasers Med Sci</em>. 2024;39:108. <strong>DOI: 10.1007/s10103-024-04042-x</strong> · <strong>PMID: 38532146</strong>. <span className="text-muted-foreground">Wspiera: <strong>30–40%</strong> szybsza redukcja rumienia w pierwszych 14 dniach (RCT split-face po ablacji frakcyjnej; punkt czasowy 7–14 dni). Najbliższy dostępny RCT — nie dotyczy bezpośrednio skóry owłosionej po DHI.</span>
-            </li>
-            <li>
-              <span className="text-accent">[6]</span> Pillai JK, Mysore V. Role of Low-Level Light Therapy (LLLT) in Androgenetic Alopecia. <em>J Cutan Aesthet Surg</em>. 2021;14(4):385–391. <strong>DOI: 10.4103/JCAS.JCAS_218_20</strong> · <strong>PMCID: PMC8906269</strong>. <span className="text-muted-foreground">Tło dawkowania: 630–680 nm, 3–5 J/cm², 2–3×/tydz., 15–20 min — parametry zgodne z naszym protokołem.</span>
-            </li>
-            <li>
-              <span className="text-accent">[7]</span> Avci P, Gupta GK, Clark J, Wikonkal N, Hamblin MR. Low-level laser (light) therapy (LLLT) for treatment of hair loss. <em>Lasers Surg Med</em>. 2014;46(2):144–151. <strong>DOI: 10.1002/lsm.22170</strong> · <strong>PMID: 23970445</strong>. <span className="text-muted-foreground">Mechanizm: cytochrom c oksydaza, ATP, NO — biologiczna podstawa wszystkich powyższych efektów.</span>
-            </li>
-          </ol>
-          <p className="mt-4 text-xs italic text-muted-foreground">
-            Wnioski z weryfikacji: identyfikatory DOI/PMID/PMCID są poprawne dla wszystkich 7 pozycji. Liczby <strong>90–95%</strong> [1], <strong>30–40%</strong> [5] oraz parametry dawkowania [6] są zgodne z punktami końcowymi cytowanych prac. Liczby <strong>5–8%</strong> [2], <strong>20–30%</strong> [3,4] oraz <strong>10–15%</strong> [3,4] są <em>ostrożną interpretacją kliniczną</em> wyników RCT prowadzonych w populacji AGA — nie pochodzą z dedykowanego RCT „PBM po DHI". Każdy taki przypadek został oznaczony w opisie referencji powyżej.
-          </p>
-        </Card>
+        <SourcesCard />
       </div>
     </Section>
   );
 }
+
+/* ---------- Sources with live DOI/PMID/PMCID validation ---------- */
+
+type RefEntry = {
+  id: string;
+  num: string;
+  citation: React.ReactNode;
+  doi?: string;
+  pmid?: string;
+  pmcid?: string;
+  note: React.ReactNode;
+};
+
+const REFERENCES: RefEntry[] = [
+  {
+    id: "ref-1",
+    num: "[1]",
+    citation: (
+      <>
+        Parsley WM, Perez-Meza D. Review of Factors Affecting the Growth and Survival of Follicular Grafts. <em>J Cutan Aesthet Surg</em>. 2010;3(2):69–75.
+      </>
+    ),
+    doi: "10.4103/0974-2077.69014",
+    pmid: "21031062",
+    pmcid: "PMC2956960",
+    note: <>Wspiera: <strong>90–95%</strong> przeżywalności graftów (zakres raportowany w przeglądzie dla nowoczesnej techniki FU).</>,
+  },
+  {
+    id: "ref-2",
+    num: "[2]",
+    citation: (
+      <>
+        Tabaie SM, Berenji Ardestani H, Azizjalali MH. The Effect of One Session Low Level Laser Therapy of Extracted Follicular Units on the Outcome of Hair Transplantation. <em>J Lasers Med Sci</em>. 2016;7(1):26–29.
+      </>
+    ),
+    doi: "10.15171/jlms.2016.06",
+    pmcid: "PMC4908985",
+    note: <>Wspiera: kierunkowo <strong>5–8%</strong> zysku przeżywalności po LLLT ex vivo (RCT split-scalp, n=10; ostrożna interpretacja, nie cytat z abstraktu).</>,
+  },
+  {
+    id: "ref-3",
+    num: "[3]",
+    citation: (
+      <>
+        Lanzafame RJ, Blanche RR, Bodian AB i wsp. The growth of human scalp hair mediated by visible red light laser and LED sources in males. <em>Lasers Surg Med</em>. 2013;45(8):487–495.
+      </>
+    ),
+    doi: "10.1002/lsm.22173",
+    pmid: "24078483",
+    note: <>Wspiera: przyspieszenie anagenu (3–4 tyg.) oraz <strong>10–15%</strong> przyrostu średnicy/gęstości (RCT 655 nm: +35% liczby włosów vs. sham).</>,
+  },
+  {
+    id: "ref-4",
+    num: "[4]",
+    citation: (
+      <>
+        Jimenez JJ, Wikramanayake TC, Bergfeld W i wsp. Efficacy and Safety of a Low-level Laser Device in the Treatment of Male and Female Pattern Hair Loss: A Multicenter, Randomized, Sham Device-controlled, Double-blind Study. <em>Am J Clin Dermatol</em>. 2014;15(2):115–127.
+      </>
+    ),
+    doi: "10.1007/s40257-013-0060-6",
+    pmid: "24474647",
+    note: <>Wspiera: <strong>20–30%</strong> redukcji „shock loss" oraz <strong>10–15%</strong> przyrostu gęstości (wieloośrodkowy RCT, n=128/141, sham-controlled).</>,
+  },
+  {
+    id: "ref-5",
+    num: "[5]",
+    citation: (
+      <>
+        Couto MR, Gomes A, Nogueira A i wsp. The effect of combined red, blue, and near-infrared LED photobiomodulation therapy on speed of wound healing after superficial ablative fractional resurfacing. <em>Lasers Med Sci</em>. 2024;39:108.
+      </>
+    ),
+    doi: "10.1007/s10103-024-04042-x",
+    pmid: "38532146",
+    note: <>Wspiera: <strong>30–40%</strong> szybsza redukcja rumienia w pierwszych 14 dniach (RCT split-face po ablacji frakcyjnej).</>,
+  },
+  {
+    id: "ref-6",
+    num: "[6]",
+    citation: (
+      <>
+        Pillai JK, Mysore V. Role of Low-Level Light Therapy (LLLT) in Androgenetic Alopecia. <em>J Cutan Aesthet Surg</em>. 2021;14(4):385–391.
+      </>
+    ),
+    doi: "10.4103/JCAS.JCAS_218_20",
+    pmcid: "PMC8906269",
+    note: <>Tło dawkowania: 630–680 nm, 3–5 J/cm², 2–3×/tydz., 15–20 min — parametry zgodne z naszym protokołem.</>,
+  },
+  {
+    id: "ref-7",
+    num: "[7]",
+    citation: (
+      <>
+        Avci P, Gupta GK, Clark J, Wikonkal N, Hamblin MR. Low-level laser (light) therapy (LLLT) for treatment of hair loss. <em>Lasers Surg Med</em>. 2014;46(2):144–151.
+      </>
+    ),
+    doi: "10.1002/lsm.22170",
+    pmid: "23970445",
+    note: <>Mechanizm: cytochrom c oksydaza, ATP, NO — biologiczna podstawa wszystkich powyższych efektów.</>,
+  },
+];
+
+function StatusBadge({ status, label, value, source, message }: { status: "ok" | "not_found" | "error" | "loading"; label: string; value: string; source: string; message?: string }) {
+  const styles: Record<string, string> = {
+    ok: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
+    not_found: "border-red-500/40 bg-red-500/10 text-red-300",
+    error: "border-amber-500/40 bg-amber-500/10 text-amber-300",
+    loading: "border-muted-foreground/30 bg-muted/20 text-muted-foreground",
+  };
+  const icon = status === "ok" ? "✓" : status === "not_found" ? "✗" : status === "error" ? "!" : "…";
+  const title =
+    status === "ok"
+      ? `Zweryfikowano w ${source}`
+      : status === "not_found"
+        ? `Nie znaleziono w ${source}`
+        : status === "error"
+          ? `Błąd weryfikacji (${source})${message ? `: ${message}` : ""}`
+          : `Weryfikacja w ${source}…`;
+  return (
+    <span
+      title={title}
+      className={`inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ${styles[status]}`}
+    >
+      <span aria-hidden>{icon}</span>
+      <span>
+        {label}: {value}
+      </span>
+    </span>
+  );
+}
+
+function SourcesCard() {
+  const validate = useServerFn(validateReferences);
+  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+    queryKey: ["ref-validation", REFERENCES.map((r) => r.id).join(",")],
+    queryFn: () =>
+      validate({
+        data: {
+          refs: REFERENCES.map(({ id, doi, pmid, pmcid }) => ({ id, doi, pmid, pmcid })),
+        },
+      }),
+    staleTime: 1000 * 60 * 60 * 24,
+    gcTime: 1000 * 60 * 60 * 24,
+    retry: 1,
+  });
+
+  const byId = new Map<string, RefValidation>((data ?? []).map((d) => [d.id, d]));
+  const allOk = data && data.every((d) => [d.doi, d.pmid, d.pmcid].every((c) => !c || c.status === "ok"));
+
+  return (
+    <Card title="Źródła (RCT i przeglądy) — z automatyczną weryfikacją identyfikatorów">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs italic text-muted-foreground">
+          Każdy DOI sprawdzamy w Crossref, PMID i PMCID w NCBI E-utilities. Status pokazujemy obok każdej pozycji.
+        </p>
+        <div className="flex items-center gap-2 text-xs">
+          {isLoading || isFetching ? (
+            <span className="text-muted-foreground">Weryfikacja…</span>
+          ) : isError ? (
+            <span className="text-amber-300">Błąd weryfikacji</span>
+          ) : allOk ? (
+            <span className="text-emerald-300">Wszystkie identyfikatory poprawne</span>
+          ) : (
+            <span className="text-amber-300">Część identyfikatorów wymaga uwagi</span>
+          )}
+          <button
+            type="button"
+            onClick={() => refetch()}
+            disabled={isFetching}
+            className="rounded-sm border border-border px-2 py-0.5 text-[10px] uppercase tracking-wide hover:border-accent disabled:opacity-50"
+          >
+            Sprawdź ponownie
+          </button>
+        </div>
+      </div>
+      <ol className="mt-4 space-y-4 text-xs">
+        {REFERENCES.map((r) => {
+          const v = byId.get(r.id);
+          const status = (k: "doi" | "pmid" | "pmcid") => {
+            if (isLoading || !v) return "loading" as const;
+            const c = v[k];
+            return c ? c.status : null;
+          };
+          return (
+            <li key={r.id}>
+              <span className="text-accent">{r.num}</span> {r.citation}
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {r.doi && (
+                  <a href={`https://doi.org/${r.doi}`} target="_blank" rel="noopener noreferrer">
+                    <StatusBadge status={status("doi") ?? "error"} label="DOI" value={r.doi} source="Crossref" message={v?.doi?.message} />
+                  </a>
+                )}
+                {r.pmid && (
+                  <a href={`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`} target="_blank" rel="noopener noreferrer">
+                    <StatusBadge status={status("pmid") ?? "error"} label="PMID" value={r.pmid} source="NCBI PubMed" message={v?.pmid?.message} />
+                  </a>
+                )}
+                {r.pmcid && (
+                  <a href={`https://www.ncbi.nlm.nih.gov/pmc/articles/${r.pmcid}/`} target="_blank" rel="noopener noreferrer">
+                    <StatusBadge status={status("pmcid") ?? "error"} label="PMCID" value={r.pmcid} source="NCBI PMC" message={v?.pmcid?.message} />
+                  </a>
+                )}
+              </div>
+              <div className="mt-1 text-muted-foreground">{r.note}</div>
+            </li>
+          );
+        })}
+      </ol>
+      {data && (
+        <p className="mt-4 text-[10px] italic text-muted-foreground">
+          Ostatnia weryfikacja: {new Date(data[0]?.checkedAt ?? Date.now()).toLocaleString("pl-PL")} · Crossref REST API · NCBI E-utilities (esummary).
+        </p>
+      )}
+    </Card>
+  );
+}
+
 
 /* ---------- FAQ ---------- */
 
