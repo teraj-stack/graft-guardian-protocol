@@ -116,6 +116,17 @@ for (const rel of listFiles()) {
       const label = m[1].toUpperCase();
       const digits = m[2].replace(/[\s-]/g, "");
       const expected = CANONICAL_IDS[label];
+
+      const formatOk =
+        label === "NIP" ? isValidNIP(digits) :
+        label === "KRS" ? isValidKRS(digits) :
+        label === "REGON" ? isValidREGON(digits) : false;
+
+      if (!formatOk) {
+        report(rel, ln, `${label.toLowerCase()}-format`, line, `poprawny format ${label}`);
+        continue;
+      }
+
       if (digits !== expected) {
         report(rel, ln, label.toLowerCase(), line, expected);
       }
