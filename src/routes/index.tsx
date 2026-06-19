@@ -986,21 +986,25 @@ function Contact() {
                     <span
                       key={i}
                       className={`inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 ${
-                        s === "sent"
+                        s.status === "sent"
                           ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
-                          : s === "skipped"
+                          : s.status === "skipped"
                             ? "border-muted-foreground/30 bg-secondary/50 text-muted-foreground"
                             : "border-destructive/40 bg-destructive/10 text-destructive"
                       }`}
                     >
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
-                          s === "sent" ? "bg-emerald-400" : s === "skipped" ? "bg-muted-foreground" : "bg-destructive"
+                          s.status === "sent" ? "bg-emerald-400" : s.status === "skipped" ? "bg-muted-foreground" : "bg-destructive"
                         }`}
                       />
-                      SMS {s === "sent" ? "wysłano" : s === "skipped" ? "pominięto" : "błąd"}
+                      SMS {s.status === "sent" ? "wysłano" : s.status === "skipped" ? "pominięto" : "błąd"}
+                      {s.attempts > 0 && (
+                        <span className="ml-1 opacity-70">· {s.attempts} {s.attempts === 1 ? "próba" : s.attempts < 5 ? "próby" : "prób"}</span>
+                      )}
                     </span>
                   ))}
+
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 ${
                       status.notifications.email === "sent"
