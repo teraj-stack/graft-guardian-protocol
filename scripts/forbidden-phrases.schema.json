@@ -5,6 +5,11 @@
   "required": ["phrases"],
   "properties": {
     "description": { "type": "string" },
+    "ignore": {
+      "type": "array",
+      "description": "Glob patterns (relative to dist/) skipped for ALL phrases. Supports **, *, ?.",
+      "items": { "type": "string", "minLength": 1 }
+    },
     "phrases": {
       "type": "array",
       "items": {
@@ -18,7 +23,12 @@
               "reason": { "type": "string" },
               "replacement": { "type": "string" },
               "caseInsensitive": { "type": "boolean", "default": false },
-              "regex": { "type": "boolean", "default": false }
+              "regex": { "type": "boolean", "default": false },
+              "ignore": {
+                "type": "array",
+                "description": "Glob patterns (relative to dist/) skipped only for THIS phrase.",
+                "items": { "type": "string", "minLength": 1 }
+              }
             },
             "additionalProperties": false
           }

@@ -1,6 +1,11 @@
 {
   "$schema": "./forbidden-phrases.schema.json",
-  "description": "Phrases that must NOT appear in the production build output (dist/). The postbuild guard (scripts/check-dist-forbidden-phrases.mjs) reads this file and fails the build if any phrase is found. Add new entries here — no code changes required.",
+  "description": "Phrases that must NOT appear in the production build output (dist/). The postbuild guard (scripts/check-dist-forbidden-phrases.mjs) reads this file and fails the build if any phrase is found. Add new entries here — no code changes required. Use `ignore` (globs, relative to dist/) to skip files/folders globally; each phrase entry can also define its own `ignore` list.",
+  "ignore": [
+    "**/*.map",
+    "**/sourcemaps/**",
+    "**/_libs/**"
+  ],
   "phrases": [
     {
       "phrase": "Cennik / Sklep",
