@@ -3,14 +3,15 @@ import { test, expect, request as pwRequest, type APIRequestContext } from "@pla
 /**
  * E2E: dla każdego <loc> w sitemap.xml (oraz w sub-sitemapach pod
  * sitemap-index) pobiera stronę i weryfikuje, że <link rel="canonical">
- * w HTML wskazuje dokładnie ten sam URL co <loc>.
+ * w HTML wskazuje ten sam zasób co <loc>.
  *
- * Normalizacja:
- *  - trim po obu stronach,
- *  - protokół i host porównywane case-insensitive,
- *  - ścieżka / query / fragment porównywane case-sensitive,
- *  - trailing slash znaczący (musi się zgadzać) — sitemap powinien być
- *    spójny z canonical co do znaku.
+ * Strategia środowiskowa:
+ *  - sitemap może zawierać URL-e produkcyjne (np. https://graftgen.com/...).
+ *    Testy odpalają się jednak na baseURL (preview/local), więc fetch
+ *    wykonujemy pod baseURL + pathname z <loc>.
+ *  - Porównujemy pathname + search + hash <loc> i canonical
+ *    (host/protokół mogą się różnić między środowiskami; to OK).
+ *  - Trailing slash i case w ścieżce są znaczące — muszą się zgadzać.
  */
 
 interface UrlEntry {
