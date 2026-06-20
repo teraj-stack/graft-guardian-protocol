@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-20T05:00:02.344Z",
-  "total": 6,
+  "generatedAt": "2026-06-20T17:27:36.697Z",
+  "total": 17,
   "byRule": {
-    "graftgen-bare": 1,
-    "legacy-fue": 3,
+    "graftgen-bare": 3,
+    "legacy-fue": 12,
     "legacy-cennik-nav": 2
   },
   "rules": [
@@ -73,6 +73,116 @@
       "column": 3,
       "match": "Cennik",
       "snippet": "\"Cennik\","
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 6,
+      "column": 52,
+      "match": "FUE",
+      "snippet": "\"Aktualne ceny przeszczepu włosów w Polsce (DHI, FUE, safirowe ostrza) — od 8 000 do 25 000 zł. Sprawdź, co realnie wpływa na koszt i jak protokół PBM + HBOT chroni Twoją inwestycję w pierwszych 48 godzinach.\";"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 49,
+      "column": 112,
+      "match": "FUE",
+      "snippet": "text: \"Cena przeszczepu włosów w Polsce w 2026 roku waha się od ok. 8 000 zł (mniejsze zabiegi FUE, ok. 1500 graftów) do 25 000–35 000 zł (zaawansowane DHI, 3500+ graftów w renomowanej klinice). Średni koszt sesji DHI to 15 000–22 000 zł.\","
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 57,
+      "column": 54,
+      "match": "FUE",
+      "snippet": "text: \"Cena zależy od metody (DHI vs FUE), liczby graftów, doświadczenia operatora, użytych narzędzi (implantery Choi, safirowe ostrza) oraz zakresu opieki pozabiegowej (PBM, HBOT, PRP, follow-up). Sama liczba graftów to tylko ok. 40% warto"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 106,
+      "column": 71,
+      "match": "FUE",
+      "snippet": "<li><a href=\"#metody\" className=\"hover:text-primary\">DHI vs FUE — różnice w cenie i efekcie</a></li>"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 129,
+      "column": 49,
+      "match": "FUE",
+      "snippet": "<th className=\"p-3 font-medium\">FUE (zł)</th>"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 149,
+      "column": 76,
+      "match": "FUE",
+      "snippet": "<h2 className=\"font-serif text-3xl text-foreground mb-6\">2. DHI vs FUE — różnice w cenie i efekcie</h2>"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 151,
+      "column": 19,
+      "match": "FUE",
+      "snippet": "<strong>FUE (Follicular Unit Extraction)</strong> i <strong>DHI (Direct Hair Implantation)</strong> to"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 156,
+      "column": 23,
+      "match": "FUE",
+      "snippet": "<li><strong>FUE</strong> — ekstrakcja mikropunczem, potem implantacja w wcześniej zrobione nacięcia. Tańsza, szybsza, dobra przy dużych powierzchniach.</li>"
+    },
+    {
+      "rule": "graftgen-bare",
+      "label": "Brakuje \".com\" przy nazwie Graftgen",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 202,
+      "column": 20,
+      "match": "Graftgen",
+      "snippet": "Protokół Graftgen — <strong>PBM (fototerapia 633/660/810 nm)</strong> + <strong>HBOT (1,5–3,0 ATA)</strong> + zarządzanie mikrobiomem —"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 244,
+      "column": 66,
+      "match": "FUE",
+      "snippet": "<p className=\"leading-relaxed\">Od ok. 8 000 zł (małe FUE, 1500 graftów) do 25 000–35 000 zł (duże DHI 3500+ graftów). Średnia sesja DHI to 15 000–22 000 zł.</p>"
+    },
+    {
+      "rule": "graftgen-bare",
+      "label": "Brakuje \".com\" przy nazwie Graftgen",
+      "severity": "warn",
+      "file": "src/routes/koszt-przeszczepu-wlosow.tsx",
+      "line": 269,
+      "column": 60,
+      "match": "Graftgen",
+      "snippet": "Sprawdź gotowe pakiety protokołu pozabiegowego Graftgen — PBM, HBOT i wsparcie"
     },
     {
       "rule": "legacy-cennik-nav",
