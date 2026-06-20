@@ -18,6 +18,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:removed-products": "playwright test removed-products",
     "test:visual": "python3 scripts/visual-logo-check.py",
     "test:visual:diff": "python3 scripts/visual-diff.py",
     "test:visual:update": "python3 scripts/visual-diff.py --update-baselines",
@@ -92,6 +94,7 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "^2.5.2",
+    "@playwright/test": "1.56.0",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
