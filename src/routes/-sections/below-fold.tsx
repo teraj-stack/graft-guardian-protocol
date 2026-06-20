@@ -370,7 +370,7 @@ export function InteractiveSchedule() {
         </button>
       </div>
 
-      <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-15">
+      <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
         {SCHEDULE.map((d) => {
           const dayDone = d.tasks.every((t) => done[t.id]);
           const dayPartial = !dayDone && d.tasks.some((t) => done[t.id]);
