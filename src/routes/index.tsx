@@ -153,6 +153,8 @@ function Index() {
         <LADD />
         <LazyMount minHeight={900} fallback={<MicrobiomeSkeleton />}><Microbiome /></LazyMount>
         <LazyMount minHeight={1300} fallback={<TimelineSkeleton />}><Timeline /></LazyMount>
+        <LazyMount minHeight={900} fallback={<div style={{ minHeight: 900 }} />}><InteractiveSchedule /></LazyMount>
+
         <LazyMount minHeight={780} fallback={<JourneySkeleton />}><Journey /></LazyMount>
         <LazyMount minHeight={900} fallback={<DayZeroToThreeSkeleton />}><DayZeroToThree /></LazyMount>
         <LazyMount minHeight={2100} fallback={<EvidenceBasementSkeleton />}><EvidenceBasement /></LazyMount>
