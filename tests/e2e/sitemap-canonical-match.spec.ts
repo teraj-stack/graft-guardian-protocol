@@ -158,6 +158,3 @@ test("self-test: pathQueryHash izoluje ścieżkę od hosta", () => {
   expect(pathQueryHash("https://x/a/") === pathQueryHash("https://x/a")).toBe(false);
   expect(pathQueryHash("https://x/A") === pathQueryHash("https://x/a")).toBe(false);
 });
-
-  expect(normalizeForCompare("https://x/a/") === normalizeForCompare("https://x/a")).toBe(false);
-});
