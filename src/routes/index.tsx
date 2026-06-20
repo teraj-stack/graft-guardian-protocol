@@ -424,8 +424,8 @@ function Creator() {
               </li>
               <li>
                 Tworzy protokoły oparte na hiperbarii, laserobarii, polu
-                magnetycznym, fototerapii i fotobiomodulacji. Podkreśla, że
-                technologia bez empatii jest bezwartościowa.
+                magnetycznym, fototerapii i fotobiomodulacji. Zawsze podkreśla, że
+                najlepsza technologia jest bezwartościowa bez empatii i partnerskiej relacji z pacjentem.
               </li>
             </ul>
           </div>
