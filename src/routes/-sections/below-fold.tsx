@@ -313,9 +313,115 @@ function loadProgress(): Record<string, boolean> {
   }
 }
 
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function addDaysIso(iso: string, days: number): string {
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function icsDate(iso: string): string {
+  return iso.replaceAll("-", "");
+}
+
+function icsEscape(s: string): string {
+  return s.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+
+function buildPlainText(surgeryDate: string): string {
+  const lines: string[] = [
+    `Graftgen.com — Przypomnienia po przeszczepie włosów (Dzień 0–14)`,
+    `Data zabiegu: ${surgeryDate}`,
+    ``,
+  ];
+  for (const d of SCHEDULE) {
+    const date = addDaysIso(surgeryDate, d.day);
+    lines.push(`Dzień ${d.day} — ${date} — ${d.phase}`);
+    lines.push(`Fokus: ${d.focus}`);
+    for (const t of d.tasks) {
+      lines.push(`  • ${t.label}${t.tone === "critical" ? "  [KRYTYCZNE]" : ""}`);
+    }
+    lines.push(``);
+  }
+  lines.push(`Źródło: https://graftgen.com  •  Materiał edukacyjny, nie zastępuje zaleceń lekarza.`);
+  return lines.join("\n");
+}
+
+function buildIcs(surgeryDate: string): string {
+  const dtstamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  const out: string[] = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Graftgen.com//Protokol 14//PL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "X-WR-CALNAME:Graftgen — Dzień 0–14",
+    "X-WR-TIMEZONE:Europe/Warsaw",
+  ];
+  for (const d of SCHEDULE) {
+    const date = addDaysIso(surgeryDate, d.day);
+    const dtstart = icsDate(date);
+    const dtend = icsDate(addDaysIso(date, 1));
+    const summary = `Dzień ${d.day} — ${d.phase}`;
+    const descLines = [
+      d.focus,
+      "",
+      ...d.tasks.map((t) => `• ${t.label}${t.tone === "critical" ? " [KRYTYCZNE]" : ""}`),
+      "",
+      "Graftgen.com — materiał edukacyjny.",
+    ];
+    out.push(
+      "BEGIN:VEVENT",
+      `UID:graftgen-${surgeryDate}-d${d.day}@graftgen.com`,
+      `DTSTAMP:${dtstamp}`,
+      `DTSTART;VALUE=DATE:${dtstart}`,
+      `DTEND;VALUE=DATE:${dtend}`,
+      `SUMMARY:${icsEscape(summary)}`,
+      `DESCRIPTION:${icsEscape(descLines.join("\n"))}`,
+      "BEGIN:VALARM",
+      "TRIGGER:-PT1H",
+      "ACTION:DISPLAY",
+      `DESCRIPTION:${icsEscape(summary)}`,
+      "END:VALARM",
+      "END:VEVENT",
+    );
+  }
+  out.push("END:VCALENDAR");
+  return out.join("\r\n");
+}
+
 export function InteractiveSchedule() {
   const [openDay, setOpenDay] = useState<number>(0);
   const [done, setDone] = useState<Record<string, boolean>>(() => loadProgress());
+  const [surgeryDate, setSurgeryDate] = useState<string>(todayIso());
+  const [copyStatus, setCopyStatus] = useState<"idle" | "ok" | "err">("idle");
+  const [showPreview, setShowPreview] = useState(false);
+
+  function downloadIcs() {
+    const ics = buildIcs(surgeryDate);
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `graftgen-przypomnienia-${surgeryDate}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function copyText() {
+    try {
+      await navigator.clipboard.writeText(buildPlainText(surgeryDate));
+      setCopyStatus("ok");
+    } catch {
+      setCopyStatus("err");
+    }
+    setTimeout(() => setCopyStatus("idle"), 2500);
+  }
 
   const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
   const doneCount = Object.values(done).filter(Boolean).length;
