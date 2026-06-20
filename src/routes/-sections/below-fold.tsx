@@ -8,6 +8,14 @@ import { validateReferences, type RefValidation } from "@/lib/references.functio
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
 import { AnimatedTile } from "@/components/animated-tile";
 import { evidenceLqip } from "@/components/animated-tile-lqip";
+import {
+  SCHEDULE,
+  addDaysIso,
+  buildIcs,
+  buildPlainText,
+  buildShortMessage,
+  todayIso,
+} from "@/lib/schedule-data";
 
 /* ---------- Microbiome ---------- */
 
@@ -136,170 +144,6 @@ export function Timeline() {
 
 /* ---------- Interactive Day 0–14 Schedule ---------- */
 
-type ScheduleTask = { id: string; label: string; tone?: "critical" | "default" };
-type ScheduleDay = {
-  day: number;
-  phase: string;
-  focus: string;
-  tasks: ScheduleTask[];
-};
-
-const SCHEDULE: ScheduleDay[] = [
-  {
-    day: 0,
-    phase: "Doba „Zero”",
-    focus: "Bezpośrednio po zabiegu — start protokołu",
-    tasks: [
-      { id: "d0-pbm", label: "PBM 630–680 + 830 nm, 20 min — pierwsza sesja jeszcze w klinice", tone: "critical" },
-      { id: "d0-hbot", label: "HBOT 1,5–3,0 ATA — pierwsza sesja w dobie „Zero”", tone: "critical" },
-      { id: "d0-sleep", label: "Sen w pozycji półsiedzącej ≥30° (poduszka klinowa)" },
-      { id: "d0-cold", label: "Zimne okłady wokół czoła (nigdy na strefę biorczą)" },
-      { id: "d0-meds", label: "Leki wg karty wypisowej: antybiotyk, p/bólowe, p/obrzękowe" },
-      { id: "d0-noalc", label: "Bez alkoholu, bez papierosów, bez wysiłku, bez schylania" },
-    ],
-  },
-  {
-    day: 1,
-    phase: "Doba 1",
-    focus: "Krytyczne okno reperfuzji",
-    tasks: [
-      { id: "d1-hbot", label: "HBOT — druga sesja", tone: "critical" },
-      { id: "d1-pbm", label: "PBM 20 min" },
-      { id: "d1-spray", label: "Bezdotykowy spray fizjologiczny / HOCl co 2–3 h" },
-      { id: "d1-sleep", label: "Sen ≥30°, bez dotykania, bez czapki" },
-    ],
-  },
-  {
-    day: 2,
-    phase: "Doba 2",
-    focus: "Stabilizacja graftów",
-    tasks: [
-      { id: "d2-pbm", label: "PBM 20 min" },
-      { id: "d2-hoci", label: "Spłukiwanie HOCl od 48 h — strumień bezdotykowy" },
-      { id: "d2-walk", label: "Spacer 20–30 min, bez pochylania głowy" },
-    ],
-  },
-  {
-    day: 3,
-    phase: "Doba 3",
-    focus: "Koniec ostrego zapalenia",
-    tasks: [
-      { id: "d3-pbm", label: "PBM 20 min" },
-      { id: "d3-wash", label: "Pierwsze delikatne mycie wg instrukcji kliniki" },
-      { id: "d3-photo", label: "Zdjęcie kontrolne (góra, boki, tył) — dodaj do panelu pacjenta" },
-    ],
-  },
-  {
-    day: 4,
-    phase: "Doba 4",
-    focus: "Start fazy proliferacji",
-    tasks: [
-      { id: "d4-pbm", label: "PBM 20 min" },
-      { id: "d4-wash", label: "Mycie skóry głowy szamponem pH 5,5 bez SLS, bez tarcia" },
-      { id: "d4-sleep", label: "Można spać płasko (bez ucisku na strefę biorczą)" },
-    ],
-  },
-  {
-    day: 5,
-    phase: "Doba 5",
-    focus: "Zarządzanie mikrobiomem",
-    tasks: [
-      { id: "d5-pbm", label: "PBM 20 min" },
-      { id: "d5-wash", label: "Mycie 1×/dobę, delikatne osuszanie ręcznikiem (bez pocierania)" },
-      { id: "d5-sport", label: "Lekka aktywność OK — bez pocenia się głowy" },
-    ],
-  },
-  {
-    day: 6,
-    phase: "Doba 6",
-    focus: "Kontrola erytemy",
-    tasks: [
-      { id: "d6-pbm", label: "PBM 20 min" },
-      { id: "d6-photo", label: "Trichoskopowe zdjęcie kontrolne (panel pacjenta)" },
-      { id: "d6-erythema", label: "Ocena rumienia — jeśli utrzymuje się: kontakt z koordynatorem" },
-    ],
-  },
-  {
-    day: 7,
-    phase: "Doba 7 — tydzień 1.",
-    focus: "Punkt kontrolny tygodniowy",
-    tasks: [
-      { id: "d7-pbm", label: "PBM 20 min" },
-      { id: "d7-report", label: "Raport tygodniowy: anagen %, grubość, tolerancja skóry" },
-      { id: "d7-call", label: "Kontakt telefoniczny / wideo z koordynatorem", tone: "critical" },
-    ],
-  },
-  {
-    day: 8,
-    phase: "Doba 8",
-    focus: "Usuwanie strupów",
-    tasks: [
-      { id: "d8-pbm", label: "PBM 20 min" },
-      { id: "d8-massage", label: "Miękki masaż usuwający strupy + botaniki (arnika, centella)" },
-      { id: "d8-noscratch", label: "Bezwzględnie nie drapać — strupy schodzą same z wodą" },
-    ],
-  },
-  {
-    day: 9,
-    phase: "Doba 9",
-    focus: "Mikrobiom + nawilżenie",
-    tasks: [
-      { id: "d9-pbm", label: "PBM 20 min" },
-      { id: "d9-mist", label: "Mgiełka HOCl / fizjologiczna 2–3×/dobę" },
-      { id: "d9-diet", label: "Dieta przeciwzapalna: omega-3, polifenole, białko" },
-    ],
-  },
-  {
-    day: 10,
-    phase: "Doba 10",
-    focus: "Strefa dawcza",
-    tasks: [
-      { id: "d10-pbm", label: "PBM 20 min — ze szczególnym uwzględnieniem strefy dawczej" },
-      { id: "d10-cap", label: "Opcjonalnie: sesja zimnej plazmy (CAP) na strefę dawczą" },
-      { id: "d10-photo", label: "Zdjęcie strefy dawczej (panel pacjenta)" },
-    ],
-  },
-  {
-    day: 11,
-    phase: "Doba 11",
-    focus: "Powrót do codzienności",
-    tasks: [
-      { id: "d11-pbm", label: "PBM 20 min" },
-      { id: "d11-sport", label: "Powrót do umiarkowanego sportu (bez sztang nad głową)" },
-      { id: "d11-hat", label: "Luźna czapka OK przy słońcu — nigdy ciasna" },
-    ],
-  },
-  {
-    day: 12,
-    phase: "Doba 12",
-    focus: "Konsolidacja",
-    tasks: [
-      { id: "d12-pbm", label: "PBM 20 min" },
-      { id: "d12-wash", label: "Mycie standardowym szamponem pH 5,5" },
-    ],
-  },
-  {
-    day: 13,
-    phase: "Doba 13",
-    focus: "Przygotowanie do kontroli",
-    tasks: [
-      { id: "d13-pbm", label: "PBM 20 min" },
-      { id: "d13-photo", label: "Pełna seria zdjęć kontrolnych (5 ujęć)" },
-      { id: "d13-questions", label: "Spisz pytania na wizytę kontrolną" },
-    ],
-  },
-  {
-    day: 14,
-    phase: "Doba 14 — koniec protokołu 14-dniowego",
-    focus: "Kontrola + plan miesiąc 1+",
-    tasks: [
-      { id: "d14-visit", label: "Wizyta kontrolna w klinice (trichoskopia)", tone: "critical" },
-      { id: "d14-pbm", label: "PBM przechodzi w tryb 2–3×/tydz." },
-      { id: "d14-plan", label: "Ustalenie planu LADD / PRP / minoksydyl na miesiąc 1+" },
-      { id: "d14-report", label: "Raport końcowy fazy ostrej (panel pacjenta)" },
-    ],
-  },
-];
 
 const SCHEDULE_STORAGE_KEY = "graftgen.schedule.v1";
 
@@ -313,85 +157,6 @@ function loadProgress(): Record<string, boolean> {
   }
 }
 
-function todayIso(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function addDaysIso(iso: string, days: number): string {
-  const d = new Date(iso + "T00:00:00");
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
-}
-
-function icsDate(iso: string): string {
-  return iso.replaceAll("-", "");
-}
-
-function icsEscape(s: string): string {
-  return s.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
-}
-
-function buildPlainText(surgeryDate: string): string {
-  const lines: string[] = [
-    `Graftgen.com — Przypomnienia po przeszczepie włosów (Dzień 0–14)`,
-    `Data zabiegu: ${surgeryDate}`,
-    ``,
-  ];
-  for (const d of SCHEDULE) {
-    const date = addDaysIso(surgeryDate, d.day);
-    lines.push(`Dzień ${d.day} — ${date} — ${d.phase}`);
-    lines.push(`Fokus: ${d.focus}`);
-    for (const t of d.tasks) {
-      lines.push(`  • ${t.label}${t.tone === "critical" ? "  [KRYTYCZNE]" : ""}`);
-    }
-    lines.push(``);
-  }
-  lines.push(`Źródło: https://graftgen.com  •  Materiał edukacyjny, nie zastępuje zaleceń lekarza.`);
-  return lines.join("\n");
-}
-
-function buildIcs(surgeryDate: string): string {
-  const dtstamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-  const out: string[] = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Graftgen.com//Protokol 14//PL",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "X-WR-CALNAME:Graftgen — Dzień 0–14",
-    "X-WR-TIMEZONE:Europe/Warsaw",
-  ];
-  for (const d of SCHEDULE) {
-    const date = addDaysIso(surgeryDate, d.day);
-    const dtstart = icsDate(date);
-    const dtend = icsDate(addDaysIso(date, 1));
-    const summary = `Dzień ${d.day} — ${d.phase}`;
-    const descLines = [
-      d.focus,
-      "",
-      ...d.tasks.map((t) => `• ${t.label}${t.tone === "critical" ? " [KRYTYCZNE]" : ""}`),
-      "",
-      "Graftgen.com — materiał edukacyjny.",
-    ];
-    out.push(
-      "BEGIN:VEVENT",
-      `UID:graftgen-${surgeryDate}-d${d.day}@graftgen.com`,
-      `DTSTAMP:${dtstamp}`,
-      `DTSTART;VALUE=DATE:${dtstart}`,
-      `DTEND;VALUE=DATE:${dtend}`,
-      `SUMMARY:${icsEscape(summary)}`,
-      `DESCRIPTION:${icsEscape(descLines.join("\n"))}`,
-      "BEGIN:VALARM",
-      "TRIGGER:-PT1H",
-      "ACTION:DISPLAY",
-      `DESCRIPTION:${icsEscape(summary)}`,
-      "END:VALARM",
-      "END:VEVENT",
-    );
-  }
-  out.push("END:VCALENDAR");
-  return out.join("\r\n");
-}
 
 export function InteractiveSchedule() {
   const [openDay, setOpenDay] = useState<number>(0);
@@ -399,6 +164,12 @@ export function InteractiveSchedule() {
   const [surgeryDate, setSurgeryDate] = useState<string>(todayIso());
   const [copyStatus, setCopyStatus] = useState<"idle" | "ok" | "err">("idle");
   const [showPreview, setShowPreview] = useState(false);
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<
+    "idle" | "sending" | "sent" | "rate_limited" | "suppressed" | "invalid" | "error"
+  >("idle");
+  const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
 
   function downloadIcs() {
     const ics = buildIcs(surgeryDate);
@@ -422,6 +193,80 @@ export function InteractiveSchedule() {
     }
     setTimeout(() => setCopyStatus("idle"), 2500);
   }
+
+  async function sendEmail() {
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!ok) {
+      setEmailStatus("invalid");
+      setTimeout(() => setEmailStatus("idle"), 2500);
+      return;
+    }
+    if (!consent) return;
+    setEmailStatus("sending");
+    try {
+      const resp = await fetch("/api/public/reminders/send-checklist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          surgeryDate,
+          consent: true,
+        }),
+      });
+      const json = (await resp.json().catch(() => ({}))) as {
+        ok?: boolean;
+        reason?: string;
+      };
+      if (resp.status === 429 || json.reason === "rate_limited") {
+        setEmailStatus("rate_limited");
+      } else if (json.reason === "email_suppressed") {
+        setEmailStatus("suppressed");
+      } else if (resp.ok && json.ok) {
+        setEmailStatus("sent");
+      } else {
+        setEmailStatus("error");
+      }
+    } catch {
+      setEmailStatus("error");
+    }
+    setTimeout(() => setEmailStatus("idle"), 6000);
+  }
+
+  async function shareToPhone() {
+    const text = buildShortMessage(surgeryDate);
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: "Graftgen — Dzień 0–14",
+          text,
+        });
+        setShareStatus("shared");
+      } catch {
+        setShareStatus("idle");
+        return;
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(text);
+        setShareStatus("copied");
+      } catch {
+        setShareStatus("err");
+      }
+    }
+    setTimeout(() => setShareStatus("idle"), 2500);
+  }
+
+  function whatsappHref(): string {
+    const text = buildShortMessage(surgeryDate);
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  }
+
+  function smsHref(): string {
+    const text = buildShortMessage(surgeryDate);
+    // iOS uses ?&body=, Android tolerates ?body=
+    return `sms:?&body=${encodeURIComponent(text)}`;
+  }
+
 
   const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
   const doneCount = Object.values(done).filter(Boolean).length;
@@ -535,7 +380,101 @@ export function InteractiveSchedule() {
             className="mt-4 h-72 w-full resize-y border border-border bg-background/60 p-3 font-mono text-[11px] leading-relaxed text-foreground/90"
           />
         )}
+
+        <div className="mt-5 grid gap-5 border-t border-border pt-5 md:grid-cols-2">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Wyślij na e-mail
+            </div>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                maxLength={254}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="ty@przyklad.pl"
+                className="flex-1 border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={sendEmail}
+                disabled={emailStatus === "sending" || !consent || email.trim().length === 0}
+                className="inline-flex items-center justify-center border border-accent bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-accent transition hover:bg-accent/20 disabled:opacity-50"
+              >
+                {emailStatus === "sending"
+                  ? "Wysyłanie…"
+                  : emailStatus === "sent"
+                    ? "Wysłano ✓"
+                    : emailStatus === "rate_limited"
+                      ? "Odczekaj kilka minut"
+                      : emailStatus === "suppressed"
+                        ? "Adres wypisany"
+                        : emailStatus === "invalid"
+                          ? "Sprawdź adres"
+                          : emailStatus === "error"
+                            ? "Spróbuj ponownie"
+                            : "Wyślij mi e-mailem"}
+              </button>
+            </div>
+            <label className="mt-2 flex items-start gap-2 text-[11px] text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 h-3.5 w-3.5 accent-[hsl(var(--accent))]"
+              />
+              <span>
+                Wyrażam zgodę na jednorazową wysyłkę przypomnień edukacyjnych
+                na podany adres. Bez zapisu na listę — jeden e-mail, bez ciągu
+                dalszego.
+              </span>
+            </label>
+          </div>
+
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Wyślij jako wiadomość na telefon
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={shareToPhone}
+                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                {shareStatus === "shared"
+                  ? "Udostępniono ✓"
+                  : shareStatus === "copied"
+                    ? "Skopiowano ✓"
+                    : shareStatus === "err"
+                      ? "Błąd — skopiuj ręcznie"
+                      : "Udostępnij / skopiuj"}
+              </button>
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                WhatsApp
+              </a>
+              <a
+                href={smsHref()}
+                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                SMS
+              </a>
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              „Udostępnij” korzysta z systemowego okna na telefonie (Wiadomości,
+              WhatsApp, Signal, Telegram). Na desktopie kopiuje skróconą wersję
+              do schowka.
+            </p>
+          </div>
+        </div>
       </div>
+
 
       <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
 

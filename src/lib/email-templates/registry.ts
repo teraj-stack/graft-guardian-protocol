@@ -18,7 +18,9 @@ export interface TemplateEntry {
  *   // then add to TEMPLATES: 'welcome': welcomeTemplate
  */
 import { template as testPingTemplate } from './test-ping'
+import { template as remindersDay0To14Template } from './reminders-day-0-14'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'test-ping': testPingTemplate,
+  'reminders-day-0-14': remindersDay0To14Template,
 }
