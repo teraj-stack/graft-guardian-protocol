@@ -143,7 +143,7 @@ function Nav() {
     { href: "#hbot", label: "HBOT" },
     { href: "#ladd", label: "LADD" },
     { href: "#protokol", label: "14 dni" },
-    { to: "/sklep", label: "Cennik / Sklep" },
+    { to: "/sklep", label: "Sklep" },
     { to: "/panel", label: "Panel pacjenta" },
     { to: "/przypomnienia", label: "Przypomnienia" },
     { href: "#faq", label: "FAQ" },
