@@ -1,0 +1,11 @@
+{
+  "$schema": "./forbidden-phrases.schema.json",
+  "description": "Phrases that must NOT appear in the production build output (dist/). The postbuild guard (scripts/check-dist-forbidden-phrases.mjs) reads this file and fails the build if any phrase is found. Add new entries here — no code changes required.",
+  "phrases": [
+    {
+      "phrase": "Cennik / Sklep",
+      "reason": "Replaced site-wide by 'Sklep' — old label must not resurface.",
+      "replacement": "Sklep"
+    }
+  ]
+}
