@@ -408,8 +408,9 @@ function Creator() {
             <ul className="mt-8 list-disc space-y-5 pl-6 text-muted-foreground md:text-lg">
               <li>
                 Twórca MySkinCode.pl — aplikacji MedTech SaaS wykorzystującej
-                autorski klucz kodowania problemów skórnych z pomocą AI.
-                Koordynuje pracę zespołów klinik w całej Polsce.
+                autorski AI engine do budowania złożonych protokołów
+                zabiegowych z użyciem różnych technologii laserowych,
+                rewitalizujących i Anti-Aging
               </li>
               <li>
                 Twórca Projektu Mazowieckie Centrum Medycyny Laserowej — łączy
