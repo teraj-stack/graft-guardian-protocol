@@ -1355,7 +1355,7 @@ export function EbookLeadMagnet() {
   }
 
   return (
-    <Section id="ebook" eyebrow="08 — Patient Journey">
+    <Section id="ebook" eyebrow="13 — E-BOOK: PATIENT JOURNEY">
       <div className="grid gap-12 md:grid-cols-12 md:items-start">
         <div className="md:col-span-7">
           <SectionHeader
