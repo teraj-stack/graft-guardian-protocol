@@ -58,12 +58,15 @@ function scanSource(phrase: string): SourceHit[] {
 // ---------- Snapshot (baseline) persistence ----------
 type Snapshot = {
   phrase: string;
-  savedAt: string;
+  name: string; // human-readable date label
+  savedAt: string; // ISO
+  scope: { ui: number; ebook: number };
   source: string[]; // sourceKey()
   ebook: string[]; // ebookKey()
 };
 
 const SNAP_LS_PREFIX = "phrase-audit:snapshot:v1:";
+const INDEX_LS_KEY = "phrase-audit:snapshot-index:v1";
 const sourceKey = (h: SourceHit) => `${h.file}:${h.line}:${h.column}`;
 const ebookKey = (h: EbookPhraseHit) => `${h.slug}:${h.line}:${h.column}`;
 
@@ -77,14 +80,45 @@ function loadSnapshot(phrase: string): Snapshot | null {
   }
 }
 
+function loadIndex(): string[] {
+  if (typeof localStorage === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(INDEX_LS_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 function persistSnapshot(snap: Snapshot) {
   if (typeof localStorage === "undefined") return;
   try {
     localStorage.setItem(SNAP_LS_PREFIX + snap.phrase.toLowerCase(), JSON.stringify(snap));
+    const idx = loadIndex();
+    const key = snap.phrase.toLowerCase();
+    if (!idx.includes(key)) {
+      idx.push(key);
+      localStorage.setItem(INDEX_LS_KEY, JSON.stringify(idx));
+    }
   } catch {
     /* noop */
   }
 }
+
+function formatBaselineName(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `Baseline ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
+    d.getDate(),
+  )} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+const QUICK_PHRASES = [
+  "Faza intensywna",
+  "Graftgen",
+  "FUE",
+  "Cennik",
+  "48 godzin",
+] as const;
 
 
 function PhraseAuditPage() {
@@ -92,6 +126,8 @@ function PhraseAuditPage() {
   const [activePhrase, setActivePhrase] = useState<string | null>(null);
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
   const [compareMode, setCompareMode] = useState(false);
+  const [savedIndex, setSavedIndex] = useState<string[]>([]);
+  const [savingPhrase, setSavingPhrase] = useState<string | null>(null);
 
   const scanEbook = useServerFn(scanEbookForPhrase);
   const ebookScan = useMutation({
@@ -106,11 +142,31 @@ function PhraseAuditPage() {
   const ebookHits: EbookPhraseHit[] = ebookScan.data?.hits ?? [];
   const totalChapters = ebookScan.data?.totalChapters ?? 0;
 
+  useEffect(() => {
+    setSavedIndex(loadIndex());
+  }, []);
+
   // Load snapshot for active phrase from localStorage.
   useEffect(() => {
     if (!activePhrase) return;
     setSnapshot(loadSnapshot(activePhrase));
   }, [activePhrase]);
+
+  const buildSnapshot = (
+    p: string,
+    src: SourceHit[],
+    eb: EbookPhraseHit[],
+  ): Snapshot => {
+    const now = new Date();
+    return {
+      phrase: p,
+      name: formatBaselineName(now),
+      savedAt: now.toISOString(),
+      scope: { ui: src.length, ebook: eb.length },
+      source: src.map(sourceKey),
+      ebook: eb.map(ebookKey),
+    };
+  };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,15 +179,29 @@ function PhraseAuditPage() {
 
   const saveAsBaseline = () => {
     if (!activePhrase || ebookScan.isPending) return;
-    const snap: Snapshot = {
-      phrase: activePhrase,
-      savedAt: new Date().toISOString(),
-      source: sourceHits.map(sourceKey),
-      ebook: ebookHits.map(ebookKey),
-    };
+    const snap = buildSnapshot(activePhrase, sourceHits, ebookHits);
     persistSnapshot(snap);
     setSnapshot(snap);
+    setSavedIndex(loadIndex());
   };
+
+  // Scan + save baseline for a phrase without disturbing the active view.
+  const saveBaselineFor = async (p: string) => {
+    setSavingPhrase(p);
+    try {
+      const src = scanSource(p);
+      const res = await scanEbook({ data: { phrase: p } });
+      const snap = buildSnapshot(p, src, res.hits);
+      persistSnapshot(snap);
+      setSavedIndex(loadIndex());
+      if (activePhrase && activePhrase.toLowerCase() === p.toLowerCase()) {
+        setSnapshot(snap);
+      }
+    } finally {
+      setSavingPhrase(null);
+    }
+  };
+
 
   const diff = useMemo(() => {
     if (!snapshot) return null;
@@ -148,7 +218,7 @@ function PhraseAuditPage() {
   }, [snapshot, sourceHits, ebookHits]);
 
   const total = sourceHits.length + ebookHits.length;
-  const prevTotal = snapshot ? snapshot.source.length + snapshot.ebook.length : null;
+  
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
@@ -186,21 +256,75 @@ function PhraseAuditPage() {
         >
           {ebookScan.isPending ? "Skanuję…" : "Skanuj"}
         </button>
-        {(["Faza intensywna", "Graftgen", "FUE", "Cennik", "48 godzin"] as const).map((s) => (
-          <button
-            key={s}
-            type="button"
-            onClick={() => {
-              setPhrase(s);
-              setActivePhrase(s);
-              ebookScan.mutate(s);
-            }}
-            className="rounded-full border border-border px-3 py-1 text-xs hover:bg-muted"
-          >
-            {s}
-          </button>
-        ))}
+        {QUICK_PHRASES.map((s) => {
+          const saved = savedIndex.includes(s.toLowerCase());
+          const isSaving = savingPhrase === s;
+          return (
+            <span key={s} className="inline-flex overflow-hidden rounded-full border border-border">
+              <button
+                type="button"
+                onClick={() => {
+                  setPhrase(s);
+                  setActivePhrase(s);
+                  ebookScan.mutate(s);
+                }}
+                className="px-3 py-1 text-xs hover:bg-muted"
+              >
+                {s}
+              </button>
+              <button
+                type="button"
+                onClick={() => saveBaselineFor(s)}
+                disabled={isSaving}
+                title={saved ? "Nadpisz baseline (UI + e-book)" : "Zapisz baseline (UI + e-book)"}
+                aria-label={`Zapisz baseline dla frazy ${s}`}
+                className="border-l border-border px-2 py-1 text-xs hover:bg-muted disabled:opacity-50"
+              >
+                {isSaving ? "…" : saved ? "💾✓" : "💾"}
+              </button>
+            </span>
+          );
+        })}
       </form>
+
+      {savedIndex.length > 0 ? (
+        <section className="mb-6 rounded-md border border-border bg-muted/20 p-3">
+          <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Zapisane baseline'y ({savedIndex.length})
+          </h2>
+          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {savedIndex.map((key) => {
+              const snap = loadSnapshot(key);
+              if (!snap) return null;
+              return (
+                <li
+                  key={key}
+                  className="rounded border border-border bg-background p-2 text-xs"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPhrase(snap.phrase);
+                      setActivePhrase(snap.phrase);
+                      setSnapshot(snap);
+                      ebookScan.mutate(snap.phrase);
+                    }}
+                    className="block w-full text-left"
+                  >
+                    <div className="font-medium">„{snap.phrase}"</div>
+                    <div className="text-muted-foreground">{snap.name}</div>
+                    <div className="mt-0.5 text-muted-foreground">
+                      Zakres — UI: <span className="text-foreground">{snap.scope.ui}</span>,
+                      e-book: <span className="text-foreground">{snap.scope.ebook}</span>
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : null}
+
 
       {!activePhrase ? (
         <div className="rounded-md border border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
@@ -227,8 +351,8 @@ function PhraseAuditPage() {
             {snapshot ? (
               <>
                 <span className="text-muted-foreground">
-                  baseline {new Date(snapshot.savedAt).toLocaleString("pl-PL")} ({prevTotal}{" "}
-                  → {total},{" "}
+                  {snapshot.name} ({new Date(snapshot.savedAt).toLocaleString("pl-PL")}) — UI{" "}
+                  {snapshot.scope.ui} / e-book {snapshot.scope.ebook} → teraz {total}{" "}
                   <span className="text-emerald-600 dark:text-emerald-400">
                     +{(diff?.sourceAdded.length ?? 0) + (diff?.ebookAdded.length ?? 0)}
                   </span>{" "}
@@ -236,8 +360,8 @@ function PhraseAuditPage() {
                   <span className="text-rose-600 dark:text-rose-400">
                     −{(diff?.sourceRemoved.length ?? 0) + (diff?.ebookRemoved.length ?? 0)}
                   </span>
-                  )
                 </span>
+
                 <button
                   type="button"
                   onClick={() => setCompareMode((v) => !v)}
