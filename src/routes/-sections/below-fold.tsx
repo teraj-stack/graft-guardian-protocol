@@ -619,6 +619,59 @@ export function InteractiveSchedule() {
         Harmonogram ma charakter edukacyjny i nie zastępuje indywidualnych zaleceń lekarza
         prowadzącego. W razie wątpliwości — skontaktuj się z koordynatorem.
       </p>
+
+      {showEmailPreview && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Podgląd wiadomości e-mail"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setShowEmailPreview(false)}
+        >
+          <div
+            className="flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden border border-border bg-background shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-border bg-card/60 px-5 py-3">
+              <div className="min-w-0">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Podgląd e-maila
+                </div>
+                <div className="truncate text-sm text-foreground">
+                  {emailPreview.state === "ready" ? emailPreview.subject : "Wczytywanie…"}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowEmailPreview(false)}
+                className="border border-border px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                Zamknij
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden bg-white">
+              {emailPreview.state === "loading" && (
+                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                  Generowanie podglądu…
+                </div>
+              )}
+              {emailPreview.state === "error" && (
+                <div className="flex h-full items-center justify-center px-6 text-center text-sm text-destructive">
+                  {emailPreview.message}
+                </div>
+              )}
+              {emailPreview.state === "ready" && (
+                <iframe
+                  title="Podgląd wiadomości e-mail"
+                  srcDoc={emailPreview.html}
+                  sandbox=""
+                  className="h-full w-full border-0"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </Section>
   );
 }
