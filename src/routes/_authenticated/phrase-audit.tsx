@@ -58,12 +58,15 @@ function scanSource(phrase: string): SourceHit[] {
 // ---------- Snapshot (baseline) persistence ----------
 type Snapshot = {
   phrase: string;
-  savedAt: string;
+  name: string; // human-readable date label
+  savedAt: string; // ISO
+  scope: { ui: number; ebook: number };
   source: string[]; // sourceKey()
   ebook: string[]; // ebookKey()
 };
 
 const SNAP_LS_PREFIX = "phrase-audit:snapshot:v1:";
+const INDEX_LS_KEY = "phrase-audit:snapshot-index:v1";
 const sourceKey = (h: SourceHit) => `${h.file}:${h.line}:${h.column}`;
 const ebookKey = (h: EbookPhraseHit) => `${h.slug}:${h.line}:${h.column}`;
 
@@ -77,14 +80,45 @@ function loadSnapshot(phrase: string): Snapshot | null {
   }
 }
 
+function loadIndex(): string[] {
+  if (typeof localStorage === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(INDEX_LS_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 function persistSnapshot(snap: Snapshot) {
   if (typeof localStorage === "undefined") return;
   try {
     localStorage.setItem(SNAP_LS_PREFIX + snap.phrase.toLowerCase(), JSON.stringify(snap));
+    const idx = loadIndex();
+    const key = snap.phrase.toLowerCase();
+    if (!idx.includes(key)) {
+      idx.push(key);
+      localStorage.setItem(INDEX_LS_KEY, JSON.stringify(idx));
+    }
   } catch {
     /* noop */
   }
 }
+
+function formatBaselineName(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `Baseline ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
+    d.getDate(),
+  )} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+const QUICK_PHRASES = [
+  "Faza intensywna",
+  "Graftgen",
+  "FUE",
+  "Cennik",
+  "48 godzin",
+] as const;
 
 
 function PhraseAuditPage() {
