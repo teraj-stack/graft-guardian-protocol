@@ -82,9 +82,11 @@ function productPlaceholder(product: any) {
 
 function ProductPage() {
   const { handle } = useParams({ from: "/product/$handle" });
+  const initialProduct = Route.useLoaderData();
   const { data: product, isLoading } = useQuery({
     queryKey: ["shopify", "product", handle],
     queryFn: () => fetchProduct(handle),
+    initialData: initialProduct ?? undefined,
   });
 
   const addItem = useCartStore((s) => s.addItem);
