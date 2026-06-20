@@ -204,6 +204,8 @@ function walk(dir) {
             replacement: entry.replacement,
             line: m.line,
             column: m.column,
+            endLine: m.endLine,
+            endColumn: m.endColumn,
             match: m.match,
             snippet: m.snippet,
           });
