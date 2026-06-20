@@ -111,7 +111,7 @@ function decide(group: Group, urlPath: string): "allow" | "disallow" {
       }
     }
   }
-  return best ? best.type : "allow";
+  return best ? best.rule.type : "allow";
 }
 
 function isAbsoluteUrl(s: string): boolean {
