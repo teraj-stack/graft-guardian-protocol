@@ -533,7 +533,7 @@ function SessionPlans({ product, currentVariant }: { product: any; currentVarian
       <div className="rounded-sm border border-border/60 bg-card p-6 md:p-10">
         <h2 className="font-serif text-2xl md:text-3xl">Ile sesji zwykle potrzeba?</h2>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Poniżej przykładowe plany terapeutyczne oparte na protokole Graftgen. Wybór zależy od zakresu przeszczepu, historii medycznej i celu.
+          Poniżej przykładowe plany terapeutyczne oparte na protokole Graftgen.com. Wybór zależy od zakresu przeszczepu, historii medycznej i celu.
         </p>
 
         {priceRange && (

@@ -1258,7 +1258,7 @@ export function Pricing() {
         title="Pełny cennik i zakup pakietów — w sklepie."
         lead={
           <>
-            Cennik zabiegów wspierających przeniesiony do <strong>sklepu Graftgen.</strong>.
+            Cennik zabiegów wspierających przeniesiony do <strong>sklepu Graftgen.com.</strong>.
             Pakiety 1 / 5 / 10 / 20 sesji z natychmiastową rezerwacją, bezpieczna płatność
             online, faktura VAT.&nbsp;
           </>
