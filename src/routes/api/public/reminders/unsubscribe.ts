@@ -100,8 +100,9 @@ export const Route = createFileRoute("/api/public/reminders/unsubscribe")({
           { _token: parsed.data }
         );
         if (error) {
+          console.error("[reminders.unsubscribe] rpc failed", error);
           return Response.json(
-            { ok: false, status: "error", message: error.message },
+            { ok: false, status: "error", error: "internal_error" },
             { status: 500, headers: corsHeaders() }
           );
         }
