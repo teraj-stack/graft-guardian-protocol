@@ -1,12 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 
+const NOINDEX_HEADERS = { 'X-Robots-Tag': 'noindex, nofollow' } as const
+
+function json(body: unknown, init: ResponseInit = {}) {
+  const res = Response.json(body, init)
+  res.headers.set('X-Robots-Tag', NOINDEX_HEADERS['X-Robots-Tag'])
+  return res
+}
+
 function redactEmail(email: string | null | undefined): string {
   if (!email) return '***'
   const [localPart, domain] = email.split('@')
   if (!localPart || !domain) return '***'
   return `${localPart[0]}***@${domain}`
 }
+
 
 export const Route = createFileRoute("/email/unsubscribe")({
   server: {
