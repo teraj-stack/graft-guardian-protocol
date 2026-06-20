@@ -291,10 +291,14 @@ if (ci) {
       ``,
     ];
     if (hits.length) {
-      lines.push(`| Phrase | File | Line:Col | Reason |`, `| --- | --- | --- | --- |`);
+      lines.push(`| Phrase | File | Range | Reason |`, `| --- | --- | --- | --- |`);
       for (const h of hits.slice(0, 200)) {
         const cell = (v) => String(v ?? "").replace(/\|/g, "\\|");
-        lines.push(`| \`${cell(h.phrase)}\` | dist/${cell(h.file)} | ${h.line}:${h.column} | ${cell(h.reason ?? "")} |`);
+        const range =
+          h.endLine && (h.endLine !== h.line || h.endColumn !== h.column)
+            ? `${h.line}:${h.column}–${h.endLine}:${h.endColumn}`
+            : `${h.line}:${h.column}`;
+        lines.push(`| \`${cell(h.phrase)}\` | dist/${cell(h.file)} | ${range} | ${cell(h.reason ?? "")} |`);
       }
       if (hits.length > 200) lines.push(`\n_…and ${hits.length - 200} more (see artifact)._`);
     } else {
