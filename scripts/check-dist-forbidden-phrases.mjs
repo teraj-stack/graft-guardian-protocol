@@ -22,9 +22,11 @@
  *                     plus all files/dirs skipped via ignore rules.
  *   --no-fail         Always exit 0 (still writes the report). Useful for audits.
  *   --quiet           Suppress per-violation console output (the report still has it).
- *   --ci              CI mode. Implies --report (default path), emits GitHub Actions
- *                     `::error` annotations for every violation, and appends a
- *                     Markdown summary to $GITHUB_STEP_SUMMARY when present.
+ *   --sarif[=path]    Write a SARIF 2.1.0 file (default: dist/_forbidden-phrases.sarif)
+ *                     for upload to GitHub Code Scanning (github/codeql-action/upload-sarif).
+ *   --ci              CI mode. Implies --report AND --sarif (default paths),
+ *                     emits GitHub Actions `::error` annotations for every violation,
+ *                     and appends a Markdown summary to $GITHUB_STEP_SUMMARY.
  *                     Existing commands (build / test:dist / test:clean-build) are
  *                     unaffected — they don't pass --ci.
  */
@@ -42,12 +44,23 @@ const argv = process.argv.slice(2);
 function flag(name) {
   return argv.find((a) => a === `--${name}` || a.startsWith(`--${name}=`));
 }
+function flagValue(f, defaultPath) {
+  if (!f) return null;
+  return f.includes("=")
+    ? resolve(process.cwd(), f.split("=").slice(1).join("="))
+    : defaultPath;
+}
 const ci = Boolean(flag("ci"));
 const reportFlag = flag("report");
 const writeReport = Boolean(reportFlag) || ci;
-const reportPath = reportFlag?.includes("=")
-  ? resolve(process.cwd(), reportFlag.split("=").slice(1).join("="))
-  : resolve(DIST, "_forbidden-phrases-report.json");
+const reportPath =
+  flagValue(reportFlag, resolve(DIST, "_forbidden-phrases-report.json")) ??
+  resolve(DIST, "_forbidden-phrases-report.json");
+const sarifFlag = flag("sarif");
+const writeSarif = Boolean(sarifFlag) || ci;
+const sarifPath =
+  flagValue(sarifFlag, resolve(DIST, "_forbidden-phrases.sarif")) ??
+  resolve(DIST, "_forbidden-phrases.sarif");
 const noFail = Boolean(flag("no-fail"));
 const quiet = Boolean(flag("quiet"));
 
