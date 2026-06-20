@@ -406,10 +406,13 @@ function Creator() {
             </h2>
             <div className="mt-8 space-y-5 text-muted-foreground md:text-lg">
               <p>
-                Twórca MySkinCode.pl - Twórca Projektu Mazowieckie Centrum
-                Medycyny Laserowej — połączył wieloletnie doświadczenie
-                chirurgiczne z głębokim zrozumieniem potrzeb pacjenta, budując
-                nowy model wczesnej opieki pooperacyjnej w Polsce.
+                Twórca MySkinCode.pl - aplikacji MedTech SaaS wykorzystującej
+                autorski klucz kodowania różnych typów problemów skórnych przy
+                użyciu AI engine. Aplikacja buduje złożone protokoły zabiegowe —
+                Twórca Projektu Mazowieckie Centrum Medycyny Laserowej — połączył
+                wieloletnie doświadczenie chirurgiczne z głębokim zrozumieniem
+                potrzeb pacjenta, budując nowy model wczesnej opieki
+                pooperacyjnej w Polsce.
               </p>
               <p>
                 Dr Bujok operuje, prowadzi autorskie szkolenia dla lekarzy z
