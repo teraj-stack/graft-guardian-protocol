@@ -62,7 +62,8 @@ test.describe("Indeksowane strony — brak zakazanych fraz w meta, nagłówkach 
     }
   });
 
-  // Routes wyciągnięte z sitemap[.]xml.ts — kategorie / strony indeksowane.
+  // Routes wyciągnięte z sitemap[.]xml.ts — publiczne strony indeksowane
+  // (kategorie + landing). /auth pominięty: ma noindex z założenia.
   const INDEXED_ROUTES = [
     "/",
     "/sklep",
@@ -70,7 +71,6 @@ test.describe("Indeksowane strony — brak zakazanych fraz w meta, nagłówkach 
     "/przypomnienia",
     "/prywatnosc",
     "/cookies",
-    "/auth",
   ];
 
   for (const route of INDEXED_ROUTES) {
