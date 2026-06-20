@@ -819,11 +819,18 @@ function SourcesCard() {
 export function FAQSection() {
   const [selectedStage, setSelectedStage] = useState<Stage | "all">("all");
   const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
 
   const filtered = FAQ.filter((f) => {
     const stageMatch = selectedStage === "all" || f.stages.includes(selectedStage);
     const topicMatch = selectedTopic === "all" || f.topics.includes(selectedTopic);
-    return stageMatch && topicMatch;
+    const searchMatch =
+      normalizedQuery.length === 0 ||
+      f.q.toLowerCase().includes(normalizedQuery) ||
+      f.a.toLowerCase().includes(normalizedQuery);
+    return stageMatch && topicMatch && searchMatch;
   });
 
   const chip = (
@@ -849,6 +856,15 @@ export function FAQSection() {
       <SectionHeader title="To, o co pytacie najczęściej." />
 
       <div className="mb-8 space-y-4">
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Szukaj w pytaniach i odpowiedziach…"
+            className="w-full max-w-md rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+          />
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
             Etap:
@@ -888,7 +904,7 @@ export function FAQSection() {
           ))
         ) : (
           <p className="py-8 text-sm text-muted-foreground">
-            Brak pytań dla wybranych filtrów. Zmień etap lub temat.
+            Brak pytań dla wybranych filtrów i wyszukiwania. Zmień etap, temat lub frazę.
           </p>
         )}
       </div>
