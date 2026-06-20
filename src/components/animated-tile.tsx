@@ -1,4 +1,26 @@
 import { useEffect, useRef, useState } from "react";
+import { decode } from "blurhash";
+
+/** Decode a BlurHash string into a small <canvas> placeholder. */
+function BlurHashCanvas({ hash, className }: { hash: string; className?: string }) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const c = ref.current;
+    if (!c) return;
+    const w = 32, h = 32;
+    try {
+      const pixels = decode(hash, w, h);
+      const ctx = c.getContext("2d");
+      if (!ctx) return;
+      const img = ctx.createImageData(w, h);
+      img.data.set(pixels);
+      ctx.putImageData(img, 0, 0);
+    } catch {
+      /* invalid hash — leave blank */
+    }
+  }, [hash]);
+  return <canvas ref={ref} width={32} height={32} aria-hidden="true" className={className} />;
+}
 
 /**
  * Lekki, wydajny kafel z animacją wideo (mp4 + webm).
