@@ -437,7 +437,7 @@ function Creator() {
 
 function Why() {
   return (
-    <Section id="dlaczego" eyebrow="01 — DLACZEGO PIERWSZE 100 GODZIN?">
+    <Section id="dlaczego" eyebrow="01 — DLACZEGO PIERWSZE 48 GODZIN?">
       <SectionHeader title="Okno, w którym decyduje się los każdego przeszczepionego włosa." />
       <div className="grid gap-8 md:grid-cols-3">
         <Para>
