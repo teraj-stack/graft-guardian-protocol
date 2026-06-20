@@ -561,7 +561,7 @@ function PBM() {
 
 function HBOT() {
   return (
-    <Section id="hbot" eyebrow="04 — Tlenoterapia hiperbaryczna (HBOT)">
+    <Section id="hbot" eyebrow="04 — TLENOTERAPIA HIPERBARYCZNA (HBOT)">
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
           title="Tlen dociera tam, gdzie krwinki czerwone jeszcze nie mogą dotrzeć."
