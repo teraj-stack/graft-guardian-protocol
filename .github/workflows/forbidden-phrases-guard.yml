@@ -1,0 +1,39 @@
+name: Forbidden phrases guard
+
+# Runs the dist/ forbidden-phrase guard in CI and publishes the JSON report
+# as a build artifact. Does NOT touch existing local commands
+# (bun run build / bun run test:clean-build still work unchanged).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build + run guard in CI mode
+        # --ci writes report to a stable path, fails the job on violations,
+        # and emits GitHub Actions annotations + a job summary.
+        run: bun run guard:ci
+
+      - name: Upload forbidden-phrases report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forbidden-phrases-report
+          path: dist/_forbidden-phrases-report.json
+          if-no-files-found: warn
+          retention-days: 30
