@@ -630,7 +630,7 @@ function LADD() {
   }, []);
 
   return (
-    <Section id="ladd" eyebrow="05 — LADD: Laser-Assisted Drug Delivery">
+    <Section id="ladd" eyebrow="05 — LADD: LASER-ASSISTED DRUG DELIVERY">
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-1 flex-col">
           <SectionHeader
