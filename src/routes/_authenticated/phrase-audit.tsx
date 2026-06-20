@@ -351,8 +351,8 @@ function PhraseAuditPage() {
             {snapshot ? (
               <>
                 <span className="text-muted-foreground">
-                  baseline {new Date(snapshot.savedAt).toLocaleString("pl-PL")} ({prevTotal}{" "}
-                  → {total},{" "}
+                  {snapshot.name} ({new Date(snapshot.savedAt).toLocaleString("pl-PL")}) — UI{" "}
+                  {snapshot.scope.ui} / e-book {snapshot.scope.ebook} → teraz {total}{" "}
                   <span className="text-emerald-600 dark:text-emerald-400">
                     +{(diff?.sourceAdded.length ?? 0) + (diff?.ebookAdded.length ?? 0)}
                   </span>{" "}
@@ -360,8 +360,8 @@ function PhraseAuditPage() {
                   <span className="text-rose-600 dark:text-rose-400">
                     −{(diff?.sourceRemoved.length ?? 0) + (diff?.ebookRemoved.length ?? 0)}
                   </span>
-                  )
                 </span>
+
                 <button
                   type="button"
                   onClick={() => setCompareMode((v) => !v)}
