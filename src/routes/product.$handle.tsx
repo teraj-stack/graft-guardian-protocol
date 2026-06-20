@@ -13,12 +13,54 @@ import {
 } from "@/lib/shopify";
 
 export const Route = createFileRoute("/product/$handle")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.handle} — Sklep Graftgen.com` },
-      { name: "description", content: "Produkt sklepu Graftgen.com — pielęgnacja po przeszczepie." },
-    ],
-  }),
+  loader: ({ params }) => fetchProduct(params.handle),
+  head: ({ params, loaderData }) => {
+    const url = `https://graftgen.com/product/${params.handle}`;
+    const p: any = loaderData;
+    const title = p?.title ? `${p.title} — Sklep Graftgen.com` : `${params.handle} — Sklep Graftgen.com`;
+    const description = (p?.description as string | undefined)?.slice(0, 160)
+      ?? "Produkt sklepu Graftgen.com — pielęgnacja po przeszczepie.";
+    const image = p?.images?.edges?.[0]?.node?.url as string | undefined;
+    const variant = p?.variants?.edges?.[0]?.node;
+    const meta: Array<Record<string, string>> = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "product" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ];
+    if (image) {
+      meta.push({ property: "og:image", content: image });
+      meta.push({ name: "twitter:image", content: image });
+    }
+    const scripts: Array<{ type: string; children: string }> = [];
+    if (p?.title) {
+      const ld: Record<string, unknown> = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: p.title,
+        description: p.description,
+        url,
+      };
+      if (image) ld.image = image;
+      if (variant?.price?.amount) {
+        ld.offers = {
+          "@type": "Offer",
+          price: variant.price.amount,
+          priceCurrency: variant.price.currencyCode ?? "PLN",
+          availability: variant.availableForSale
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          url,
+        };
+      }
+      scripts.push({ type: "application/ld+json", children: JSON.stringify(ld) });
+    }
+    return { meta, links: [{ rel: "canonical", href: url }], scripts };
+  },
   component: ProductPage,
 });
 
