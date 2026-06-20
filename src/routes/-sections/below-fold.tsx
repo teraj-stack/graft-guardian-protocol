@@ -904,7 +904,7 @@ export function FAQSection() {
           ))
         ) : (
           <p className="py-8 text-sm text-muted-foreground">
-            Brak pytań dla wybranych filtrów. Zmień etap lub temat.
+            Brak pytań dla wybranych filtrów i wyszukiwania. Zmień etap, temat lub frazę.
           </p>
         )}
       </div>
