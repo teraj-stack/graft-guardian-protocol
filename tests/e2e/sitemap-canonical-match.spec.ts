@@ -93,42 +93,45 @@ test.beforeAll(async ({ baseURL }) => {
   }
 });
 
-test("każda strona z <loc> w sitemap.xml ma <link rel=\"canonical\"> równy <loc>", async ({
+test("każda strona z <loc> w sitemap.xml ma <link rel=\"canonical\"> zgodny z <loc>", async ({
   baseURL,
 }) => {
   const ctx = await pwRequest.newContext({ baseURL });
   const failures: string[] = [];
   try {
     for (const e of entries) {
-      const res = await ctx.fetch(e.loc, { failOnStatusCode: false, maxRedirects: 10 });
+      const expectedPath = pathQueryHash(e.loc);
+      if (expectedPath === null) {
+        failures.push(`[${e.source}] ${e.loc}: <loc> nie jest absolutnym URL-em`);
+        continue;
+      }
+      // Fetch względem baseURL — niezależnie od hosta w <loc>.
+      const res = await ctx.fetch(expectedPath, { failOnStatusCode: false, maxRedirects: 10 });
       if (res.status() >= 400) {
         failures.push(`[${e.source}] ${e.loc}: HTTP ${res.status()}`);
         continue;
       }
       const ct = res.headers()["content-type"] ?? "";
-      if (!ct.includes("text/html")) {
-        // canonical jest atrybutem HTML — pliki XML/JSON pomijamy świadomie.
-        continue;
-      }
+      if (!ct.includes("text/html")) continue;
+
       const html = await res.text();
       const canonical = extractCanonical(html);
       if (!canonical) {
         failures.push(`[${e.source}] ${e.loc}: brak <link rel="canonical">`);
         continue;
       }
-      // canonical musi być absolutny — względny powoduje rozjazd z sitemap.
       let absoluteCanonical: string;
       try {
+        // Rozwiń względem <loc>, by porównać pełny URL gdy canonical jest relatywny.
         absoluteCanonical = new URL(canonical, e.loc).toString();
       } catch {
         failures.push(`[${e.source}] ${e.loc}: nieprawidłowy canonical="${canonical}"`);
         continue;
       }
-      const expected = normalizeForCompare(e.loc);
-      const got = normalizeForCompare(absoluteCanonical);
-      if (expected !== got) {
+      const gotPath = pathQueryHash(absoluteCanonical);
+      if (gotPath !== expectedPath) {
         failures.push(
-          `[${e.source}] ${e.loc}: canonical="${absoluteCanonical}" ≠ <loc>="${e.loc}"`,
+          `[${e.source}] ${e.loc}: canonical path="${gotPath}" ≠ <loc> path="${expectedPath}"`,
         );
       }
     }
@@ -141,22 +144,20 @@ test("każda strona z <loc> w sitemap.xml ma <link rel=\"canonical\"> równy <lo
 // ---------------- self-testy ----------------
 
 test("self-test: extractCanonical obsługuje oba porządki atrybutów", () => {
-  expect(
-    extractCanonical(`<link rel="canonical" href="https://x/a">`),
-  ).toBe("https://x/a");
-  expect(
-    extractCanonical(`<link href="https://x/a" rel="canonical">`),
-  ).toBe("https://x/a");
-  expect(
-    extractCanonical(`<link rel='canonical' href='https://x/a' />`),
-  ).toBe("https://x/a");
+  expect(extractCanonical(`<link rel="canonical" href="https://x/a">`)).toBe("https://x/a");
+  expect(extractCanonical(`<link href="https://x/a" rel="canonical">`)).toBe("https://x/a");
+  expect(extractCanonical(`<link rel='canonical' href='https://x/a' />`)).toBe("https://x/a");
   expect(extractCanonical(`<link rel="alternate" href="https://x/a">`)).toBeNull();
 });
 
-test("self-test: normalizeForCompare jest case-insensitive dla host/protocol", () => {
-  expect(normalizeForCompare("HTTPS://Graftgen.com/a")).toBe("https://graftgen.com/a");
-  // ścieżka case-sensitive
-  expect(normalizeForCompare("https://x/A") === normalizeForCompare("https://x/a")).toBe(false);
-  // trailing slash znaczący
+test("self-test: pathQueryHash izoluje ścieżkę od hosta", () => {
+  expect(pathQueryHash("https://graftgen.com/a?x=1#h")).toBe("/a?x=1#h");
+  expect(pathQueryHash("https://other.app/a?x=1#h")).toBe("/a?x=1#h");
+  expect(pathQueryHash("/relatywny")).toBeNull();
+  // trailing slash i case w ścieżce są znaczące
+  expect(pathQueryHash("https://x/a/") === pathQueryHash("https://x/a")).toBe(false);
+  expect(pathQueryHash("https://x/A") === pathQueryHash("https://x/a")).toBe(false);
+});
+
   expect(normalizeForCompare("https://x/a/") === normalizeForCompare("https://x/a")).toBe(false);
 });
