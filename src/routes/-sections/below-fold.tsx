@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode, type FormEvent } from "react";
 import { PRICING } from "@/lib/pricing-data";
-import { FAQ } from "@/lib/faq-data";
+import { FAQ, STAGES, TOPICS, type Stage, type Topic } from "@/lib/faq-data";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
 
@@ -817,23 +817,80 @@ function SourcesCard() {
 /* ---------- FAQ ---------- */
 
 export function FAQSection() {
+  const [selectedStage, setSelectedStage] = useState<Stage | "all">("all");
+  const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
+
+  const filtered = FAQ.filter((f) => {
+    const stageMatch = selectedStage === "all" || f.stages.includes(selectedStage);
+    const topicMatch = selectedTopic === "all" || f.topics.includes(selectedTopic);
+    return stageMatch && topicMatch;
+  });
+
+  const chip = (
+    label: string,
+    active: boolean,
+    onClick: () => void,
+  ) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-sm border px-3 py-1.5 text-xs font-medium uppercase tracking-wide transition ${
+        active
+          ? "border-accent bg-accent/10 text-accent"
+          : "border-border text-muted-foreground hover:border-accent/60 hover:text-foreground"
+      }`}
+    >
+      {label}
+    </button>
+  );
+
   return (
     <Section id="faq" eyebrow="09 — Pytania pacjentów">
       <SectionHeader title="To, o co pytacie najczęściej." />
+
+      <div className="mb-8 space-y-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
+            Etap:
+          </span>
+          {chip("Wszystkie", selectedStage === "all", () => setSelectedStage("all"))}
+          {STAGES.map((s) =>
+            chip(s, selectedStage === s, () => setSelectedStage(s)),
+          )}
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
+            Temat:
+          </span>
+          {chip("Wszystkie", selectedTopic === "all", () => setSelectedTopic("all"))}
+          {TOPICS.map((t) =>
+            chip(t, selectedTopic === t, () => setSelectedTopic(t)),
+          )}
+        </div>
+      </div>
+
       <div className="divide-y divide-border border-y border-border">
-        {FAQ.map((f) => (
-          <details key={f.q} className="group py-6">
-            <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-              <h3 className="font-display text-xl break-words md:text-2xl">{f.q}</h3>
-              <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
-                +
-              </span>
-            </summary>
-            <p className="mt-4 max-w-3xl text-sm text-muted-foreground md:text-base">
-              {f.a}
-            </p>
-          </details>
-        ))}
+        {filtered.length > 0 ? (
+          filtered.map((f) => (
+            <details key={f.q} className="group py-6">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
+                <h3 className="font-display text-xl break-words md:text-2xl">
+                  {f.q}
+                </h3>
+                <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <p className="mt-4 max-w-3xl text-sm text-muted-foreground md:text-base">
+                {f.a}
+              </p>
+            </details>
+          ))
+        ) : (
+          <p className="py-8 text-sm text-muted-foreground">
+            Brak pytań dla wybranych filtrów. Zmień etap lub temat.
+          </p>
+        )}
       </div>
     </Section>
   );
