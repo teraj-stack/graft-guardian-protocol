@@ -68,6 +68,20 @@ const sarifPath =
 const noFail = Boolean(flag("no-fail"));
 const quiet = Boolean(flag("quiet"));
 
+if (outFlag !== undefined) {
+  const eqIndex = outFlag.indexOf("=");
+  const rawValue = eqIndex !== -1 ? outFlag.slice(eqIndex + 1) : "";
+  if (!rawValue) {
+    console.error("[check-dist] --out requires a non-empty path. Example: --out=reports/output.sarif");
+    process.exit(2);
+  }
+  const outDir = dirname(resolve(process.cwd(), rawValue));
+  if (!existsSync(outDir)) {
+    console.error(`[check-dist] --out directory does not exist: ${outDir}`);
+    process.exit(2);
+  }
+}
+
 if (!existsSync(CONFIG)) {
   console.error(`[check-dist] Missing config: ${CONFIG}`);
   process.exit(2);
