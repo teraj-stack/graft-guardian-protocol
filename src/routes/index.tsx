@@ -3,7 +3,7 @@ import { lazy, useEffect, useRef, useState } from "react";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
-import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo-unified.png.asset.json";
 import drBujok from "@/assets/dr-bujok.jpg.asset.json";
 
 import laddVideo from "@/assets/ladd.mp4.asset.json";
