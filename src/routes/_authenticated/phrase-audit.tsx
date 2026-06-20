@@ -222,6 +222,60 @@ function PhraseAuditPage() {
             />
           </div>
 
+          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-md border border-border bg-muted/30 p-3 text-sm">
+            <span className="font-medium">Porównanie z poprzednim skanem:</span>
+            {snapshot ? (
+              <>
+                <span className="text-muted-foreground">
+                  baseline {new Date(snapshot.savedAt).toLocaleString("pl-PL")} ({prevTotal}{" "}
+                  → {total},{" "}
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    +{(diff?.sourceAdded.length ?? 0) + (diff?.ebookAdded.length ?? 0)}
+                  </span>{" "}
+                  /{" "}
+                  <span className="text-rose-600 dark:text-rose-400">
+                    −{(diff?.sourceRemoved.length ?? 0) + (diff?.ebookRemoved.length ?? 0)}
+                  </span>
+                  )
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCompareMode((v) => !v)}
+                  className="rounded-md border border-border px-3 py-1 text-xs hover:bg-muted"
+                >
+                  {compareMode ? "Ukryj różnice" : "Pokaż różnice"}
+                </button>
+              </>
+            ) : (
+              <span className="text-muted-foreground">Brak zapisanego baseline.</span>
+            )}
+            <button
+              type="button"
+              onClick={saveAsBaseline}
+              disabled={ebookScan.isPending}
+              className="ml-auto rounded-md border border-border px-3 py-1 text-xs hover:bg-muted disabled:opacity-50"
+            >
+              Zapisz bieżący jako baseline
+            </button>
+          </div>
+
+          {compareMode && diff ? (
+            <section className="mb-8 grid gap-4 md:grid-cols-2">
+              <DiffList
+                title="Dodane (nowe wystąpienia)"
+                tone="add"
+                items={[...diff.sourceAdded, ...diff.ebookAdded]}
+              />
+              <DiffList
+                title="Usunięte (już ich nie ma)"
+                tone="remove"
+                items={[...diff.sourceRemoved, ...diff.ebookRemoved]}
+              />
+            </section>
+          ) : null}
+
+
+
           <section className="mb-8">
             <h2 className="mb-3 font-serif text-xl">
               UI / kod źródłowy ({sourceHits.length})
