@@ -43,50 +43,50 @@ function assertHeadersClean(res: APIResponse, where: string) {
   }
 }
 
-/**
- * Ręczne podążanie po łańcuchu 301/302/303/307/308 z weryfikacją KAŻDEGO hopa.
- * Zwraca finalną odpowiedź + listę URL-i w łańcuchu.
- */
+interface FinalResponse {
+  status: number;
+  headers: Record<string, string>;
+  body: string;
+  chain: string[];
+}
+
 async function followRedirectChain(
   ctxBaseURL: string,
   startPath: string,
   maxHops = 10,
-): Promise<{ finalRes: APIResponse; chain: string[] }> {
+): Promise<FinalResponse> {
   const ctx = await pwRequest.newContext({ baseURL: ctxBaseURL });
   const chain: string[] = [];
   let current = startPath;
 
-  for (let hop = 0; hop <= maxHops; hop++) {
-    const url = current.startsWith("http") ? current : new URL(current, ctxBaseURL).toString();
-    chain.push(url);
+  try {
+    for (let hop = 0; hop <= maxHops; hop++) {
+      const url = current.startsWith("http") ? current : new URL(current, ctxBaseURL).toString();
+      chain.push(url);
 
-    const res = await ctx.fetch(url, { maxRedirects: 0, failOnStatusCode: false });
-    const status = res.status();
+      const res = await ctx.fetch(url, { maxRedirects: 0, failOnStatusCode: false });
+      const status = res.status();
 
-    // Każdy hop (włącznie z pośrednimi) nie może wymuszać noindex.
-    assertHeadersClean(res, `hop ${hop} ${url} [${status}]`);
+      assertHeadersClean(res, `hop ${hop} ${url} [${status}]`);
 
-    if (status >= 300 && status < 400) {
-      const loc = headerValue(res, "location");
-      if (!loc) {
-        await ctx.dispose();
-        throw new Error(`[${url}] status ${status} bez nagłówka Location`);
+      if (status >= 300 && status < 400) {
+        const loc = headerValue(res, "location");
+        if (!loc) throw new Error(`[${url}] status ${status} bez nagłówka Location`);
+        current = loc;
+        continue;
       }
-      current = loc;
-      continue;
+
+      const headers = res.headers();
+      const body = await res.text();
+      return { status, headers, body, chain };
     }
-
-    // Status końcowy (2xx/4xx/5xx — bez redirectu).
+    throw new Error(`Zbyt wiele przekierowań (>${maxHops}) zaczynając od ${startPath}`);
+  } finally {
     await ctx.dispose();
-    return { finalRes: res, chain };
   }
-
-  await ctx.dispose();
-  throw new Error(`Zbyt wiele przekierowań (>${maxHops}) zaczynając od ${startPath}`);
 }
 
 function extractMetaRobots(html: string): string[] {
-  // Wyciąga content z każdego <meta name="robots" ...> (case-insensitive).
   const out: string[] = [];
   const re = /<meta\b[^>]*\bname\s*=\s*["']robots["'][^>]*>/gi;
   for (const match of html.matchAll(re)) {
@@ -99,24 +99,21 @@ function extractMetaRobots(html: string): string[] {
 
 for (const route of PUBLIC_ROUTES) {
   test(`publiczna routa ${route} nie ma noindex (z uwzględnieniem przekierowań)`, async ({ baseURL }) => {
-    const base = baseURL!;
-    const { finalRes, chain } = await followRedirectChain(base, route);
+    const { status, headers, body, chain } = await followRedirectChain(baseURL!, route);
 
-    // 1) Status końcowy musi być 2xx — przekierowanie do /auth lub 4xx oznaczałoby,
-    //    że routa nie jest publicznie indeksowalna mimo obecności w sitemap.
     expect(
-      finalRes.ok(),
-      `[${route}] łańcuch ${chain.join(" -> ")} zakończył się statusem ${finalRes.status()}`,
+      status >= 200 && status < 300,
+      `[${route}] łańcuch ${chain.join(" -> ")} zakończył się statusem ${status}`,
     ).toBe(true);
 
-    // 2) Finalna odpowiedź — nagłówki czyste (powtórzenie dla jasności raportu).
-    assertHeadersClean(finalRes, `final ${route}`);
+    const xrt = headers["x-robots-tag"];
+    if (xrt) {
+      expect(NOINDEX_DIRECTIVE.test(xrt), `[${route}] final X-Robots-Tag: "${xrt}"`).toBe(false);
+    }
 
-    // 3) Meta robots w HTML — żadna wartość nie może zawierać noindex/none.
-    const ct = headerValue(finalRes, "content-type") ?? "";
+    const ct = headers["content-type"] ?? "";
     if (ct.includes("text/html")) {
-      const html = await finalRes.text();
-      const metas = extractMetaRobots(html);
+      const metas = extractMetaRobots(body);
       for (const value of metas) {
         expect(
           NOINDEX_DIRECTIVE.test(value),
@@ -127,12 +124,10 @@ for (const route of PUBLIC_ROUTES) {
   });
 }
 
-test("kontrolny: /auth jest świadomie poza indeksem (sanity-check)", async ({ baseURL }) => {
-  // Test odwrotny — upewnia się, że nasza detekcja w ogóle działa.
-  // /auth nie powinno mieć noindex w X-Robots-Tag (Lovable nie ustawia),
-  // ale jest pominięte w sitemap. Tu sprawdzamy tylko, że strona w ogóle odpowiada.
-  const ctx = await pwRequest.newContext({ baseURL: baseURL! });
-  const res = await ctx.fetch("/auth", { failOnStatusCode: false });
-  expect([200, 301, 302, 401, 403, 404]).toContain(res.status());
-  await ctx.dispose();
+test("kontrolny: detekcja noindex w meta działa (self-test regexpa)", async () => {
+  // Sanity-check: upewnia się, że nasza ekstrakcja i regexp w ogóle łapią noindex.
+  const html = `<html><head><meta name="robots" content="noindex, follow"></head></html>`;
+  const metas = extractMetaRobots(html);
+  expect(metas).toEqual(["noindex, follow"]);
+  expect(NOINDEX_DIRECTIVE.test(metas[0])).toBe(true);
 });
