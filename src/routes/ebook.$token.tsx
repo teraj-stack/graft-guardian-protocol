@@ -237,21 +237,49 @@ function chapterProgress(slug: string, total: number, state: ChecklistState) {
 
 function EbookPage() {
   const { data: chapters } = useSuspenseQuery(chaptersQuery);
+  const { state, hydrated, toggle, reset } = useChecklist();
+
+  const totals = useMemo(() => {
+    const perChapter = new Map<string, number>();
+    let grand = 0;
+    for (const c of chapters) {
+      const n = countItems(c.body_md);
+      perChapter.set(c.slug, n);
+      grand += n;
+    }
+    return { perChapter, grand };
+  }, [chapters]);
+
+  const doneCount = hydrated
+    ? Object.values(state).filter(Boolean).length
+    : 0;
+  const overallPct =
+    totals.grand === 0 ? 0 : Math.round((doneCount / totals.grand) * 100);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header — hidden on print */}
       <header className="border-b border-border/60 print:hidden">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-5">
           <Link to="/" className="text-xs uppercase tracking-[0.25em] text-muted-foreground hover:text-foreground">
             ← Strona główna
           </Link>
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
-          >
-            Pobierz / Drukuj PDF
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (confirm("Wyzerować całą checklistę?")) reset();
+              }}
+              className="rounded-sm border border-border px-3 py-2 text-xs uppercase tracking-wider hover:bg-secondary"
+            >
+              Reset checklisty
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Pobierz / Drukuj PDF
+            </button>
+          </div>
         </div>
       </header>
 
@@ -266,30 +294,66 @@ function EbookPage() {
           Protokół kliniczny oparty na EBM. Wersja {new Date().toISOString().slice(0, 10)}.
         </p>
 
+        {/* Overall progress */}
+        <div className="mt-8 rounded-sm border border-border/60 bg-card/30 p-5 print:hidden">
+          <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span>Twój postęp — Dzień 0–14</span>
+            <span className="text-accent">
+              {doneCount} / {totals.grand} kroków · {overallPct}%
+            </span>
+          </div>
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-border/60">
+            <div
+              className="h-full bg-accent transition-[width] duration-300"
+              style={{ width: `${overallPct}%` }}
+            />
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Postęp zapisuje się lokalnie w tej przeglądarce. Odhaczaj kroki w trakcie dnia — ⚠️ ostrzeżenia („Czego unikać", „Sygnały alarmowe") także można zaznaczyć jako przeczytane.
+          </p>
+        </div>
+
         <div className="mt-12 space-y-12">
-          {chapters.map((c: EbookChapter) => (
-            <article
-              key={c.id}
-              id={c.slug}
-              className="break-inside-avoid border-t border-border/60 pt-8 print:pt-4"
-            >
-              <p className="text-xs uppercase tracking-[0.2em] text-accent">
-                {c.day_label}
-              </p>
-              <h2 className="mt-2 font-display text-2xl md:text-3xl">
-                {c.title}
-              </h2>
-              <div className="mt-4 text-muted-foreground">
-                {renderMarkdown(c.body_md)}
-              </div>
-            </article>
-          ))}
+          {chapters.map((c: EbookChapter) => {
+            const total = totals.perChapter.get(c.slug) ?? 0;
+            const prog = chapterProgress(c.slug, total, state);
+            return (
+              <article
+                key={c.id}
+                id={c.slug}
+                className="break-inside-avoid border-t border-border/60 pt-8 print:pt-4"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                    {c.day_label}
+                  </p>
+                  {total > 0 && (
+                    <p className="text-xs text-muted-foreground print:hidden">
+                      {prog.done}/{prog.total} · {prog.pct}%
+                    </p>
+                  )}
+                </div>
+                <h2 className="mt-2 font-display text-2xl md:text-3xl">
+                  {c.title}
+                </h2>
+                <div className="mt-4 text-muted-foreground">
+                  <ChapterBody
+                    slug={c.slug}
+                    body={c.body_md}
+                    state={state}
+                    onToggle={toggle}
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         <footer className="mt-16 border-t border-border/60 pt-8 text-xs text-muted-foreground print:mt-8">
           © {new Date().getFullYear()} Graftgen.com. Materiał edukacyjny — nie zastępuje konsultacji lekarskiej.
         </footer>
       </main>
+
 
       <style>{`
         @media print {
