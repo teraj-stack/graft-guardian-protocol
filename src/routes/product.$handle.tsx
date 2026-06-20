@@ -15,8 +15,8 @@ import {
 export const Route = createFileRoute("/product/$handle")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.handle} — Sklep Graftgen` },
-      { name: "description", content: "Produkt sklepu Graftgen — pielęgnacja po przeszczepie." },
+      { title: `${params.handle} — Sklep Graftgen.com` },
+      { name: "description", content: "Produkt sklepu Graftgen.com — pielęgnacja po przeszczepie." },
     ],
   }),
   component: ProductPage,
