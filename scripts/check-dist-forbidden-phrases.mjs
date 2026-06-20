@@ -22,8 +22,13 @@
  *                     plus all files/dirs skipped via ignore rules.
  *   --no-fail         Always exit 0 (still writes the report). Useful for audits.
  *   --quiet           Suppress per-violation console output (the report still has it).
+ *   --ci              CI mode. Implies --report (default path), emits GitHub Actions
+ *                     `::error` annotations for every violation, and appends a
+ *                     Markdown summary to $GITHUB_STEP_SUMMARY when present.
+ *                     Existing commands (build / test:dist / test:clean-build) are
+ *                     unaffected — they don't pass --ci.
  */
-import { readdirSync, readFileSync, statSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { appendFileSync, readdirSync, readFileSync, statSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, extname, dirname, resolve, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -37,8 +42,9 @@ const argv = process.argv.slice(2);
 function flag(name) {
   return argv.find((a) => a === `--${name}` || a.startsWith(`--${name}=`));
 }
+const ci = Boolean(flag("ci"));
 const reportFlag = flag("report");
-const writeReport = Boolean(reportFlag);
+const writeReport = Boolean(reportFlag) || ci;
 const reportPath = reportFlag?.includes("=")
   ? resolve(process.cwd(), reportFlag.split("=").slice(1).join("="))
   : resolve(DIST, "_forbidden-phrases-report.json");
@@ -233,6 +239,48 @@ if (writeReport) {
   console.log(
     `📝 [check-dist] Report written: ${relative(process.cwd(), reportPath) || reportPath}`,
   );
+}
+
+if (ci) {
+  // GitHub Actions annotations — one per violation.
+  for (const h of hits) {
+    const msg =
+      `Forbidden phrase "${h.phrase}"` +
+      (h.reason ? ` — ${h.reason}` : "") +
+      (h.replacement ? ` (use: "${h.replacement}")` : "");
+    // Escape per GH workflow command spec.
+    const esc = (s) => String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+    console.log(
+      `::error file=dist/${esc(h.file)},line=${h.line},col=${h.column},title=Forbidden phrase::${esc(msg)}`,
+    );
+  }
+  const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+  if (summaryPath) {
+    const lines = [
+      `## Forbidden phrases guard`,
+      ``,
+      `- Phrases checked: **${entries.length}**`,
+      `- Files scanned: **${scannedFiles}**`,
+      `- Paths skipped (ignore rules): **${skippedCount}**`,
+      `- Violations: **${hits.length}**`,
+      ``,
+    ];
+    if (hits.length) {
+      lines.push(`| Phrase | File | Line:Col | Reason |`, `| --- | --- | --- | --- |`);
+      for (const h of hits.slice(0, 200)) {
+        const cell = (v) => String(v ?? "").replace(/\|/g, "\\|");
+        lines.push(`| \`${cell(h.phrase)}\` | dist/${cell(h.file)} | ${h.line}:${h.column} | ${cell(h.reason ?? "")} |`);
+      }
+      if (hits.length > 200) lines.push(`\n_…and ${hits.length - 200} more (see artifact)._`);
+    } else {
+      lines.push(`✅ No forbidden phrases found in \`dist/\`.`);
+    }
+    try {
+      appendFileSync(summaryPath, lines.join("\n") + "\n", "utf8");
+    } catch {
+      /* ignore — summary is best-effort */
+    }
+  }
 }
 
 if (hits.length) {
