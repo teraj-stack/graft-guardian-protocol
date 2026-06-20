@@ -178,7 +178,7 @@ function BrandAuditPage() {
             </button>
             <button
               onClick={() => {
-                if (confirm("Wyczyścić oznaczenia „sprawdzone"?")) reset();
+                if (confirm('Wyczyścić oznaczenia „sprawdzone"?')) reset();
               }}
               className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
             >
