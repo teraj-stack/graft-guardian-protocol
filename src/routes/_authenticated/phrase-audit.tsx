@@ -126,6 +126,8 @@ function PhraseAuditPage() {
   const [activePhrase, setActivePhrase] = useState<string | null>(null);
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
   const [compareMode, setCompareMode] = useState(false);
+  const [savedIndex, setSavedIndex] = useState<string[]>([]);
+  const [savingPhrase, setSavingPhrase] = useState<string | null>(null);
 
   const scanEbook = useServerFn(scanEbookForPhrase);
   const ebookScan = useMutation({
@@ -140,11 +142,31 @@ function PhraseAuditPage() {
   const ebookHits: EbookPhraseHit[] = ebookScan.data?.hits ?? [];
   const totalChapters = ebookScan.data?.totalChapters ?? 0;
 
+  useEffect(() => {
+    setSavedIndex(loadIndex());
+  }, []);
+
   // Load snapshot for active phrase from localStorage.
   useEffect(() => {
     if (!activePhrase) return;
     setSnapshot(loadSnapshot(activePhrase));
   }, [activePhrase]);
+
+  const buildSnapshot = (
+    p: string,
+    src: SourceHit[],
+    eb: EbookPhraseHit[],
+  ): Snapshot => {
+    const now = new Date();
+    return {
+      phrase: p,
+      name: formatBaselineName(now),
+      savedAt: now.toISOString(),
+      scope: { ui: src.length, ebook: eb.length },
+      source: src.map(sourceKey),
+      ebook: eb.map(ebookKey),
+    };
+  };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,15 +179,29 @@ function PhraseAuditPage() {
 
   const saveAsBaseline = () => {
     if (!activePhrase || ebookScan.isPending) return;
-    const snap: Snapshot = {
-      phrase: activePhrase,
-      savedAt: new Date().toISOString(),
-      source: sourceHits.map(sourceKey),
-      ebook: ebookHits.map(ebookKey),
-    };
+    const snap = buildSnapshot(activePhrase, sourceHits, ebookHits);
     persistSnapshot(snap);
     setSnapshot(snap);
+    setSavedIndex(loadIndex());
   };
+
+  // Scan + save baseline for a phrase without disturbing the active view.
+  const saveBaselineFor = async (p: string) => {
+    setSavingPhrase(p);
+    try {
+      const src = scanSource(p);
+      const res = await scanEbook({ data: { phrase: p } });
+      const snap = buildSnapshot(p, src, res.hits);
+      persistSnapshot(snap);
+      setSavedIndex(loadIndex());
+      if (activePhrase && activePhrase.toLowerCase() === p.toLowerCase()) {
+        setSnapshot(snap);
+      }
+    } finally {
+      setSavingPhrase(null);
+    }
+  };
+
 
   const diff = useMemo(() => {
     if (!snapshot) return null;
