@@ -1,10 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getPublishedChapters,
   verifyEbookAccess,
   type EbookChapter,
 } from "@/lib/ebook.functions";
+
 
 const TITLE = "Patient Journey — przewodnik po pierwszych 14 dniach";
 
