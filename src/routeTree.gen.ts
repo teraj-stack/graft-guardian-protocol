@@ -32,6 +32,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
 import { Route as ApiPublicEbookRequestRouteImport } from './routes/api/public/ebook-request'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
@@ -153,6 +154,12 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicRemindersUnsubscribeRoute =
   ApiPublicRemindersUnsubscribeRouteImport.update({
     id: '/api/public/reminders/unsubscribe',
@@ -212,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -241,6 +249,7 @@ export interface FileRoutesByTo {
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -272,6 +281,7 @@ export interface FileRoutesById {
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -303,6 +313,7 @@ export interface FileRouteTypes {
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -362,6 +374,7 @@ export interface FileRouteTypes {
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -386,6 +399,7 @@ export interface RootRouteChildren {
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -551,6 +565,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/reminders/unsubscribe': {
       id: '/api/public/reminders/unsubscribe'
       path: '/api/public/reminders/unsubscribe'
@@ -644,6 +665,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
