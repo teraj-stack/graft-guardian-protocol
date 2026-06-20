@@ -170,6 +170,42 @@ export function InteractiveSchedule() {
     "idle" | "sending" | "sent" | "rate_limited" | "suppressed" | "invalid" | "error"
   >("idle");
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
+  const [emailPreview, setEmailPreview] = useState<
+    | { state: "idle" }
+    | { state: "loading" }
+    | { state: "ready"; html: string; subject: string }
+    | { state: "error"; message: string }
+  >({ state: "idle" });
+  const [showEmailPreview, setShowEmailPreview] = useState(false);
+
+  async function openEmailPreview() {
+    setShowEmailPreview(true);
+    setEmailPreview({ state: "loading" });
+    try {
+      const resp = await fetch("/api/public/reminders/preview-checklist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ surgeryDate }),
+      });
+      const json = (await resp.json().catch(() => ({}))) as {
+        ok?: boolean;
+        html?: string;
+        subject?: string;
+      };
+      if (resp.ok && json.ok && json.html) {
+        setEmailPreview({ state: "ready", html: json.html, subject: json.subject ?? "" });
+      } else {
+        setEmailPreview({ state: "error", message: "Nie udało się wygenerować podglądu." });
+      }
+    } catch {
+      setEmailPreview({ state: "error", message: "Błąd sieci. Spróbuj ponownie." });
+    }
+  }
+
+  function resetEmailForm() {
+    setEmail("");
+    setEmailStatus("idle");
+  }
 
   function downloadIcs() {
     const ics = buildIcs(surgeryDate);
@@ -418,6 +454,24 @@ export function InteractiveSchedule() {
                             : "Wyślij mi e-mailem"}
               </button>
             </div>
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={openEmailPreview}
+                className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 transition hover:text-accent hover:underline"
+              >
+                Podgląd e-maila przed wysłaniem
+              </button>
+              {emailStatus === "sent" && (
+                <button
+                  type="button"
+                  onClick={resetEmailForm}
+                  className="text-[11px] uppercase tracking-[0.18em] text-accent underline-offset-4 transition hover:underline"
+                >
+                  Wyślij na inny adres
+                </button>
+              )}
+            </div>
             <label className="mt-2 flex items-start gap-2 text-[11px] text-muted-foreground">
               <input
                 type="checkbox"
@@ -432,6 +486,7 @@ export function InteractiveSchedule() {
               </span>
             </label>
           </div>
+
 
           <div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -564,6 +619,59 @@ export function InteractiveSchedule() {
         Harmonogram ma charakter edukacyjny i nie zastępuje indywidualnych zaleceń lekarza
         prowadzącego. W razie wątpliwości — skontaktuj się z koordynatorem.
       </p>
+
+      {showEmailPreview && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Podgląd wiadomości e-mail"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setShowEmailPreview(false)}
+        >
+          <div
+            className="flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden border border-border bg-background shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-border bg-card/60 px-5 py-3">
+              <div className="min-w-0">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  Podgląd e-maila
+                </div>
+                <div className="truncate text-sm text-foreground">
+                  {emailPreview.state === "ready" ? emailPreview.subject : "Wczytywanie…"}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowEmailPreview(false)}
+                className="border border-border px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                Zamknij
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden bg-white">
+              {emailPreview.state === "loading" && (
+                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                  Generowanie podglądu…
+                </div>
+              )}
+              {emailPreview.state === "error" && (
+                <div className="flex h-full items-center justify-center px-6 text-center text-sm text-destructive">
+                  {emailPreview.message}
+                </div>
+              )}
+              {emailPreview.state === "ready" && (
+                <iframe
+                  title="Podgląd wiadomości e-mail"
+                  srcDoc={emailPreview.html}
+                  sandbox=""
+                  className="h-full w-full border-0"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </Section>
   );
 }
