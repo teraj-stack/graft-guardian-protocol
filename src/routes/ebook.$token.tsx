@@ -152,6 +152,8 @@ function useChecklist() {
   return { state, hydrated, toggle, reset };
 }
 
+const ALARM_PARA_RE = /alarm|natychmiast|zgłoś|niepokoj|pilnie|wezwij/i;
+
 function ChapterBody({
   slug,
   body,
@@ -165,10 +167,12 @@ function ChapterBody({
 }) {
   const blocks = useMemo(() => parseMarkdown(body), [body]);
   let itemCounter = 0;
+  let lastParaText = "";
   return (
     <>
       {blocks.map((block, bi) => {
         if (block.kind === "para") {
+          lastParaText = block.text;
           return (
             <p
               key={`p-${bi}`}
@@ -178,21 +182,36 @@ function ChapterBody({
             </p>
           );
         }
+        const isAlarmList = ALARM_PARA_RE.test(lastParaText);
         return (
-          <ul key={`ul-${bi}`} className="my-4 space-y-2">
+          <ul
+            key={`ul-${bi}`}
+            className={
+              isAlarmList
+                ? "my-4 space-y-2 rounded-sm border border-destructive/40 bg-destructive/5 p-4 print:border-black"
+                : "my-4 space-y-2"
+            }
+          >
+            {isAlarmList && (
+              <li className="-mt-1 mb-2 text-[11px] uppercase tracking-[0.2em] text-destructive print:text-black">
+                ⚠ Sygnały alarmowe — zaznacz objaw, by zobaczyć instrukcję
+              </li>
+            )}
             {block.items.map((item) => {
               const idx = itemCounter++;
               const key = `${slug}:${idx}`;
               const checked = !!state[key];
               return (
-                <li key={idx} className="flex items-start gap-3">
+                <li key={idx} className="flex flex-col gap-2">
                   <label className="flex cursor-pointer items-start gap-3 print:cursor-default">
                     <input
                       type="checkbox"
                       checked={checked}
                       onChange={() => onToggle(key)}
-                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-accent print:hidden"
-                      aria-label={`Odhacz krok: ${item.replace(/\*\*/g, "")}`}
+                      className={`mt-1 h-4 w-4 shrink-0 cursor-pointer print:hidden ${
+                        isAlarmList ? "accent-destructive" : "accent-accent"
+                      }`}
+                      aria-label={`${isAlarmList ? "Zgłoś objaw" : "Odhacz krok"}: ${item.replace(/\*\*/g, "")}`}
                     />
                     <span
                       aria-hidden="true"
@@ -202,14 +221,19 @@ function ChapterBody({
                     </span>
                     <span
                       className={
-                        checked
+                        checked && !isAlarmList
                           ? "text-sm text-muted-foreground line-through md:text-base"
-                          : "text-sm md:text-base"
+                          : isAlarmList
+                            ? "text-sm font-medium text-foreground md:text-base"
+                            : "text-sm md:text-base"
                       }
                     >
                       {renderInline(item)}
                     </span>
                   </label>
+                  {isAlarmList && checked && (
+                    <AlarmCallout symptom={item.replace(/\*\*/g, "")} />
+                  )}
                 </li>
               );
             })}
@@ -219,6 +243,58 @@ function ChapterBody({
     </>
   );
 }
+
+const CLINIC_PHONE_DISPLAY = "+48 510 432 361";
+const CLINIC_PHONE_TEL = "+48510432361";
+const CLINIC_WHATSAPP = "https://wa.me/48510432361";
+
+function AlarmCallout({ symptom }: { symptom: string }) {
+  return (
+    <div
+      role="alert"
+      className="ml-7 rounded-sm border border-destructive/60 bg-destructive/10 p-4 text-sm print:hidden"
+    >
+      <p className="font-semibold text-destructive">
+        Skontaktuj się z kliniką teraz
+      </p>
+      <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+        Zgłoszony objaw: {symptom}
+      </p>
+      <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-foreground">
+        <li>
+          Nie dotykaj, nie naciskaj i nie przemywaj strefy biorczej środkami innymi niż HOCl.
+        </li>
+        <li>
+          Zrób zdjęcie zmiany w dobrym świetle (z linijką lub palcem jako skalą).
+        </li>
+        <li>
+          Zadzwoń lub napisz na WhatsApp — przygotuj numer pacjenta i datę zabiegu.
+        </li>
+        <li>
+          Przy objawach ogólnych (gorączka &gt; 38,5 °C, narastający obrzęk z bólem, wyciek ropny,
+          duszność) — zgłoś się na SOR i poinformuj klinikę.
+        </li>
+      </ol>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <a
+          href={`tel:${CLINIC_PHONE_TEL}`}
+          className="inline-flex items-center rounded-sm bg-destructive px-3 py-2 text-xs font-medium text-destructive-foreground hover:opacity-90"
+        >
+          📞 Zadzwoń {CLINIC_PHONE_DISPLAY}
+        </a>
+        <a
+          href={CLINIC_WHATSAPP}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center rounded-sm border border-destructive/60 px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/10"
+        >
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  );
+}
+
 
 function countItems(md: string): number {
   return parseMarkdown(md).reduce(
