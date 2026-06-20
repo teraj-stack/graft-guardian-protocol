@@ -531,7 +531,7 @@ export function Journey() {
 
 export function DayZeroToThree() {
   return (
-    <Section id="dzien-0-3" eyebrow="08a — Twój plan: Dzień 0–3">
+    <Section id="dzien-0-3" eyebrow="00 — TWÓJ PLAN: DZIEŃ 0–3">
       <SectionHeader
         title="Pierwsze 72 h decydują o przeżyciu przeszczepionych cebulek"
         lead="Instrukcje wzięte bezpośrednio z e-booka Patient Journey. Wykonuj krok po kroku — nie improwizuj."
