@@ -43,11 +43,13 @@ function parseRobots(txt: string): Parsed {
   let current: Group | null = null;
   let sitemapInsideGroup = false;
   let lastWasAgent = false;
+  let blankSinceLastRule = true;
 
   for (const raw of txt.split(/\r?\n/)) {
     const line = raw.replace(/#.*$/, "").trim();
     if (!line) {
       lastWasAgent = false;
+      blankSinceLastRule = true;
       continue;
     }
     const m = line.match(/^([a-zA-Z-]+)\s*:\s*(.*)$/);
@@ -62,6 +64,7 @@ function parseRobots(txt: string): Parsed {
         current.agents.push(value);
       }
       lastWasAgent = true;
+      blankSinceLastRule = false;
     } else if (field === "allow" || field === "disallow") {
       if (!current) {
         current = { agents: ["*"], rules: [] };
@@ -69,13 +72,13 @@ function parseRobots(txt: string): Parsed {
       }
       current.rules.push({ type: field, path: value });
       lastWasAgent = false;
+      blankSinceLastRule = false;
     } else if (field === "sitemap") {
       sitemaps.push(value);
-      if (current && lastWasAgent === false && current.rules.length === 0) {
-        // sitemap pojawił się tuż po user-agent bez reguł — i tak globalne,
-        // ale ostrzegamy gdy występuje "wewnątrz" grupy z regułami.
-      }
-      if (current && current.rules.length > 0) {
+      // Sitemap powinien być oddzielony pustą linią od reguł grupy —
+      // formalnie jest dyrektywą non-group, ale dla czytelności wymagamy
+      // separacji. Jeśli pojawia się "wciśnięty" w ciąg reguł, to błąd.
+      if (current && current.rules.length > 0 && !blankSinceLastRule) {
         sitemapInsideGroup = true;
       }
       lastWasAgent = false;
@@ -85,6 +88,7 @@ function parseRobots(txt: string): Parsed {
   }
   return { groups, sitemaps, sitemapInsideGroup };
 }
+
 
 function findStarGroup(p: Parsed): Group | null {
   return p.groups.find((g) => g.agents.includes("*")) ?? null;
