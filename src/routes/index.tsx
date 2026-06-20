@@ -275,6 +275,33 @@ function Nav() {
   );
 }
 
+/* ---------- Hero FAQ ---------- */
+
+function HeroFAQ() {
+  return (
+    <section id="hero-faq" className="border-b border-border/60">
+      <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+        <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
+          Najczęstsze pytania
+        </p>
+        <h2 className="font-display text-3xl leading-[1.05] md:text-4xl">
+          Co pacjenci pytają najczęściej przed protokołem
+        </h2>
+        <div className="mt-10 grid gap-8 md:grid-cols-2">
+          {heroFaq.map((item) => (
+            <div key={item.q} className="border-l-2 border-accent pl-5">
+              <h3 className="text-base font-medium leading-snug">{item.q}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {item.a}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- Hero ---------- */
 
 function Hero() {
