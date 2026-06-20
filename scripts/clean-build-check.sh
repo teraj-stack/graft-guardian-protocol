@@ -9,7 +9,8 @@ rm -rf dist .vite node_modules/.vite node_modules/.cache .tanstack 2>/dev/null |
 echo "🏗  [clean-build-check] Running fresh production build..."
 bun run vite build
 
-echo "🔎 [clean-build-check] Scanning dist/ for forbidden phrases..."
-node scripts/check-dist-forbidden-phrases.mjs
+echo "🔎 [clean-build-check] Scanning dist/ for forbidden phrases (with JSON report)..."
+node scripts/check-dist-forbidden-phrases.mjs --report=dist/_forbidden-phrases-report.json
 
 echo "✅ [clean-build-check] Clean build passed forbidden-phrase guard."
+echo "   Report: dist/_forbidden-phrases-report.json"
