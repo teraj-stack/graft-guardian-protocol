@@ -232,7 +232,10 @@ function ChapterBody({
                     </span>
                   </label>
                   {isAlarmList && checked && (
-                    <AlarmCallout symptom={item.replace(/\*\*/g, "")} />
+                    <AlarmCallout
+                      symptom={item.replace(/\*\*/g, "")}
+                      level={classifyUrgency(item)}
+                    />
                   )}
                 </li>
               );
@@ -248,48 +251,147 @@ const CLINIC_PHONE_DISPLAY = "+48 510 432 361";
 const CLINIC_PHONE_TEL = "+48510432361";
 const CLINIC_WHATSAPP = "https://wa.me/48510432361";
 
-function AlarmCallout({ symptom }: { symptom: string }) {
+type UrgencyLevel = "emergency" | "urgent" | "routine";
+
+const EMERGENCY_RE =
+  /duszność|duszności|omdlen|utrata przytomn|silny ból w klatc|krwotok|tętnicz|anafilaks|obrzęk twarzy|obrzęk języka|drgawk|udar|zawał/i;
+const URGENT_RE =
+  /gorączk|>?\s*38|ropn|ropa|cuchnąc|narastając(y|a) (obrzęk|ból|rumień)|silny ból|krwawien|martwic|czarn(y|e) strup|cellulit|zakażen|infekcj|wyciek\s+(ropn|surowicz)/i;
+
+function classifyUrgency(text: string): UrgencyLevel {
+  if (EMERGENCY_RE.test(text)) return "emergency";
+  if (URGENT_RE.test(text)) return "urgent";
+  return "routine";
+}
+
+const LEVEL_META: Record<
+  UrgencyLevel,
+  {
+    label: string;
+    badge: string;
+    channel: string;
+    timing: string;
+    steps: string[];
+    primary: { label: string; href: string };
+    secondary?: { label: string; href: string };
+    tone: string;
+    badgeTone: string;
+  }
+> = {
+  emergency: {
+    label: "STAN NAGŁY — 112 / SOR",
+    badge: "Pilność: krytyczna",
+    channel:
+      "Zadzwoń pod 112 lub jedź na SOR. Klinikę poinformuj w drugiej kolejności.",
+    timing: "Działaj natychmiast — nie czekaj na odpowiedź kliniki.",
+    steps: [
+      "Zadzwoń pod 112 lub poproś osobę towarzyszącą o wezwanie pomocy.",
+      "Nie jedź samodzielnie, jeśli masz duszność, zaburzenia świadomości lub silny ból w klatce.",
+      "Jeśli to możliwe, zrób zdjęcie zmiany — pokażesz je w SOR.",
+      "Po stabilizacji powiadom klinikę o zdarzeniu i hospitalizacji.",
+    ],
+    primary: { label: "📞 Zadzwoń 112", href: "tel:112" },
+    secondary: {
+      label: `Poinformuj klinikę ${CLINIC_PHONE_DISPLAY}`,
+      href: `tel:${CLINIC_PHONE_TEL}`,
+    },
+    tone: "border-destructive bg-destructive/15",
+    badgeTone: "bg-destructive text-destructive-foreground",
+  },
+  urgent: {
+    label: "PILNE — kontakt telefoniczny",
+    badge: "Pilność: wysoka",
+    channel:
+      "Zadzwoń do kliniki teraz. W razie braku kontaktu w 30 min — zgłoś się na SOR.",
+    timing: "Reakcja w ciągu 1–2 godzin.",
+    steps: [
+      "Nie dotykaj, nie naciskaj i nie przemywaj strefy biorczej środkami innymi niż HOCl.",
+      "Zmierz temperaturę i zapisz wynik.",
+      "Zrób zdjęcie zmiany w dobrym świetle (z linijką lub palcem jako skalą).",
+      "Zadzwoń do kliniki — przygotuj numer pacjenta i datę zabiegu.",
+      "Jeśli nie uzyskasz kontaktu w ciągu 30 minut — zgłoś się na SOR.",
+    ],
+    primary: {
+      label: `📞 Zadzwoń ${CLINIC_PHONE_DISPLAY}`,
+      href: `tel:${CLINIC_PHONE_TEL}`,
+    },
+    secondary: { label: "WhatsApp (dodatkowo)", href: CLINIC_WHATSAPP },
+    tone: "border-destructive/60 bg-destructive/10",
+    badgeTone: "bg-destructive/80 text-destructive-foreground",
+  },
+  routine: {
+    label: "NIEPILNE — konsultacja WhatsApp",
+    badge: "Pilność: niska",
+    channel:
+      "Napisz na WhatsApp — odpowiadamy 8:00–20:00 (zwykle do 2 godzin).",
+    timing: "Reakcja w ciągu doby roboczej.",
+    steps: [
+      "Zrób zdjęcie zmiany w dobrym świetle (z linijką lub palcem jako skalą).",
+      "Opisz: kiedy zauważyłeś objaw, czy się nasila, czy towarzyszy mu ból/świąd/gorączka.",
+      "Wyślij wiadomość na WhatsApp wraz ze zdjęciem.",
+      "Do czasu odpowiedzi kontynuuj standardowy protokół pielęgnacji.",
+    ],
+    primary: { label: "WhatsApp do kliniki", href: CLINIC_WHATSAPP },
+    secondary: {
+      label: `Telefon ${CLINIC_PHONE_DISPLAY}`,
+      href: `tel:${CLINIC_PHONE_TEL}`,
+    },
+    tone: "border-amber-500/60 bg-amber-500/10",
+    badgeTone: "bg-amber-500 text-black",
+  },
+};
+
+function AlarmCallout({
+  symptom,
+  level,
+}: {
+  symptom: string;
+  level: UrgencyLevel;
+}) {
+  const meta = LEVEL_META[level];
+  const isExternal = (href: string) => href.startsWith("http");
   return (
     <div
       role="alert"
-      className="ml-7 rounded-sm border border-destructive/60 bg-destructive/10 p-4 text-sm print:hidden"
+      className={`ml-7 rounded-sm border p-4 text-sm print:hidden ${meta.tone}`}
     >
-      <p className="font-semibold text-destructive">
-        Skontaktuj się z kliniką teraz
-      </p>
-      <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-2">
+        <span
+          className={`rounded-sm px-2 py-1 text-[10px] font-semibold uppercase tracking-wider ${meta.badgeTone}`}
+        >
+          {meta.badge}
+        </span>
+        <p className="font-semibold text-foreground">{meta.label}</p>
+      </div>
+      <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
         Zgłoszony objaw: {symptom}
       </p>
+      <p className="mt-2 text-sm text-foreground">{meta.channel}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{meta.timing}</p>
       <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-foreground">
-        <li>
-          Nie dotykaj, nie naciskaj i nie przemywaj strefy biorczej środkami innymi niż HOCl.
-        </li>
-        <li>
-          Zrób zdjęcie zmiany w dobrym świetle (z linijką lub palcem jako skalą).
-        </li>
-        <li>
-          Zadzwoń lub napisz na WhatsApp — przygotuj numer pacjenta i datę zabiegu.
-        </li>
-        <li>
-          Przy objawach ogólnych (gorączka &gt; 38,5 °C, narastający obrzęk z bólem, wyciek ropny,
-          duszność) — zgłoś się na SOR i poinformuj klinikę.
-        </li>
+        {meta.steps.map((s, i) => (
+          <li key={i}>{s}</li>
+        ))}
       </ol>
       <div className="mt-3 flex flex-wrap gap-2">
         <a
-          href={`tel:${CLINIC_PHONE_TEL}`}
-          className="inline-flex items-center rounded-sm bg-destructive px-3 py-2 text-xs font-medium text-destructive-foreground hover:opacity-90"
+          href={meta.primary.href}
+          target={isExternal(meta.primary.href) ? "_blank" : undefined}
+          rel={isExternal(meta.primary.href) ? "noreferrer" : undefined}
+          className="inline-flex items-center rounded-sm bg-foreground px-3 py-2 text-xs font-medium text-background hover:opacity-90"
         >
-          📞 Zadzwoń {CLINIC_PHONE_DISPLAY}
+          {meta.primary.label}
         </a>
-        <a
-          href={CLINIC_WHATSAPP}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center rounded-sm border border-destructive/60 px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/10"
-        >
-          WhatsApp
-        </a>
+        {meta.secondary && (
+          <a
+            href={meta.secondary.href}
+            target={isExternal(meta.secondary.href) ? "_blank" : undefined}
+            rel={isExternal(meta.secondary.href) ? "noreferrer" : undefined}
+            className="inline-flex items-center rounded-sm border border-border px-3 py-2 text-xs font-medium text-foreground hover:bg-secondary"
+          >
+            {meta.secondary.label}
+          </a>
+        )}
       </div>
     </div>
   );
