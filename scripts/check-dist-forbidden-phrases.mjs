@@ -241,6 +241,48 @@ if (writeReport) {
   );
 }
 
+if (ci) {
+  // GitHub Actions annotations — one per violation.
+  for (const h of hits) {
+    const msg =
+      `Forbidden phrase "${h.phrase}"` +
+      (h.reason ? ` — ${h.reason}` : "") +
+      (h.replacement ? ` (use: "${h.replacement}")` : "");
+    // Escape per GH workflow command spec.
+    const esc = (s) => String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+    console.log(
+      `::error file=dist/${esc(h.file)},line=${h.line},col=${h.column},title=Forbidden phrase::${esc(msg)}`,
+    );
+  }
+  const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+  if (summaryPath) {
+    const lines = [
+      `## Forbidden phrases guard`,
+      ``,
+      `- Phrases checked: **${entries.length}**`,
+      `- Files scanned: **${scannedFiles}**`,
+      `- Paths skipped (ignore rules): **${skippedCount}**`,
+      `- Violations: **${hits.length}**`,
+      ``,
+    ];
+    if (hits.length) {
+      lines.push(`| Phrase | File | Line:Col | Reason |`, `| --- | --- | --- | --- |`);
+      for (const h of hits.slice(0, 200)) {
+        const cell = (v) => String(v ?? "").replace(/\|/g, "\\|");
+        lines.push(`| \`${cell(h.phrase)}\` | dist/${cell(h.file)} | ${h.line}:${h.column} | ${cell(h.reason ?? "")} |`);
+      }
+      if (hits.length > 200) lines.push(`\n_…and ${hits.length - 200} more (see artifact)._`);
+    } else {
+      lines.push(`✅ No forbidden phrases found in \`dist/\`.`);
+    }
+    try {
+      appendFileSync(summaryPath, lines.join("\n") + "\n", "utf8");
+    } catch {
+      /* ignore — summary is best-effort */
+    }
+  }
+}
+
 if (hits.length) {
   if (!quiet) {
     console.error(`\n❌ [check-dist] ${hits.length} violation(s) found:\n`);
