@@ -383,7 +383,7 @@ function Creator() {
     <section className="border-b border-border/60">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
         <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
-          Twórca protokołu
+          TWÓRCA PROJEKTU
         </p>
         <div className="grid items-start gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
