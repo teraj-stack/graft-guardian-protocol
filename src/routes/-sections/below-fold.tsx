@@ -313,9 +313,115 @@ function loadProgress(): Record<string, boolean> {
   }
 }
 
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function addDaysIso(iso: string, days: number): string {
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function icsDate(iso: string): string {
+  return iso.replaceAll("-", "");
+}
+
+function icsEscape(s: string): string {
+  return s.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+
+function buildPlainText(surgeryDate: string): string {
+  const lines: string[] = [
+    `Graftgen.com — Przypomnienia po przeszczepie włosów (Dzień 0–14)`,
+    `Data zabiegu: ${surgeryDate}`,
+    ``,
+  ];
+  for (const d of SCHEDULE) {
+    const date = addDaysIso(surgeryDate, d.day);
+    lines.push(`Dzień ${d.day} — ${date} — ${d.phase}`);
+    lines.push(`Fokus: ${d.focus}`);
+    for (const t of d.tasks) {
+      lines.push(`  • ${t.label}${t.tone === "critical" ? "  [KRYTYCZNE]" : ""}`);
+    }
+    lines.push(``);
+  }
+  lines.push(`Źródło: https://graftgen.com  •  Materiał edukacyjny, nie zastępuje zaleceń lekarza.`);
+  return lines.join("\n");
+}
+
+function buildIcs(surgeryDate: string): string {
+  const dtstamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  const out: string[] = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Graftgen.com//Protokol 14//PL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "X-WR-CALNAME:Graftgen — Dzień 0–14",
+    "X-WR-TIMEZONE:Europe/Warsaw",
+  ];
+  for (const d of SCHEDULE) {
+    const date = addDaysIso(surgeryDate, d.day);
+    const dtstart = icsDate(date);
+    const dtend = icsDate(addDaysIso(date, 1));
+    const summary = `Dzień ${d.day} — ${d.phase}`;
+    const descLines = [
+      d.focus,
+      "",
+      ...d.tasks.map((t) => `• ${t.label}${t.tone === "critical" ? " [KRYTYCZNE]" : ""}`),
+      "",
+      "Graftgen.com — materiał edukacyjny.",
+    ];
+    out.push(
+      "BEGIN:VEVENT",
+      `UID:graftgen-${surgeryDate}-d${d.day}@graftgen.com`,
+      `DTSTAMP:${dtstamp}`,
+      `DTSTART;VALUE=DATE:${dtstart}`,
+      `DTEND;VALUE=DATE:${dtend}`,
+      `SUMMARY:${icsEscape(summary)}`,
+      `DESCRIPTION:${icsEscape(descLines.join("\n"))}`,
+      "BEGIN:VALARM",
+      "TRIGGER:-PT1H",
+      "ACTION:DISPLAY",
+      `DESCRIPTION:${icsEscape(summary)}`,
+      "END:VALARM",
+      "END:VEVENT",
+    );
+  }
+  out.push("END:VCALENDAR");
+  return out.join("\r\n");
+}
+
 export function InteractiveSchedule() {
   const [openDay, setOpenDay] = useState<number>(0);
   const [done, setDone] = useState<Record<string, boolean>>(() => loadProgress());
+  const [surgeryDate, setSurgeryDate] = useState<string>(todayIso());
+  const [copyStatus, setCopyStatus] = useState<"idle" | "ok" | "err">("idle");
+  const [showPreview, setShowPreview] = useState(false);
+
+  function downloadIcs() {
+    const ics = buildIcs(surgeryDate);
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `graftgen-przypomnienia-${surgeryDate}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function copyText() {
+    try {
+      await navigator.clipboard.writeText(buildPlainText(surgeryDate));
+      setCopyStatus("ok");
+    } catch {
+      setCopyStatus("err");
+    }
+    setTimeout(() => setCopyStatus("idle"), 2500);
+  }
 
   const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
   const doneCount = Object.values(done).filter(Boolean).length;
@@ -375,7 +481,64 @@ export function InteractiveSchedule() {
         </button>
       </div>
 
+      <div className="mb-6 border border-border bg-card/40 p-5">
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Data zabiegu
+            </label>
+            <input
+              type="date"
+              value={surgeryDate}
+              onChange={(e) => setSurgeryDate(e.target.value || todayIso())}
+              className="mt-1 border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
+            />
+          </div>
+          <div className="flex-1 min-w-[14rem] text-xs text-muted-foreground">
+            Wygeneruj 15 wpisów (Dzień 0–14) z zaleceniami: mycie, HOCl, PBM/LLLT,
+            HBOT, strupki, sen, czerwone flagi. Każde wydarzenie ma alarm 1 h
+            wcześniej.
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={downloadIcs}
+              className="inline-flex items-center border border-accent bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-accent transition hover:bg-accent/20"
+            >
+              Pobierz .ics (kalendarz)
+            </button>
+            <button
+              type="button"
+              onClick={copyText}
+              className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+            >
+              {copyStatus === "ok" ? "Skopiowano ✓" : copyStatus === "err" ? "Błąd — zaznacz ręcznie" : "Skopiuj jako tekst"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowPreview((v) => !v)}
+              className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground transition hover:text-foreground"
+            >
+              {showPreview ? "Ukryj podgląd" : "Podgląd tekstu"}
+            </button>
+          </div>
+        </div>
+        <p className="mt-3 text-[11px] text-muted-foreground">
+          Plik .ics zaimportujesz w Google Calendar, Apple Calendar i Outlooku.
+          Tekst wklej do dowolnej aplikacji notatek lub wiadomości.
+        </p>
+        {showPreview && (
+          <textarea
+            readOnly
+            value={buildPlainText(surgeryDate)}
+            onFocus={(e) => e.currentTarget.select()}
+            className="mt-4 h-72 w-full resize-y border border-border bg-background/60 p-3 font-mono text-[11px] leading-relaxed text-foreground/90"
+          />
+        )}
+      </div>
+
       <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
+
         {SCHEDULE.map((d) => {
           const dayDone = d.tasks.every((t) => done[t.id]);
           const dayPartial = !dayDone && d.tasks.some((t) => done[t.id]);
