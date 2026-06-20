@@ -49,7 +49,7 @@ export const Route = createFileRoute("/api/public/reminders/subscribe")({
         if (error) {
           console.error("[reminders.subscribe] insert failed", error);
           return Response.json(
-            { error: "db_error", message: error.message },
+            { error: "internal_error" },
             { status: 500, headers: corsHeaders() }
           );
         }
