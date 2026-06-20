@@ -146,6 +146,7 @@ function Index() {
         <Hero />
         <HeroFAQ />
         <Creator />
+        <LazyMount minHeight={900} fallback={<DayZeroToThreeSkeleton />}><DayZeroToThree /></LazyMount>
         <Why />
         <ExVivo />
         <PBM />
@@ -156,7 +157,6 @@ function Index() {
         <LazyMount minHeight={900} fallback={<div style={{ minHeight: 900 }} />}><InteractiveSchedule /></LazyMount>
 
         <LazyMount minHeight={780} fallback={<JourneySkeleton />}><Journey /></LazyMount>
-        <LazyMount minHeight={900} fallback={<DayZeroToThreeSkeleton />}><DayZeroToThree /></LazyMount>
         <LazyMount minHeight={2100} fallback={<EvidenceBasementSkeleton />}><EvidenceBasement /></LazyMount>
         <LazyMount minHeight={1000} fallback={<PricingSkeleton />}><Pricing /></LazyMount>
         <LazyMount minHeight={1200} fallback={<FAQSkeleton />}><FAQSection /></LazyMount>
