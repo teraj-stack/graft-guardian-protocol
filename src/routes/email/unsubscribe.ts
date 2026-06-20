@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 const NOINDEX_HEADERS = { 'X-Robots-Tag': 'noindex, nofollow' } as const
 
 function json(body: unknown, init: ResponseInit = {}) {
-  const res = json(body, init)
+  const res = Response.json(body, init)
   res.headers.set('X-Robots-Tag', NOINDEX_HEADERS['X-Robots-Tag'])
   return res
 }
