@@ -1,10 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getPublishedChapters,
   verifyEbookAccess,
   type EbookChapter,
 } from "@/lib/ebook.functions";
+
 
 const TITLE = "Patient Journey — przewodnik po pierwszych 14 dniach";
 
@@ -53,32 +55,23 @@ function ErrorState({ message }: { message: string }) {
 
 /* ---------- Tiny markdown renderer (bold, lists, paragraphs) ---------- */
 
-function renderMarkdown(md: string) {
+type Block =
+  | { kind: "list"; items: string[] }
+  | { kind: "para"; text: string };
+
+function parseMarkdown(md: string): Block[] {
   const lines = md.split(/\r?\n/);
-  const blocks: React.ReactNode[] = [];
+  const blocks: Block[] = [];
   let listBuffer: string[] = [];
   let paraBuffer: string[] = [];
   const flushList = () => {
     if (listBuffer.length === 0) return;
-    blocks.push(
-      <ul
-        key={`ul-${blocks.length}`}
-        className="my-4 list-disc space-y-1 pl-6 text-sm md:text-base"
-      >
-        {listBuffer.map((item, i) => (
-          <li key={i}>{renderInline(item)}</li>
-        ))}
-      </ul>
-    );
+    blocks.push({ kind: "list", items: listBuffer });
     listBuffer = [];
   };
   const flushPara = () => {
     if (paraBuffer.length === 0) return;
-    blocks.push(
-      <p key={`p-${blocks.length}`} className="my-3 text-sm leading-relaxed md:text-base">
-        {renderInline(paraBuffer.join(" "))}
-      </p>
-    );
+    blocks.push({ kind: "para", text: paraBuffer.join(" ") });
     paraBuffer = [];
   };
   for (const raw of lines) {
@@ -114,23 +107,179 @@ function renderInline(text: string): React.ReactNode {
   });
 }
 
+/* ---------- Checklist state (localStorage) ---------- */
+
+const STORAGE_KEY = "ebook-checklist-v1";
+
+type ChecklistState = Record<string, boolean>; // key = `${slug}:${idx}`
+
+function useChecklist() {
+  const [state, setState] = useState<ChecklistState>({});
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) setState(JSON.parse(raw));
+    } catch {
+      /* ignore */
+    }
+    setHydrated(true);
+  }, []);
+
+  const toggle = useCallback((key: string) => {
+    setState((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      if (!next[key]) delete next[key];
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
+
+  const reset = useCallback(() => {
+    setState({});
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  return { state, hydrated, toggle, reset };
+}
+
+function ChapterBody({
+  slug,
+  body,
+  state,
+  onToggle,
+}: {
+  slug: string;
+  body: string;
+  state: ChecklistState;
+  onToggle: (key: string) => void;
+}) {
+  const blocks = useMemo(() => parseMarkdown(body), [body]);
+  let itemCounter = 0;
+  return (
+    <>
+      {blocks.map((block, bi) => {
+        if (block.kind === "para") {
+          return (
+            <p
+              key={`p-${bi}`}
+              className="my-3 text-sm leading-relaxed md:text-base"
+            >
+              {renderInline(block.text)}
+            </p>
+          );
+        }
+        return (
+          <ul key={`ul-${bi}`} className="my-4 space-y-2">
+            {block.items.map((item) => {
+              const idx = itemCounter++;
+              const key = `${slug}:${idx}`;
+              const checked = !!state[key];
+              return (
+                <li key={idx} className="flex items-start gap-3">
+                  <label className="flex cursor-pointer items-start gap-3 print:cursor-default">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => onToggle(key)}
+                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-accent print:hidden"
+                      aria-label={`Odhacz krok: ${item.replace(/\*\*/g, "")}`}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="mt-1 hidden h-4 w-4 shrink-0 items-center justify-center border border-current text-[10px] print:inline-flex"
+                    >
+                      {checked ? "✓" : ""}
+                    </span>
+                    <span
+                      className={
+                        checked
+                          ? "text-sm text-muted-foreground line-through md:text-base"
+                          : "text-sm md:text-base"
+                      }
+                    >
+                      {renderInline(item)}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+        );
+      })}
+    </>
+  );
+}
+
+function countItems(md: string): number {
+  return parseMarkdown(md).reduce(
+    (n, b) => n + (b.kind === "list" ? b.items.length : 0),
+    0,
+  );
+}
+
+function chapterProgress(slug: string, total: number, state: ChecklistState) {
+  if (total === 0) return { done: 0, total: 0, pct: 0 };
+  let done = 0;
+  for (let i = 0; i < total; i++) if (state[`${slug}:${i}`]) done++;
+  return { done, total, pct: Math.round((done / total) * 100) };
+}
+
+
 function EbookPage() {
   const { data: chapters } = useSuspenseQuery(chaptersQuery);
+  const { state, hydrated, toggle, reset } = useChecklist();
+
+  const totals = useMemo(() => {
+    const perChapter = new Map<string, number>();
+    let grand = 0;
+    for (const c of chapters) {
+      const n = countItems(c.body_md);
+      perChapter.set(c.slug, n);
+      grand += n;
+    }
+    return { perChapter, grand };
+  }, [chapters]);
+
+  const doneCount = hydrated
+    ? Object.values(state).filter(Boolean).length
+    : 0;
+  const overallPct =
+    totals.grand === 0 ? 0 : Math.round((doneCount / totals.grand) * 100);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header — hidden on print */}
       <header className="border-b border-border/60 print:hidden">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-5">
           <Link to="/" className="text-xs uppercase tracking-[0.25em] text-muted-foreground hover:text-foreground">
             ← Strona główna
           </Link>
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
-          >
-            Pobierz / Drukuj PDF
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (confirm("Wyzerować całą checklistę?")) reset();
+              }}
+              className="rounded-sm border border-border px-3 py-2 text-xs uppercase tracking-wider hover:bg-secondary"
+            >
+              Reset checklisty
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Pobierz / Drukuj PDF
+            </button>
+          </div>
         </div>
       </header>
 
@@ -145,30 +294,66 @@ function EbookPage() {
           Protokół kliniczny oparty na EBM. Wersja {new Date().toISOString().slice(0, 10)}.
         </p>
 
+        {/* Overall progress */}
+        <div className="mt-8 rounded-sm border border-border/60 bg-card/30 p-5 print:hidden">
+          <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span>Twój postęp — Dzień 0–14</span>
+            <span className="text-accent">
+              {doneCount} / {totals.grand} kroków · {overallPct}%
+            </span>
+          </div>
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-border/60">
+            <div
+              className="h-full bg-accent transition-[width] duration-300"
+              style={{ width: `${overallPct}%` }}
+            />
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Postęp zapisuje się lokalnie w tej przeglądarce. Odhaczaj kroki w trakcie dnia — ⚠️ ostrzeżenia („Czego unikać", „Sygnały alarmowe") także można zaznaczyć jako przeczytane.
+          </p>
+        </div>
+
         <div className="mt-12 space-y-12">
-          {chapters.map((c: EbookChapter) => (
-            <article
-              key={c.id}
-              id={c.slug}
-              className="break-inside-avoid border-t border-border/60 pt-8 print:pt-4"
-            >
-              <p className="text-xs uppercase tracking-[0.2em] text-accent">
-                {c.day_label}
-              </p>
-              <h2 className="mt-2 font-display text-2xl md:text-3xl">
-                {c.title}
-              </h2>
-              <div className="mt-4 text-muted-foreground">
-                {renderMarkdown(c.body_md)}
-              </div>
-            </article>
-          ))}
+          {chapters.map((c: EbookChapter) => {
+            const total = totals.perChapter.get(c.slug) ?? 0;
+            const prog = chapterProgress(c.slug, total, state);
+            return (
+              <article
+                key={c.id}
+                id={c.slug}
+                className="break-inside-avoid border-t border-border/60 pt-8 print:pt-4"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                    {c.day_label}
+                  </p>
+                  {total > 0 && (
+                    <p className="text-xs text-muted-foreground print:hidden">
+                      {prog.done}/{prog.total} · {prog.pct}%
+                    </p>
+                  )}
+                </div>
+                <h2 className="mt-2 font-display text-2xl md:text-3xl">
+                  {c.title}
+                </h2>
+                <div className="mt-4 text-muted-foreground">
+                  <ChapterBody
+                    slug={c.slug}
+                    body={c.body_md}
+                    state={state}
+                    onToggle={toggle}
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         <footer className="mt-16 border-t border-border/60 pt-8 text-xs text-muted-foreground print:mt-8">
           © {new Date().getFullYear()} Graftgen.com. Materiał edukacyjny — nie zastępuje konsultacji lekarskiej.
         </footer>
       </main>
+
 
       <style>{`
         @media print {
