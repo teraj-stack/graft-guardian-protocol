@@ -454,6 +454,24 @@ export function InteractiveSchedule() {
                             : "Wyślij mi e-mailem"}
               </button>
             </div>
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={openEmailPreview}
+                className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 transition hover:text-accent hover:underline"
+              >
+                Podgląd e-maila przed wysłaniem
+              </button>
+              {emailStatus === "sent" && (
+                <button
+                  type="button"
+                  onClick={resetEmailForm}
+                  className="text-[11px] uppercase tracking-[0.18em] text-accent underline-offset-4 transition hover:underline"
+                >
+                  Wyślij na inny adres
+                </button>
+              )}
+            </div>
             <label className="mt-2 flex items-start gap-2 text-[11px] text-muted-foreground">
               <input
                 type="checkbox"
@@ -468,6 +486,7 @@ export function InteractiveSchedule() {
               </span>
             </label>
           </div>
+
 
           <div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
