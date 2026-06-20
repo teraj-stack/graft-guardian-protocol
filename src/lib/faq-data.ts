@@ -1,8 +1,8 @@
 export type Stage = "Dzień 0-3" | "Dzień 4-14" | "Miesiąc 1+";
-export type Topic = "LED" | "HBOT" | "LADD/PRP" | "pielęgnacja domowa";
+export type Topic = "LED" | "HBOT" | "LADD/PRP" | "pielęgnacja domowa" | "gojenie";
 
 export const STAGES: Stage[] = ["Dzień 0-3", "Dzień 4-14", "Miesiąc 1+"];
-export const TOPICS: Topic[] = ["LED", "HBOT", "LADD/PRP", "pielęgnacja domowa"];
+export const TOPICS: Topic[] = ["LED", "HBOT", "LADD/PRP", "pielęgnacja domowa", "gojenie"];
 
 export const FAQ: { q: string; a: string; stages: Stage[]; topics: Topic[] }[] = [
   {
