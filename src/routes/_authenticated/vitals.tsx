@@ -17,7 +17,12 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
-  head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen.com" }] }),
+  head: () => ({
+    meta: [
+      { title: "Web Vitals (RUM) — Graftgen.com" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   loader: async ({ context }) =>
     context.queryClient.ensureQueryData({
       queryKey: ["vitals-summary"],
