@@ -201,13 +201,22 @@ test("każdy URL strony z dowolnego sitemap — canonical w HTML === <loc> w sit
       const canonical = extractCanonical(html);
       expect(canonical, `[${loc}] strona nie ma <link rel="canonical">`).not.toBeNull();
 
-      const canonicalAbs = toAbsolute(canonical!, baseURL!);
-      const sitemapAbs = toAbsolute(loc, baseURL!);
+      // Porównujemy po pathname — hosty mogą się różnić między środowiskami
+      // (sitemap zawsze emituje produkcyjny BASE_URL, canonical może być
+      // emitowany jako root-relative lub z bieżącego origin w preview).
+      const canonicalPath = pathOf(toAbsolute(canonical!, baseURL!));
+      const sitemapPath = pathOf(toAbsolute(loc, baseURL!));
 
       expect(
-        canonicalAbs,
-        `[${loc}] canonical "${canonicalAbs}" ≠ sitemap <loc> "${sitemapAbs}"`,
-      ).toBe(sitemapAbs);
+        canonicalPath,
+        `[${loc}] canonical path "${canonicalPath}" ≠ sitemap <loc> path "${sitemapPath}"`,
+      ).toBe(sitemapPath);
+
+      // Canonical NIE może zawierać query stringa — sitemap też go nie ma.
+      expect(
+        canonical!.includes("?"),
+        `[${loc}] canonical "${canonical}" zawiera query string`,
+      ).toBe(false);
     }
   } finally {
     await ctx.dispose();
