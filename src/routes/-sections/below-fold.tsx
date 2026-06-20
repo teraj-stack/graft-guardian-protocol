@@ -856,6 +856,15 @@ export function FAQSection() {
       <SectionHeader title="To, o co pytacie najczęściej." />
 
       <div className="mb-8 space-y-4">
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Szukaj w pytaniach i odpowiedziach…"
+            className="w-full max-w-md rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+          />
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
             Etap:
