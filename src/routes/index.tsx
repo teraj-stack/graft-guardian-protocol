@@ -3,7 +3,7 @@ import { lazy, useEffect, useRef, useState } from "react";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
-import graftgenLogo from "@/assets/graftgen-logo-2026.png.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo-unified.png.asset.json";
 import drBujok from "@/assets/dr-bujok.jpg.asset.json";
 
 import laddVideo from "@/assets/ladd.mp4.asset.json";
@@ -650,7 +650,7 @@ function LADD() {
               { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
               { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
               { src: mabelLogo.url, alt: "Mabel Hair Clinic", w: 372, h: 370 },
-              { src: graftgenLogo.url, alt: "Graftgen.com — Post-Transplant Care", w: 415, h: 531 },
+              { src: graftgenLogo.url, alt: "Graftgen.com — Post-Transplant Care", w: 512, h: 512 },
             ].map((logo) => (
               <div
                 key={logo.alt}
