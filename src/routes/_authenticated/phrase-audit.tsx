@@ -389,3 +389,38 @@ function Stat({
     </div>
   );
 }
+
+function DiffList({
+  title,
+  tone,
+  items,
+}: {
+  title: string;
+  tone: "add" | "remove";
+  items: string[];
+}) {
+  const colors =
+    tone === "add"
+      ? "border-emerald-500/40 bg-emerald-500/5"
+      : "border-rose-500/40 bg-rose-500/5";
+  return (
+    <div className={`rounded-md border p-3 ${colors}`}>
+      <h3 className="mb-2 text-sm font-medium">
+        {title} ({items.length})
+      </h3>
+      {items.length === 0 ? (
+        <p className="text-xs text-muted-foreground">— brak —</p>
+      ) : (
+        <ul className="space-y-1 font-mono text-xs">
+          {items.map((k) => (
+            <li key={k} className="truncate" title={k}>
+              {tone === "add" ? "+ " : "− "}
+              {k}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
