@@ -718,7 +718,7 @@ export function EvidenceBasement() {
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="Przeżywalność graftów">
-          <AnimatedTile src="evidence-1" alt="Animacja mieszka włosowego — przeżywalność graftów" aspect="16/9" className="mb-4" />
+          <AnimatedTile src="evidence-1" poster="/videos/evidence-1.jpg" alt="Animacja mieszka włosowego — przeżywalność graftów" aspect="16/9" className="mb-4" />
           <p>
             Zabiegi przeszczepu włosów (szczególnie w renomowanych klinikach) cechują się naturalnie wysoką przeżywalnością na poziomie{" "}
             <strong className="text-foreground">90–95%</strong>
