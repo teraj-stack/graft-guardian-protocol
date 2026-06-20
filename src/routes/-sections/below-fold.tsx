@@ -481,7 +481,64 @@ export function InteractiveSchedule() {
         </button>
       </div>
 
+      <div className="mb-6 border border-border bg-card/40 p-5">
+        <div className="flex flex-wrap items-end gap-4">
+          <div>
+            <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Data zabiegu
+            </label>
+            <input
+              type="date"
+              value={surgeryDate}
+              onChange={(e) => setSurgeryDate(e.target.value || todayIso())}
+              className="mt-1 border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
+            />
+          </div>
+          <div className="flex-1 min-w-[14rem] text-xs text-muted-foreground">
+            Wygeneruj 15 wpisów (Dzień 0–14) z zaleceniami: mycie, HOCl, PBM/LLLT,
+            HBOT, strupki, sen, czerwone flagi. Każde wydarzenie ma alarm 1 h
+            wcześniej.
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={downloadIcs}
+              className="inline-flex items-center border border-accent bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-accent transition hover:bg-accent/20"
+            >
+              Pobierz .ics (kalendarz)
+            </button>
+            <button
+              type="button"
+              onClick={copyText}
+              className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+            >
+              {copyStatus === "ok" ? "Skopiowano ✓" : copyStatus === "err" ? "Błąd — zaznacz ręcznie" : "Skopiuj jako tekst"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowPreview((v) => !v)}
+              className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground transition hover:text-foreground"
+            >
+              {showPreview ? "Ukryj podgląd" : "Podgląd tekstu"}
+            </button>
+          </div>
+        </div>
+        <p className="mt-3 text-[11px] text-muted-foreground">
+          Plik .ics zaimportujesz w Google Calendar, Apple Calendar i Outlooku.
+          Tekst wklej do dowolnej aplikacji notatek lub wiadomości.
+        </p>
+        {showPreview && (
+          <textarea
+            readOnly
+            value={buildPlainText(surgeryDate)}
+            onFocus={(e) => e.currentTarget.select()}
+            className="mt-4 h-72 w-full resize-y border border-border bg-background/60 p-3 font-mono text-[11px] leading-relaxed text-foreground/90"
+          />
+        )}
+      </div>
+
       <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
+
         {SCHEDULE.map((d) => {
           const dayDone = d.tasks.every((t) => done[t.id]);
           const dayPartial = !dayDone && d.tasks.some((t) => done[t.id]);
