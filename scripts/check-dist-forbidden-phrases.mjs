@@ -152,10 +152,24 @@ function findAllMatches(content, entry) {
       }
     }
     const endColumn = endIdx - endLineStart + 1;
+    // Within-line char ranges (0-based, half-open: [startChar, endChar)).
+    const startChar = idx - lineStart;
+    const endChar = endIdx - endLineStart;
     const lineEnd = content.indexOf("\n", idx);
     const rawLine = content.slice(lineStart, lineEnd === -1 ? content.length : lineEnd);
     const snippet = rawLine.length > 240 ? rawLine.slice(0, 240) + "…" : rawLine;
-    out.push({ line, column, endLine, endColumn, match: m[0], snippet });
+    out.push({
+      line,
+      column,
+      endLine,
+      endColumn,
+      startChar,
+      endChar,
+      startOffset: idx,
+      endOffset: endIdx,
+      match: m[0],
+      snippet,
+    });
     if (m.index === entry.matcher.lastIndex) entry.matcher.lastIndex++;
   }
   return out;
