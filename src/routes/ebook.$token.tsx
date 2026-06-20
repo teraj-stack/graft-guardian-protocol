@@ -55,32 +55,23 @@ function ErrorState({ message }: { message: string }) {
 
 /* ---------- Tiny markdown renderer (bold, lists, paragraphs) ---------- */
 
-function renderMarkdown(md: string) {
+type Block =
+  | { kind: "list"; items: string[] }
+  | { kind: "para"; text: string };
+
+function parseMarkdown(md: string): Block[] {
   const lines = md.split(/\r?\n/);
-  const blocks: React.ReactNode[] = [];
+  const blocks: Block[] = [];
   let listBuffer: string[] = [];
   let paraBuffer: string[] = [];
   const flushList = () => {
     if (listBuffer.length === 0) return;
-    blocks.push(
-      <ul
-        key={`ul-${blocks.length}`}
-        className="my-4 list-disc space-y-1 pl-6 text-sm md:text-base"
-      >
-        {listBuffer.map((item, i) => (
-          <li key={i}>{renderInline(item)}</li>
-        ))}
-      </ul>
-    );
+    blocks.push({ kind: "list", items: listBuffer });
     listBuffer = [];
   };
   const flushPara = () => {
     if (paraBuffer.length === 0) return;
-    blocks.push(
-      <p key={`p-${blocks.length}`} className="my-3 text-sm leading-relaxed md:text-base">
-        {renderInline(paraBuffer.join(" "))}
-      </p>
-    );
+    blocks.push({ kind: "para", text: paraBuffer.join(" ") });
     paraBuffer = [];
   };
   for (const raw of lines) {
@@ -115,6 +106,134 @@ function renderInline(text: string): React.ReactNode {
     return <span key={i}>{part}</span>;
   });
 }
+
+/* ---------- Checklist state (localStorage) ---------- */
+
+const STORAGE_KEY = "ebook-checklist-v1";
+
+type ChecklistState = Record<string, boolean>; // key = `${slug}:${idx}`
+
+function useChecklist() {
+  const [state, setState] = useState<ChecklistState>({});
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) setState(JSON.parse(raw));
+    } catch {
+      /* ignore */
+    }
+    setHydrated(true);
+  }, []);
+
+  const toggle = useCallback((key: string) => {
+    setState((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      if (!next[key]) delete next[key];
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
+
+  const reset = useCallback(() => {
+    setState({});
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  return { state, hydrated, toggle, reset };
+}
+
+function ChapterBody({
+  slug,
+  body,
+  state,
+  onToggle,
+}: {
+  slug: string;
+  body: string;
+  state: ChecklistState;
+  onToggle: (key: string) => void;
+}) {
+  const blocks = useMemo(() => parseMarkdown(body), [body]);
+  let itemCounter = 0;
+  return (
+    <>
+      {blocks.map((block, bi) => {
+        if (block.kind === "para") {
+          return (
+            <p
+              key={`p-${bi}`}
+              className="my-3 text-sm leading-relaxed md:text-base"
+            >
+              {renderInline(block.text)}
+            </p>
+          );
+        }
+        return (
+          <ul key={`ul-${bi}`} className="my-4 space-y-2">
+            {block.items.map((item) => {
+              const idx = itemCounter++;
+              const key = `${slug}:${idx}`;
+              const checked = !!state[key];
+              return (
+                <li key={idx} className="flex items-start gap-3">
+                  <label className="flex cursor-pointer items-start gap-3 print:cursor-default">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => onToggle(key)}
+                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-accent print:hidden"
+                      aria-label={`Odhacz krok: ${item.replace(/\*\*/g, "")}`}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="mt-1 hidden h-4 w-4 shrink-0 items-center justify-center border border-current text-[10px] print:inline-flex"
+                    >
+                      {checked ? "✓" : ""}
+                    </span>
+                    <span
+                      className={
+                        checked
+                          ? "text-sm text-muted-foreground line-through md:text-base"
+                          : "text-sm md:text-base"
+                      }
+                    >
+                      {renderInline(item)}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+        );
+      })}
+    </>
+  );
+}
+
+function countItems(md: string): number {
+  return parseMarkdown(md).reduce(
+    (n, b) => n + (b.kind === "list" ? b.items.length : 0),
+    0,
+  );
+}
+
+function chapterProgress(slug: string, total: number, state: ChecklistState) {
+  if (total === 0) return { done: 0, total: 0, pct: 0 };
+  let done = 0;
+  for (let i = 0; i < total; i++) if (state[`${slug}:${i}`]) done++;
+  return { done, total, pct: Math.round((done / total) * 100) };
+}
+
 
 function EbookPage() {
   const { data: chapters } = useSuspenseQuery(chaptersQuery);
