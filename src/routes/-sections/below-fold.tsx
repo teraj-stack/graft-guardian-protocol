@@ -1561,7 +1561,7 @@ export function Contact() {
   }
 
   return (
-    <Section id="kontakt" eyebrow="11 — Kontakt">
+    <Section id="kontakt" eyebrow="14 — KONTAKT">
       <SectionHeader
         title="Napisz do nas"
         lead={
