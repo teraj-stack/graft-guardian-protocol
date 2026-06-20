@@ -263,9 +263,21 @@ if (ci) {
       (h.replacement ? ` (use: "${h.replacement}")` : "");
     // Escape per GH workflow command spec.
     const esc = (s) => String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
-    console.log(
-      `::error file=dist/${esc(h.file)},line=${h.line},col=${h.column},title=Forbidden phrase::${esc(msg)}`,
-    );
+    // GitHub annotations support full ranges via endLine/endColumn.
+    // Per the workflow-command spec, endColumn is only valid when the match
+    // stays on a single line; for multi-line matches we emit endLine alone.
+    const parts = [
+      `file=dist/${esc(h.file)}`,
+      `line=${h.line}`,
+      `col=${h.column}`,
+    ];
+    if (h.endLine && h.endLine !== h.line) {
+      parts.push(`endLine=${h.endLine}`);
+    } else if (h.endColumn && h.endColumn !== h.column) {
+      parts.push(`endLine=${h.endLine ?? h.line}`, `endColumn=${h.endColumn}`);
+    }
+    parts.push(`title=Forbidden phrase`);
+    console.log(`::error ${parts.join(",")}::${esc(msg)}`);
   }
   const summaryPath = process.env.GITHUB_STEP_SUMMARY;
   if (summaryPath) {
