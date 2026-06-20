@@ -1,0 +1,2 @@
+CREATE POLICY "Deny anon/authenticated inserts on web_vitals" ON public.web_vitals FOR INSERT TO anon, authenticated WITH CHECK (false);
+CREATE POLICY "Deny anon/authenticated inserts on ebook_leads" ON public.ebook_leads FOR INSERT TO anon, authenticated WITH CHECK (false);
