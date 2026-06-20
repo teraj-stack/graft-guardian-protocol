@@ -24,11 +24,26 @@ export const Route = createFileRoute("/sklep")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
-      { property: "og:url", content: "https://graft-guardian-protocol.lovable.app/sklep" },
+      { property: "og:url", content: "https://graftgen.com/sklep" },
+      { property: "og:type", content: "website" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "https://graft-guardian-protocol.lovable.app/sklep" }],
+    links: [{ rel: "canonical", href: "https://graftgen.com/sklep" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: TITLE,
+          description: DESCRIPTION,
+          url: "https://graftgen.com/sklep",
+          inLanguage: "pl",
+          isPartOf: { "@type": "WebSite", name: "Graftgen.com", url: "https://graftgen.com" },
+        }),
+      },
+    ],
   }),
   component: Shop,
 });

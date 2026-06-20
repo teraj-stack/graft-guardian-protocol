@@ -3,10 +3,9 @@ import { useState } from "react";
 import { ALL_WEEKS, WEEK_PRESETS, materialsForWeek } from "@/lib/materials";
 import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/reminders/schema";
 
-const TITLE =
-  "Automatyczne przypomnienia po przeszczepie — e-mail i SMS";
+const TITLE = "Przypomnienia po przeszczepie — e-mail i SMS";
 const DESCRIPTION =
-  "Zapisz się, aby otrzymywać przypomnienia e-mail i SMS o materiałach edukacyjnych dopasowanych do każdego tygodnia po przeszczepie włosów. Bez spamu, jednym kliknięciem można się wypisać.";
+  "Zapisz się na przypomnienia e-mail i SMS o materiałach na każdy tydzień po przeszczepie włosów. Bez spamu, wypis jednym kliknięciem.";
 
 export const Route = createFileRoute("/przypomnienia")({
   head: () => ({
@@ -15,10 +14,11 @@ export const Route = createFileRoute("/przypomnienia")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
+      { property: "og:url", content: "https://graftgen.com/przypomnienia" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/przypomnienia" }],
+    links: [{ rel: "canonical", href: "https://graftgen.com/przypomnienia" }],
   }),
   component: RemindersPage,
 });

@@ -65,7 +65,7 @@ const Contact = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.Contact })),
 );
 
-const TITLE = "Protokół po przeszczepie włosów — DHI, PBM, HBOT, LADD";
+const TITLE = "Protokół po przeszczepie DHI — PBM, HBOT, LADD";
 const DESCRIPTION =
   "Zintegrowany protokół po przeszczepie włosów DHI: ochrona ex vivo, fotobiomodulacja, HBOT i LADD. Zwiększ przeżywalność graftów dzięki metodom EBM.";
 
@@ -76,12 +76,12 @@ export const Route = createFileRoute("/")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
-      { property: "og:url", content: "https://graft-guardian-protocol.lovable.app/" },
+      { property: "og:url", content: "https://graftgen.com/" },
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "https://graft-guardian-protocol.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://graftgen.com/" }],
     scripts: [
       {
         type: "application/ld+json",

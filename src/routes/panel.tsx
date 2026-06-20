@@ -6,7 +6,7 @@ import { usePanelProgress } from "@/hooks/use-panel-progress";
 
 const TITLE = "Panel pacjenta — biblioteka materiałów pozabiegowych";
 const DESCRIPTION =
-  "Biblioteka materiałów edukacyjnych po przeszczepie włosów: pełna dokumentacja protokołu, instrukcje na każdy tydzień rekonwalescencji, najnowsze trendy w medycynie regeneracyjnej i anti-aging.";
+  "Biblioteka materiałów po przeszczepie włosów: protokół, instrukcje na każdy tydzień rekonwalescencji i trendy w medycynie regeneracyjnej.";
 
 const CATEGORIES = ["Pielęgnacja", "HBOT", "PBM", "LADD", "Dieta", "Anti-aging"] as const;
 const TYPES = ["Artykuł", "Wideo", "PDF", "Checklist"] as const;
@@ -193,10 +193,11 @@ export const Route = createFileRoute("/panel")({
       { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
+      { property: "og:url", content: "https://graftgen.com/panel" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/panel" }],
+    links: [{ rel: "canonical", href: "https://graftgen.com/panel" }],
   }),
   component: PanelPage,
 });

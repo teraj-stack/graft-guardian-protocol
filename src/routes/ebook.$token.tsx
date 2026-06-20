@@ -19,6 +19,11 @@ export const Route = createFileRoute("/ebook/$token")({
   head: () => ({
     meta: [
       { title: TITLE },
+      {
+        name: "description",
+        content:
+          "Przewodnik po pierwszych 14 dniach po przeszczepie włosów — dzień po dniu instrukcje, checklisty i objawy alarmowe.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
