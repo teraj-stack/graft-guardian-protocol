@@ -256,21 +256,75 @@ function PhraseAuditPage() {
         >
           {ebookScan.isPending ? "Skanuję…" : "Skanuj"}
         </button>
-        {(["Faza intensywna", "Graftgen", "FUE", "Cennik", "48 godzin"] as const).map((s) => (
-          <button
-            key={s}
-            type="button"
-            onClick={() => {
-              setPhrase(s);
-              setActivePhrase(s);
-              ebookScan.mutate(s);
-            }}
-            className="rounded-full border border-border px-3 py-1 text-xs hover:bg-muted"
-          >
-            {s}
-          </button>
-        ))}
+        {QUICK_PHRASES.map((s) => {
+          const saved = savedIndex.includes(s.toLowerCase());
+          const isSaving = savingPhrase === s;
+          return (
+            <span key={s} className="inline-flex overflow-hidden rounded-full border border-border">
+              <button
+                type="button"
+                onClick={() => {
+                  setPhrase(s);
+                  setActivePhrase(s);
+                  ebookScan.mutate(s);
+                }}
+                className="px-3 py-1 text-xs hover:bg-muted"
+              >
+                {s}
+              </button>
+              <button
+                type="button"
+                onClick={() => saveBaselineFor(s)}
+                disabled={isSaving}
+                title={saved ? "Nadpisz baseline (UI + e-book)" : "Zapisz baseline (UI + e-book)"}
+                aria-label={`Zapisz baseline dla frazy ${s}`}
+                className="border-l border-border px-2 py-1 text-xs hover:bg-muted disabled:opacity-50"
+              >
+                {isSaving ? "…" : saved ? "💾✓" : "💾"}
+              </button>
+            </span>
+          );
+        })}
       </form>
+
+      {savedIndex.length > 0 ? (
+        <section className="mb-6 rounded-md border border-border bg-muted/20 p-3">
+          <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Zapisane baseline'y ({savedIndex.length})
+          </h2>
+          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {savedIndex.map((key) => {
+              const snap = loadSnapshot(key);
+              if (!snap) return null;
+              return (
+                <li
+                  key={key}
+                  className="rounded border border-border bg-background p-2 text-xs"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPhrase(snap.phrase);
+                      setActivePhrase(snap.phrase);
+                      setSnapshot(snap);
+                      ebookScan.mutate(snap.phrase);
+                    }}
+                    className="block w-full text-left"
+                  >
+                    <div className="font-medium">„{snap.phrase}"</div>
+                    <div className="text-muted-foreground">{snap.name}</div>
+                    <div className="mt-0.5 text-muted-foreground">
+                      Zakres — UI: <span className="text-foreground">{snap.scope.ui}</span>,
+                      e-book: <span className="text-foreground">{snap.scope.ebook}</span>
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : null}
+
 
       {!activePhrase ? (
         <div className="rounded-md border border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
