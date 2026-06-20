@@ -98,7 +98,10 @@ export function Timeline() {
 
   return (
     <Section id="protokol" eyebrow="07 — Oś czasu 14 dni i dalej">
-      <SectionHeader title="Chronologiczny protokół, krok po kroku." />
+      <SectionHeader
+        title="Chronologiczny protokół, krok po kroku."
+        lead="48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni."
+      />
       <ol className="space-y-12">
         {phases.map((p, i) => (
           <li
