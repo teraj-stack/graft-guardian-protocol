@@ -11,6 +11,7 @@ export function AnimatedTile({
   src,
   alt,
   poster,
+  lqip,
   aspect = "16/9",
   className = "",
 }: {
@@ -19,6 +20,8 @@ export function AnimatedTile({
   alt: string;
   /** Ścieżka do statycznego placeholdera (np. /videos/evidence-1.jpg) */
   poster?: string;
+  /** Niskorozdzielcza miniatura (data URI / URL) — natychmiastowy podgląd przed JPG */
+  lqip?: string;
   /** CSS aspect-ratio, np. "16/9" lub "1/1" */
   aspect?: string;
   className?: string;
@@ -26,6 +29,7 @@ export function AnimatedTile({
   const ref = useRef<HTMLVideoElement | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [posterReady, setPosterReady] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -53,12 +57,23 @@ export function AnimatedTile({
       className={`relative overflow-hidden rounded-sm border border-border/60 bg-secondary/40 ${className}`}
       style={{ aspectRatio: aspect }}
     >
+      {lqip && (
+        <img
+          src={lqip}
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          className={`absolute inset-0 h-full w-full object-cover scale-110 blur-xl transition-opacity duration-700 ${posterReady || videoReady ? "opacity-0" : "opacity-100"}`}
+        />
+      )}
       {poster && (
         <img
           src={poster}
           alt={alt}
           loading="lazy"
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-0" : "opacity-100"}`}
+          decoding="async"
+          onLoad={() => setPosterReady(true)}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-0" : posterReady ? "opacity-100" : "opacity-0"}`}
         />
       )}
       <video
