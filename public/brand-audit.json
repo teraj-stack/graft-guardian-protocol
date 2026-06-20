@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T04:35:23.153Z",
+  "generatedAt": "2026-06-20T05:00:02.344Z",
   "total": 6,
   "byRule": {
     "graftgen-bare": 1,
@@ -29,7 +29,7 @@
       "label": "Legacy: technika FUE (standard to DHI)",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 617,
+      "line": 618,
       "column": 71,
       "match": "FUE",
       "snippet": "gaps: [\"Brak współczesnego head-to-head RCT porównującego DHI vs. FUE z zaślepioną oceną przeżywalności.\"],"
@@ -39,7 +39,7 @@
       "label": "Legacy: technika FUE (standard to DHI)",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 631,
+      "line": 632,
       "column": 49,
       "match": "FUE",
       "snippet": "\"Brak head-to-head dla DHI (oryginał: FUT/FUE).\","
