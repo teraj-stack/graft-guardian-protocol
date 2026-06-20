@@ -131,7 +131,8 @@ function findAllMatches(content, entry) {
   let m;
   while ((m = entry.matcher.exec(content)) !== null) {
     const idx = m.index;
-    // Compute line/col
+    const endIdx = idx + m[0].length;
+    // Compute start line/col
     let line = 1;
     let lineStart = 0;
     for (let i = 0; i < idx; i++) {
@@ -141,10 +142,20 @@ function findAllMatches(content, entry) {
       }
     }
     const column = idx - lineStart + 1;
+    // Compute end line/col by continuing the scan from idx → endIdx.
+    let endLine = line;
+    let endLineStart = lineStart;
+    for (let i = idx; i < endIdx; i++) {
+      if (content.charCodeAt(i) === 10) {
+        endLine++;
+        endLineStart = i + 1;
+      }
+    }
+    const endColumn = endIdx - endLineStart + 1;
     const lineEnd = content.indexOf("\n", idx);
     const rawLine = content.slice(lineStart, lineEnd === -1 ? content.length : lineEnd);
     const snippet = rawLine.length > 240 ? rawLine.slice(0, 240) + "…" : rawLine;
-    out.push({ line, column, match: m[0], snippet });
+    out.push({ line, column, endLine, endColumn, match: m[0], snippet });
     if (m.index === entry.matcher.lastIndex) entry.matcher.lastIndex++;
   }
   return out;
