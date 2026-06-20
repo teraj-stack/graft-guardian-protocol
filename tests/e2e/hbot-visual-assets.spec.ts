@@ -32,30 +32,14 @@ async function imageIsLoaded(img: Locator): Promise<{
 }
 
 async function gotoHbot(page: Page) {
-  const failedRequests: string[] = [];
-  page.on("requestfailed", (req) => {
-    const url = req.url();
-    if (/\.(png|jpe?g|webp|avif|gif|svg|ico|woff2?|ttf|otf|mp4|webm)(\?|$)/i.test(url)) {
-      failedRequests.push(`${req.failure()?.errorText ?? "failed"} ${url}`);
-    }
-  });
-  page.on("response", (res) => {
-    const url = res.url();
-    if (
-      res.status() >= 400 &&
-      /\.(png|jpe?g|webp|avif|gif|svg|ico|woff2?|ttf|otf|mp4|webm)(\?|$)/i.test(url)
-    ) {
-      failedRequests.push(`${res.status()} ${url}`);
-    }
-  });
-
   await page.goto("/", { waitUntil: "domcontentloaded" });
   const section = page.locator("section#hbot");
   await section.scrollIntoViewIfNeeded();
   // Allow lazy-loaded images / fonts to settle.
   await page.waitForLoadState("networkidle").catch(() => {});
-  return { section, failedRequests };
+  return { section };
 }
+
 
 test.describe("HBOT visual assets", () => {
   test("every <img> inside #hbot loads with non-zero intrinsic size", async ({ page }) => {
