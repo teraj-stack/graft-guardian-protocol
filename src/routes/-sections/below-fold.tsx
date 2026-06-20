@@ -8,6 +8,14 @@ import { validateReferences, type RefValidation } from "@/lib/references.functio
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
 import { AnimatedTile } from "@/components/animated-tile";
 import { evidenceLqip } from "@/components/animated-tile-lqip";
+import {
+  SCHEDULE,
+  addDaysIso,
+  buildIcs,
+  buildPlainText,
+  buildShortMessage,
+  todayIso,
+} from "@/lib/schedule-data";
 
 /* ---------- Microbiome ---------- */
 
