@@ -22,6 +22,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
 import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
 import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
@@ -29,9 +30,12 @@ import { Route as AuthenticatedPhraseAuditRouteImport } from './routes/_authenti
 import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
 import { Route as AuthenticatedBrandAuditRouteImport } from './routes/_authenticated/brand-audit'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
 import { Route as ApiPublicEbookRequestRouteImport } from './routes/api/public/ebook-request'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
@@ -103,6 +107,11 @@ const ProductHandleRoute = ProductHandleRouteImport.update({
   path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EbookTokenRoute = EbookTokenRouteImport.update({
   id: '/ebook/$token',
   path: '/ebook/$token',
@@ -139,6 +148,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicVitalsRoute = ApiPublicVitalsRouteImport.update({
   id: '/api/public/vitals',
   path: '/api/public/vitals',
@@ -154,6 +168,18 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -208,18 +234,22 @@ export interface FileRoutesByFullPath {
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
   '/ebook/$token': typeof EbookTokenRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/ebook-request': typeof ApiPublicEbookRequestRoute
   '/api/public/vitals': typeof ApiPublicVitalsRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -238,18 +268,22 @@ export interface FileRoutesByTo {
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
   '/ebook/$token': typeof EbookTokenRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/ebook-request': typeof ApiPublicEbookRequestRoute
   '/api/public/vitals': typeof ApiPublicVitalsRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -270,18 +304,22 @@ export interface FileRoutesById {
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
   '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
   '/ebook/$token': typeof EbookTokenRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/product/$handle': typeof ProductHandleRoute
   '/przypomnienia/wypisz': typeof PrzypomnieniaWypiszRoute
   '/raporty/status': typeof RaportyStatusRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/api/public/ebook-request': typeof ApiPublicEbookRequestRoute
   '/api/public/vitals': typeof ApiPublicVitalsRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -302,18 +340,22 @@ export interface FileRouteTypes {
     | '/raporty'
     | '/vitals'
     | '/ebook/$token'
+    | '/email/unsubscribe'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
     | '/api/public/ebook-request'
     | '/api/public/vitals'
+    | '/lovable/email/suppression'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -332,18 +374,22 @@ export interface FileRouteTypes {
     | '/raporty'
     | '/vitals'
     | '/ebook/$token'
+    | '/email/unsubscribe'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
     | '/api/public/ebook-request'
     | '/api/public/vitals'
+    | '/lovable/email/suppression'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -363,18 +409,22 @@ export interface FileRouteTypes {
     | '/_authenticated/raporty'
     | '/_authenticated/vitals'
     | '/ebook/$token'
+    | '/email/unsubscribe'
     | '/product/$handle'
     | '/przypomnienia/wypisz'
     | '/raporty/status'
     | '/api/public/contact'
     | '/api/public/ebook-request'
     | '/api/public/vitals'
+    | '/lovable/email/suppression'
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -389,17 +439,21 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SklepRoute: typeof SklepRoute
   EbookTokenRoute: typeof EbookTokenRoute
+  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductHandleRoute: typeof ProductHandleRoute
   RaportyStatusRoute: typeof RaportyStatusRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   ApiPublicEbookRequestRoute: typeof ApiPublicEbookRequestRoute
   ApiPublicVitalsRoute: typeof ApiPublicVitalsRoute
+  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
+  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -495,6 +549,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ebook/$token': {
       id: '/ebook/$token'
       path: '/ebook/$token'
@@ -544,6 +605,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/vitals': {
       id: '/api/public/vitals'
       path: '/api/public/vitals'
@@ -563,6 +631,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/contact'
       fullPath: '/api/public/contact'
       preLoaderRoute: typeof ApiPublicContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/queue/process': {
@@ -655,17 +737,21 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SklepRoute: SklepRoute,
   EbookTokenRoute: EbookTokenRoute,
+  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductHandleRoute: ProductHandleRoute,
   RaportyStatusRoute: RaportyStatusRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   ApiPublicEbookRequestRoute: ApiPublicEbookRequestRoute,
   ApiPublicVitalsRoute: ApiPublicVitalsRoute,
+  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
+  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
