@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/vitals")({
-  head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen" }] }),
+  head: () => ({ meta: [{ title: "Web Vitals (RUM) — Graftgen.com" }] }),
   loader: async ({ context }) =>
     context.queryClient.ensureQueryData({
       queryKey: ["vitals-summary"],
@@ -548,7 +548,7 @@ function VitalsPage() {
       let startY = 40;
       if (pdfMetadata) {
         doc.setFontSize(14);
-        doc.text("Web Vitals — raport RUM (Graftgen)", 40, 40);
+        doc.text("Web Vitals — raport RUM (Graftgen.com)", 40, 40);
         doc.setFontSize(10);
         const meta = [
           `Wygenerowano: ${new Date().toLocaleString("pl-PL")}`,

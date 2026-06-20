@@ -11,7 +11,7 @@ export const Route = createFileRoute("/raporty/status")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Status wysyłki raportów — Graftgen" },
+      { title: "Status wysyłki raportów — Graftgen.com" },
       { name: "robots", content: "noindex, nofollow" },
       { name: "description", content: "Historia wysyłki cotygodniowych raportów PDF: wysłano, dostarczono, otwarto, potwierdzono." },
     ],
