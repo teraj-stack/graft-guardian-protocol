@@ -165,10 +165,12 @@ export function InteractiveSchedule() {
   const [copyStatus, setCopyStatus] = useState<"idle" | "ok" | "err">("idle");
   const [showPreview, setShowPreview] = useState(false);
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [emailStatus, setEmailStatus] = useState<
     "idle" | "sending" | "sent" | "rate_limited" | "suppressed" | "invalid" | "error"
   >("idle");
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
   const [emailPreview, setEmailPreview] = useState<
     | { state: "idle" }
@@ -177,6 +179,47 @@ export function InteractiveSchedule() {
     | { state: "error"; message: string }
   >({ state: "idle" });
   const [showEmailPreview, setShowEmailPreview] = useState(false);
+
+  function validateEmail(raw: string): { ok: true; value: string } | { ok: false; message: string } {
+    const value = raw.trim().toLowerCase();
+    if (!value) return { ok: false, message: "Podaj adres e-mail." };
+    if (value.length > 254) return { ok: false, message: "Adres e-mail jest zbyt długi (max 254 znaki)." };
+    if (/\s/.test(value)) return { ok: false, message: "Adres nie może zawierać spacji." };
+    const at = value.indexOf("@");
+    if (at < 1 || at !== value.lastIndexOf("@")) {
+      return { ok: false, message: "Adres musi zawierać dokładnie jeden znak @." };
+    }
+    const local = value.slice(0, at);
+    const domain = value.slice(at + 1);
+    if (local.length > 64) return { ok: false, message: "Część przed @ jest zbyt długa (max 64 znaki)." };
+    if (local.startsWith(".") || local.endsWith(".") || local.includes("..")) {
+      return { ok: false, message: "Niepoprawne kropki w części przed @." };
+    }
+    if (!/^[a-z0-9._%+\-]+$/.test(local)) {
+      return { ok: false, message: "Część przed @ zawiera niedozwolone znaki." };
+    }
+    if (!domain.includes(".")) return { ok: false, message: "Domena musi zawierać kropkę, np. gmail.com." };
+    if (domain.startsWith(".") || domain.endsWith(".") || domain.includes("..")) {
+      return { ok: false, message: "Niepoprawne kropki w domenie." };
+    }
+    if (!/^[a-z0-9.\-]+$/.test(domain)) {
+      return { ok: false, message: "Domena zawiera niedozwolone znaki." };
+    }
+    const tld = domain.split(".").pop() ?? "";
+    if (!/^[a-z]{2,}$/.test(tld)) {
+      return { ok: false, message: "Domena najwyższego poziomu jest niepoprawna." };
+    }
+    return { ok: true, value };
+  }
+
+  function onEmailBlur() {
+    if (!email.trim()) {
+      setEmailError(null);
+      return;
+    }
+    const v = validateEmail(email);
+    setEmailError(v.ok ? null : v.message);
+  }
 
   async function openEmailPreview() {
     setShowEmailPreview(true);
@@ -195,15 +238,17 @@ export function InteractiveSchedule() {
       if (resp.ok && json.ok && json.html) {
         setEmailPreview({ state: "ready", html: json.html, subject: json.subject ?? "" });
       } else {
-        setEmailPreview({ state: "error", message: "Nie udało się wygenerować podglądu." });
+        setEmailPreview({ state: "error", message: "Nie udało się wygenerować podglądu wiadomości. Spróbuj ponownie za chwilę." });
       }
     } catch {
-      setEmailPreview({ state: "error", message: "Błąd sieci. Spróbuj ponownie." });
+      setEmailPreview({ state: "error", message: "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie." });
     }
   }
 
   function resetEmailForm() {
     setEmail("");
+    setEmailError(null);
+    setStatusMessage(null);
     setEmailStatus("idle");
   }
 
@@ -231,20 +276,26 @@ export function InteractiveSchedule() {
   }
 
   async function sendEmail() {
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-    if (!ok) {
+    const v = validateEmail(email);
+    if (!v.ok) {
+      setEmailError(v.message);
       setEmailStatus("invalid");
-      setTimeout(() => setEmailStatus("idle"), 2500);
+      setStatusMessage(v.message);
       return;
     }
-    if (!consent) return;
+    setEmailError(null);
+    if (!consent) {
+      setStatusMessage("Zaznacz zgodę na otrzymywanie przypomnień.");
+      return;
+    }
     setEmailStatus("sending");
+    setStatusMessage(null);
     try {
       const resp = await fetch("/api/public/reminders/send-checklist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: email.trim().toLowerCase(),
+          email: v.value,
           surgeryDate,
           consent: true,
         }),
@@ -252,21 +303,37 @@ export function InteractiveSchedule() {
       const json = (await resp.json().catch(() => ({}))) as {
         ok?: boolean;
         reason?: string;
+        error?: string;
+        retryAfterMinutes?: number;
+        details?: { fieldErrors?: Record<string, string[]> };
       };
       if (resp.status === 429 || json.reason === "rate_limited") {
+        const mins = json.retryAfterMinutes ?? 5;
         setEmailStatus("rate_limited");
+        setStatusMessage(`Wysłaliśmy już wiadomość na ten adres. Odczekaj ${mins} min i spróbuj ponownie.`);
       } else if (json.reason === "email_suppressed") {
         setEmailStatus("suppressed");
+        setStatusMessage("Ten adres został wcześniej wypisany z powiadomień. Użyj innego adresu lub skontaktuj się z nami.");
+      } else if (resp.status === 400 && json.error === "validation_failed") {
+        const first = Object.values(json.details?.fieldErrors ?? {})[0]?.[0];
+        setEmailStatus("invalid");
+        setStatusMessage(first ?? "Dane formularza są niepoprawne. Sprawdź adres e-mail i datę zabiegu.");
+      } else if (resp.status >= 500 || json.error === "enqueue_failed" || json.error === "server_misconfigured") {
+        setEmailStatus("error");
+        setStatusMessage("Serwer chwilowo nie może wysłać wiadomości. Spróbuj ponownie za kilka minut.");
       } else if (resp.ok && json.ok) {
         setEmailStatus("sent");
+        setStatusMessage(`Wysłaliśmy harmonogram na ${v.value}. Sprawdź też folder Spam.`);
       } else {
         setEmailStatus("error");
+        setStatusMessage("Nie udało się wysłać wiadomości. Spróbuj ponownie.");
       }
     } catch {
       setEmailStatus("error");
+      setStatusMessage("Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.");
     }
-    setTimeout(() => setEmailStatus("idle"), 6000);
   }
+
 
   async function shareToPhone() {
     const text = buildShortMessage(surgeryDate);
@@ -429,9 +496,24 @@ export function InteractiveSchedule() {
                 autoComplete="email"
                 maxLength={254}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError(null);
+                  if (statusMessage && emailStatus !== "sent") {
+                    setStatusMessage(null);
+                    setEmailStatus("idle");
+                  }
+                }}
+                onBlur={onEmailBlur}
                 placeholder="ty@przyklad.pl"
-                className="flex-1 border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
+                aria-invalid={emailError ? true : undefined}
+                aria-describedby={emailError ? "schedule-email-error" : statusMessage ? "schedule-email-status" : undefined}
+                className={
+                  "flex-1 border bg-background px-3 py-2 text-sm focus:outline-none " +
+                  (emailError
+                    ? "border-destructive focus:border-destructive"
+                    : "border-border focus:border-accent")
+                }
               />
               <button
                 type="button"
@@ -443,17 +525,31 @@ export function InteractiveSchedule() {
                   ? "Wysyłanie…"
                   : emailStatus === "sent"
                     ? "Wysłano ✓"
-                    : emailStatus === "rate_limited"
-                      ? "Odczekaj kilka minut"
-                      : emailStatus === "suppressed"
-                        ? "Adres wypisany"
-                        : emailStatus === "invalid"
-                          ? "Sprawdź adres"
-                          : emailStatus === "error"
-                            ? "Spróbuj ponownie"
-                            : "Wyślij mi e-mailem"}
+                    : "Wyślij mi e-mailem"}
               </button>
             </div>
+            {emailError && (
+              <p id="schedule-email-error" role="alert" className="mt-2 text-[11px] text-destructive">
+                {emailError}
+              </p>
+            )}
+            {statusMessage && !emailError && (
+              <p
+                id="schedule-email-status"
+                role={emailStatus === "sent" ? "status" : "alert"}
+                aria-live="polite"
+                className={
+                  "mt-2 text-[11px] " +
+                  (emailStatus === "sent"
+                    ? "text-accent"
+                    : emailStatus === "rate_limited"
+                      ? "text-amber-500"
+                      : "text-destructive")
+                }
+              >
+                {statusMessage}
+              </p>
+            )}
             <div className="mt-2 flex flex-wrap items-center gap-3">
               <button
                 type="button"
@@ -472,6 +568,7 @@ export function InteractiveSchedule() {
                 </button>
               )}
             </div>
+
             <label className="mt-2 flex items-start gap-2 text-[11px] text-muted-foreground">
               <input
                 type="checkbox"
