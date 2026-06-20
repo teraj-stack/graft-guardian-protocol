@@ -22,8 +22,13 @@
  *                     plus all files/dirs skipped via ignore rules.
  *   --no-fail         Always exit 0 (still writes the report). Useful for audits.
  *   --quiet           Suppress per-violation console output (the report still has it).
+ *   --ci              CI mode. Implies --report (default path), emits GitHub Actions
+ *                     `::error` annotations for every violation, and appends a
+ *                     Markdown summary to $GITHUB_STEP_SUMMARY when present.
+ *                     Existing commands (build / test:dist / test:clean-build) are
+ *                     unaffected — they don't pass --ci.
  */
-import { readdirSync, readFileSync, statSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { appendFileSync, readdirSync, readFileSync, statSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, extname, dirname, resolve, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -37,8 +42,9 @@ const argv = process.argv.slice(2);
 function flag(name) {
   return argv.find((a) => a === `--${name}` || a.startsWith(`--${name}=`));
 }
+const ci = Boolean(flag("ci"));
 const reportFlag = flag("report");
-const writeReport = Boolean(reportFlag);
+const writeReport = Boolean(reportFlag) || ci;
 const reportPath = reportFlag?.includes("=")
   ? resolve(process.cwd(), reportFlag.split("=").slice(1).join("="))
   : resolve(DIST, "_forbidden-phrases-report.json");
