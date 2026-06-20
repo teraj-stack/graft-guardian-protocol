@@ -192,13 +192,13 @@ function Nav() {
         <a href="#" className="flex items-stretch py-1.5" aria-label="Graftgen.com">
           <span
             className="block h-full overflow-hidden rounded-lg bg-background"
-            style={{ aspectRatio: "415 / 531", width: "auto" }}
+            style={{ aspectRatio: "414 / 430", width: "auto" }}
           >
             <img
               src={graftgenLogo.url}
               alt="Graftgen.com"
-              width={415}
-              height={531}
+              width={414}
+              height={430}
               decoding="async"
               fetchPriority="high"
               className="block h-full w-auto"
@@ -254,8 +254,8 @@ function Nav() {
             <img
               src={graftgenLogo.url}
               alt="Graftgen.com"
-              width={415}
-              height={531}
+              width={414}
+              height={430}
               decoding="async"
               className="h-[73px] w-auto"
             />
@@ -650,7 +650,7 @@ function LADD() {
               { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
               { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
               { src: mabelLogo.url, alt: "Mabel Hair Clinic", w: 372, h: 370 },
-              { src: graftgenLogo.url, alt: "Graftgen.com — Post-Transplant Care", w: 512, h: 512 },
+              { src: graftgenLogo.url, alt: "Graftgen.com — Post-Transplant Care", w: 414, h: 430 },
             ].map((logo) => (
               <div
                 key={logo.alt}
