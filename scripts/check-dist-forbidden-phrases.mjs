@@ -285,6 +285,119 @@ if (writeReport) {
   );
 }
 
+if (writeSarif) {
+  // SARIF 2.1.0 — see https://docs.oasis-open.org/sarif/sarif/v2.1.0/
+  // Compatible with github/codeql-action/upload-sarif@v3.
+  // ruleId is a stable slug derived from the phrase so Code Scanning can
+  // dedupe/track findings per phrase across runs.
+  const slug = (s) =>
+    "forbidden-phrase/" +
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 80);
+
+  const rules = entries.map((e) => ({
+    id: slug(e.phrase),
+    name: "ForbiddenPhrase",
+    shortDescription: { text: `Forbidden phrase: "${e.phrase}"` },
+    fullDescription: {
+      text:
+        (e.reason ? `${e.reason} ` : "") +
+        `This phrase must not appear in built output.` +
+        (e.replacement ? ` Use instead: "${e.replacement}".` : ""),
+    },
+    helpUri: "https://github.com/" /* repo-agnostic */,
+    defaultConfiguration: { level: "error" },
+    properties: {
+      phrase: e.phrase,
+      regex: Boolean(e.regex),
+      caseInsensitive: Boolean(e.caseInsensitive),
+      replacement: e.replacement ?? null,
+      tags: ["build-guard", "forbidden-phrase"],
+    },
+  }));
+
+  // SARIF results reference rules by index in tool.driver.rules.
+  const ruleIndex = new Map(entries.map((e, i) => [e.phrase, i]));
+
+  const results = hits.map((h) => ({
+    ruleId: slug(h.phrase),
+    ruleIndex: ruleIndex.get(h.phrase) ?? -1,
+    level: "error",
+    message: {
+      text:
+        `Forbidden phrase "${h.phrase}" found in built output.` +
+        (h.reason ? ` ${h.reason}` : "") +
+        (h.replacement ? ` Use instead: "${h.replacement}".` : ""),
+    },
+    locations: [
+      {
+        physicalLocation: {
+          artifactLocation: {
+            // SARIF URIs are relative to the repo root → keep `dist/` prefix.
+            uri: `dist/${h.file}`,
+            uriBaseId: "%SRCROOT%",
+          },
+          region: {
+            startLine: h.line,
+            startColumn: h.column,
+            endLine: h.endLine ?? h.line,
+            endColumn: h.endColumn ?? h.column + (h.match?.length ?? 0),
+            snippet: { text: h.snippet ?? h.match ?? "" },
+            charOffset: h.startOffset,
+            charLength:
+              h.endOffset != null && h.startOffset != null
+                ? h.endOffset - h.startOffset
+                : (h.match?.length ?? 0),
+          },
+        },
+      },
+    ],
+    partialFingerprints: {
+      // Stable across runs so Code Scanning can match/dismiss findings.
+      "phrase/v1": h.phrase,
+      "location/v1": `${h.file}:${h.line}:${h.column}`,
+    },
+  }));
+
+  const sarif = {
+    $schema: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+    version: "2.1.0",
+    runs: [
+      {
+        tool: {
+          driver: {
+            name: "forbidden-phrases-guard",
+            informationUri:
+              "https://github.com/" /* repo-agnostic placeholder */,
+            version: "1.0.0",
+            rules,
+          },
+        },
+        results,
+        invocations: [
+          {
+            executionSuccessful: true, // guard ran cleanly; violations are results, not tool errors
+            endTimeUtc: new Date().toISOString(),
+          },
+        ],
+        columnKind: "utf16CodeUnits",
+        originalUriBaseIds: {
+          "%SRCROOT%": { uri: "file:///" },
+        },
+      },
+    ],
+  };
+
+  mkdirSync(dirname(sarifPath), { recursive: true });
+  writeFileSync(sarifPath, JSON.stringify(sarif, null, 2), "utf8");
+  console.log(
+    `🛡  [check-dist] SARIF written: ${relative(process.cwd(), sarifPath) || sarifPath}`,
+  );
+}
+
 if (ci) {
   // GitHub Actions annotations — one per violation.
   for (const h of hits) {
