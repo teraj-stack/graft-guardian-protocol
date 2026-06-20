@@ -220,6 +220,10 @@ function walk(dir) {
             column: m.column,
             endLine: m.endLine,
             endColumn: m.endColumn,
+            startChar: m.startChar,
+            endChar: m.endChar,
+            startOffset: m.startOffset,
+            endOffset: m.endOffset,
             match: m.match,
             snippet: m.snippet,
           });
