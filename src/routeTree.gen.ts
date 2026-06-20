@@ -25,6 +25,7 @@ import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
 import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
+import { Route as AuthenticatedPhraseAuditRouteImport } from './routes/_authenticated/phrase-audit'
 import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
 import { Route as AuthenticatedBrandAuditRouteImport } from './routes/_authenticated/brand-audit'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -116,6 +117,12 @@ const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
   path: '/raporty',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPhraseAuditRoute =
+  AuthenticatedPhraseAuditRouteImport.update({
+    id: '/phrase-audit',
+    path: '/phrase-audit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEbookRoute = AuthenticatedEbookRouteImport.update({
   id: '/ebook',
   path: '/ebook',
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/ebook': typeof AuthenticatedEbookRoute
+  '/phrase-audit': typeof AuthenticatedPhraseAuditRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
   '/ebook/$token': typeof EbookTokenRoute
@@ -218,6 +226,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/ebook': typeof AuthenticatedEbookRoute
+  '/phrase-audit': typeof AuthenticatedPhraseAuditRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
   '/ebook/$token': typeof EbookTokenRoute
@@ -248,6 +257,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/_authenticated/ebook': typeof AuthenticatedEbookRoute
+  '/_authenticated/phrase-audit': typeof AuthenticatedPhraseAuditRoute
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
   '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
   '/ebook/$token': typeof EbookTokenRoute
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/brand-audit'
     | '/ebook'
+    | '/phrase-audit'
     | '/raporty'
     | '/vitals'
     | '/ebook/$token'
@@ -306,6 +317,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/brand-audit'
     | '/ebook'
+    | '/phrase-audit'
     | '/raporty'
     | '/vitals'
     | '/ebook/$token'
@@ -335,6 +347,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/brand-audit'
     | '/_authenticated/ebook'
+    | '/_authenticated/phrase-audit'
     | '/_authenticated/raporty'
     | '/_authenticated/vitals'
     | '/ebook/$token'
@@ -489,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRaportyRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/phrase-audit': {
+      id: '/_authenticated/phrase-audit'
+      path: '/phrase-audit'
+      fullPath: '/phrase-audit'
+      preLoaderRoute: typeof AuthenticatedPhraseAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ebook': {
       id: '/_authenticated/ebook'
       path: '/ebook'
@@ -573,6 +593,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedBrandAuditRoute: typeof AuthenticatedBrandAuditRoute
   AuthenticatedEbookRoute: typeof AuthenticatedEbookRoute
+  AuthenticatedPhraseAuditRoute: typeof AuthenticatedPhraseAuditRoute
   AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
   AuthenticatedVitalsRoute: typeof AuthenticatedVitalsRoute
 }
@@ -581,6 +602,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedBrandAuditRoute: AuthenticatedBrandAuditRoute,
   AuthenticatedEbookRoute: AuthenticatedEbookRoute,
+  AuthenticatedPhraseAuditRoute: AuthenticatedPhraseAuditRoute,
   AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
   AuthenticatedVitalsRoute: AuthenticatedVitalsRoute,
 }

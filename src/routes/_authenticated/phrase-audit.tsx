@@ -92,7 +92,7 @@ function PhraseAuditPage() {
           </p>
         </div>
         <Link
-          to="/_authenticated/brand-audit"
+          to="/brand-audit"
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted"
         >
           Audyt marki →
