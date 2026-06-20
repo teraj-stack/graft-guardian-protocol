@@ -311,6 +311,63 @@ function Stat({ k, v }: { k: string; v: string }) {
   );
 }
 
+/* ---------- Creator ---------- */
+
+function Creator() {
+  return (
+    <section className="border-b border-border/60">
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
+          Twórca protokołu
+        </p>
+        <div className="grid items-start gap-12 md:grid-cols-12">
+          <div className="md:col-span-4">
+            <div className="overflow-hidden rounded-sm border border-border/60">
+              <img
+                src={drBujok.url}
+                alt="Dr Bujok — twórca protokołu Graftgen"
+                width={600}
+                height={800}
+                decoding="async"
+                loading="lazy"
+                className="block h-auto w-full object-cover"
+              />
+            </div>
+          </div>
+          <div className="md:col-span-8">
+            <h2 className="font-display text-3xl leading-[1.05] sm:text-4xl md:text-5xl">
+              Specjalista chirurgii ogólnej, którego zawodową pasją są
+              nowoczesne technologie stosowane w medycynie.
+            </h2>
+            <div className="mt-8 space-y-5 text-muted-foreground md:text-lg">
+              <p>
+                Twórca Mazowieckiego Centrum Medycyny Laserowej — połączył
+                wieloletnie doświadczenie chirurgiczne z głębokim zrozumieniem
+                potrzeb pacjenta, budując nowy model wczesnej opieki
+                pooperacyjnej w Polsce.
+              </p>
+              <p>
+                Dr Bujok operuje, prowadzi autorskie szkolenia dla lekarzy z
+                całego kraju w zakresie wykorzystywania technologii laserowych
+                w trakcie zabiegów mało inwazyjnych oraz możliwych do
+                zastosowania we wczesnym okresie pooperacyjnym rozwiązań
+                skracających okres rekonwalescencji.
+              </p>
+              <p>
+                Protokoły tworzone z użyciem Hiperbarii, laserobarii, pola
+                magnetycznego, fototerapii, fotobiomodulacji i innych zabiegów
+                medycyny fizykalnej. Zawsze podkreśla, że najlepsza technologia
+                jest bezwartościowa bez empatii i partnerskiej relacji z
+                pacjentem.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- Why ---------- */
 
 function Why() {
