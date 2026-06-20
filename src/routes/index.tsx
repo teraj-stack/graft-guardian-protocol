@@ -137,7 +137,7 @@ const heroFaq = [
   },
   {
     q: "Czy muszę przebywać w Warszawie lub Gdańsku przez cały protokół?",
-    a: "Nie. PBM i LADD wykonujemy w klinice Graftgen; HBOT w certyfikowanym ośrodku partnerskim. Możliwy jest też model hybrydowy — zabieg w Twojej klinice, a protokół pozabiegowy realizowany zdalnie z naszym koordynatorem i tygodniowymi raportami biomedycznymi.",
+    a: "Nie. PBM i LADD wykonujemy w klinice Graftgen.com; HBOT w certyfikowanym ośrodku partnerskim. Możliwy jest też model hybrydowy — zabieg w Twojej klinice, a protokół pozabiegowy realizowany zdalnie z naszym koordynatorem i tygodniowymi raportami biomedycznymi.",
   },
 ];
 
