@@ -1823,3 +1823,54 @@ function Field({
     </div>
   );
 }
+
+/* ---------- Risks & Contraindications ---------- */
+
+export function RisksAndContraindications() {
+  return (
+    <Section id="ryzyko" eyebrow="10 — RYZYKO I PRZECIWWSKAZANIA">
+      <SectionHeader
+        title="Co może się zdarzyć i kiedy należy natychmiast przerwać protokół."
+        lead="Każdy zabieg transplantacji włosów DHI wiąże się z naturalnymi, przewidywalnymi reakcjami organizmu. Poniżej lista typowych działań niepożądanych, przeciwwskazań oraz sygnałów alarmowych, przy których konieczny jest kontakt z kliniką."
+      />
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card title="Działania niepożądane" badge="Częste / rzadkie" badgeTone="red">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>Obrzęk twarzy i czoła, szczególnie między 2. a 4. dobą po zabiegu.</li>
+            <li>Delikatne punktowe krwawienie z mikroran — typowe do 24–48 h.</li>
+            <li>Ból, ucisk i uczucie napięcia skóry głowy w strefie dawczej i biorczej.</li>
+            <li>„Shock loss" — przejściowa utrata natywnych włosów wokół nowych graftów.</li>
+            <li>Zaburzenia czucia (drętwienie, mrowienie) — zazwyczaj ustępują w ciągu 3–6 miesięcy.</li>
+            <li>Świąd i łuszczenie skóry głowy podczas gojenia.</li>
+            <li>Zakażenie — rzadkie (&lt;1%) przy przestrzeganiu protokołu antyseptycznego.</li>
+          </ul>
+        </Card>
+        <Card title="Przeciwwskazania" badge="Kwalifikacja" badgeTone="red">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>Aktywne infekcje bakteryjne, wirusowe lub grzybicze skóry głowy.</li>
+            <li>Zaburzenia krzepliwości krwi lub przyjmowanie leków przeciwzakrzepowych (doufnych).</li>
+            <li>Nieustabilizowana cukrzyca — znacząco utrudnia gojenie.</li>
+            <li>Aktywne palenie tytoniu — obniża przeżywalność graftów o 20–30%.</li>
+            <li>Ciąża i karmienie piersią (przy niektórych elementach farmakologicznych protokołu).</li>
+            <li>Padaczka lub historia drgawek — wymaga konsultacji przed HBOT.</li>
+            <li>Choroba pęcherzykowa płuc lub nieprawidłowa odpowiedź na ciśnienie — przeciwwskazanie do hiperbarii.</li>
+          </ul>
+        </Card>
+        <Card title="Kontakt z kliniką — alarmy" badge="Natychmiast" badgeTone="red">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>Gorączka &gt;38 °C po 2. dobie od zabiegu.</li>
+            <li>Silny, narastający ból po 3. dobie (zamiast ustępować).</li>
+            <li>Zaczerwienienie, obrzęk i ropna wydzielina z obszaru biorczego lub dawczego.</li>
+            <li>Otwarte ranki, częściowe wypadanie lub „wypychanie" się graftów.</li>
+            <li>Objawy alergiczne: pokrzywka, duszności, obrzęk twarzy.</li>
+            <li>Zasłabnięcie, silne zawroty głowy lub bóry w uszach po sesji HBOT.</li>
+            <li>Krwawienie, które nie ustępuje po 10 min ucisku gazikiem.</li>
+          </ul>
+          <Mech>
+            Nie czekaj z kontaktem „do rana". W krytycznym oknie 48 h każda godzina opóźnienia może wpłynąć na przeżywalność graftów.
+          </Mech>
+        </Card>
+      </div>
+    </Section>
+  );
+}
