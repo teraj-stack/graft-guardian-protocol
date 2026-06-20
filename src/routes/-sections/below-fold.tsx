@@ -164,6 +164,12 @@ export function InteractiveSchedule() {
   const [surgeryDate, setSurgeryDate] = useState<string>(todayIso());
   const [copyStatus, setCopyStatus] = useState<"idle" | "ok" | "err">("idle");
   const [showPreview, setShowPreview] = useState(false);
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<
+    "idle" | "sending" | "sent" | "rate_limited" | "suppressed" | "invalid" | "error"
+  >("idle");
+  const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
 
   function downloadIcs() {
     const ics = buildIcs(surgeryDate);
@@ -187,6 +193,80 @@ export function InteractiveSchedule() {
     }
     setTimeout(() => setCopyStatus("idle"), 2500);
   }
+
+  async function sendEmail() {
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!ok) {
+      setEmailStatus("invalid");
+      setTimeout(() => setEmailStatus("idle"), 2500);
+      return;
+    }
+    if (!consent) return;
+    setEmailStatus("sending");
+    try {
+      const resp = await fetch("/api/public/reminders/send-checklist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          surgeryDate,
+          consent: true,
+        }),
+      });
+      const json = (await resp.json().catch(() => ({}))) as {
+        ok?: boolean;
+        reason?: string;
+      };
+      if (resp.status === 429 || json.reason === "rate_limited") {
+        setEmailStatus("rate_limited");
+      } else if (json.reason === "email_suppressed") {
+        setEmailStatus("suppressed");
+      } else if (resp.ok && json.ok) {
+        setEmailStatus("sent");
+      } else {
+        setEmailStatus("error");
+      }
+    } catch {
+      setEmailStatus("error");
+    }
+    setTimeout(() => setEmailStatus("idle"), 6000);
+  }
+
+  async function shareToPhone() {
+    const text = buildShortMessage(surgeryDate);
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: "Graftgen — Dzień 0–14",
+          text,
+        });
+        setShareStatus("shared");
+      } catch {
+        setShareStatus("idle");
+        return;
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(text);
+        setShareStatus("copied");
+      } catch {
+        setShareStatus("err");
+      }
+    }
+    setTimeout(() => setShareStatus("idle"), 2500);
+  }
+
+  function whatsappHref(): string {
+    const text = buildShortMessage(surgeryDate);
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  }
+
+  function smsHref(): string {
+    const text = buildShortMessage(surgeryDate);
+    // iOS uses ?&body=, Android tolerates ?body=
+    return `sms:?&body=${encodeURIComponent(text)}`;
+  }
+
 
   const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
   const doneCount = Object.values(done).filter(Boolean).length;
