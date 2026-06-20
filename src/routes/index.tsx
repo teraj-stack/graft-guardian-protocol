@@ -440,6 +440,96 @@ function Creator() {
   );
 }
 
+/* ---------- Creator Reviews ---------- */
+
+function CreatorReviews() {
+  return (
+    <section className="border-b border-border/60" aria-labelledby="creator-reviews-heading">
+      <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+        <div className="grid items-start gap-12 md:grid-cols-12">
+          <div className="md:col-span-4">
+            <a
+              href="https://www.znanylekarz.pl/jan-bujok-2/chirurg-flebolog-proktolog/warszawa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block rounded-sm border border-border/60 bg-card p-6 transition hover:border-accent/40"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">ZnanyLekarz.pl</p>
+                  <p className="text-xs text-muted-foreground">Profil online</p>
+                </div>
+              </div>
+              <div className="mt-6 flex items-baseline gap-2">
+                <span className="font-display text-5xl text-accent">5,0</span>
+                <span className="text-sm text-muted-foreground">/ 5</span>
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">316 opinii pacjentów</p>
+              <p className="mt-4 text-xs text-accent group-hover:underline">
+                Zobacz profil →
+              </p>
+            </a>
+          </div>
+
+          <div className="md:col-span-8">
+            <h2 id="creator-reviews-heading" className="font-display text-2xl leading-[1.1] md:text-3xl">
+              Opinie pacjentów
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Poniżej znajdują się wypowiedzi osób, które skorzystały z usług dr. Bujoka.
+              Kliknij link obok, aby przeczytać wszystkie opinie na ZnanyLekarz.pl.
+            </p>
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  [Opinia pacjenta — wklej tutaj cytat]
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
+              </blockquote>
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  [Opinia pacjenta — wklej tutaj cytat]
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
+              </blockquote>
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  [Opinia pacjenta — wklej tutaj cytat]
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
+              </blockquote>
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  [Opinia pacjenta — wklej tutaj cytat]
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- Why ---------- */
 
 function Why() {
