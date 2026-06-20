@@ -58,8 +58,11 @@ const reportPath =
   flagValue(reportFlag, resolve(DIST, "_forbidden-phrases-report.json")) ??
   resolve(DIST, "_forbidden-phrases-report.json");
 const sarifFlag = flag("sarif");
-const writeSarif = Boolean(sarifFlag) || ci;
+const outFlag = flag("out");
+const outPath = flagValue(outFlag, null);
+const writeSarif = Boolean(sarifFlag) || ci || Boolean(outFlag);
 const sarifPath =
+  outPath ??
   flagValue(sarifFlag, resolve(DIST, "_forbidden-phrases.sarif")) ??
   resolve(DIST, "_forbidden-phrases.sarif");
 const noFail = Boolean(flag("no-fail"));
