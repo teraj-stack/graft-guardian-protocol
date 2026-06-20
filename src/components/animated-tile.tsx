@@ -80,13 +80,14 @@ export function AnimatedTile({
       style={{ aspectRatio: aspect }}
     >
       {lqip && (
-        <img
-          src={lqip}
-          alt=""
-          aria-hidden="true"
-          decoding="async"
-          className={`absolute inset-0 h-full w-full object-cover scale-110 blur-xl transition-opacity duration-700 ${posterReady || videoReady ? "opacity-0" : "opacity-100"}`}
-        />
+        <div
+          className={`absolute inset-0 transition-opacity duration-700 ${posterReady || videoReady ? "opacity-0" : "opacity-100"}`}
+        >
+          <BlurHashCanvas
+            hash={lqip}
+            className="h-full w-full scale-110 blur-lg"
+          />
+        </div>
       )}
       {poster && (
         <img
