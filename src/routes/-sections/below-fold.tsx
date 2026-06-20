@@ -129,6 +129,340 @@ export function Timeline() {
   );
 }
 
+/* ---------- Interactive Day 0–14 Schedule ---------- */
+
+type ScheduleTask = { id: string; label: string; tone?: "critical" | "default" };
+type ScheduleDay = {
+  day: number;
+  phase: string;
+  focus: string;
+  tasks: ScheduleTask[];
+};
+
+const SCHEDULE: ScheduleDay[] = [
+  {
+    day: 0,
+    phase: "Doba „Zero”",
+    focus: "Bezpośrednio po zabiegu — start protokołu",
+    tasks: [
+      { id: "d0-pbm", label: "PBM 630–680 + 830 nm, 20 min — pierwsza sesja jeszcze w klinice", tone: "critical" },
+      { id: "d0-hbot", label: "HBOT 1,5–3,0 ATA — pierwsza sesja w dobie „Zero”", tone: "critical" },
+      { id: "d0-sleep", label: "Sen w pozycji półsiedzącej ≥30° (poduszka klinowa)" },
+      { id: "d0-cold", label: "Zimne okłady wokół czoła (nigdy na strefę biorczą)" },
+      { id: "d0-meds", label: "Leki wg karty wypisowej: antybiotyk, p/bólowe, p/obrzękowe" },
+      { id: "d0-noalc", label: "Bez alkoholu, bez papierosów, bez wysiłku, bez schylania" },
+    ],
+  },
+  {
+    day: 1,
+    phase: "Doba 1",
+    focus: "Krytyczne okno reperfuzji",
+    tasks: [
+      { id: "d1-hbot", label: "HBOT — druga sesja", tone: "critical" },
+      { id: "d1-pbm", label: "PBM 20 min" },
+      { id: "d1-spray", label: "Bezdotykowy spray fizjologiczny / HOCl co 2–3 h" },
+      { id: "d1-sleep", label: "Sen ≥30°, bez dotykania, bez czapki" },
+    ],
+  },
+  {
+    day: 2,
+    phase: "Doba 2",
+    focus: "Stabilizacja graftów",
+    tasks: [
+      { id: "d2-pbm", label: "PBM 20 min" },
+      { id: "d2-hoci", label: "Spłukiwanie HOCl od 48 h — strumień bezdotykowy" },
+      { id: "d2-walk", label: "Spacer 20–30 min, bez pochylania głowy" },
+    ],
+  },
+  {
+    day: 3,
+    phase: "Doba 3",
+    focus: "Koniec ostrego zapalenia",
+    tasks: [
+      { id: "d3-pbm", label: "PBM 20 min" },
+      { id: "d3-wash", label: "Pierwsze delikatne mycie wg instrukcji kliniki" },
+      { id: "d3-photo", label: "Zdjęcie kontrolne (góra, boki, tył) — dodaj do panelu pacjenta" },
+    ],
+  },
+  {
+    day: 4,
+    phase: "Doba 4",
+    focus: "Start fazy proliferacji",
+    tasks: [
+      { id: "d4-pbm", label: "PBM 20 min" },
+      { id: "d4-wash", label: "Mycie skóry głowy szamponem pH 5,5 bez SLS, bez tarcia" },
+      { id: "d4-sleep", label: "Można spać płasko (bez ucisku na strefę biorczą)" },
+    ],
+  },
+  {
+    day: 5,
+    phase: "Doba 5",
+    focus: "Zarządzanie mikrobiomem",
+    tasks: [
+      { id: "d5-pbm", label: "PBM 20 min" },
+      { id: "d5-wash", label: "Mycie 1×/dobę, delikatne osuszanie ręcznikiem (bez pocierania)" },
+      { id: "d5-sport", label: "Lekka aktywność OK — bez pocenia się głowy" },
+    ],
+  },
+  {
+    day: 6,
+    phase: "Doba 6",
+    focus: "Kontrola erytemy",
+    tasks: [
+      { id: "d6-pbm", label: "PBM 20 min" },
+      { id: "d6-photo", label: "Trichoskopowe zdjęcie kontrolne (panel pacjenta)" },
+      { id: "d6-erythema", label: "Ocena rumienia — jeśli utrzymuje się: kontakt z koordynatorem" },
+    ],
+  },
+  {
+    day: 7,
+    phase: "Doba 7 — tydzień 1.",
+    focus: "Punkt kontrolny tygodniowy",
+    tasks: [
+      { id: "d7-pbm", label: "PBM 20 min" },
+      { id: "d7-report", label: "Raport tygodniowy: anagen %, grubość, tolerancja skóry" },
+      { id: "d7-call", label: "Kontakt telefoniczny / wideo z koordynatorem", tone: "critical" },
+    ],
+  },
+  {
+    day: 8,
+    phase: "Doba 8",
+    focus: "Usuwanie strupów",
+    tasks: [
+      { id: "d8-pbm", label: "PBM 20 min" },
+      { id: "d8-massage", label: "Miękki masaż usuwający strupy + botaniki (arnika, centella)" },
+      { id: "d8-noscratch", label: "Bezwzględnie nie drapać — strupy schodzą same z wodą" },
+    ],
+  },
+  {
+    day: 9,
+    phase: "Doba 9",
+    focus: "Mikrobiom + nawilżenie",
+    tasks: [
+      { id: "d9-pbm", label: "PBM 20 min" },
+      { id: "d9-mist", label: "Mgiełka HOCl / fizjologiczna 2–3×/dobę" },
+      { id: "d9-diet", label: "Dieta przeciwzapalna: omega-3, polifenole, białko" },
+    ],
+  },
+  {
+    day: 10,
+    phase: "Doba 10",
+    focus: "Strefa dawcza",
+    tasks: [
+      { id: "d10-pbm", label: "PBM 20 min — ze szczególnym uwzględnieniem strefy dawczej" },
+      { id: "d10-cap", label: "Opcjonalnie: sesja zimnej plazmy (CAP) na strefę dawczą" },
+      { id: "d10-photo", label: "Zdjęcie strefy dawczej (panel pacjenta)" },
+    ],
+  },
+  {
+    day: 11,
+    phase: "Doba 11",
+    focus: "Powrót do codzienności",
+    tasks: [
+      { id: "d11-pbm", label: "PBM 20 min" },
+      { id: "d11-sport", label: "Powrót do umiarkowanego sportu (bez sztang nad głową)" },
+      { id: "d11-hat", label: "Luźna czapka OK przy słońcu — nigdy ciasna" },
+    ],
+  },
+  {
+    day: 12,
+    phase: "Doba 12",
+    focus: "Konsolidacja",
+    tasks: [
+      { id: "d12-pbm", label: "PBM 20 min" },
+      { id: "d12-wash", label: "Mycie standardowym szamponem pH 5,5" },
+    ],
+  },
+  {
+    day: 13,
+    phase: "Doba 13",
+    focus: "Przygotowanie do kontroli",
+    tasks: [
+      { id: "d13-pbm", label: "PBM 20 min" },
+      { id: "d13-photo", label: "Pełna seria zdjęć kontrolnych (5 ujęć)" },
+      { id: "d13-questions", label: "Spisz pytania na wizytę kontrolną" },
+    ],
+  },
+  {
+    day: 14,
+    phase: "Doba 14 — koniec protokołu 14-dniowego",
+    focus: "Kontrola + plan miesiąc 1+",
+    tasks: [
+      { id: "d14-visit", label: "Wizyta kontrolna w klinice (trichoskopia)", tone: "critical" },
+      { id: "d14-pbm", label: "PBM przechodzi w tryb 2–3×/tydz." },
+      { id: "d14-plan", label: "Ustalenie planu LADD / PRP / minoksydyl na miesiąc 1+" },
+      { id: "d14-report", label: "Raport końcowy fazy ostrej (panel pacjenta)" },
+    ],
+  },
+];
+
+const SCHEDULE_STORAGE_KEY = "graftgen.schedule.v1";
+
+function loadProgress(): Record<string, boolean> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(SCHEDULE_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function InteractiveSchedule() {
+  const [openDay, setOpenDay] = useState<number>(0);
+  const [done, setDone] = useState<Record<string, boolean>>(() => loadProgress());
+
+  const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
+  const doneCount = Object.values(done).filter(Boolean).length;
+  const pct = Math.round((doneCount / totalTasks) * 100);
+
+  function toggle(id: string) {
+    setDone((prev) => {
+      const next = { ...prev, [id]: !prev[id] };
+      try {
+        window.localStorage.setItem(SCHEDULE_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* ignore quota */
+      }
+      return next;
+    });
+  }
+
+  function resetAll() {
+    setDone({});
+    try {
+      window.localStorage.removeItem(SCHEDULE_STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return (
+    <Section id="harmonogram" eyebrow="07a — Interaktywny harmonogram 0–14">
+      <SectionHeader
+        title="Twoja checklista, dzień po dniu."
+        lead="Odhacz każdy krok. Postęp zapisuje się lokalnie w przeglądarce — bez konta, bez chmury."
+      />
+
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border border-border bg-card/40 p-4">
+        <div className="text-sm">
+          Ukończono <span className="font-display text-lg text-accent">{doneCount}</span> /{" "}
+          {totalTasks} kroków
+        </div>
+        <div className="flex flex-1 items-center gap-3 md:max-w-md">
+          <div className="h-1.5 flex-1 overflow-hidden bg-border">
+            <div
+              className="h-full bg-accent transition-[width] duration-500"
+              style={{ width: `${pct}%` }}
+              aria-hidden
+            />
+          </div>
+          <span className="w-10 text-right text-xs tabular-nums text-muted-foreground">
+            {pct}%
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={resetAll}
+          className="text-xs uppercase tracking-[0.18em] text-muted-foreground transition hover:text-accent"
+        >
+          Resetuj postęp
+        </button>
+      </div>
+
+      <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-15">
+        {SCHEDULE.map((d) => {
+          const dayDone = d.tasks.every((t) => done[t.id]);
+          const dayPartial = !dayDone && d.tasks.some((t) => done[t.id]);
+          const active = openDay === d.day;
+          return (
+            <button
+              key={d.day}
+              type="button"
+              onClick={() => setOpenDay(d.day)}
+              aria-pressed={active}
+              className={[
+                "flex aspect-square flex-col items-center justify-center border text-xs transition",
+                active
+                  ? "border-accent bg-accent/15 text-accent"
+                  : "border-border text-muted-foreground hover:border-accent/60 hover:text-accent",
+                dayDone ? "bg-accent/10" : dayPartial ? "bg-accent/5" : "",
+              ].join(" ")}
+            >
+              <span className="text-[10px] uppercase tracking-widest opacity-70">Dzień</span>
+              <span className="font-display text-lg leading-none">{d.day}</span>
+              {dayDone && <span className="mt-0.5 text-[10px]">✓</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      {SCHEDULE.filter((d) => d.day === openDay).map((d) => {
+        const dayDoneCount = d.tasks.filter((t) => done[t.id]).length;
+        return (
+          <div
+            key={d.day}
+            className="grid gap-6 border-t border-border pt-8 md:grid-cols-12"
+          >
+            <div className="md:col-span-4">
+              <div className="text-xs uppercase tracking-[0.2em] text-accent">
+                {String(d.day).padStart(2, "0")}
+              </div>
+              <div className="mt-2 font-display text-3xl">{d.phase}</div>
+              <p className="mt-3 text-sm text-muted-foreground">{d.focus}</p>
+              <div className="mt-4 text-xs text-muted-foreground">
+                {dayDoneCount}/{d.tasks.length} kroków ukończonych
+              </div>
+            </div>
+            <ul className="space-y-2 md:col-span-8">
+              {d.tasks.map((t) => {
+                const checked = !!done[t.id];
+                const critical = t.tone === "critical";
+                return (
+                  <li key={t.id}>
+                    <label
+                      className={[
+                        "flex cursor-pointer items-start gap-3 border p-3 text-sm transition",
+                        checked
+                          ? "border-accent/40 bg-accent/5 text-foreground/70 line-through"
+                          : critical
+                            ? "border-red-500/40 bg-red-500/5 hover:border-red-500/70"
+                            : "border-border hover:border-accent/60",
+                      ].join(" ")}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggle(t.id)}
+                        className="mt-1 h-4 w-4 shrink-0 accent-[hsl(var(--accent))]"
+                      />
+                      <span className="flex-1">
+                        {critical && !checked && (
+                          <span className="mr-2 inline-block border border-red-500/60 px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-red-500">
+                            Krytyczne
+                          </span>
+                        )}
+                        {t.label}
+                      </span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
+
+      <p className="mt-8 text-xs text-muted-foreground">
+        Harmonogram ma charakter edukacyjny i nie zastępuje indywidualnych zaleceń lekarza
+        prowadzącego. W razie wątpliwości — skontaktuj się z koordynatorem.
+      </p>
+    </Section>
+  );
+}
+
+
+
 /* ---------- Patient journey ---------- */
 
 export function Journey() {
