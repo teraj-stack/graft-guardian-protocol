@@ -324,7 +324,7 @@ function Hero() {
             fotobiomodulacji, <em className="text-accent">HBOT</em> i LADD.
           </h1>
           <p className="mt-8 max-w-2xl text-base text-muted-foreground md:text-lg">
-            Pierwsze 14 dni decyduje o przeżywalności graftów. Zamiast soli
+            Pierwsze 48 godzin decyduje o przeżywalności graftów. Zamiast soli
             fizjologicznej i pasywnego gojenia — zintegrowany plan oparty
             na transplantologicznych płynach ochronnych, fotobiomodulacji
             650/830 nm, tlenoterapii hiperbarycznej 1,5–3,0 ATA oraz
