@@ -15,6 +15,7 @@ import { Route as RaportRouteImport } from './routes/raport'
 import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
 import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
 import { Route as PanelRouteImport } from './routes/panel'
+import { Route as KosztPrzeszczepuWlosowRouteImport } from './routes/koszt-przeszczepu-wlosow'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -72,6 +73,11 @@ const PrywatnoscRoute = PrywatnoscRouteImport.update({
 const PanelRoute = PanelRouteImport.update({
   id: '/panel',
   path: '/panel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KosztPrzeszczepuWlosowRoute = KosztPrzeszczepuWlosowRouteImport.update({
+  id: '/koszt-przeszczepu-wlosow',
+  path: '/koszt-przeszczepu-wlosow',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiesRoute = CookiesRouteImport.update({
@@ -227,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
+  '/koszt-przeszczepu-wlosow': typeof KosztPrzeszczepuWlosowRoute
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
@@ -262,6 +269,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
+  '/koszt-przeszczepu-wlosow': typeof KosztPrzeszczepuWlosowRoute
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
@@ -299,6 +307,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
+  '/koszt-przeszczepu-wlosow': typeof KosztPrzeszczepuWlosowRoute
   '/panel': typeof PanelRoute
   '/prywatnosc': typeof PrywatnoscRoute
   '/przypomnienia': typeof PrzypomnieniaRouteWithChildren
@@ -336,6 +345,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cookies'
+    | '/koszt-przeszczepu-wlosow'
     | '/panel'
     | '/prywatnosc'
     | '/przypomnienia'
@@ -371,6 +381,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cookies'
+    | '/koszt-przeszczepu-wlosow'
     | '/panel'
     | '/prywatnosc'
     | '/przypomnienia'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/cookies'
+    | '/koszt-przeszczepu-wlosow'
     | '/panel'
     | '/prywatnosc'
     | '/przypomnienia'
@@ -444,6 +456,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CookiesRoute: typeof CookiesRoute
+  KosztPrzeszczepuWlosowRoute: typeof KosztPrzeszczepuWlosowRoute
   PanelRoute: typeof PanelRoute
   PrywatnoscRoute: typeof PrywatnoscRoute
   PrzypomnieniaRoute: typeof PrzypomnieniaRouteWithChildren
@@ -510,6 +523,13 @@ declare module '@tanstack/react-router' {
       path: '/panel'
       fullPath: '/panel'
       preLoaderRoute: typeof PanelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/koszt-przeszczepu-wlosow': {
+      id: '/koszt-przeszczepu-wlosow'
+      path: '/koszt-przeszczepu-wlosow'
+      fullPath: '/koszt-przeszczepu-wlosow'
+      preLoaderRoute: typeof KosztPrzeszczepuWlosowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookies': {
@@ -751,6 +771,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CookiesRoute: CookiesRoute,
+  KosztPrzeszczepuWlosowRoute: KosztPrzeszczepuWlosowRoute,
   PanelRoute: PanelRoute,
   PrywatnoscRoute: PrywatnoscRoute,
   PrzypomnieniaRoute: PrzypomnieniaRouteWithChildren,
