@@ -55,6 +55,38 @@ function scanSource(phrase: string): SourceHit[] {
   return out;
 }
 
+// ---------- Snapshot (baseline) persistence ----------
+type Snapshot = {
+  phrase: string;
+  savedAt: string;
+  source: string[]; // sourceKey()
+  ebook: string[]; // ebookKey()
+};
+
+const SNAP_LS_PREFIX = "phrase-audit:snapshot:v1:";
+const sourceKey = (h: SourceHit) => `${h.file}:${h.line}:${h.column}`;
+const ebookKey = (h: EbookPhraseHit) => `${h.slug}:${h.line}:${h.column}`;
+
+function loadSnapshot(phrase: string): Snapshot | null {
+  if (typeof localStorage === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(SNAP_LS_PREFIX + phrase.toLowerCase());
+    return raw ? (JSON.parse(raw) as Snapshot) : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistSnapshot(snap: Snapshot) {
+  if (typeof localStorage === "undefined") return;
+  try {
+    localStorage.setItem(SNAP_LS_PREFIX + snap.phrase.toLowerCase(), JSON.stringify(snap));
+  } catch {
+    /* noop */
+  }
+}
+
+
 function PhraseAuditPage() {
   const [phrase, setPhrase] = useState("Faza intensywna");
   const [activePhrase, setActivePhrase] = useState<string | null>(null);
