@@ -512,7 +512,7 @@ function ExVivo() {
 
 function PBM() {
   return (
-    <Section id="pbm" eyebrow="03 — Fotobiomodulacja (PBM / LLLT)">
+    <Section id="pbm" eyebrow="03 — FOTOBIOMODULACJA (PBM / LLLT)">
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
           title="Światło 650 i 830 nm jako narzędzie bioenergetyczne."
