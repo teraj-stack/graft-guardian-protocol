@@ -58,6 +58,8 @@ function scanSource(phrase: string): SourceHit[] {
 function PhraseAuditPage() {
   const [phrase, setPhrase] = useState("Faza intensywna");
   const [activePhrase, setActivePhrase] = useState<string | null>(null);
+  const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
+  const [compareMode, setCompareMode] = useState(false);
 
   const scanEbook = useServerFn(scanEbookForPhrase);
   const ebookScan = useMutation({
@@ -72,15 +74,49 @@ function PhraseAuditPage() {
   const ebookHits: EbookPhraseHit[] = ebookScan.data?.hits ?? [];
   const totalChapters = ebookScan.data?.totalChapters ?? 0;
 
+  // Load snapshot for active phrase from localStorage.
+  useEffect(() => {
+    if (!activePhrase) return;
+    setSnapshot(loadSnapshot(activePhrase));
+  }, [activePhrase]);
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = phrase.trim();
     if (trimmed.length < 2) return;
     setActivePhrase(trimmed);
+    setSnapshot(loadSnapshot(trimmed));
     ebookScan.mutate(trimmed);
   };
 
+  const saveAsBaseline = () => {
+    if (!activePhrase || ebookScan.isPending) return;
+    const snap: Snapshot = {
+      phrase: activePhrase,
+      savedAt: new Date().toISOString(),
+      source: sourceHits.map(sourceKey),
+      ebook: ebookHits.map(ebookKey),
+    };
+    persistSnapshot(snap);
+    setSnapshot(snap);
+  };
+
+  const diff = useMemo(() => {
+    if (!snapshot) return null;
+    const currentSource = new Set(sourceHits.map(sourceKey));
+    const currentEbook = new Set(ebookHits.map(ebookKey));
+    const prevSource = new Set(snapshot.source);
+    const prevEbook = new Set(snapshot.ebook);
+    return {
+      sourceAdded: [...currentSource].filter((k) => !prevSource.has(k)),
+      sourceRemoved: [...prevSource].filter((k) => !currentSource.has(k)),
+      ebookAdded: [...currentEbook].filter((k) => !prevEbook.has(k)),
+      ebookRemoved: [...prevEbook].filter((k) => !currentEbook.has(k)),
+    };
+  }, [snapshot, sourceHits, ebookHits]);
+
   const total = sourceHits.length + ebookHits.length;
+  const prevTotal = snapshot ? snapshot.source.length + snapshot.ebook.length : null;
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
