@@ -534,21 +534,32 @@ export function InteractiveSchedule() {
               </p>
             )}
             {statusMessage && !emailError && (
-              <p
-                id="schedule-email-status"
-                role={emailStatus === "sent" ? "status" : "alert"}
-                aria-live="polite"
-                className={
-                  "mt-2 text-[11px] " +
-                  (emailStatus === "sent"
-                    ? "text-accent"
-                    : emailStatus === "rate_limited"
-                      ? "text-amber-500"
-                      : "text-destructive")
-                }
-              >
-                {statusMessage}
-              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <p
+                  id="schedule-email-status"
+                  role={emailStatus === "sent" ? "status" : "alert"}
+                  aria-live="polite"
+                  className={
+                    "text-[11px] " +
+                    (emailStatus === "sent"
+                      ? "text-accent"
+                      : emailStatus === "rate_limited"
+                        ? "text-amber-500"
+                        : "text-destructive")
+                  }
+                >
+                  {statusMessage}
+                </p>
+                {emailStatus === "error" && (
+                  <button
+                    type="button"
+                    onClick={sendEmail}
+                    className="text-[11px] uppercase tracking-[0.18em] text-accent underline-offset-4 transition hover:underline"
+                  >
+                    Wyślij ponownie
+                  </button>
+                )}
+              </div>
             )}
             <div className="mt-2 flex flex-wrap items-center gap-3">
               <button
