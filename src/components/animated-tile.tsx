@@ -42,7 +42,7 @@ export function AnimatedTile({
   alt: string;
   /** Ścieżka do statycznego placeholdera (np. /videos/evidence-1.jpg) */
   poster?: string;
-  /** Niskorozdzielcza miniatura (data URI / URL) — natychmiastowy podgląd przed JPG */
+  /** BlurHash (~28 chars) — dekodowany na canvas jako natychmiastowy podgląd przed JPG */
   lqip?: string;
   /** CSS aspect-ratio, np. "16/9" lub "1/1" */
   aspect?: string;
