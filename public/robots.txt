@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://graft-guardian-protocol.lovable.app/sitemap.xml
+Sitemap: https://graftgen.com/sitemap.xml
