@@ -380,9 +380,9 @@ function Stat({ k, v }: { k: string; v: string }) {
 
 function Creator() {
   return (
-    <section className="border-b border-border/60">
+    <section className="border-b border-border/60" aria-labelledby="creator-heading">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-        <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
+        <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent" aria-hidden="true">
           TWÓRCA PROJEKTU
         </p>
         <div className="grid items-start gap-12 md:grid-cols-12">
@@ -400,7 +400,8 @@ function Creator() {
             </div>
           </div>
           <div className="md:col-span-8">
-            <h2 className="font-display text-3xl leading-[1.05] sm:text-4xl md:text-5xl">
+            <h2 id="creator-heading" className="font-display text-3xl leading-[1.05] sm:text-4xl md:text-5xl">
+
               Specjalista chirurgii ogólnej, którego zawodową pasją są
               nowoczesne technologie stosowane w medycynie.
             </h2>
