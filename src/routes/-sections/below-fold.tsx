@@ -11,7 +11,7 @@ import { Section, SectionHeader, Card, Mech } from "@/components/section-primiti
 
 export function Microbiome() {
   return (
-    <Section id="mikrobiom" eyebrow="06 — Mikrobiom i strefa dawcza">
+    <Section id="mikrobiom" eyebrow="06 — MIKROBIOM I STREFA DAWCZA">
       <SectionHeader
         title="Antyseptyka, która nie uszkadza graftu."
         lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
@@ -97,7 +97,7 @@ export function Timeline() {
   ];
 
   return (
-    <Section id="protokol" eyebrow="07 — Oś czasu 14 dni i dalej">
+    <Section id="protokol" eyebrow="07 — OŚ CZASU: 48H I PIERWSZE 14 DNI">
       <SectionHeader
         title="Chronologiczny protokół, krok po kroku."
         lead="48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni."
@@ -341,7 +341,7 @@ export function InteractiveSchedule() {
   }
 
   return (
-    <Section id="harmonogram" eyebrow="07a — Interaktywny harmonogram 0–14">
+    <Section id="harmonogram" eyebrow="08 — INTERAKTYWNY HARMONOGRAM 0–14">
       <SectionHeader
         title="Twoja checklista, dzień po dniu."
         lead="Odhacz każdy krok. Postęp zapisuje się lokalnie w przeglądarce — bez konta, bez chmury."
@@ -470,7 +470,7 @@ export function InteractiveSchedule() {
 
 export function Journey() {
   return (
-    <Section id="journey" eyebrow="08 — Patient Journey">
+    <Section id="journey" eyebrow="09 — PATIENT JOURNEY">
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-7">
           <h2 className="font-display text-4xl md:text-5xl">
@@ -702,7 +702,7 @@ const CLAIMS: EvidenceClaim[] = [
 export function EvidenceBasement() {
   const [audit, setAudit] = useState(false);
   return (
-    <Section id="evidence" eyebrow="09 — Evidence Basement Medicine">
+    <Section id="evidence" eyebrow="10 — EVIDENCE-BASED MEDICINE">
       <SectionHeader title="Udokumentowana fotobiomodulacja jako terapia wspomagająca." />
       <div className="mb-6 flex items-center justify-end gap-3 text-xs">
         <span className="text-muted-foreground">Tryb audytu dowodów</span>
@@ -1189,7 +1189,7 @@ export function FAQSection() {
   );
 
   return (
-    <Section id="faq" eyebrow="09 — Pytania pacjentów">
+    <Section id="faq" eyebrow="12 — PYTANIA PACJENTÓW">
       <SectionHeader title="To, o co pytacie najczęściej." />
 
       <div className="mb-8 space-y-4">
@@ -1253,7 +1253,7 @@ export function FAQSection() {
 
 export function Pricing() {
   return (
-    <Section id="cennik" eyebrow="10 — Sklep">
+    <Section id="cennik" eyebrow="11 — SKLEP">
       <SectionHeader
         title="Pełny cennik i zakup pakietów — w sklepie."
         lead={
@@ -1355,7 +1355,7 @@ export function EbookLeadMagnet() {
   }
 
   return (
-    <Section id="ebook" eyebrow="08 — Patient Journey">
+    <Section id="ebook" eyebrow="13 — E-BOOK: PATIENT JOURNEY">
       <div className="grid gap-12 md:grid-cols-12 md:items-start">
         <div className="md:col-span-7">
           <SectionHeader
@@ -1561,7 +1561,7 @@ export function Contact() {
   }
 
   return (
-    <Section id="kontakt" eyebrow="11 — Kontakt">
+    <Section id="kontakt" eyebrow="14 — KONTAKT">
       <SectionHeader
         title="Napisz do nas"
         lead={

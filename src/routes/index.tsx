@@ -469,7 +469,7 @@ function Why() {
 
 function ExVivo() {
   return (
-    <Section id="ex-vivo" eyebrow="02 — Faza Ex Vivo">
+    <Section id="ex-vivo" eyebrow="02 — FAZA EX VIVO">
       <SectionHeader
         title="Ochrona metaboliczna graftów od momentu ekstrakcji."
         lead="Standardem w wielu klinikach wciąż jest 0,9% NaCl lub płyn Ringera. Z punktu widzenia transplantologii są to roztwory podtrzymujące osmolarność, nie chroniące metabolizmu komórki. W naszym protokole grafty trafiają do roztworów stosowanych w przechowywaniu narządów do przeszczepu."
@@ -512,7 +512,7 @@ function ExVivo() {
 
 function PBM() {
   return (
-    <Section id="pbm" eyebrow="03 — Fotobiomodulacja (PBM / LLLT)">
+    <Section id="pbm" eyebrow="03 — FOTOBIOMODULACJA (PBM / LLLT)">
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
           title="Światło 650 i 830 nm jako narzędzie bioenergetyczne."
@@ -561,7 +561,7 @@ function PBM() {
 
 function HBOT() {
   return (
-    <Section id="hbot" eyebrow="04 — Tlenoterapia hiperbaryczna (HBOT)">
+    <Section id="hbot" eyebrow="04 — TLENOTERAPIA HIPERBARYCZNA (HBOT)">
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
           title="Tlen dociera tam, gdzie krwinki czerwone jeszcze nie mogą dotrzeć."
@@ -630,7 +630,7 @@ function LADD() {
   }, []);
 
   return (
-    <Section id="ladd" eyebrow="05 — LADD: Laser-Assisted Drug Delivery">
+    <Section id="ladd" eyebrow="05 — LADD: LASER-ASSISTED DRUG DELIVERY">
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-1 flex-col">
           <SectionHeader
