@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-06-20T02:57:49.013Z",
+  "total": 3,
+  "byRule": {
+    "graftgen-bare": 0,
+    "legacy-fue": 2,
+    "legacy-cennik-nav": 1
+  },
+  "rules": [
+    {
+      "id": "graftgen-bare",
+      "label": "Brakuje \".com\" przy nazwie Graftgen",
+      "severity": "warn"
+    },
+    {
+      "id": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn"
+    },
+    {
+      "id": "legacy-cennik-nav",
+      "label": "Legacy nawigacja: \"Cennik\" (standard to \"Sklep\")",
+      "severity": "info"
+    }
+  ],
+  "findings": [
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/-sections/below-fold.tsx",
+      "line": 616,
+      "column": 71,
+      "match": "FUE",
+      "snippet": "gaps: [\"Brak współczesnego head-to-head RCT porównującego DHI vs. FUE z zaślepioną oceną przeżywalności.\"],"
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/-sections/below-fold.tsx",
+      "line": 630,
+      "column": 49,
+      "match": "FUE",
+      "snippet": "\"Brak head-to-head dla DHI (oryginał: FUT/FUE).\","
+    },
+    {
+      "rule": "legacy-cennik-nav",
+      "label": "Legacy nawigacja: \"Cennik\" (standard to \"Sklep\")",
+      "severity": "info",
+      "file": "src/routes/sklep.tsx",
+      "line": 142,
+      "column": 78,
+      "match": "Cennik",
+      "snippet": "<p className=\"text-xs uppercase tracking-[0.3em] text-muted-foreground\">Cennik</p>"
+    }
+  ]
+}
