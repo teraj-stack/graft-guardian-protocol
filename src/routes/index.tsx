@@ -33,6 +33,10 @@ const Microbiome = lazy(() =>
 const Timeline = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.Timeline })),
 );
+const InteractiveSchedule = lazy(() =>
+  import("./-sections/below-fold").then((m) => ({ default: m.InteractiveSchedule })),
+);
+
 const Journey = lazy(() =>
   import("./-sections/below-fold").then((m) => ({ default: m.Journey })),
 );
