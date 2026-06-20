@@ -113,6 +113,7 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
+        <Creator />
         <Why />
         <ExVivo />
         <PBM />
