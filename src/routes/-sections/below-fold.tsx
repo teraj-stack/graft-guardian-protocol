@@ -97,7 +97,7 @@ export function Timeline() {
   ];
 
   return (
-    <Section id="protokol" eyebrow="07 — Oś czasu 14 dni i dalej">
+    <Section id="protokol" eyebrow="07 — OŚ CZASU: 48H I PIERWSZE 14 DNI">
       <SectionHeader
         title="Chronologiczny protokół, krok po kroku."
         lead="48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni."
