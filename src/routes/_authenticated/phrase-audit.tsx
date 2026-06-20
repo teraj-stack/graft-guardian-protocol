@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { scanEbookForPhrase, type EbookPhraseHit } from "@/lib/phrase-audit.functions";
@@ -14,12 +14,16 @@ export const Route = createFileRoute("/_authenticated/phrase-audit")({
   component: PhraseAuditPage,
 });
 
-// Bundle all source files as raw text at build time so we can grep client-side.
-const SOURCE_FILES = import.meta.glob("/src/**/*.{ts,tsx,js,jsx,md,mdx,html,css}", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-}) as Record<string, string>;
+// Bundle source files as raw text at build time so we can grep client-side.
+// Exclude generated route tree (no default export when imported as ?raw) and this page itself.
+const SOURCE_FILES = import.meta.glob(
+  [
+    "/src/**/*.{ts,tsx,js,jsx,md,mdx,html,css}",
+    "!/src/routeTree.gen.ts",
+    "!/src/routes/_authenticated/phrase-audit.tsx",
+  ],
+  { query: "?raw", import: "default", eager: true },
+) as Record<string, string>;
 
 type SourceHit = {
   file: string;
@@ -51,9 +55,43 @@ function scanSource(phrase: string): SourceHit[] {
   return out;
 }
 
+// ---------- Snapshot (baseline) persistence ----------
+type Snapshot = {
+  phrase: string;
+  savedAt: string;
+  source: string[]; // sourceKey()
+  ebook: string[]; // ebookKey()
+};
+
+const SNAP_LS_PREFIX = "phrase-audit:snapshot:v1:";
+const sourceKey = (h: SourceHit) => `${h.file}:${h.line}:${h.column}`;
+const ebookKey = (h: EbookPhraseHit) => `${h.slug}:${h.line}:${h.column}`;
+
+function loadSnapshot(phrase: string): Snapshot | null {
+  if (typeof localStorage === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(SNAP_LS_PREFIX + phrase.toLowerCase());
+    return raw ? (JSON.parse(raw) as Snapshot) : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistSnapshot(snap: Snapshot) {
+  if (typeof localStorage === "undefined") return;
+  try {
+    localStorage.setItem(SNAP_LS_PREFIX + snap.phrase.toLowerCase(), JSON.stringify(snap));
+  } catch {
+    /* noop */
+  }
+}
+
+
 function PhraseAuditPage() {
   const [phrase, setPhrase] = useState("Faza intensywna");
   const [activePhrase, setActivePhrase] = useState<string | null>(null);
+  const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
+  const [compareMode, setCompareMode] = useState(false);
 
   const scanEbook = useServerFn(scanEbookForPhrase);
   const ebookScan = useMutation({
@@ -68,15 +106,49 @@ function PhraseAuditPage() {
   const ebookHits: EbookPhraseHit[] = ebookScan.data?.hits ?? [];
   const totalChapters = ebookScan.data?.totalChapters ?? 0;
 
+  // Load snapshot for active phrase from localStorage.
+  useEffect(() => {
+    if (!activePhrase) return;
+    setSnapshot(loadSnapshot(activePhrase));
+  }, [activePhrase]);
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = phrase.trim();
     if (trimmed.length < 2) return;
     setActivePhrase(trimmed);
+    setSnapshot(loadSnapshot(trimmed));
     ebookScan.mutate(trimmed);
   };
 
+  const saveAsBaseline = () => {
+    if (!activePhrase || ebookScan.isPending) return;
+    const snap: Snapshot = {
+      phrase: activePhrase,
+      savedAt: new Date().toISOString(),
+      source: sourceHits.map(sourceKey),
+      ebook: ebookHits.map(ebookKey),
+    };
+    persistSnapshot(snap);
+    setSnapshot(snap);
+  };
+
+  const diff = useMemo(() => {
+    if (!snapshot) return null;
+    const currentSource = new Set(sourceHits.map(sourceKey));
+    const currentEbook = new Set(ebookHits.map(ebookKey));
+    const prevSource = new Set(snapshot.source);
+    const prevEbook = new Set(snapshot.ebook);
+    return {
+      sourceAdded: [...currentSource].filter((k) => !prevSource.has(k)),
+      sourceRemoved: [...prevSource].filter((k) => !currentSource.has(k)),
+      ebookAdded: [...currentEbook].filter((k) => !prevEbook.has(k)),
+      ebookRemoved: [...prevEbook].filter((k) => !currentEbook.has(k)),
+    };
+  }, [snapshot, sourceHits, ebookHits]);
+
   const total = sourceHits.length + ebookHits.length;
+  const prevTotal = snapshot ? snapshot.source.length + snapshot.ebook.length : null;
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
@@ -149,6 +221,60 @@ function PhraseAuditPage() {
               }
             />
           </div>
+
+          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-md border border-border bg-muted/30 p-3 text-sm">
+            <span className="font-medium">Porównanie z poprzednim skanem:</span>
+            {snapshot ? (
+              <>
+                <span className="text-muted-foreground">
+                  baseline {new Date(snapshot.savedAt).toLocaleString("pl-PL")} ({prevTotal}{" "}
+                  → {total},{" "}
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    +{(diff?.sourceAdded.length ?? 0) + (diff?.ebookAdded.length ?? 0)}
+                  </span>{" "}
+                  /{" "}
+                  <span className="text-rose-600 dark:text-rose-400">
+                    −{(diff?.sourceRemoved.length ?? 0) + (diff?.ebookRemoved.length ?? 0)}
+                  </span>
+                  )
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCompareMode((v) => !v)}
+                  className="rounded-md border border-border px-3 py-1 text-xs hover:bg-muted"
+                >
+                  {compareMode ? "Ukryj różnice" : "Pokaż różnice"}
+                </button>
+              </>
+            ) : (
+              <span className="text-muted-foreground">Brak zapisanego baseline.</span>
+            )}
+            <button
+              type="button"
+              onClick={saveAsBaseline}
+              disabled={ebookScan.isPending}
+              className="ml-auto rounded-md border border-border px-3 py-1 text-xs hover:bg-muted disabled:opacity-50"
+            >
+              Zapisz bieżący jako baseline
+            </button>
+          </div>
+
+          {compareMode && diff ? (
+            <section className="mb-8 grid gap-4 md:grid-cols-2">
+              <DiffList
+                title="Dodane (nowe wystąpienia)"
+                tone="add"
+                items={[...diff.sourceAdded, ...diff.ebookAdded]}
+              />
+              <DiffList
+                title="Usunięte (już ich nie ma)"
+                tone="remove"
+                items={[...diff.sourceRemoved, ...diff.ebookRemoved]}
+              />
+            </section>
+          ) : null}
+
+
 
           <section className="mb-8">
             <h2 className="mb-3 font-serif text-xl">
@@ -263,3 +389,38 @@ function Stat({
     </div>
   );
 }
+
+function DiffList({
+  title,
+  tone,
+  items,
+}: {
+  title: string;
+  tone: "add" | "remove";
+  items: string[];
+}) {
+  const colors =
+    tone === "add"
+      ? "border-emerald-500/40 bg-emerald-500/5"
+      : "border-rose-500/40 bg-rose-500/5";
+  return (
+    <div className={`rounded-md border p-3 ${colors}`}>
+      <h3 className="mb-2 text-sm font-medium">
+        {title} ({items.length})
+      </h3>
+      {items.length === 0 ? (
+        <p className="text-xs text-muted-foreground">— brak —</p>
+      ) : (
+        <ul className="space-y-1 font-mono text-xs">
+          {items.map((k) => (
+            <li key={k} className="truncate" title={k}>
+              {tone === "add" ? "+ " : "− "}
+              {k}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
