@@ -24,6 +24,7 @@
  *   --quiet           Suppress per-violation console output (the report still has it).
  *   --sarif[=path]    Write a SARIF 2.1.0 file (default: dist/_forbidden-phrases.sarif)
  *                     for upload to GitHub Code Scanning (github/codeql-action/upload-sarif).
+ *   --out=path        Alias for --sarif=path (shorthand when you only want to set the output file).
  *   --ci              CI mode. Implies --report AND --sarif (default paths),
  *                     emits GitHub Actions `::error` annotations for every violation,
  *                     and appends a Markdown summary to $GITHUB_STEP_SUMMARY.
@@ -57,8 +58,11 @@ const reportPath =
   flagValue(reportFlag, resolve(DIST, "_forbidden-phrases-report.json")) ??
   resolve(DIST, "_forbidden-phrases-report.json");
 const sarifFlag = flag("sarif");
-const writeSarif = Boolean(sarifFlag) || ci;
+const outFlag = flag("out");
+const outPath = flagValue(outFlag, null);
+const writeSarif = Boolean(sarifFlag) || ci || Boolean(outFlag);
 const sarifPath =
+  outPath ??
   flagValue(sarifFlag, resolve(DIST, "_forbidden-phrases.sarif")) ??
   resolve(DIST, "_forbidden-phrases.sarif");
 const noFail = Boolean(flag("no-fail"));
