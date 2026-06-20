@@ -491,36 +491,9 @@ function CreatorReviews() {
                   <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
                 <p className="mt-3 text-sm italic text-muted-foreground">
-                  [Opinia pacjenta — wklej tutaj cytat]
+                  „Świetny lekarz z zaangażowaniem. Nie pamiętam kiedy ostatnio u takiego byłam. Szczegółowo wyjaśnia problem, tłumaczy dokładnie leczenie i w razie potrzeby pozostaje z pacjentem w kontakcie po wizycie i modyfikuje leczenie, tak żeby było jak najbardziej skuteczne. W końcu śpię spokojnie, a to wszystko zasługa doktora, dziękuję ;)"
                 </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
-              </blockquote>
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  [Opinia pacjenta — wklej tutaj cytat]
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
-              </blockquote>
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  [Opinia pacjenta — wklej tutaj cytat]
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
-              </blockquote>
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  [Opinia pacjenta — wklej tutaj cytat]
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Imię i data</footer>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Agata, 7 stycznia 2026</footer>
               </blockquote>
             </div>
           </div>
