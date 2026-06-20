@@ -41,6 +41,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
+import { Route as ApiPublicRemindersSendChecklistRouteImport } from './routes/api/public/reminders/send-checklist'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
 import { Route as ApiPublicHooksSecurityWatchRouteImport } from './routes/api/public/hooks/security-watch'
 import { Route as ApiPublicHooksPricingAutoRestoreRouteImport } from './routes/api/public/hooks/pricing-auto-restore'
@@ -210,6 +211,12 @@ const ApiPublicRemindersSubscribeRoute =
     path: '/api/public/reminders/subscribe',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicRemindersSendChecklistRoute =
+  ApiPublicRemindersSendChecklistRouteImport.update({
+    id: '/api/public/reminders/send-checklist',
+    path: '/api/public/reminders/send-checklist',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicRemindersDispatchRoute =
   ApiPublicRemindersDispatchRouteImport.update({
     id: '/api/public/reminders/dispatch',
@@ -259,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/send-checklist': typeof ApiPublicRemindersSendChecklistRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -295,6 +303,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/send-checklist': typeof ApiPublicRemindersSendChecklistRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -333,6 +342,7 @@ export interface FileRoutesById {
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/send-checklist': typeof ApiPublicRemindersSendChecklistRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -371,6 +381,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/send-checklist'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
     | '/lovable/email/queue/process'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/send-checklist'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
     | '/lovable/email/queue/process'
@@ -444,6 +456,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/send-checklist'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
     | '/lovable/email/queue/process'
@@ -474,6 +487,7 @@ export interface RootRouteChildren {
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
+  ApiPublicRemindersSendChecklistRoute: typeof ApiPublicRemindersSendChecklistRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -707,6 +721,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRemindersSubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/reminders/send-checklist': {
+      id: '/api/public/reminders/send-checklist'
+      path: '/api/public/reminders/send-checklist'
+      fullPath: '/api/public/reminders/send-checklist'
+      preLoaderRoute: typeof ApiPublicRemindersSendChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/reminders/dispatch': {
       id: '/api/public/reminders/dispatch'
       path: '/api/public/reminders/dispatch'
@@ -789,6 +810,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
+  ApiPublicRemindersSendChecklistRoute: ApiPublicRemindersSendChecklistRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
