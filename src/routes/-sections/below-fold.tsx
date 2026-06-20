@@ -64,7 +64,7 @@ export function Timeline() {
     },
     {
       tag: "Doba 0–3",
-      title: "Faza ostrego zapalenia — walka z niedokrwieniem i obrzękiem",
+      title: "48h — krytyczne okno przeżywalności graftów (faza ostrego zapalenia)",
       bullets: [
         "PBM 650 + 830 nm, 20 min, bezpośrednio po zabiegu, dalej co 24 h",
         "HBOT 1,5–3,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
@@ -98,7 +98,10 @@ export function Timeline() {
 
   return (
     <Section id="protokol" eyebrow="07 — Oś czasu 14 dni i dalej">
-      <SectionHeader title="Chronologiczny protokół, krok po kroku." />
+      <SectionHeader
+        title="Chronologiczny protokół, krok po kroku."
+        lead="48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni."
+      />
       <ol className="space-y-12">
         {phases.map((p, i) => (
           <li
