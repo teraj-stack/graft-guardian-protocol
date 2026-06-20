@@ -702,7 +702,7 @@ const CLAIMS: EvidenceClaim[] = [
 export function EvidenceBasement() {
   const [audit, setAudit] = useState(false);
   return (
-    <Section id="evidence" eyebrow="09 — Evidence Basement Medicine">
+    <Section id="evidence" eyebrow="10 — EVIDENCE-BASED MEDICINE">
       <SectionHeader title="Udokumentowana fotobiomodulacja jako terapia wspomagająca." />
       <div className="mb-6 flex items-center justify-end gap-3 text-xs">
         <span className="text-muted-foreground">Tryb audytu dowodów</span>
