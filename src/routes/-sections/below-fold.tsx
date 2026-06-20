@@ -380,7 +380,101 @@ export function InteractiveSchedule() {
             className="mt-4 h-72 w-full resize-y border border-border bg-background/60 p-3 font-mono text-[11px] leading-relaxed text-foreground/90"
           />
         )}
+
+        <div className="mt-5 grid gap-5 border-t border-border pt-5 md:grid-cols-2">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Wyślij na e-mail
+            </div>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                maxLength={254}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="ty@przyklad.pl"
+                className="flex-1 border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={sendEmail}
+                disabled={emailStatus === "sending" || !consent || email.trim().length === 0}
+                className="inline-flex items-center justify-center border border-accent bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-accent transition hover:bg-accent/20 disabled:opacity-50"
+              >
+                {emailStatus === "sending"
+                  ? "Wysyłanie…"
+                  : emailStatus === "sent"
+                    ? "Wysłano ✓"
+                    : emailStatus === "rate_limited"
+                      ? "Odczekaj kilka minut"
+                      : emailStatus === "suppressed"
+                        ? "Adres wypisany"
+                        : emailStatus === "invalid"
+                          ? "Sprawdź adres"
+                          : emailStatus === "error"
+                            ? "Spróbuj ponownie"
+                            : "Wyślij mi e-mailem"}
+              </button>
+            </div>
+            <label className="mt-2 flex items-start gap-2 text-[11px] text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 h-3.5 w-3.5 accent-[hsl(var(--accent))]"
+              />
+              <span>
+                Wyrażam zgodę na jednorazową wysyłkę przypomnień edukacyjnych
+                na podany adres. Bez zapisu na listę — jeden e-mail, bez ciągu
+                dalszego.
+              </span>
+            </label>
+          </div>
+
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Wyślij jako wiadomość na telefon
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={shareToPhone}
+                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                {shareStatus === "shared"
+                  ? "Udostępniono ✓"
+                  : shareStatus === "copied"
+                    ? "Skopiowano ✓"
+                    : shareStatus === "err"
+                      ? "Błąd — skopiuj ręcznie"
+                      : "Udostępnij / skopiuj"}
+              </button>
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                WhatsApp
+              </a>
+              <a
+                href={smsHref()}
+                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
+              >
+                SMS
+              </a>
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              „Udostępnij” korzysta z systemowego okna na telefonie (Wiadomości,
+              WhatsApp, Signal, Telegram). Na desktopie kopiuje skróconą wersję
+              do schowka.
+            </p>
+          </div>
+        </div>
       </div>
+
 
       <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
 
