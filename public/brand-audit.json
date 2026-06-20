@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-20T02:57:49.013Z",
-  "total": 3,
+  "generatedAt": "2026-06-20T03:19:50.871Z",
+  "total": 6,
   "byRule": {
-    "graftgen-bare": 0,
-    "legacy-fue": 2,
-    "legacy-cennik-nav": 1
+    "graftgen-bare": 1,
+    "legacy-fue": 3,
+    "legacy-cennik-nav": 2
   },
   "rules": [
     {
@@ -43,6 +43,36 @@
       "column": 49,
       "match": "FUE",
       "snippet": "\"Brak head-to-head dla DHI (oryginał: FUT/FUE).\","
+    },
+    {
+      "rule": "graftgen-bare",
+      "label": "Brakuje \".com\" przy nazwie Graftgen",
+      "severity": "warn",
+      "file": "src/routes/_authenticated/phrase-audit.tsx",
+      "line": 117,
+      "column": 4,
+      "match": "Graftgen",
+      "snippet": "\"Graftgen\","
+    },
+    {
+      "rule": "legacy-fue",
+      "label": "Legacy: technika FUE (standard to DHI)",
+      "severity": "warn",
+      "file": "src/routes/_authenticated/phrase-audit.tsx",
+      "line": 118,
+      "column": 4,
+      "match": "FUE",
+      "snippet": "\"FUE\","
+    },
+    {
+      "rule": "legacy-cennik-nav",
+      "label": "Legacy nawigacja: \"Cennik\" (standard to \"Sklep\")",
+      "severity": "info",
+      "file": "src/routes/_authenticated/phrase-audit.tsx",
+      "line": 119,
+      "column": 3,
+      "match": "Cennik",
+      "snippet": "\"Cennik\","
     },
     {
       "rule": "legacy-cennik-nav",

@@ -120,6 +120,60 @@ const QUICK_PHRASES = [
   "48 godzin",
 ] as const;
 
+function downloadBlob(content: string, filename: string, type: string) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function escapeCsvField(field: string): string {
+  if (field.includes('"') || field.includes(",") || field.includes("\n")) {
+    return '"' + field.replace(/"/g, '""') + '"';
+  }
+  return field;
+}
+
+function exportAllBaselinesJSON() {
+  const index = loadIndex();
+  const baselines = index.map((key) => loadSnapshot(key)).filter(Boolean) as Snapshot[];
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    count: baselines.length,
+    baselines,
+  };
+  downloadBlob(
+    JSON.stringify(payload, null, 2),
+    `baseline-export-${new Date().toISOString().slice(0, 10)}.json`,
+    "application/json",
+  );
+}
+
+function exportAllBaselinesCSV() {
+  const index = loadIndex();
+  const baselines = index.map((key) => loadSnapshot(key)).filter(Boolean) as Snapshot[];
+  const header = "Fraza,Nazwa baseline,Data zapisu (ISO),Liczba wystąpień UI,Liczba wystąpień E-book";
+  const rows = baselines.map((s) =>
+    [
+      escapeCsvField(s.phrase),
+      escapeCsvField(s.name),
+      escapeCsvField(s.savedAt),
+      String(s.scope.ui),
+      String(s.scope.ebook),
+    ].join(","),
+  );
+  const csv = [header, ...rows].join("\n");
+  downloadBlob(
+    csv,
+    `baseline-export-${new Date().toISOString().slice(0, 10)}.csv`,
+    "text/csv;charset=utf-8",
+  );
+}
 
 function PhraseAuditPage() {
   const [phrase, setPhrase] = useState("Faza intensywna");
@@ -289,9 +343,29 @@ function PhraseAuditPage() {
 
       {savedIndex.length > 0 ? (
         <section className="mb-6 rounded-md border border-border bg-muted/20 p-3">
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Zapisane baseline'y ({savedIndex.length})
-          </h2>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Zapisane baseline'y ({savedIndex.length})
+            </h2>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={exportAllBaselinesJSON}
+                className="rounded border border-border px-2 py-1 text-[10px] uppercase tracking-wider hover:bg-muted"
+                title="Pobierz wszystkie baseline'y jako JSON"
+              >
+                JSON
+              </button>
+              <button
+                type="button"
+                onClick={exportAllBaselinesCSV}
+                className="rounded border border-border px-2 py-1 text-[10px] uppercase tracking-wider hover:bg-muted"
+                title="Pobierz wszystkie baseline'y jako CSV"
+              >
+                CSV
+              </button>
+            </div>
+          </div>
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {savedIndex.map((key) => {
               const snap = loadSnapshot(key);
