@@ -14,12 +14,16 @@ export const Route = createFileRoute("/_authenticated/phrase-audit")({
   component: PhraseAuditPage,
 });
 
-// Bundle all source files as raw text at build time so we can grep client-side.
-const SOURCE_FILES = import.meta.glob("/src/**/*.{ts,tsx,js,jsx,md,mdx,html,css}", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-}) as Record<string, string>;
+// Bundle source files as raw text at build time so we can grep client-side.
+// Exclude generated route tree (no default export when imported as ?raw) and this page itself.
+const SOURCE_FILES = import.meta.glob(
+  [
+    "/src/**/*.{ts,tsx,js,jsx,md,mdx,html,css}",
+    "!/src/routeTree.gen.ts",
+    "!/src/routes/_authenticated/phrase-audit.tsx",
+  ],
+  { query: "?raw", import: "default", eager: true },
+) as Record<string, string>;
 
 type SourceHit = {
   file: string;
