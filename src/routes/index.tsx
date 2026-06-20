@@ -469,7 +469,7 @@ function Why() {
 
 function ExVivo() {
   return (
-    <Section id="ex-vivo" eyebrow="02 — Faza Ex Vivo">
+    <Section id="ex-vivo" eyebrow="02 — FAZA EX VIVO">
       <SectionHeader
         title="Ochrona metaboliczna graftów od momentu ekstrakcji."
         lead="Standardem w wielu klinikach wciąż jest 0,9% NaCl lub płyn Ringera. Z punktu widzenia transplantologii są to roztwory podtrzymujące osmolarność, nie chroniące metabolizmu komórki. W naszym protokole grafty trafiają do roztworów stosowanych w przechowywaniu narządów do przeszczepu."
