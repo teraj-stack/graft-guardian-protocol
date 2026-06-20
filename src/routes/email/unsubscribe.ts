@@ -1,12 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 
+const NOINDEX_HEADERS = { 'X-Robots-Tag': 'noindex, nofollow' } as const
+
+function json(body: unknown, init: ResponseInit = {}) {
+  const res = Response.json(body, init)
+  res.headers.set('X-Robots-Tag', NOINDEX_HEADERS['X-Robots-Tag'])
+  return res
+}
+
 function redactEmail(email: string | null | undefined): string {
   if (!email) return '***'
   const [localPart, domain] = email.split('@')
   if (!localPart || !domain) return '***'
   return `${localPart[0]}***@${domain}`
 }
+
 
 export const Route = createFileRoute("/email/unsubscribe")({
   server: {
@@ -16,7 +25,7 @@ export const Route = createFileRoute("/email/unsubscribe")({
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
         if (!supabaseUrl || !supabaseServiceKey) {
-          return Response.json({ error: 'Server configuration error' }, { status: 500 })
+          return json({ error: 'Server configuration error' }, { status: 500 })
         }
 
         // Extract token from query params
@@ -24,7 +33,7 @@ export const Route = createFileRoute("/email/unsubscribe")({
         const token = url.searchParams.get('token')
 
         if (!token) {
-          return Response.json({ error: 'Token is required' }, { status: 400 })
+          return json({ error: 'Token is required' }, { status: 400 })
         }
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey)
@@ -37,14 +46,14 @@ export const Route = createFileRoute("/email/unsubscribe")({
           .maybeSingle()
 
         if (lookupError || !tokenRecord) {
-          return Response.json({ error: 'Invalid or expired token' }, { status: 404 })
+          return json({ error: 'Invalid or expired token' }, { status: 404 })
         }
 
         if (tokenRecord.used_at) {
-          return Response.json({ valid: false, reason: 'already_unsubscribed' })
+          return json({ valid: false, reason: 'already_unsubscribed' })
         }
 
-        return Response.json({ valid: true })
+        return json({ valid: true })
       },
 
       POST: async ({ request }) => {
@@ -52,7 +61,7 @@ export const Route = createFileRoute("/email/unsubscribe")({
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
         if (!supabaseUrl || !supabaseServiceKey) {
-          return Response.json({ error: 'Server configuration error' }, { status: 500 })
+          return json({ error: 'Server configuration error' }, { status: 500 })
         }
 
         // Extract token from query params (always present for RFC 8058 one-click)
@@ -87,7 +96,7 @@ export const Route = createFileRoute("/email/unsubscribe")({
         }
 
         if (!token) {
-          return Response.json({ error: 'Token is required' }, { status: 400 })
+          return json({ error: 'Token is required' }, { status: 400 })
         }
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey)
@@ -100,11 +109,11 @@ export const Route = createFileRoute("/email/unsubscribe")({
           .maybeSingle()
 
         if (lookupError || !tokenRecord) {
-          return Response.json({ error: 'Invalid or expired token' }, { status: 404 })
+          return json({ error: 'Invalid or expired token' }, { status: 404 })
         }
 
         if (tokenRecord.used_at) {
-          return Response.json({ success: false, reason: 'already_unsubscribed' })
+          return json({ success: false, reason: 'already_unsubscribed' })
         }
 
         // Atomic check-and-update to avoid TOCTOU race
@@ -118,11 +127,11 @@ export const Route = createFileRoute("/email/unsubscribe")({
 
         if (updateError) {
           console.error('Failed to mark token as used', { error: updateError, token })
-          return Response.json({ error: 'Failed to process unsubscribe' }, { status: 500 })
+          return json({ error: 'Failed to process unsubscribe' }, { status: 500 })
         }
 
         if (!updated) {
-          return Response.json({ success: false, reason: 'already_unsubscribed' })
+          return json({ success: false, reason: 'already_unsubscribed' })
         }
 
         // Add email to suppressed list (upsert to handle duplicates)
@@ -138,14 +147,14 @@ export const Route = createFileRoute("/email/unsubscribe")({
             error: suppressError,
             email_redacted: redactEmail(tokenRecord.email),
           })
-          return Response.json({ error: 'Failed to process unsubscribe' }, { status: 500 })
+          return json({ error: 'Failed to process unsubscribe' }, { status: 500 })
         }
 
         console.log('Email unsubscribed', {
           email_redacted: redactEmail(tokenRecord.email),
         })
 
-        return Response.json({ success: true })
+        return json({ success: true })
       },
     },
   },
