@@ -133,7 +133,7 @@ const heroFaq = [
   },
   {
     q: "Ile trwa intensywna faza protokołu?",
-    a: "Faza intensywna to 14 dni — wtedy decyduje się przeżywalność graftów i jakość rewaskularyzacji. Po niej przechodzimy w fazę wspomagającą (LADD z PRP/minoksydylem, raporty biomedyczne), która trwa do 3–6 miesięcy.",
+    a: "Faza intensywna to 14 dni — Ten okres warunkuje i jakość rewaskularyzacji. Po niej przechodzimy w fazę wspomagającą (LADD z PRP/minoksydylem, raporty biomedyczne), która trwa do 3–6 miesięcy.",
   },
   {
     q: "Czy muszę przebywać w Warszawie lub Gdańsku przez cały protokół?",
