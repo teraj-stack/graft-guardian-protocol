@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "https://graft-guardian-protocol.lovable.app";
+const BASE_URL = "https://graftgen.com";
 
 interface SitemapEntry {
   path: string;
@@ -15,8 +15,11 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/sklep", changefreq: "weekly", priority: "0.8" },
           { path: "/panel", changefreq: "weekly", priority: "0.7" },
           { path: "/przypomnienia", changefreq: "monthly", priority: "0.6" },
+          { path: "/raport", changefreq: "monthly", priority: "0.5" },
+          { path: "/auth", changefreq: "yearly", priority: "0.3" },
           { path: "/prywatnosc", changefreq: "yearly", priority: "0.3" },
           { path: "/cookies", changefreq: "yearly", priority: "0.3" },
         ];
