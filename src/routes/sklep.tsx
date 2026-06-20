@@ -4,7 +4,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { formatMoney } from "@/lib/utils";
 import { CartDrawer } from "@/components/CartDrawer";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
-import graftgenLogo from "@/assets/graftgen-logo-unified.png.asset.json";
+import graftgenLogo from "@/assets/graftgen-logo.jpg.asset.json";
 import {
   STOREFRONT_PRODUCTS_QUERY,
   storefrontApiRequest,
