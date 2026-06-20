@@ -26,6 +26,7 @@ import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
 import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
 import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
+import { Route as AuthenticatedBrandAuditRouteImport } from './routes/_authenticated/brand-audit'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
 import { Route as ApiPublicEbookRequestRouteImport } from './routes/api/public/ebook-request'
@@ -120,6 +121,11 @@ const AuthenticatedEbookRoute = AuthenticatedEbookRouteImport.update({
   path: '/ebook',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBrandAuditRoute = AuthenticatedBrandAuditRouteImport.update({
+  id: '/brand-audit',
+  path: '/brand-audit',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/ebook': typeof AuthenticatedEbookRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/ebook': typeof AuthenticatedEbookRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sklep': typeof SklepRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/_authenticated/ebook': typeof AuthenticatedEbookRoute
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
   '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
+    | '/brand-audit'
     | '/ebook'
     | '/raporty'
     | '/vitals'
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/admin'
+    | '/brand-audit'
     | '/ebook'
     | '/raporty'
     | '/vitals'
@@ -322,6 +333,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sklep'
     | '/_authenticated/admin'
+    | '/_authenticated/brand-audit'
     | '/_authenticated/ebook'
     | '/_authenticated/raporty'
     | '/_authenticated/vitals'
@@ -484,6 +496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEbookRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/brand-audit': {
+      id: '/_authenticated/brand-audit'
+      path: '/brand-audit'
+      fullPath: '/brand-audit'
+      preLoaderRoute: typeof AuthenticatedBrandAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -552,6 +571,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedBrandAuditRoute: typeof AuthenticatedBrandAuditRoute
   AuthenticatedEbookRoute: typeof AuthenticatedEbookRoute
   AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
   AuthenticatedVitalsRoute: typeof AuthenticatedVitalsRoute
@@ -559,6 +579,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedBrandAuditRoute: AuthenticatedBrandAuditRoute,
   AuthenticatedEbookRoute: AuthenticatedEbookRoute,
   AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
   AuthenticatedVitalsRoute: AuthenticatedVitalsRoute,
