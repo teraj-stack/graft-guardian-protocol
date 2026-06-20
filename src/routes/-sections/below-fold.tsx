@@ -11,7 +11,7 @@ import { Section, SectionHeader, Card, Mech } from "@/components/section-primiti
 
 export function Microbiome() {
   return (
-    <Section id="mikrobiom" eyebrow="06 — Mikrobiom i strefa dawcza">
+    <Section id="mikrobiom" eyebrow="06 — MIKROBIOM I STREFA DAWCZA">
       <SectionHeader
         title="Antyseptyka, która nie uszkadza graftu."
         lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
