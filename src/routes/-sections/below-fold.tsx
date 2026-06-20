@@ -470,7 +470,7 @@ export function InteractiveSchedule() {
 
 export function Journey() {
   return (
-    <Section id="journey" eyebrow="08 — Patient Journey">
+    <Section id="journey" eyebrow="09 — PATIENT JOURNEY">
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-7">
           <h2 className="font-display text-4xl md:text-5xl">
