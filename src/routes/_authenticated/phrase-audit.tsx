@@ -343,9 +343,29 @@ function PhraseAuditPage() {
 
       {savedIndex.length > 0 ? (
         <section className="mb-6 rounded-md border border-border bg-muted/20 p-3">
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Zapisane baseline'y ({savedIndex.length})
-          </h2>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Zapisane baseline'y ({savedIndex.length})
+            </h2>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={exportAllBaselinesJSON}
+                className="rounded border border-border px-2 py-1 text-[10px] uppercase tracking-wider hover:bg-muted"
+                title="Pobierz wszystkie baseline'y jako JSON"
+              >
+                JSON
+              </button>
+              <button
+                type="button"
+                onClick={exportAllBaselinesCSV}
+                className="rounded border border-border px-2 py-1 text-[10px] uppercase tracking-wider hover:bg-muted"
+                title="Pobierz wszystkie baseline'y jako CSV"
+              >
+                CSV
+              </button>
+            </div>
+          </div>
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {savedIndex.map((key) => {
               const snap = loadSnapshot(key);
