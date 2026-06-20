@@ -3,20 +3,21 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/prywatnosc")({
   head: () => ({
     meta: [
-      { title: "Polityka Prywatności i Bezpieczeństwo Danych — Protokół Po Przeszczepie" },
+      { title: "Polityka prywatności — Graftgen.com" },
       {
         name: "description",
         content:
           "Polityka prywatności RODO: kto przetwarza dane, podstawy prawne, okresy retencji, prawa pacjenta oraz kontakt IOD.",
       },
       { name: "robots", content: "index,follow" },
-      { property: "og:title", content: "Polityka Prywatności — Protokół Po Przeszczepie" },
+      { property: "og:title", content: "Polityka prywatności — Graftgen.com" },
       {
         property: "og:description",
         content: "Pełna informacja RODO dla pacjentów korzystających z materiałów i przypomnień.",
       },
-      { rel: "canonical", href: "https://graft-guardian-protocol.lovable.app/prywatnosc" },
+      { property: "og:url", content: "https://graftgen.com/prywatnosc" },
     ],
+    links: [{ rel: "canonical", href: "https://graftgen.com/prywatnosc" }],
   }),
   component: PrivacyPage,
 });
