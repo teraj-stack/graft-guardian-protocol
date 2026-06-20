@@ -614,15 +614,6 @@ function PBM() {
         <SectionHeader
           title="Światło 650 i 830 nm jako narzędzie bioenergetyczne."
         />
-        <img
-          src={graftgenLogo.url}
-          alt="Graftgen.com"
-          width={415}
-          height={531}
-          decoding="async"
-          loading="lazy"
-          className="mt-2 h-10 w-auto shrink-0 opacity-80 md:mt-0 md:h-12"
-        />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="Parametry sesji pozabiegowej" badge="20 min">
