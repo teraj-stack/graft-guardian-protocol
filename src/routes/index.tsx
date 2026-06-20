@@ -330,6 +330,10 @@ function Hero() {
             650/830 nm, tlenoterapii hiperbarycznej 1,5–3,0 ATA oraz
             laserowo wspomaganym dostarczaniu leków (LADD).
           </p>
+          <p className="mt-4 max-w-2xl text-sm text-muted-foreground/70">
+            48 godzin = krytyczne okno przeżywalności graftów. Pełną
+            rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni.
+          </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <a
               href="#konsultacja"
