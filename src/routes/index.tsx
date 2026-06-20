@@ -495,6 +495,33 @@ function CreatorReviews() {
                 </p>
                 <footer className="mt-3 text-xs text-muted-foreground/70">— Agata, 7 stycznia 2026</footer>
               </blockquote>
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  „Dr Przeprowadził wywiad i wszystko wyjaśnił. Poświęcił czas pacjentowi bez żadnego pośpiechu. Przedstawił odpowiednie metody leczenia."
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— KK, 25 lutego 2026</footer>
+              </blockquote>
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  „Pan Doktor rzeczowo wyjaśnia schorzenia, z zaangażowaniem. Pacjent może poczuć się zaopiekowany."
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Marcin, 3 marca 2026</footer>
+              </blockquote>
+              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
+                <div className="flex gap-1 text-accent">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <p className="mt-3 text-sm italic text-muted-foreground">
+                  „Profesjonalizm i dociekliwość. Dokładny wywiad, życzliwe wyjaśnianie pacjentowi możliwości leczenia."
+                </p>
+                <footer className="mt-3 text-xs text-muted-foreground/70">— Paweł Olejnik, 17 lutego 2026</footer>
+              </blockquote>
             </div>
           </div>
         </div>
