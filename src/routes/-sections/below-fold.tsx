@@ -136,14 +136,6 @@ export function Timeline() {
 
 /* ---------- Interactive Day 0–14 Schedule ---------- */
 
-import {
-  SCHEDULE,
-  addDaysIso,
-  buildIcs,
-  buildPlainText,
-  buildShortMessage,
-  todayIso,
-} from "@/lib/schedule-data";
 
 const SCHEDULE_STORAGE_KEY = "graftgen.schedule.v1";
 
