@@ -1,4 +1,18 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /raporty
+Disallow: /raporty/status
+Disallow: /brand-audit
+Disallow: /phrase-audit
+Disallow: /vitals
+Disallow: /email-test
+Disallow: /ebook
+Disallow: /ebook/
+Disallow: /auth
+Disallow: /api/
+Disallow: /lovable/
+Disallow: /email/unsubscribe
+Disallow: /przypomnienia/wypisz
 
 Sitemap: https://graftgen.com/sitemap.xml
