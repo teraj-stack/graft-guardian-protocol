@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode, type FormEvent } from "react";
 import { PRICING } from "@/lib/pricing-data";
-import { FAQ } from "@/lib/faq-data";
+import { FAQ, STAGES, TOPICS, type Stage, type Topic } from "@/lib/faq-data";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
 
