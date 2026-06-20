@@ -170,6 +170,42 @@ export function InteractiveSchedule() {
     "idle" | "sending" | "sent" | "rate_limited" | "suppressed" | "invalid" | "error"
   >("idle");
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
+  const [emailPreview, setEmailPreview] = useState<
+    | { state: "idle" }
+    | { state: "loading" }
+    | { state: "ready"; html: string; subject: string }
+    | { state: "error"; message: string }
+  >({ state: "idle" });
+  const [showEmailPreview, setShowEmailPreview] = useState(false);
+
+  async function openEmailPreview() {
+    setShowEmailPreview(true);
+    setEmailPreview({ state: "loading" });
+    try {
+      const resp = await fetch("/api/public/reminders/preview-checklist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ surgeryDate }),
+      });
+      const json = (await resp.json().catch(() => ({}))) as {
+        ok?: boolean;
+        html?: string;
+        subject?: string;
+      };
+      if (resp.ok && json.ok && json.html) {
+        setEmailPreview({ state: "ready", html: json.html, subject: json.subject ?? "" });
+      } else {
+        setEmailPreview({ state: "error", message: "Nie udało się wygenerować podglądu." });
+      }
+    } catch {
+      setEmailPreview({ state: "error", message: "Błąd sieci. Spróbuj ponownie." });
+    }
+  }
+
+  function resetEmailForm() {
+    setEmail("");
+    setEmailStatus("idle");
+  }
 
   function downloadIcs() {
     const ics = buildIcs(surgeryDate);

@@ -42,6 +42,7 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
 import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
 import { Route as ApiPublicRemindersSendChecklistRouteImport } from './routes/api/public/reminders/send-checklist'
+import { Route as ApiPublicRemindersPreviewChecklistRouteImport } from './routes/api/public/reminders/preview-checklist'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
 import { Route as ApiPublicHooksSecurityWatchRouteImport } from './routes/api/public/hooks/security-watch'
 import { Route as ApiPublicHooksPricingAutoRestoreRouteImport } from './routes/api/public/hooks/pricing-auto-restore'
@@ -217,6 +218,12 @@ const ApiPublicRemindersSendChecklistRoute =
     path: '/api/public/reminders/send-checklist',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicRemindersPreviewChecklistRoute =
+  ApiPublicRemindersPreviewChecklistRouteImport.update({
+    id: '/api/public/reminders/preview-checklist',
+    path: '/api/public/reminders/preview-checklist',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicRemindersDispatchRoute =
   ApiPublicRemindersDispatchRouteImport.update({
     id: '/api/public/reminders/dispatch',
@@ -266,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/preview-checklist': typeof ApiPublicRemindersPreviewChecklistRoute
   '/api/public/reminders/send-checklist': typeof ApiPublicRemindersSendChecklistRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -303,6 +311,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/preview-checklist': typeof ApiPublicRemindersPreviewChecklistRoute
   '/api/public/reminders/send-checklist': typeof ApiPublicRemindersSendChecklistRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -342,6 +351,7 @@ export interface FileRoutesById {
   '/api/public/hooks/pricing-auto-restore': typeof ApiPublicHooksPricingAutoRestoreRoute
   '/api/public/hooks/security-watch': typeof ApiPublicHooksSecurityWatchRoute
   '/api/public/reminders/dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/reminders/preview-checklist': typeof ApiPublicRemindersPreviewChecklistRoute
   '/api/public/reminders/send-checklist': typeof ApiPublicRemindersSendChecklistRoute
   '/api/public/reminders/subscribe': typeof ApiPublicRemindersSubscribeRoute
   '/api/public/reminders/unsubscribe': typeof ApiPublicRemindersUnsubscribeRoute
@@ -381,6 +391,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/preview-checklist'
     | '/api/public/reminders/send-checklist'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -418,6 +429,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/preview-checklist'
     | '/api/public/reminders/send-checklist'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -456,6 +468,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/pricing-auto-restore'
     | '/api/public/hooks/security-watch'
     | '/api/public/reminders/dispatch'
+    | '/api/public/reminders/preview-checklist'
     | '/api/public/reminders/send-checklist'
     | '/api/public/reminders/subscribe'
     | '/api/public/reminders/unsubscribe'
@@ -487,6 +500,7 @@ export interface RootRouteChildren {
   ApiPublicHooksPricingAutoRestoreRoute: typeof ApiPublicHooksPricingAutoRestoreRoute
   ApiPublicHooksSecurityWatchRoute: typeof ApiPublicHooksSecurityWatchRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
+  ApiPublicRemindersPreviewChecklistRoute: typeof ApiPublicRemindersPreviewChecklistRoute
   ApiPublicRemindersSendChecklistRoute: typeof ApiPublicRemindersSendChecklistRoute
   ApiPublicRemindersSubscribeRoute: typeof ApiPublicRemindersSubscribeRoute
   ApiPublicRemindersUnsubscribeRoute: typeof ApiPublicRemindersUnsubscribeRoute
@@ -728,6 +742,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRemindersSendChecklistRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/reminders/preview-checklist': {
+      id: '/api/public/reminders/preview-checklist'
+      path: '/api/public/reminders/preview-checklist'
+      fullPath: '/api/public/reminders/preview-checklist'
+      preLoaderRoute: typeof ApiPublicRemindersPreviewChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/reminders/dispatch': {
       id: '/api/public/reminders/dispatch'
       path: '/api/public/reminders/dispatch'
@@ -810,6 +831,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksPricingAutoRestoreRoute: ApiPublicHooksPricingAutoRestoreRoute,
   ApiPublicHooksSecurityWatchRoute: ApiPublicHooksSecurityWatchRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
+  ApiPublicRemindersPreviewChecklistRoute:
+    ApiPublicRemindersPreviewChecklistRoute,
   ApiPublicRemindersSendChecklistRoute: ApiPublicRemindersSendChecklistRoute,
   ApiPublicRemindersSubscribeRoute: ApiPublicRemindersSubscribeRoute,
   ApiPublicRemindersUnsubscribeRoute: ApiPublicRemindersUnsubscribeRoute,
