@@ -394,7 +394,7 @@ function Creator() {
             <div className="overflow-hidden rounded-sm border border-border/60">
               <img
                 src={drBujok.url}
-                alt="Dr Bujok — twórca protokołu Graftgen"
+                alt="Dr Bujok — twórca protokołu Graftgen.com"
                 width={600}
                 height={800}
                 decoding="async"

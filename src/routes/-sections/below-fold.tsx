@@ -806,7 +806,7 @@ function EvidenceAuditCard() {
         </tr>`,
     ).join("");
     const html = `<!doctype html><html lang="pl"><head><meta charset="utf-8"/>
-<title>Audyt dowodów — Graftgen</title>
+<title>Audyt dowodów — Graftgen.com</title>
 <style>
   *{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Inter,sans-serif;color:#111;margin:32px;font-size:11px;line-height:1.45}
   h1{font-size:18px;margin:0 0 4px}.meta{color:#666;font-size:10px;margin-bottom:16px}
@@ -825,7 +825,7 @@ function EvidenceAuditCard() {
   @media print{body{margin:14mm}}
 </style></head><body>
 <h1>Audyt dowodów — Evidence Basement Medicine</h1>
-<div class="meta">Graftgen · Wygenerowano: ${esc(date)}</div>
+<div class="meta">Graftgen.com · Wygenerowano: ${esc(date)}</div>
 <div class="summary">
   <span class="chip direct">Bezpośrednie: ${summary.direct}</span>
   <span class="chip indirect">Pośrednie: ${summary.indirect}</span>
@@ -846,7 +846,7 @@ function EvidenceAuditCard() {
     const payload = {
       meta: {
         title: "Audyt dowodów — Evidence Basement Medicine",
-        generatedBy: "Graftgen",
+        generatedBy: "Graftgen.com",
         generatedAt: new Date().toISOString(),
         version: "1.0",
       },

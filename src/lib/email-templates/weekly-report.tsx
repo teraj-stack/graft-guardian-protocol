@@ -75,7 +75,7 @@ export const WeeklyReportEmail: React.FC<WeeklyReportEmailProps> = ({
               src={logoUrl}
               width="140"
               height="36"
-              alt="Graftgen"
+              alt="Graftgen.com"
               style={{ display: "block" }}
             />
           </Section>

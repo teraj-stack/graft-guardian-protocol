@@ -49,7 +49,7 @@ function Shop() {
       <header className="border-b border-border/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Link to="/" className="font-serif text-lg text-foreground">
-            ← Graftgen
+            ← Graftgen.com
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
