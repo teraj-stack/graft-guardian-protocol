@@ -218,7 +218,7 @@ function PhraseAuditPage() {
   }, [snapshot, sourceHits, ebookHits]);
 
   const total = sourceHits.length + ebookHits.length;
-  const prevTotal = snapshot ? snapshot.source.length + snapshot.ebook.length : null;
+  
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
