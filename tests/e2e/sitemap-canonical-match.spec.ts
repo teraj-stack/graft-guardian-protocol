@@ -50,16 +50,12 @@ function extractCanonical(html: string): string | null {
   return (m[1] ?? m[2] ?? "").trim();
 }
 
-function normalizeForCompare(u: string): string {
-  // protokół + host lower-case, reszta bez zmian; bez sztucznego usuwania
-  // trailing slash (jeśli sitemap go ma, canonical musi też).
+function pathQueryHash(u: string): string | null {
   try {
     const parsed = new URL(u);
-    const proto = parsed.protocol.toLowerCase();
-    const host = parsed.host.toLowerCase();
-    return `${proto}//${host}${parsed.pathname}${parsed.search}${parsed.hash}`;
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
   } catch {
-    return u;
+    return null;
   }
 }
 
