@@ -819,11 +819,18 @@ function SourcesCard() {
 export function FAQSection() {
   const [selectedStage, setSelectedStage] = useState<Stage | "all">("all");
   const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
 
   const filtered = FAQ.filter((f) => {
     const stageMatch = selectedStage === "all" || f.stages.includes(selectedStage);
     const topicMatch = selectedTopic === "all" || f.topics.includes(selectedTopic);
-    return stageMatch && topicMatch;
+    const searchMatch =
+      normalizedQuery.length === 0 ||
+      f.q.toLowerCase().includes(normalizedQuery) ||
+      f.a.toLowerCase().includes(normalizedQuery);
+    return stageMatch && topicMatch && searchMatch;
   });
 
   const chip = (
