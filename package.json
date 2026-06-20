@@ -9,6 +9,7 @@
     "test:dist": "node scripts/check-dist-forbidden-phrases.mjs",
     "test:clean-build": "bash scripts/clean-build-check.sh",
     "guard:ci": "vite build && node scripts/check-dist-forbidden-phrases.mjs --ci",
+    "guard:sarif": "vite build && node scripts/check-dist-forbidden-phrases.mjs --sarif",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
