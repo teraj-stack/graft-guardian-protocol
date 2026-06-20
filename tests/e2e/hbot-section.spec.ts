@@ -15,9 +15,14 @@ test.describe("HBOT section", () => {
   test("renders structure, copy and parameters without errors", async ({ page }) => {
     const consoleErrors: string[] = [];
     page.on("console", (msg) => {
-      if (msg.type() === "error") consoleErrors.push(msg.text());
+      if (msg.type() !== "error") return;
+      const text = msg.text();
+      // Ignore unrelated asset 404s — we only guard rendering / JS errors.
+      if (/Failed to load resource/i.test(text)) return;
+      consoleErrors.push(text);
     });
     page.on("pageerror", (err) => consoleErrors.push(err.message));
+
 
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
