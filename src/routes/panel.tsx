@@ -6,7 +6,7 @@ import { usePanelProgress } from "@/hooks/use-panel-progress";
 
 const TITLE = "Panel pacjenta — biblioteka materiałów pozabiegowych";
 const DESCRIPTION =
-  "Biblioteka materiałów edukacyjnych po przeszczepie włosów: pełna dokumentacja protokołu, instrukcje na każdy tydzień rekonwalescencji, najnowsze trendy w medycynie regeneracyjnej i anti-aging.";
+  "Biblioteka materiałów po przeszczepie włosów: protokół, instrukcje na każdy tydzień rekonwalescencji i trendy w medycynie regeneracyjnej.";
 
 const CATEGORIES = ["Pielęgnacja", "HBOT", "PBM", "LADD", "Dieta", "Anti-aging"] as const;
 const TYPES = ["Artykuł", "Wideo", "PDF", "Checklist"] as const;
