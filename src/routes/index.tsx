@@ -149,6 +149,7 @@ function Index() {
         <Hero />
         <HeroFAQ />
         <Creator />
+        <CreatorReviews />
         <LazyMount minHeight={900} fallback={<DayZeroToThreeSkeleton />}><DayZeroToThree /></LazyMount>
         <Why />
         <ExVivo />
