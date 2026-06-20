@@ -404,35 +404,28 @@ function Creator() {
               Specjalista chirurgii ogólnej, którego zawodową pasją są
               nowoczesne technologie stosowane w medycynie.
             </h2>
-            <div className="mt-8 space-y-5 text-muted-foreground md:text-lg">
-              <p>
-                Twórca MySkinCode.pl - aplikacji MedTech SaaS wykorzystującej
-                autorski klucz kodowania różnych typów problemów skórnych przy
-                użyciu AI engine. Aplikacja buduje złożone protokoły zabiegowe —
-                koordynuje pracę wieloosobowych zespołów Klinik Medycyny
-                Estetycznej w całej Polsce.
-              </p>
-              <p>
-                Twórca Projektu Mazowieckie Centrum Medycyny Laserowej — połączył
-                wieloletnie doświadczenie chirurgiczne z głębokim zrozumieniem
-                potrzeb pacjenta, budując nowy model wczesnej opieki
-                pooperacyjnej w Polsce.
-              </p>
-              <p>
-                Dr Bujok operuje, prowadzi autorskie szkolenia dla lekarzy z
-                całego kraju w zakresie wykorzystywania technologii laserowych
-                w trakcie zabiegów mało inwazyjnych oraz możliwych do
-                zastosowania we wczesnym okresie pooperacyjnym rozwiązań
-                skracających okres rekonwalescencji.
-              </p>
-              <p>
-                Protokoły tworzone z użyciem Hiperbarii, laserobarii, pola
-                magnetycznego, fototerapii, fotobiomodulacji i innych zabiegów
-                medycyny fizykalnej. Zawsze podkreśla, że najlepsza technologia
-                jest bezwartościowa bez empatii i partnerskiej relacji z
-                pacjentem.
-              </p>
-            </div>
+            <ul className="mt-8 list-disc space-y-5 pl-6 text-muted-foreground md:text-lg">
+              <li>
+                Twórca MySkinCode.pl — aplikacji MedTech SaaS wykorzystującej
+                autorski klucz kodowania problemów skórnych z pomocą AI.
+                Koordynuje pracę zespołów klinik w całej Polsce.
+              </li>
+              <li>
+                Twórca Projektu Mazowieckie Centrum Medycyny Laserowej — łączy
+                doświadczenie chirurgiczne z potrzebami pacjenta, budując nowy
+                model wczesnej opieki pooperacyjnej.
+              </li>
+              <li>
+                Prowadzi autorskie szkolenia dla lekarzy z zakresu technologii
+                laserowych w zabiegach mało inwazyjnych i rozwiązań skracających
+                rekonwalescencję.
+              </li>
+              <li>
+                Tworzy protokoły oparte na hiperbarii, laserobarii, polu
+                magnetycznym, fototerapii i fotobiomodulacji. Podkreśla, że
+                technologia bez empatii jest bezwartościowa.
+              </li>
+            </ul>
           </div>
         </div>
       </div>
