@@ -75,6 +75,10 @@ if (outFlag !== undefined) {
     console.error("[check-dist] --out requires a non-empty path. Example: --out=reports/output.sarif");
     process.exit(2);
   }
+  if (!rawValue.toLowerCase().endsWith(".sarif")) {
+    console.error(`[check-dist] --out path must end with .sarif. Received: "${rawValue}"`);
+    process.exit(2);
+  }
   const outDir = dirname(resolve(process.cwd(), rawValue));
   if (!existsSync(outDir)) {
     console.error(`[check-dist] --out directory does not exist: ${outDir}`);
