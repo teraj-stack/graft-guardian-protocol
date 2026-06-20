@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T03:19:50.871Z",
+  "generatedAt": "2026-06-20T04:35:23.153Z",
   "total": 6,
   "byRule": {
     "graftgen-bare": 1,
@@ -29,7 +29,7 @@
       "label": "Legacy: technika FUE (standard to DHI)",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 616,
+      "line": 617,
       "column": 71,
       "match": "FUE",
       "snippet": "gaps: [\"Brak współczesnego head-to-head RCT porównującego DHI vs. FUE z zaślepioną oceną przeżywalności.\"],"
@@ -39,7 +39,7 @@
       "label": "Legacy: technika FUE (standard to DHI)",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 630,
+      "line": 631,
       "column": 49,
       "match": "FUE",
       "snippet": "\"Brak head-to-head dla DHI (oryginał: FUT/FUE).\","
@@ -79,7 +79,7 @@
       "label": "Legacy nawigacja: \"Cennik\" (standard to \"Sklep\")",
       "severity": "info",
       "file": "src/routes/sklep.tsx",
-      "line": 142,
+      "line": 157,
       "column": 78,
       "match": "Cennik",
       "snippet": "<p className=\"text-xs uppercase tracking-[0.3em] text-muted-foreground\">Cennik</p>"

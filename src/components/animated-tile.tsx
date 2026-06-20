@@ -10,18 +10,22 @@ import { useEffect, useRef, useState } from "react";
 export function AnimatedTile({
   src,
   alt,
+  poster,
   aspect = "16/9",
   className = "",
 }: {
   /** Bazowa nazwa pliku w /public/videos (bez rozszerzenia), np. "evidence-1" */
   src: string;
   alt: string;
+  /** Ścieżka do statycznego placeholdera (np. /videos/evidence-1.jpg) */
+  poster?: string;
   /** CSS aspect-ratio, np. "16/9" lub "1/1" */
   aspect?: string;
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -46,9 +50,17 @@ export function AnimatedTile({
 
   return (
     <div
-      className={`overflow-hidden rounded-sm border border-border/60 bg-secondary/40 ${className}`}
+      className={`relative overflow-hidden rounded-sm border border-border/60 bg-secondary/40 ${className}`}
       style={{ aspectRatio: aspect }}
     >
+      {poster && (
+        <img
+          src={poster}
+          alt={alt}
+          loading="lazy"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-0" : "opacity-100"}`}
+        />
+      )}
       <video
         ref={ref}
         muted
@@ -56,7 +68,8 @@ export function AnimatedTile({
         playsInline
         preload="none"
         aria-label={alt}
-        className="h-full w-full object-cover"
+        onLoadedData={() => setVideoReady(true)}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
       >
         {loaded && (
           <>
