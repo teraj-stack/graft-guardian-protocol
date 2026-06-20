@@ -182,9 +182,9 @@ function PrivacyPage() {
         </ul>
         <p>
           Z subskrypcji przypomnień można wypisać się jednym kliknięciem na stronie{" "}
-          <Link to="/przypomnienia/wypisz" className="text-primary underline">
+          <a href="/przypomnienia/wypisz" rel="nofollow" className="text-primary underline">
             /przypomnienia/wypisz
-          </Link>{" "}
+          </a>{" "}
           (link znajduje się w stopce każdej wiadomości).
         </p>
       </Section>
