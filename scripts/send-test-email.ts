@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { render } from '@react-email/components'
 import { createClient } from '@supabase/supabase-js'
-import { template } from '../dev-server/src/lib/email-templates/test-ping'
+import { template } from '../src/lib/email-templates/test-ping'
 
 const SITE_NAME = 'graft-guardian-protocol'
 const SENDER_DOMAIN = 'notify.graftgen.com'
