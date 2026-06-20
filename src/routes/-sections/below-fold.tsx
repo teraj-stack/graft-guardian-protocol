@@ -843,7 +843,7 @@ export function FAQSection() {
 
 export function Pricing() {
   return (
-    <Section id="cennik" eyebrow="10 — Cennik / Sklep">
+    <Section id="cennik" eyebrow="10 — Sklep">
       <SectionHeader
         title="Pełny cennik i zakup pakietów — w sklepie."
         lead={
