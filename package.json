@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && node scripts/check-dist-forbidden-phrases.mjs",
+    "build": "node scripts/brand-audit.mjs && vite build && node scripts/check-dist-forbidden-phrases.mjs",
+    "brand:audit": "node scripts/brand-audit.mjs",
     "test:dist": "node scripts/check-dist-forbidden-phrases.mjs",
     "test:clean-build": "bash scripts/clean-build-check.sh",
     "guard:ci": "vite build && node scripts/check-dist-forbidden-phrases.mjs --ci",
