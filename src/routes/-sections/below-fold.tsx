@@ -496,9 +496,24 @@ export function InteractiveSchedule() {
                 autoComplete="email"
                 maxLength={254}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError(null);
+                  if (statusMessage && emailStatus !== "sent") {
+                    setStatusMessage(null);
+                    setEmailStatus("idle");
+                  }
+                }}
+                onBlur={onEmailBlur}
                 placeholder="ty@przyklad.pl"
-                className="flex-1 border border-border bg-background px-3 py-2 text-sm focus:border-accent focus:outline-none"
+                aria-invalid={emailError ? true : undefined}
+                aria-describedby={emailError ? "schedule-email-error" : statusMessage ? "schedule-email-status" : undefined}
+                className={
+                  "flex-1 border bg-background px-3 py-2 text-sm focus:outline-none " +
+                  (emailError
+                    ? "border-destructive focus:border-destructive"
+                    : "border-border focus:border-accent")
+                }
               />
               <button
                 type="button"
@@ -510,17 +525,31 @@ export function InteractiveSchedule() {
                   ? "Wysyłanie…"
                   : emailStatus === "sent"
                     ? "Wysłano ✓"
-                    : emailStatus === "rate_limited"
-                      ? "Odczekaj kilka minut"
-                      : emailStatus === "suppressed"
-                        ? "Adres wypisany"
-                        : emailStatus === "invalid"
-                          ? "Sprawdź adres"
-                          : emailStatus === "error"
-                            ? "Spróbuj ponownie"
-                            : "Wyślij mi e-mailem"}
+                    : "Wyślij mi e-mailem"}
               </button>
             </div>
+            {emailError && (
+              <p id="schedule-email-error" role="alert" className="mt-2 text-[11px] text-destructive">
+                {emailError}
+              </p>
+            )}
+            {statusMessage && !emailError && (
+              <p
+                id="schedule-email-status"
+                role={emailStatus === "sent" ? "status" : "alert"}
+                aria-live="polite"
+                className={
+                  "mt-2 text-[11px] " +
+                  (emailStatus === "sent"
+                    ? "text-accent"
+                    : emailStatus === "rate_limited"
+                      ? "text-amber-500"
+                      : "text-destructive")
+                }
+              >
+                {statusMessage}
+              </p>
+            )}
             <div className="mt-2 flex flex-wrap items-center gap-3">
               <button
                 type="button"
@@ -539,6 +568,7 @@ export function InteractiveSchedule() {
                 </button>
               )}
             </div>
+
             <label className="mt-2 flex items-start gap-2 text-[11px] text-muted-foreground">
               <input
                 type="checkbox"
