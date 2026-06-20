@@ -131,7 +131,8 @@ function findAllMatches(content, entry) {
   let m;
   while ((m = entry.matcher.exec(content)) !== null) {
     const idx = m.index;
-    // Compute line/col
+    const endIdx = idx + m[0].length;
+    // Compute start line/col
     let line = 1;
     let lineStart = 0;
     for (let i = 0; i < idx; i++) {
@@ -141,10 +142,20 @@ function findAllMatches(content, entry) {
       }
     }
     const column = idx - lineStart + 1;
+    // Compute end line/col by continuing the scan from idx → endIdx.
+    let endLine = line;
+    let endLineStart = lineStart;
+    for (let i = idx; i < endIdx; i++) {
+      if (content.charCodeAt(i) === 10) {
+        endLine++;
+        endLineStart = i + 1;
+      }
+    }
+    const endColumn = endIdx - endLineStart + 1;
     const lineEnd = content.indexOf("\n", idx);
     const rawLine = content.slice(lineStart, lineEnd === -1 ? content.length : lineEnd);
     const snippet = rawLine.length > 240 ? rawLine.slice(0, 240) + "…" : rawLine;
-    out.push({ line, column, match: m[0], snippet });
+    out.push({ line, column, endLine, endColumn, match: m[0], snippet });
     if (m.index === entry.matcher.lastIndex) entry.matcher.lastIndex++;
   }
   return out;
@@ -193,6 +204,8 @@ function walk(dir) {
             replacement: entry.replacement,
             line: m.line,
             column: m.column,
+            endLine: m.endLine,
+            endColumn: m.endColumn,
             match: m.match,
             snippet: m.snippet,
           });
@@ -250,9 +263,21 @@ if (ci) {
       (h.replacement ? ` (use: "${h.replacement}")` : "");
     // Escape per GH workflow command spec.
     const esc = (s) => String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
-    console.log(
-      `::error file=dist/${esc(h.file)},line=${h.line},col=${h.column},title=Forbidden phrase::${esc(msg)}`,
-    );
+    // GitHub annotations support full ranges via endLine/endColumn.
+    // Per the workflow-command spec, endColumn is only valid when the match
+    // stays on a single line; for multi-line matches we emit endLine alone.
+    const parts = [
+      `file=dist/${esc(h.file)}`,
+      `line=${h.line}`,
+      `col=${h.column}`,
+    ];
+    if (h.endLine && h.endLine !== h.line) {
+      parts.push(`endLine=${h.endLine}`);
+    } else if (h.endColumn && h.endColumn !== h.column) {
+      parts.push(`endLine=${h.endLine ?? h.line}`, `endColumn=${h.endColumn}`);
+    }
+    parts.push(`title=Forbidden phrase`);
+    console.log(`::error ${parts.join(",")}::${esc(msg)}`);
   }
   const summaryPath = process.env.GITHUB_STEP_SUMMARY;
   if (summaryPath) {
@@ -266,10 +291,14 @@ if (ci) {
       ``,
     ];
     if (hits.length) {
-      lines.push(`| Phrase | File | Line:Col | Reason |`, `| --- | --- | --- | --- |`);
+      lines.push(`| Phrase | File | Range | Reason |`, `| --- | --- | --- | --- |`);
       for (const h of hits.slice(0, 200)) {
         const cell = (v) => String(v ?? "").replace(/\|/g, "\\|");
-        lines.push(`| \`${cell(h.phrase)}\` | dist/${cell(h.file)} | ${h.line}:${h.column} | ${cell(h.reason ?? "")} |`);
+        const range =
+          h.endLine && (h.endLine !== h.line || h.endColumn !== h.column)
+            ? `${h.line}:${h.column}–${h.endLine}:${h.endColumn}`
+            : `${h.line}:${h.column}`;
+        lines.push(`| \`${cell(h.phrase)}\` | dist/${cell(h.file)} | ${range} | ${cell(h.reason ?? "")} |`);
       }
       if (hits.length > 200) lines.push(`\n_…and ${hits.length - 200} more (see artifact)._`);
     } else {
