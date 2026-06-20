@@ -1189,7 +1189,7 @@ export function FAQSection() {
   );
 
   return (
-    <Section id="faq" eyebrow="09 — Pytania pacjentów">
+    <Section id="faq" eyebrow="12 — PYTANIA PACJENTÓW">
       <SectionHeader title="To, o co pytacie najczęściej." />
 
       <div className="mb-8 space-y-4">
