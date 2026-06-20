@@ -1,8 +1,10 @@
 name: Forbidden phrases guard
 
-# Runs the dist/ forbidden-phrase guard in CI and publishes the JSON report
-# as a build artifact. Does NOT touch existing local commands
-# (bun run build / bun run test:clean-build still work unchanged).
+# Runs the dist/ forbidden-phrase guard in CI, publishes the JSON report
+# as a build artifact, and uploads SARIF to GitHub Code Scanning so
+# violations show up under Security → Code scanning alerts.
+#
+# Does NOT touch local commands (bun run build / test:clean-build still work).
 
 on:
   push:
@@ -14,6 +16,9 @@ jobs:
   guard:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write # required for upload-sarif
     steps:
       - uses: actions/checkout@v4
 
@@ -25,11 +30,11 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build + run guard in CI mode
-        # --ci writes report to a stable path, fails the job on violations,
-        # and emits GitHub Actions annotations + a job summary.
+        # --ci writes JSON report + SARIF to stable paths, fails the job on
+        # violations, and emits GitHub Actions annotations + step summary.
         run: bun run guard:ci
 
-      - name: Upload forbidden-phrases report
+      - name: Upload forbidden-phrases JSON report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -37,3 +42,10 @@ jobs:
           path: dist/_forbidden-phrases-report.json
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: dist/_forbidden-phrases.sarif
+          category: forbidden-phrases-guard
