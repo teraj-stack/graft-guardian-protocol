@@ -653,7 +653,7 @@ function LADD() {
           />
           <div className="mt-auto grid grid-cols-2 gap-3 pt-8 md:grid-cols-4">
             {[
-              { src: mscLogo.url, alt: "MSC", w: 1920, h: 1920 },
+              { src: mscLogo.url, alt: "MySkinCode MedTech Platform", w: 1920, h: 1920 },
               { src: bujokLogo.url, alt: "Medical Lasers and STEM Cells Solutions", w: 1024, h: 1024 },
               { src: mabelLogo.url, alt: "Mabel Hair Clinic", w: 372, h: 370 },
               { src: graftgenLogo.url, alt: "Graftgen.com — Post-Transplant Care", w: 414, h: 430 },

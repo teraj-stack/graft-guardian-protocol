@@ -75,7 +75,7 @@ function productPlaceholder(product: any) {
     return { src: graftgenLogo.url, alt: "Graftgen.com" };
   }
   if (t.includes("ladd") || t.includes("plazm") || t.includes("cap") || t.includes("tul")) {
-    return { src: mscLogo.url, alt: "MSC" };
+    return { src: mscLogo.url, alt: "MySkinCode MedTech Platform" };
   }
   return { src: graftgenLogo.url, alt: "Graftgen.com" };
 }
