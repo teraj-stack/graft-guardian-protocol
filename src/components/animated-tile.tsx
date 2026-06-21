@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { decode } from "blurhash";
 
 /** Decode a BlurHash string into a small <canvas> placeholder. */
