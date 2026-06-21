@@ -53,8 +53,19 @@ export function AnimatedTile({
   const [loaded, setLoaded] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [posterReady, setPosterReady] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const shouldPlayRef = useRef(false);
+
+  // Delay spinner so it doesn't flash on fast connections
+  useEffect(() => {
+    if (videoReady) {
+      setShowSpinner(false);
+      return;
+    }
+    const t = setTimeout(() => setShowSpinner(true), 300);
+    return () => clearTimeout(t);
+  }, [videoReady]);
 
   useEffect(() => {
     const el = ref.current;
