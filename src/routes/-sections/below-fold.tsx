@@ -172,6 +172,8 @@ export function InteractiveSchedule() {
   >("idle");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [emailPreview, setEmailPreview] = useState<
     | { state: "idle" }
     | { state: "loading" }
