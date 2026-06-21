@@ -172,6 +172,8 @@ export function InteractiveSchedule() {
   >("idle");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [emailPreview, setEmailPreview] = useState<
     | { state: "idle" }
     | { state: "loading" }
@@ -366,9 +368,38 @@ export function InteractiveSchedule() {
 
   function smsHref(): string {
     const text = buildShortMessage(surgeryDate);
-    // iOS uses ?&body=, Android tolerates ?body=
-    return `sms:?&body=${encodeURIComponent(text)}`;
+    const v = validatePhone(phone);
+    const num = v.ok ? v.value : "";
+    // iOS uses ?&body=, Android tolerates ?body=. Number is optional.
+    return `sms:${num}?&body=${encodeURIComponent(text)}`;
   }
+
+  // E.164: leading +, country code 1–9, then up to 14 digits. Total 8–15 digits.
+  function validatePhone(raw: string): { ok: true; value: string } | { ok: false; message: string } {
+    const value = raw.replace(/[\s\-().]/g, "").trim();
+    if (!value) return { ok: false, message: "Podaj numer telefonu w formacie międzynarodowym, np. +48600100200." };
+    if (!value.startsWith("+")) return { ok: false, message: "Numer musi zaczynać się od „+" + "” i kodu kraju, np. +48." };
+    const digits = value.slice(1);
+    if (!/^\d+$/.test(digits)) return { ok: false, message: "Numer może zawierać tylko cyfry (po znaku +)." };
+    if (digits.length < 8 || digits.length > 15) {
+      return { ok: false, message: "Numer powinien mieć 8–15 cyfr łącznie z kodem kraju." };
+    }
+    if (digits.startsWith("0")) {
+      return { ok: false, message: "Po + nie wpisuj zera wiodącego — od razu kod kraju (48, 49, 44…)." };
+    }
+    return { ok: true, value };
+  }
+
+  function onPhoneBlur() {
+    if (!phone.trim()) {
+      setPhoneError(null);
+      return;
+    }
+    const v = validatePhone(phone);
+    setPhoneError(v.ok ? null : v.message);
+  }
+
+
 
 
   const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
@@ -614,7 +645,57 @@ export function InteractiveSchedule() {
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Wyślij jako wiadomość na telefon
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                maxLength={20}
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  if (phoneError) setPhoneError(null);
+                }}
+                onBlur={onPhoneBlur}
+                placeholder="+48 600 100 200"
+                aria-invalid={phoneError ? true : undefined}
+                aria-describedby={phoneError ? "schedule-phone-error" : "schedule-phone-hint"}
+                className={
+                  "flex-1 border bg-background px-3 py-2 text-sm focus:outline-none " +
+                  (phoneError
+                    ? "border-destructive focus:border-destructive"
+                    : "border-border focus:border-accent")
+                }
+              />
+              <a
+                href={smsHref()}
+                onClick={(e) => {
+                  if (phone.trim()) {
+                    const v = validatePhone(phone);
+                    if (!v.ok) {
+                      e.preventDefault();
+                      setPhoneError(v.message);
+                    }
+                  }
+                }}
+                className="inline-flex items-center justify-center border border-accent bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-accent transition hover:bg-accent/20"
+              >
+                Wyślij SMS
+              </a>
+            </div>
+            {phoneError ? (
+              <p id="schedule-phone-error" role="alert" className="mt-2 text-[11px] text-destructive">
+                {phoneError}
+              </p>
+            ) : (
+              <p id="schedule-phone-hint" className="mt-2 text-[11px] text-muted-foreground">
+                Format międzynarodowy E.164: znak <span className="font-mono">+</span>, kod kraju
+                i numer bez spacji (np. <span className="font-mono">+48600100200</span>). Pole opcjonalne —
+                bez numeru SMS otworzy się z pustym polem odbiorcy.
+              </p>
+            )}
+
+            <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={shareToPhone}
@@ -635,12 +716,6 @@ export function InteractiveSchedule() {
                 className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
               >
                 WhatsApp
-              </a>
-              <a
-                href={smsHref()}
-                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
-              >
-                SMS
               </a>
             </div>
             <p className="mt-2 text-[11px] text-muted-foreground">
