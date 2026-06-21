@@ -174,6 +174,19 @@ export function InteractiveSchedule() {
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [showSmsPreview, setShowSmsPreview] = useState(false);
+  const smsText = useMemo(() => buildShortMessage(surgeryDate), [surgeryDate]);
+  const smsStats = useMemo(() => {
+    // GSM-7 default alphabet (rough): A–Z a–z 0–9 + basic punctuation.
+    // Polish diacritics (ą ę ł ś ć ń ó ź ż) force UCS-2 encoding.
+    const gsm7 = /^[A-Za-z0-9 \r\n@£$¥èéùìòÇØøÅå_ÆæßÉ!"#¤%&'()*+,\-./:;<=>?¡ÄÖÑÜ§¿äöñüà^{}\\[~\]|€]*$/;
+    const isGsm = gsm7.test(smsText);
+    const length = [...smsText].length;
+    const single = isGsm ? 160 : 70;
+    const multi = isGsm ? 153 : 67;
+    const segments = length === 0 ? 0 : length <= single ? 1 : Math.ceil(length / multi);
+    return { length, segments, encoding: isGsm ? "GSM-7" : "UCS-2 (Unicode)", single, multi };
+  }, [smsText]);
   const [emailPreview, setEmailPreview] = useState<
     | { state: "idle" }
     | { state: "loading" }
