@@ -645,7 +645,57 @@ export function InteractiveSchedule() {
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Wyślij jako wiadomość na telefon
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                maxLength={20}
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  if (phoneError) setPhoneError(null);
+                }}
+                onBlur={onPhoneBlur}
+                placeholder="+48 600 100 200"
+                aria-invalid={phoneError ? true : undefined}
+                aria-describedby={phoneError ? "schedule-phone-error" : "schedule-phone-hint"}
+                className={
+                  "flex-1 border bg-background px-3 py-2 text-sm focus:outline-none " +
+                  (phoneError
+                    ? "border-destructive focus:border-destructive"
+                    : "border-border focus:border-accent")
+                }
+              />
+              <a
+                href={smsHref()}
+                onClick={(e) => {
+                  if (phone.trim()) {
+                    const v = validatePhone(phone);
+                    if (!v.ok) {
+                      e.preventDefault();
+                      setPhoneError(v.message);
+                    }
+                  }
+                }}
+                className="inline-flex items-center justify-center border border-accent bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-accent transition hover:bg-accent/20"
+              >
+                Wyślij SMS
+              </a>
+            </div>
+            {phoneError ? (
+              <p id="schedule-phone-error" role="alert" className="mt-2 text-[11px] text-destructive">
+                {phoneError}
+              </p>
+            ) : (
+              <p id="schedule-phone-hint" className="mt-2 text-[11px] text-muted-foreground">
+                Format międzynarodowy E.164: znak <span className="font-mono">+</span>, kod kraju
+                i numer bez spacji (np. <span className="font-mono">+48600100200</span>). Pole opcjonalne —
+                bez numeru SMS otworzy się z pustym polem odbiorcy.
+              </p>
+            )}
+
+            <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={shareToPhone}
@@ -666,12 +716,6 @@ export function InteractiveSchedule() {
                 className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
               >
                 WhatsApp
-              </a>
-              <a
-                href={smsHref()}
-                className="inline-flex items-center border border-border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-foreground transition hover:border-accent hover:text-accent"
-              >
-                SMS
               </a>
             </div>
             <p className="mt-2 text-[11px] text-muted-foreground">
