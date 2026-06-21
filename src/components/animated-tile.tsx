@@ -62,7 +62,13 @@ export function AnimatedTile({
         for (const e of entries) {
           if (e.isIntersecting) {
             setLoaded(true);
-            if (!reduce) el.play().catch(() => {});
+            if (!reduce) {
+              // Wait a tick so React inserts <source> children before load/play
+              requestAnimationFrame(() => {
+                try { el.load(); } catch {}
+                el.play().catch(() => {});
+              });
+            }
           } else {
             el.pause();
           }
