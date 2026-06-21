@@ -147,6 +147,13 @@ export function AnimatedTile({
           </>
         )}
       </video>
+      {/* Loading state — visible while video buffers on slow connections */}
+      {showSpinner && !videoReady && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/40 text-white transition-opacity duration-300">
+          <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
+          <span className="text-sm font-medium tracking-wide">Przygotowanie animacji…</span>
+        </div>
+      )}
     </div>
   );
 }
