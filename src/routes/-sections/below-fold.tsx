@@ -368,9 +368,38 @@ export function InteractiveSchedule() {
 
   function smsHref(): string {
     const text = buildShortMessage(surgeryDate);
-    // iOS uses ?&body=, Android tolerates ?body=
-    return `sms:?&body=${encodeURIComponent(text)}`;
+    const v = validatePhone(phone);
+    const num = v.ok ? v.value : "";
+    // iOS uses ?&body=, Android tolerates ?body=. Number is optional.
+    return `sms:${num}?&body=${encodeURIComponent(text)}`;
   }
+
+  // E.164: leading +, country code 1–9, then up to 14 digits. Total 8–15 digits.
+  function validatePhone(raw: string): { ok: true; value: string } | { ok: false; message: string } {
+    const value = raw.replace(/[\s\-().]/g, "").trim();
+    if (!value) return { ok: false, message: "Podaj numer telefonu w formacie międzynarodowym, np. +48600100200." };
+    if (!value.startsWith("+")) return { ok: false, message: "Numer musi zaczynać się od „+" + "” i kodu kraju, np. +48." };
+    const digits = value.slice(1);
+    if (!/^\d+$/.test(digits)) return { ok: false, message: "Numer może zawierać tylko cyfry (po znaku +)." };
+    if (digits.length < 8 || digits.length > 15) {
+      return { ok: false, message: "Numer powinien mieć 8–15 cyfr łącznie z kodem kraju." };
+    }
+    if (digits.startsWith("0")) {
+      return { ok: false, message: "Po + nie wpisuj zera wiodącego — od razu kod kraju (48, 49, 44…)." };
+    }
+    return { ok: true, value };
+  }
+
+  function onPhoneBlur() {
+    if (!phone.trim()) {
+      setPhoneError(null);
+      return;
+    }
+    const v = validatePhone(phone);
+    setPhoneError(v.ok ? null : v.message);
+  }
+
+
 
 
   const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
