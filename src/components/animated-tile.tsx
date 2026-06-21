@@ -53,6 +53,8 @@ export function AnimatedTile({
   const [videoReady, setVideoReady] = useState(false);
   const [posterReady, setPosterReady] = useState(false);
 
+  const shouldPlayRef = useRef(false);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -61,9 +63,14 @@ export function AnimatedTile({
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
+            shouldPlayRef.current = !reduce;
             setLoaded(true);
-            if (!reduce) el.play().catch(() => {});
+            // If sources are already in the DOM (subsequent intersections), play now.
+            if (!reduce && el.querySelector("source")) {
+              el.play().catch(() => {});
+            }
           } else {
+            shouldPlayRef.current = false;
             el.pause();
           }
         }
@@ -73,6 +80,18 @@ export function AnimatedTile({
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  // First time sources mount into the DOM, run resource selection then play.
+  useEffect(() => {
+    if (!loaded) return;
+    const el = ref.current;
+    if (!el) return;
+    try { el.load(); } catch {}
+    if (shouldPlayRef.current) {
+      el.play().catch(() => {});
+    }
+  }, [loaded]);
+
 
   return (
     <div
