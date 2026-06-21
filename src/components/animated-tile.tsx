@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { decode } from "blurhash";
 
 /** Decode a BlurHash string into a small <canvas> placeholder. */
@@ -52,8 +53,19 @@ export function AnimatedTile({
   const [loaded, setLoaded] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [posterReady, setPosterReady] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const shouldPlayRef = useRef(false);
+
+  // Delay spinner so it doesn't flash on fast connections
+  useEffect(() => {
+    if (videoReady) {
+      setShowSpinner(false);
+      return;
+    }
+    const t = setTimeout(() => setShowSpinner(true), 300);
+    return () => clearTimeout(t);
+  }, [videoReady]);
 
   useEffect(() => {
     const el = ref.current;
@@ -135,6 +147,13 @@ export function AnimatedTile({
           </>
         )}
       </video>
+      {/* Loading state — visible while video buffers on slow connections */}
+      {showSpinner && !videoReady && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/40 text-white transition-opacity duration-300">
+          <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
+          <span className="text-sm font-medium tracking-wide">Przygotowanie animacji…</span>
+        </div>
+      )}
     </div>
   );
 }
