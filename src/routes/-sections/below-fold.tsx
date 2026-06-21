@@ -708,6 +708,44 @@ export function InteractiveSchedule() {
               </p>
             )}
 
+            <div className="mt-3 rounded border border-border/60 bg-background/40 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
+                <span>
+                  Długość wiadomości:{" "}
+                  <strong className="text-foreground">{smsStats.length}</strong> znaków •{" "}
+                  <strong className="text-foreground">{smsStats.segments}</strong>{" "}
+                  {smsStats.segments === 1 ? "segment SMS" : "segmenty SMS"} •{" "}
+                  kodowanie {smsStats.encoding} (limit{" "}
+                  {smsStats.segments <= 1 ? smsStats.single : smsStats.multi} zn./segment)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowSmsPreview((v) => !v)}
+                  className="text-[11px] uppercase tracking-[0.18em] text-accent hover:underline"
+                  aria-expanded={showSmsPreview}
+                  aria-controls="sms-preview-text"
+                >
+                  {showSmsPreview ? "Ukryj podgląd" : "Podgląd treści SMS"}
+                </button>
+              </div>
+              {smsStats.segments > 1 ? (
+                <p className="mt-1 text-[11px] text-amber-500">
+                  Wiadomość przekracza limit pojedynczego SMS — zostanie wysłana jako{" "}
+                  {smsStats.segments} połączone segmenty (operator może naliczyć je osobno).
+                </p>
+              ) : null}
+              {showSmsPreview ? (
+                <pre
+                  id="sms-preview-text"
+                  className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words rounded bg-background/70 p-2 text-[11px] leading-relaxed text-foreground"
+                >
+                  {smsText}
+                </pre>
+              ) : null}
+            </div>
+
+
+
             <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
