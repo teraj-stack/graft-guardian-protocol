@@ -551,13 +551,27 @@ export function InteractiveSchedule() {
                   {statusMessage}
                 </p>
                 {emailStatus === "error" && (
-                  <button
-                    type="button"
-                    onClick={sendEmail}
-                    className="text-[11px] uppercase tracking-[0.18em] text-accent underline-offset-4 transition hover:underline"
-                  >
-                    Wyślij ponownie
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onClick={sendEmail}
+                      className="text-[11px] uppercase tracking-[0.18em] text-accent underline-offset-4 transition hover:underline"
+                    >
+                      Wyślij ponownie
+                    </button>
+                    <a
+                      href={smsHref()}
+                      onClick={() => {
+                        setStatusMessage(
+                          "Otworzyliśmy aplikację SMS z gotową treścią harmonogramu. Wyślij ją do siebie."
+                        );
+                        setEmailStatus("idle");
+                      }}
+                      className="text-[11px] uppercase tracking-[0.18em] text-accent underline-offset-4 transition hover:underline"
+                    >
+                      Wyślij przez SMS zamiast e-maila
+                    </a>
+                  </>
                 )}
               </div>
             )}
