@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState, type ReactNode, type FormEvent } from "react";
+import { useMemo, useState, type ReactNode, type FormEvent } from "react";
 import { PRICING } from "@/lib/pricing-data";
 import { FAQ, STAGES, TOPICS, type Stage, type Topic } from "@/lib/faq-data";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
@@ -174,6 +174,19 @@ export function InteractiveSchedule() {
   const [shareStatus, setShareStatus] = useState<"idle" | "shared" | "copied" | "err">("idle");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [showSmsPreview, setShowSmsPreview] = useState(false);
+  const smsText = useMemo(() => buildShortMessage(surgeryDate), [surgeryDate]);
+  const smsStats = useMemo(() => {
+    // GSM-7 default alphabet (rough): A–Z a–z 0–9 + basic punctuation.
+    // Polish diacritics (ą ę ł ś ć ń ó ź ż) force UCS-2 encoding.
+    const gsm7 = /^[A-Za-z0-9 \r\n@£$¥èéùìòÇØøÅå_ÆæßÉ!"#¤%&'()*+,\-./:;<=>?¡ÄÖÑÜ§¿äöñüà^{}\\[~\]|€]*$/;
+    const isGsm = gsm7.test(smsText);
+    const length = [...smsText].length;
+    const single = isGsm ? 160 : 70;
+    const multi = isGsm ? 153 : 67;
+    const segments = length === 0 ? 0 : length <= single ? 1 : Math.ceil(length / multi);
+    return { length, segments, encoding: isGsm ? "GSM-7" : "UCS-2 (Unicode)", single, multi };
+  }, [smsText]);
   const [emailPreview, setEmailPreview] = useState<
     | { state: "idle" }
     | { state: "loading" }
@@ -694,6 +707,44 @@ export function InteractiveSchedule() {
                 bez numeru SMS otworzy się z pustym polem odbiorcy.
               </p>
             )}
+
+            <div className="mt-3 rounded border border-border/60 bg-background/40 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground">
+                <span>
+                  Długość wiadomości:{" "}
+                  <strong className="text-foreground">{smsStats.length}</strong> znaków •{" "}
+                  <strong className="text-foreground">{smsStats.segments}</strong>{" "}
+                  {smsStats.segments === 1 ? "segment SMS" : "segmenty SMS"} •{" "}
+                  kodowanie {smsStats.encoding} (limit{" "}
+                  {smsStats.segments <= 1 ? smsStats.single : smsStats.multi} zn./segment)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowSmsPreview((v) => !v)}
+                  className="text-[11px] uppercase tracking-[0.18em] text-accent hover:underline"
+                  aria-expanded={showSmsPreview}
+                  aria-controls="sms-preview-text"
+                >
+                  {showSmsPreview ? "Ukryj podgląd" : "Podgląd treści SMS"}
+                </button>
+              </div>
+              {smsStats.segments > 1 ? (
+                <p className="mt-1 text-[11px] text-amber-500">
+                  Wiadomość przekracza limit pojedynczego SMS — zostanie wysłana jako{" "}
+                  {smsStats.segments} połączone segmenty (operator może naliczyć je osobno).
+                </p>
+              ) : null}
+              {showSmsPreview ? (
+                <pre
+                  id="sms-preview-text"
+                  className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words rounded bg-background/70 p-2 text-[11px] leading-relaxed text-foreground"
+                >
+                  {smsText}
+                </pre>
+              ) : null}
+            </div>
+
+
 
             <div className="mt-3 flex flex-wrap gap-2">
               <button
