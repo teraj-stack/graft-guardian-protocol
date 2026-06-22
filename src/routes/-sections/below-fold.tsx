@@ -869,8 +869,7 @@ export function InteractiveSchedule() {
       })}
 
       <p className="mt-8 text-xs text-muted-foreground">
-        Harmonogram ma charakter edukacyjny i nie zastępuje indywidualnych zaleceń lekarza
-        prowadzącego. W razie wątpliwości — skontaktuj się z koordynatorem.
+        {t("schedule.edu")}
       </p>
 
       {showEmailPreview && (
