@@ -267,9 +267,8 @@ function PrivacyPage() {
         </p>
       </Section>
 
-      <footer className="mt-16 pt-8 border-t border-border/40 text-sm text-muted-foreground">
-        <Link to="/" className="text-primary hover:underline">← Powrót do strony głównej</Link>
-      </footer>
-    </main>
+      </main>
+      <SiteFooter />
+    </div>
   );
 }
