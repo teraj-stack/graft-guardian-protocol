@@ -195,7 +195,7 @@ function Nav() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
+        <nav className="hidden items-center gap-7 text-sm text-muted-foreground lg:flex">
           {navLinks.map((l) =>
             "to" in l ? (
               <Link key={l.to} to={l.to} className="hover:text-foreground">{l.label}</Link>
@@ -210,13 +210,13 @@ function Nav() {
           <CartDrawer />
           <a
             href="#konsultacja"
-            className="hidden md:inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
+            className="hidden lg:inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
           >
             {t("nav.bookConsult")}
           </a>
           <button
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-border/60 text-foreground md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-border/60 text-foreground lg:hidden"
             aria-label={open ? t("nav.closeMenu") : t("nav.openMenu")}
             aria-expanded={open}
           >
@@ -239,7 +239,7 @@ function Nav() {
       </div>
 
       {open && (
-        <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
+        <div className="border-t border-border/60 bg-background px-6 py-4 lg:hidden">
           <div className="mb-4 flex justify-center">
             <img
               src={graftgenLogo.url}
