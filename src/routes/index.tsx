@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { lazy, useEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SiteFooter as Footer } from "@/components/SiteFooter";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import bujokLogo from "@/assets/bujok-medical.jpg.asset.json";
 import mabelLogo from "@/assets/mabel-hair.png.asset.json";
