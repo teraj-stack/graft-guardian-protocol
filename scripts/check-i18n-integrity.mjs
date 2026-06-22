@@ -142,9 +142,19 @@ const STOPWORDS = {
   ],
 };
 
+// Require >=2 distinct stopwords AND value length >30 chars so that
+// untranslatable brand/product names ("Patient Journey", "Medical Lasers …")
+// do not cause false positives.
 const containsStopword = (text, lang) => {
-  const t = ` ${String(text).toLowerCase()} `;
-  return STOPWORDS[lang].some((w) => t.includes(w.toLowerCase()));
+  const s = String(text);
+  if (s.length < 30) return false;
+  const t = ` ${s.toLowerCase()} `;
+  let hits = 0;
+  for (const w of STOPWORDS[lang]) {
+    if (t.includes(w.toLowerCase())) hits++;
+    if (hits >= 2) return true;
+  }
+  return false;
 };
 
 const scanLeaks = (lng) => {
