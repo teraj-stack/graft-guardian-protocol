@@ -804,7 +804,7 @@ export function InteractiveSchedule() {
                 dayDone ? "bg-accent/10" : dayPartial ? "bg-accent/5" : "",
               ].join(" ")}
             >
-              <span className="text-[10px] uppercase tracking-widest opacity-70">Dzień</span>
+              <span className="text-[10px] uppercase tracking-widest opacity-70">{t("schedule.dayLabel")}</span>
               <span className="font-display text-lg leading-none">{d.day}</span>
               {dayDone && <span className="mt-0.5 text-[10px]">✓</span>}
             </button>
@@ -826,7 +826,7 @@ export function InteractiveSchedule() {
               <div className="mt-2 font-display text-3xl">{d.phase}</div>
               <p className="mt-3 text-sm text-muted-foreground">{d.focus}</p>
               <div className="mt-4 text-xs text-muted-foreground">
-                {dayDoneCount}/{d.tasks.length} kroków ukończonych
+                {dayDoneCount}/{d.tasks.length} {t("schedule.stepsDone", { defaultValue: "kroków ukończonych" })}
               </div>
             </div>
             <ul className="space-y-2 md:col-span-8">
@@ -854,7 +854,7 @@ export function InteractiveSchedule() {
                       <span className="flex-1">
                         {critical && !checked && (
                           <span className="mr-2 inline-block border border-red-500/60 px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-red-500">
-                            Krytyczne
+                            {t("schedule.criticalBadge")}
                           </span>
                         )}
                         {t.label}
