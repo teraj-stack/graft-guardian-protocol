@@ -109,7 +109,7 @@ export function AnimatedTile({
             setLoaded(true);
             // If sources are already in the DOM (subsequent intersections), play now.
             if (el.querySelector("source")) {
-              el.play().catch(() => setFallback(true));
+              el.play().catch(handlePlayError);
             }
           } else {
             shouldPlayRef.current = false;
