@@ -536,7 +536,9 @@ function CreatorReviews() {
 
 function Why() {
   const { t } = useTranslation();
-  const paragraphs = t("clinical.why.paragraphs", { returnObjects: true }) as string[];
+  const raw = t("clinical.why.paragraphs", { returnObjects: true, defaultValue: [] });
+  const paragraphs = (Array.isArray(raw) ? raw : []) as string[];
+
   return (
     <Section id="dlaczego" eyebrow={t("clinical.why.eyebrow")}>
       <SectionHeader title={t("clinical.why.title")} />
