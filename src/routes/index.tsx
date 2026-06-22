@@ -180,18 +180,19 @@ function Index() {
 
 function Nav() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const navLinks = [
-    { href: "#ex-vivo", label: "Ex Vivo" },
-    { href: "#pbm", label: "PBM" },
-    { href: "#hbot", label: "HBOT" },
-    { href: "#ladd", label: "LADD" },
-    { href: "#protokol", label: "14 dni" },
-    { to: "/sklep", label: "Sklep" },
-    { to: "/panel", label: "Panel pacjenta" },
-    { to: "/przypomnienia", label: "Przypomnienia" },
-    { href: "#faq", label: "FAQ" },
-    { href: "#kontakt", label: "Kontakt" },
-  ] as const;
+    { href: "#ex-vivo", label: t("nav.exVivo") },
+    { href: "#pbm", label: t("nav.pbm") },
+    { href: "#hbot", label: t("nav.hbot") },
+    { href: "#ladd", label: t("nav.ladd") },
+    { href: "#protokol", label: t("nav.protocol14") },
+    { to: "/sklep" as const, label: t("nav.shop") },
+    { to: "/panel" as const, label: t("nav.panel") },
+    { to: "/przypomnienia" as const, label: t("nav.reminders") },
+    { href: "#faq", label: t("nav.faq") },
+    { href: "#kontakt", label: t("nav.contact") },
+  ];
 
   return (
     <header className="relative z-20 border-b border-border/60">
@@ -224,17 +225,18 @@ function Nav() {
         </nav>
 
         <div className="flex items-center gap-3 self-center">
+          <LanguageSwitcher />
           <CartDrawer />
           <a
             href="#konsultacja"
             className="hidden md:inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
           >
-            Umów konsultację
+            {t("nav.bookConsult")}
           </a>
           <button
             onClick={() => setOpen((v) => !v)}
             className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-border/60 text-foreground md:hidden"
-            aria-label={open ? "Zamknij menu" : "Otwórz menu"}
+            aria-label={open ? t("nav.closeMenu") : t("nav.openMenu")}
             aria-expanded={open}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -280,7 +282,7 @@ function Nav() {
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center rounded-sm bg-foreground px-4 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
-              Umów konsultację
+              {t("nav.bookConsult")}
             </a>
           </nav>
         </div>
