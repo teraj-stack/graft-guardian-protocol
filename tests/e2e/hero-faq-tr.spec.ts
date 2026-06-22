@@ -20,7 +20,10 @@ test.describe("HeroFAQ — Turkish locale", () => {
     const switcher = page
       .getByRole("group", { name: /dil|language|język/i })
       .first();
-    await switcher.getByRole("button", { name: /^tr$/i }).first().click();
+    await expect(switcher).toBeVisible();
+    const trButton = switcher.getByRole("button", { name: /^tr$/i }).first();
+    await trButton.click();
+    await expect(trButton).toHaveAttribute("aria-pressed", "true");
 
     // Reload to ensure the locale persists across navigations.
     await page.reload();
