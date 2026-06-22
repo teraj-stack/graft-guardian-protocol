@@ -536,7 +536,9 @@ function CreatorReviews() {
 
 function Why() {
   const { t } = useTranslation();
-  const paragraphs = t("clinical.why.paragraphs", { returnObjects: true }) as string[];
+  const raw = t("clinical.why.paragraphs", { returnObjects: true, defaultValue: [] });
+  const paragraphs = (Array.isArray(raw) ? raw : []) as string[];
+
   return (
     <Section id="dlaczego" eyebrow={t("clinical.why.eyebrow")}>
       <SectionHeader title={t("clinical.why.title")} />
@@ -577,7 +579,9 @@ function ExVivo() {
 
 function PBM() {
   const { t } = useTranslation();
-  const bullets = t("clinical.pbm.card1.bullets", { returnObjects: true }) as string[];
+  const bRaw = t("clinical.pbm.card1.bullets", { returnObjects: true, defaultValue: [] });
+  const bullets = (Array.isArray(bRaw) ? bRaw : []) as string[];
+
   return (
     <Section id="pbm" eyebrow={t("clinical.pbm.eyebrow")}>
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
@@ -604,7 +608,9 @@ function PBM() {
 
 function HBOT() {
   const { t } = useTranslation();
-  const bullets = t("clinical.hbot.card1.bullets", { returnObjects: true }) as string[];
+  const bRaw = t("clinical.hbot.card1.bullets", { returnObjects: true, defaultValue: [] });
+  const bullets = (Array.isArray(bRaw) ? bRaw : []) as string[];
+
   return (
     <Section id="hbot" eyebrow={t("clinical.hbot.eyebrow")}>
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
@@ -635,8 +641,11 @@ function HBOT() {
 function LADD() {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const header = t("clinical.ladd.table.header", { returnObjects: true }) as string[];
-  const rows = t("clinical.ladd.table.rows", { returnObjects: true }) as string[][];
+  const hRaw = t("clinical.ladd.table.header", { returnObjects: true, defaultValue: [] });
+  const header = (Array.isArray(hRaw) ? hRaw : []) as string[];
+  const rRaw = t("clinical.ladd.table.rows", { returnObjects: true, defaultValue: [] });
+  const rows = (Array.isArray(rRaw) ? rRaw : []) as string[][];
+
 
   useEffect(() => {
     const video = videoRef.current;

@@ -458,5 +458,113 @@
         "p2": "HBOT (1,5–3,0 ATA) uzupełnia mechanizm — dostarcza tlen rozpuszczony w osoczu do tkanek o upośledzonej perfuzji, dopóki nowa sieć naczyń włosowatych nie zostanie w pełni odtworzona."
       }
     }
+  },
+  "pricing": {
+    "eyebrow": "11 — SKLEP",
+    "title": "Pełny cennik i zakup pakietów — w sklepie.",
+    "leadHtml": "Cennik zabiegów wspierających przeniesiony do <strong>sklepu Graftgen.com.</strong> Pakiety 1 / 5 / 10 / 20 sesji z natychmiastową rezerwacją, bezpieczna płatność online, faktura VAT.",
+    "from": "od",
+    "perSession": "/sesja",
+    "pack20": "pakiet 20",
+    "viewInShop": "Zobacz w sklepie →",
+    "footerNote": "Pełne opisy pakietów, kalkulator czasu terapii, FAQ rozliczeniowe oraz koszyk z płatnością online znajdziesz na stronie sklepu.",
+    "goToShop": "Przejdź do sklepu →"
+  },
+  "cta": {
+    "eyebrow": "Konsultacja kwalifikacyjna",
+    "title": "Sprawdźmy, które elementy protokołu mają sens w Twoim przypadku.",
+    "lead": "Konsultacja obejmuje trichoskopię, ocenę strefy dawczej, przegląd przeciwwskazań do HBOT i farmakoterapii oraz indywidualny plan na 90 dni. Czas: 45–60 minut.",
+    "book": "Umów konsultację →"
+  },
+  "contact": {
+    "eyebrow": "14 — KONTAKT",
+    "title": "Napisz do nas",
+    "lead": "Masz pytanie o protokół, kwalifikację do HBOT lub LADD, albo chcesz zaprosić nas do współpracy? Wyślij wiadomość — odpowiadamy w ciągu 2 dni roboczych.",
+    "fields": {
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "topic": "Temat",
+      "topicPlaceholder": "Wybierz temat…",
+      "topicConsultation": "Konsultacja",
+      "topicProcedure": "Zabieg",
+      "topicLadd": "LADD / PRP + minoksydyl",
+      "topicOther": "Inne",
+      "message": "Wiadomość",
+      "websiteHoneypot": "Strona WWW"
+    },
+    "consentHtml": "Wyrażam zgodę na przetwarzanie moich danych w celu odpowiedzi na zapytanie zgodnie z <priv>Polityką prywatności</priv>.",
+    "submit": "Wyślij wiadomość",
+    "submitting": "Wysyłanie…",
+    "errCheckFields": "Sprawdź zaznaczone pola.",
+    "errSubmit": "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
+    "errNetwork": "Błąd połączenia. Spróbuj ponownie.",
+    "successKicker": "Wiadomość wysłana",
+    "successTitle": "Dziękujemy — odezwiemy się.",
+    "successDescHtml": "Potwierdzenie przyjęcia: <time>{{time}}</time>. Sprawdź skrzynkę e-mail (również SPAM) w ciągu 2 dni roboczych.",
+    "sendAnother": "Wyślij kolejną wiadomość",
+    "smsLabel": "SMS",
+    "emailLabel": "E-mail",
+    "statusSent": "wysłano",
+    "statusSkipped": "pominięto",
+    "statusError": "błąd",
+    "attemptsOne": "{{count}} próba",
+    "attemptsFew": "{{count}} próby",
+    "attemptsMany": "{{count}} prób",
+    "direct": "Kontakt bezpośredni",
+    "companyName": "Medical Lasers and STEM Cells Solutions Sp. z o.o.",
+    "addressLine1": "ul. Kard. Bolesława Kominka 44",
+    "addressLine2": "44-217 Rybnik",
+    "labelEmail": "E-mail",
+    "labelPhone": "Telefon",
+    "labelWhatsApp": "WhatsApp",
+    "labelResponseTime": "Czas odpowiedzi",
+    "whatsAppCta": "Napisz na WhatsApp",
+    "responseTime": "do 2 dni roboczych",
+    "locale": "pl-PL"
+  },
+  "risks": {
+    "eyebrow": "10 — RYZYKO I PRZECIWWSKAZANIA",
+    "title": "Co może się zdarzyć i kiedy należy natychmiast przerwać protokół.",
+    "lead": "Każdy zabieg transplantacji włosów DHI wiąże się z naturalnymi, przewidywalnymi reakcjami organizmu. Poniżej lista typowych działań niepożądanych, przeciwwskazań oraz sygnałów alarmowych, przy których konieczny jest kontakt z kliniką.",
+    "card1": {
+      "title": "Działania niepożądane",
+      "badge": "Częste / rzadkie",
+      "items": [
+        "Obrzęk twarzy i czoła, szczególnie między 2. a 4. dobą po zabiegu.",
+        "Delikatne punktowe krwawienie z mikroran — typowe do 24–48 h.",
+        "Ból, ucisk i uczucie napięcia skóry głowy w strefie dawczej i biorczej.",
+        "„Shock loss” — przejściowa utrata natywnych włosów wokół nowych graftów.",
+        "Zaburzenia czucia (drętwienie, mrowienie) — zazwyczaj ustępują w ciągu 3–6 miesięcy.",
+        "Świąd i łuszczenie skóry głowy podczas gojenia.",
+        "Zakażenie — rzadkie (<1%) przy przestrzeganiu protokołu antyseptycznego."
+      ]
+    },
+    "card2": {
+      "title": "Przeciwwskazania",
+      "badge": "Kwalifikacja",
+      "items": [
+        "Aktywne infekcje bakteryjne, wirusowe lub grzybicze skóry głowy.",
+        "Zaburzenia krzepliwości krwi lub przyjmowanie leków przeciwzakrzepowych (doustnych).",
+        "Nieustabilizowana cukrzyca — znacząco utrudnia gojenie.",
+        "Aktywne palenie tytoniu — obniża przeżywalność graftów o 20–30%.",
+        "Ciąża i karmienie piersią (przy niektórych elementach farmakologicznych protokołu).",
+        "Padaczka lub historia drgawek — wymaga konsultacji przed HBOT.",
+        "Choroba pęcherzykowa płuc lub nieprawidłowa odpowiedź na ciśnienie — przeciwwskazanie do hiperbarii."
+      ]
+    },
+    "card3": {
+      "title": "Kontakt z kliniką — alarmy",
+      "badge": "Natychmiast",
+      "items": [
+        "Gorączka >38 °C po 2. dobie od zabiegu.",
+        "Silny, narastający ból po 3. dobie (zamiast ustępować).",
+        "Zaczerwienienie, obrzęk i ropna wydzielina z obszaru biorczego lub dawczego.",
+        "Otwarte ranki, częściowe wypadanie lub „wypychanie” się graftów.",
+        "Objawy alergiczne: pokrzywka, duszności, obrzęk twarzy.",
+        "Zasłabnięcie, silne zawroty głowy lub bóle w uszach po sesji HBOT.",
+        "Krwawienie, które nie ustępuje po 10 min ucisku gazikiem."
+      ],
+      "mech": "Nie czekaj z kontaktem „do rana”. W krytycznym oknie 48 h każda godzina opóźnienia może wpłynąć na przeżywalność graftów."
+    }
   }
 }

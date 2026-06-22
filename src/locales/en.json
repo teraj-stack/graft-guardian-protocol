@@ -458,5 +458,113 @@
         "p2": "HBOT (1.5–3.0 ATA) complements the mechanism — delivering plasma-dissolved oxygen to tissues with impaired perfusion until the new capillary network is fully restored."
       }
     }
+  },
+  "pricing": {
+    "eyebrow": "11 — SHOP",
+    "title": "Full pricing and package purchase — in the shop.",
+    "leadHtml": "Pricing for supportive treatments has moved to the <strong>Graftgen.com shop.</strong> Packages of 1 / 5 / 10 / 20 sessions with instant booking, secure online payment and VAT invoice.",
+    "from": "from",
+    "perSession": "/session",
+    "pack20": "20-pack",
+    "viewInShop": "View in shop →",
+    "footerNote": "Full package descriptions, therapy time calculator, billing FAQ and online checkout are available on the shop page.",
+    "goToShop": "Go to shop →"
+  },
+  "cta": {
+    "eyebrow": "Qualification consultation",
+    "title": "Let's check which elements of the protocol make sense in your case.",
+    "lead": "The consultation includes trichoscopy, donor area assessment, review of contraindications for HBOT and pharmacotherapy, and an individual 90-day plan. Duration: 45–60 minutes.",
+    "book": "Book consultation →"
+  },
+  "contact": {
+    "eyebrow": "14 — CONTACT",
+    "title": "Write to us",
+    "lead": "Have a question about the protocol, qualification for HBOT or LADD, or would you like to invite us to collaborate? Send us a message — we reply within 2 business days.",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "topic": "Topic",
+      "topicPlaceholder": "Select topic…",
+      "topicConsultation": "Consultation",
+      "topicProcedure": "Procedure",
+      "topicLadd": "LADD / PRP + minoxidil",
+      "topicOther": "Other",
+      "message": "Message",
+      "websiteHoneypot": "Website"
+    },
+    "consentHtml": "I consent to the processing of my data for the purpose of responding to my inquiry in accordance with the <priv>Privacy Policy</priv>.",
+    "submit": "Send message",
+    "submitting": "Sending…",
+    "errCheckFields": "Please check the highlighted fields.",
+    "errSubmit": "Could not send the message. Please try again.",
+    "errNetwork": "Connection error. Please try again.",
+    "successKicker": "Message sent",
+    "successTitle": "Thank you — we'll be in touch.",
+    "successDescHtml": "Receipt confirmation: <time>{{time}}</time>. Please check your inbox (and SPAM) within 2 business days.",
+    "sendAnother": "Send another message",
+    "smsLabel": "SMS",
+    "emailLabel": "Email",
+    "statusSent": "sent",
+    "statusSkipped": "skipped",
+    "statusError": "error",
+    "attemptsOne": "{{count}} attempt",
+    "attemptsFew": "{{count}} attempts",
+    "attemptsMany": "{{count}} attempts",
+    "direct": "Direct contact",
+    "companyName": "Medical Lasers and STEM Cells Solutions Sp. z o.o.",
+    "addressLine1": "ul. Kard. Bolesława Kominka 44",
+    "addressLine2": "44-217 Rybnik, Poland",
+    "labelEmail": "Email",
+    "labelPhone": "Phone",
+    "labelWhatsApp": "WhatsApp",
+    "labelResponseTime": "Response time",
+    "whatsAppCta": "Message on WhatsApp",
+    "responseTime": "within 2 business days",
+    "locale": "en-US"
+  },
+  "risks": {
+    "eyebrow": "10 — RISKS AND CONTRAINDICATIONS",
+    "title": "What can happen and when to stop the protocol immediately.",
+    "lead": "Every DHI hair transplant procedure involves natural, predictable bodily reactions. Below is a list of common side effects, contraindications and warning signs requiring immediate contact with the clinic.",
+    "card1": {
+      "title": "Side effects",
+      "badge": "Common / rare",
+      "items": [
+        "Facial and forehead swelling, especially between day 2 and day 4 after the procedure.",
+        "Mild pinpoint bleeding from micro-wounds — typical for 24–48 h.",
+        "Pain, pressure and tightness of the scalp in the donor and recipient areas.",
+        "\"Shock loss\" — temporary loss of native hairs around new grafts.",
+        "Sensory disturbances (numbness, tingling) — usually resolve within 3–6 months.",
+        "Itching and flaking of the scalp during healing.",
+        "Infection — rare (<1%) when the antiseptic protocol is followed."
+      ]
+    },
+    "card2": {
+      "title": "Contraindications",
+      "badge": "Qualification",
+      "items": [
+        "Active bacterial, viral or fungal infections of the scalp.",
+        "Clotting disorders or use of (oral) anticoagulants.",
+        "Unstable diabetes — significantly impairs healing.",
+        "Active tobacco smoking — reduces graft survival by 20–30%.",
+        "Pregnancy and breastfeeding (for certain pharmacological elements of the protocol).",
+        "Epilepsy or history of seizures — requires consultation before HBOT.",
+        "Bullous lung disease or abnormal pressure response — contraindication to hyperbaric therapy."
+      ]
+    },
+    "card3": {
+      "title": "Contact the clinic — alarms",
+      "badge": "Immediately",
+      "items": [
+        "Fever >38 °C after day 2 post-procedure.",
+        "Severe, increasing pain after day 3 (instead of subsiding).",
+        "Redness, swelling and purulent discharge from the recipient or donor area.",
+        "Open wounds, partial loss or \"extrusion\" of grafts.",
+        "Allergic symptoms: hives, shortness of breath, facial swelling.",
+        "Fainting, severe dizziness or ear pain after an HBOT session.",
+        "Bleeding that does not stop after 10 min of gauze pressure."
+      ],
+      "mech": "Do not wait until morning to make contact. In the critical 48 h window, every hour of delay can affect graft survival."
+    }
   }
 }
