@@ -96,9 +96,27 @@
     "contact": "İletişim"
   },
   "footer": {
+    "brand": "Nakil Sonrası Protokol",
+    "about": "DHI saç ekimi sonrası hastalar için eğitim materyali. İçerik bilgilendirme amaçlıdır ve bireysel tıbbi konsültasyonun yerini tutmaz. Tedavi kararları, tam anamnez ve muayeneye dayanarak hekim tarafından verilir.",
+    "sectionsTitle": "Bölümler",
+    "sections": {
+      "exVivo": "Ex Vivo Aşaması",
+      "pbm": "Fotobiyomodülasyon",
+      "hbot": "HBOT",
+      "ladd": "LADD",
+      "timeline": "14 günlük zaman çizelgesi"
+    },
+    "disclaimersTitle": "Yasal Uyarılar",
+    "disclaimers": [
+      "Tedavi sonucu için garanti verilmez",
+      "Oral minoksidil — endikasyon dışı (off-label)",
+      "HBOT — ticari endikasyon, geri ödenmez"
+    ],
+    "partnersTitle": "Proje katkıda bulunanlar",
+    "copyright": "© {{year}} Nakil Sonrası Protokol. Tüm hakları saklıdır.",
     "rights": "Tüm hakları saklıdır.",
-    "privacy": "Gizlilik politikası",
-    "cookies": "Çerez politikası"
+    "privacy": "Gizlilik Politikası ve KVKK",
+    "cookies": "Çerez Politikası"
   },
   "languageSwitcher": {
     "label": "Dil seçin"
