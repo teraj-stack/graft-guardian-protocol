@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "exVivo": "Ex Vivo",
+    "pbm": "PBM",
+    "hbot": "HBOT",
+    "ladd": "LADD",
+    "protocol14": "14 days",
+    "shop": "Shop",
+    "panel": "Patient panel",
+    "reminders": "Reminders",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "bookConsult": "Book a consultation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "common": {
+    "back": "Back",
+    "goHome": "Back to homepage",
+    "tryAgain": "Try again",
+    "loading": "Loading…",
+    "languageSwitcher": "Language"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has been moved."
+  },
+  "error": {
+    "title": "This page didn't load",
+    "description": "Something went wrong on our end. Try refreshing or head back home."
+  },
+  "hero": {
+    "kicker": "Clinical protocol · DHI · evidence-based",
+    "title": "Post-procedure protocol built on metabolic graft protection, photobiomodulation, <em>HBOT</em> and LADD.",
+    "lead": "The first 48 hours determine graft survival. Instead of saline and passive healing — an integrated plan combining transplantology-grade preservation solutions, 650/830 nm photobiomodulation, hyperbaric oxygen therapy at 1.5–3.0 ATA and laser-assisted drug delivery (LADD).",
+    "subLead": "48 hours = the critical window for graft survival. Full recovery is guided systematically across the first 14 days.",
+    "ctaBook": "Book a consultation",
+    "ctaTimeline": "See the 14-day timeline →",
+    "statsTitle": "Hard numbers",
+    "stat1k": "650 / 830 nm",
+    "stat1v": "PBM wavelengths applied immediately after the procedure",
+    "stat2k": "1.5–3.0 ATA",
+    "stat2v": "HBOT session pressure on day 0 and day 1",
+    "stat3k": "4 °C",
+    "stat3v": "target temperature for HypoThermosol + ATP-v solution",
+    "stat4k": "48–72 h",
+    "stat4v": "critical graft ischaemia window before revascularisation"
+  },
+  "heroFaq": {
+    "kicker": "Frequently asked questions",
+    "title": "What patients ask most often before starting the protocol"
+  },
+  "sections": {
+    "exVivo": "Ex Vivo — metabolic graft protection",
+    "pbm": "PBM — photobiomodulation at 650 / 830 nm",
+    "hbot": "HBOT — hyperbaric oxygen therapy",
+    "ladd": "LADD — laser-assisted drug delivery",
+    "microbiome": "Microbiome management",
+    "timeline": "Timeline — the 14-day protocol",
+    "schedule": "Your plan: Day 0–14",
+    "journey": "Patient Journey",
+    "evidence": "Evidence-Based Medicine",
+    "pricing": "Shop",
+    "faq": "Questions & answers",
+    "risks": "Risks and contraindications",
+    "ebook": "E-book: Patient Journey",
+    "cta": "Start the protocol",
+    "contact": "Contact"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy"
+  },
+  "languageSwitcher": {
+    "label": "Choose language"
+  }
+}
