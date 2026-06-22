@@ -977,57 +977,64 @@ export function Journey() {
 /* ---------- Day 0–3 Quick Guide ---------- */
 
 export function DayZeroToThree() {
+  const { t } = useTranslation();
+  const cards = [
+    { key: "card0", tone: "red" as const },
+    { key: "card1", tone: "red" as const },
+    { key: "card2", tone: undefined as undefined | "red" },
+  ];
+  const avoid = t("dayZeroToThree.avoid", { returnObjects: true, defaultValue: [] }) as {
+    type: "bad" | "good";
+    text: string;
+  }[];
+  const half = Math.ceil(avoid.length / 2);
+  const col1 = avoid.slice(0, half);
+  const col2 = avoid.slice(half);
   return (
-    <Section id="dzien-0-3" eyebrow="00 — TWÓJ PLAN: DZIEŃ 0–3">
+    <Section id="dzien-0-3" eyebrow={t("schedule.eyebrow")}>
       <SectionHeader
-        title="Pierwsze 72 h decydują o przeżyciu przeszczepionych cebulek"
-        lead="Instrukcje wzięte bezpośrednio z e-booka Patient Journey. Wykonuj krok po kroku — nie improwizuj."
+        title={t("dayZeroToThree.title")}
+        lead={t("dayZeroToThree.lead")}
       />
       <div className="grid gap-6 md:grid-cols-3">
-        <Card title="Doba zero" badge="Bezpośrednio po zabiegu" badgeTone="red">
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-accent">✓</span> PBM 650/830 nm, 4–6 J/cm², bezpośrednio po zabiegu</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–3,0 ATA w ciągu 6 h</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spanie w pozycji pół-siedzącej (30–45°)</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Lód na czoło (nie na strefę biorczą)</li>
-          </ul>
-          <Mech>Zero dotykania, drapania, mycia strefy biorczej.</Mech>
-        </Card>
-        <Card title="Doba 1–2" badge="Krytyczne okno" badgeTone="red">
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-accent">✓</span> Druga sesja HBOT (24 h po pierwszej)</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> PBM co 24 h, 20–30 min</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spray HOCl 0,01–0,02% na strefę dawczą</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spanie z głową uniesioną na 2 poduszkach</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Nawodnienie ≥ 2,5 l wody / dobę</li>
-          </ul>
-          <Mech>Alkohol, palenie i kofeina obniżają perfuzję — absolutnie zakazane.</Mech>
-        </Card>
-        <Card title="Dni 3–4" badge="Pierwsze mycie">
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsze mycie wg instrukcji koordynatora (pH 5,5, bez SLS)</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spray HOCl 2× dziennie</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Żele z arniką / centellą na strefę dawczą</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Kontynuacja PBM co 24 h</li>
-          </ul>
-          <Mech>Nie zrywaj strupków — myj delikatnie, bez tarcia.</Mech>
-        </Card>
+        {cards.map((c) => {
+          const items = t(`dayZeroToThree.${c.key}.items`, { returnObjects: true, defaultValue: [] }) as string[];
+          return (
+            <Card
+              key={c.key}
+              title={t(`dayZeroToThree.${c.key}.title`)}
+              badge={t(`dayZeroToThree.${c.key}.badge`)}
+              badgeTone={c.tone}
+            >
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {items.map((it, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="text-accent">✓</span> {it}
+                  </li>
+                ))}
+              </ul>
+              <Mech>{t(`dayZeroToThree.${c.key}.mech`)}</Mech>
+            </Card>
+          );
+        })}
       </div>
       <div className="mt-10 rounded-sm border border-border bg-card p-6">
-        <h3 className="font-display text-xl">Checklista „czego unikać” — Dzień 0–14</h3>
+        <h3 className="font-display text-xl">{t("dayZeroToThree.avoidTitle")}</h3>
         <div className="mt-4 grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
-          <div className="space-y-2">
-            <p><span className="text-red-400">✗</span> Alkohol, palenie (vasokonstrykcja)</p>
-            <p><span className="text-red-400">✗</span> Aspiryna, ibuprofen (pierwsze 48 h)</p>
-            <p><span className="text-red-400">✗</span> Sauna, basen, słońce</p>
-            <p><span className="text-red-400">✗</span> Intensywny trening, podnoszenie ciężarów</p>
-          </div>
-          <div className="space-y-2">
-            <p><span className="text-red-400">✗</span> Czapki, kaski, hełmy ściskające skórę głowy</p>
-            <p><span className="text-red-400">✗</span> Drapanie, zrywanie strupków</p>
-            <p><span className="text-emerald-400">✓</span> Dieta bogata w białko, żelazo, cynk, witaminy B</p>
-            <p><span className="text-emerald-400">✓</span> Regularny kontakt z koordynatorem</p>
-          </div>
+          {[col1, col2].map((col, ci) => (
+            <div key={ci} className="space-y-2">
+              {col.map((row, i) => (
+                <p key={i}>
+                  {row.type === "bad" ? (
+                    <span className="text-red-400">✗</span>
+                  ) : (
+                    <span className="text-emerald-400">✓</span>
+                  )}{" "}
+                  {row.text}
+                </p>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </Section>
