@@ -66,7 +66,16 @@ function Section({ id, title, children }: { id: string; title: string; children:
 function PrivacyPage() {
   const updated = "19 czerwca 2026";
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border/60">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+          <Link to="/" className="text-xs uppercase tracking-[0.25em] text-muted-foreground hover:text-foreground">
+            ← Strona główna
+          </Link>
+          <LanguageSwitcher compact />
+        </div>
+      </header>
+      <main className="mx-auto max-w-3xl px-6 py-16 md:py-24">
       <header className="mb-10">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">
           Dokument informacyjny · RODO
