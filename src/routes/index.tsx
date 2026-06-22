@@ -641,8 +641,11 @@ function HBOT() {
 function LADD() {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const header = t("clinical.ladd.table.header", { returnObjects: true }) as string[];
-  const rows = t("clinical.ladd.table.rows", { returnObjects: true }) as string[][];
+  const hRaw = t("clinical.ladd.table.header", { returnObjects: true, defaultValue: [] });
+  const header = (Array.isArray(hRaw) ? hRaw : []) as string[];
+  const rRaw = t("clinical.ladd.table.rows", { returnObjects: true, defaultValue: [] });
+  const rows = (Array.isArray(rRaw) ? rRaw : []) as string[][];
+
 
   useEffect(() => {
     const video = videoRef.current;
