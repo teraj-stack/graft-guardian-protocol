@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ALL_WEEKS, WEEK_PRESETS, materialsForWeek } from "@/lib/materials";
 import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/reminders/schema";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const TITLE = "Przypomnienia po przeszczepie — e-mail i SMS";
 const DESCRIPTION =
