@@ -2,8 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState, type ReactNode, type FormEvent } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { PRICING } from "@/lib/pricing-data";
-import { FAQ, STAGES, TOPICS, type Stage, type Topic } from "@/lib/faq-data";
+import { FAQ, STAGES, TOPICS, useFaq, type Stage, type Topic } from "@/lib/faq-data";
+import type { StageKey, TopicKey } from "@/lib/faq-meta";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
 import { AnimatedTile } from "@/components/animated-tile";
@@ -15,6 +17,7 @@ import {
   buildPlainText,
   buildShortMessage,
   todayIso,
+  useSchedule,
 } from "@/lib/schedule-data";
 
 /* ---------- Microbiome ---------- */
