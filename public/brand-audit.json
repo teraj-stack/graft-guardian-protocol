@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T23:45:52.538Z",
+  "generatedAt": "2026-06-22T16:10:43.367Z",
   "total": 20,
   "byRule": {
     "graftgen-bare": 6,
@@ -29,7 +29,7 @@
       "label": "Brakuje \".com\" przy nazwie Graftgen",
       "severity": "warn",
       "file": "src/lib/schedule-data.ts",
-      "line": 206,
+      "line": 209,
       "column": 6,
       "match": "Graftgen",
       "snippet": "`Graftgen — protokół 0–14 (data zabiegu: ${surgeryDate}):`,"
@@ -39,7 +39,7 @@
       "label": "Brakuje \".com\" przy nazwie Graftgen",
       "severity": "warn",
       "file": "src/lib/schedule-data.ts",
-      "line": 224,
+      "line": 227,
       "column": 19,
       "match": "Graftgen",
       "snippet": "\"X-WR-CALNAME:Graftgen — Dzień 0–14\","
@@ -49,7 +49,7 @@
       "label": "Brakuje \".com\" przy nazwie Graftgen",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 343,
+      "line": 314,
       "column": 19,
       "match": "Graftgen",
       "snippet": "title: \"Graftgen — Dzień 0–14\","
@@ -59,7 +59,7 @@
       "label": "Legacy: technika FUE (standard to DHI)",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 936,
+      "line": 1021,
       "column": 71,
       "match": "FUE",
       "snippet": "gaps: [\"Brak współczesnego head-to-head RCT porównującego DHI vs. FUE z zaślepioną oceną przeżywalności.\"],"
@@ -69,7 +69,7 @@
       "label": "Legacy: technika FUE (standard to DHI)",
       "severity": "warn",
       "file": "src/routes/-sections/below-fold.tsx",
-      "line": 950,
+      "line": 1035,
       "column": 49,
       "match": "FUE",
       "snippet": "\"Brak head-to-head dla DHI (oryginał: FUT/FUE).\","
