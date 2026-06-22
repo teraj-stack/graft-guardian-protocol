@@ -608,7 +608,9 @@ function PBM() {
 
 function HBOT() {
   const { t } = useTranslation();
-  const bullets = t("clinical.hbot.card1.bullets", { returnObjects: true }) as string[];
+  const bRaw = t("clinical.hbot.card1.bullets", { returnObjects: true, defaultValue: [] });
+  const bullets = (Array.isArray(bRaw) ? bRaw : []) as string[];
+
   return (
     <Section id="hbot" eyebrow={t("clinical.hbot.eyebrow")}>
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
