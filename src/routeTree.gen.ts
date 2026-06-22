@@ -28,6 +28,7 @@ import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
 import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
 import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
 import { Route as AuthenticatedPhraseAuditRouteImport } from './routes/_authenticated/phrase-audit'
+import { Route as AuthenticatedI18nReportRouteImport } from './routes/_authenticated/i18n-report'
 import { Route as AuthenticatedEmailTestRouteImport } from './routes/_authenticated/email-test'
 import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
 import { Route as AuthenticatedBrandAuditRouteImport } from './routes/_authenticated/brand-audit'
@@ -142,6 +143,11 @@ const AuthenticatedPhraseAuditRoute =
     path: '/phrase-audit',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedI18nReportRoute = AuthenticatedI18nReportRouteImport.update({
+  id: '/i18n-report',
+  path: '/i18n-report',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEmailTestRoute = AuthenticatedEmailTestRouteImport.update({
   id: '/email-test',
   path: '/email-test',
@@ -258,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/ebook': typeof AuthenticatedEbookRoute
   '/email-test': typeof AuthenticatedEmailTestRoute
+  '/i18n-report': typeof AuthenticatedI18nReportRoute
   '/phrase-audit': typeof AuthenticatedPhraseAuditRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
@@ -296,6 +303,7 @@ export interface FileRoutesByTo {
   '/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/ebook': typeof AuthenticatedEbookRoute
   '/email-test': typeof AuthenticatedEmailTestRoute
+  '/i18n-report': typeof AuthenticatedI18nReportRoute
   '/phrase-audit': typeof AuthenticatedPhraseAuditRoute
   '/raporty': typeof AuthenticatedRaportyRoute
   '/vitals': typeof AuthenticatedVitalsRoute
@@ -336,6 +344,7 @@ export interface FileRoutesById {
   '/_authenticated/brand-audit': typeof AuthenticatedBrandAuditRoute
   '/_authenticated/ebook': typeof AuthenticatedEbookRoute
   '/_authenticated/email-test': typeof AuthenticatedEmailTestRoute
+  '/_authenticated/i18n-report': typeof AuthenticatedI18nReportRoute
   '/_authenticated/phrase-audit': typeof AuthenticatedPhraseAuditRoute
   '/_authenticated/raporty': typeof AuthenticatedRaportyRoute
   '/_authenticated/vitals': typeof AuthenticatedVitalsRoute
@@ -376,6 +385,7 @@ export interface FileRouteTypes {
     | '/brand-audit'
     | '/ebook'
     | '/email-test'
+    | '/i18n-report'
     | '/phrase-audit'
     | '/raporty'
     | '/vitals'
@@ -414,6 +424,7 @@ export interface FileRouteTypes {
     | '/brand-audit'
     | '/ebook'
     | '/email-test'
+    | '/i18n-report'
     | '/phrase-audit'
     | '/raporty'
     | '/vitals'
@@ -453,6 +464,7 @@ export interface FileRouteTypes {
     | '/_authenticated/brand-audit'
     | '/_authenticated/ebook'
     | '/_authenticated/email-test'
+    | '/_authenticated/i18n-report'
     | '/_authenticated/phrase-audit'
     | '/_authenticated/raporty'
     | '/_authenticated/vitals'
@@ -644,6 +656,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPhraseAuditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/i18n-report': {
+      id: '/_authenticated/i18n-report'
+      path: '/i18n-report'
+      fullPath: '/i18n-report'
+      preLoaderRoute: typeof AuthenticatedI18nReportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/email-test': {
       id: '/_authenticated/email-test'
       path: '/email-test'
@@ -778,6 +797,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBrandAuditRoute: typeof AuthenticatedBrandAuditRoute
   AuthenticatedEbookRoute: typeof AuthenticatedEbookRoute
   AuthenticatedEmailTestRoute: typeof AuthenticatedEmailTestRoute
+  AuthenticatedI18nReportRoute: typeof AuthenticatedI18nReportRoute
   AuthenticatedPhraseAuditRoute: typeof AuthenticatedPhraseAuditRoute
   AuthenticatedRaportyRoute: typeof AuthenticatedRaportyRoute
   AuthenticatedVitalsRoute: typeof AuthenticatedVitalsRoute
@@ -788,6 +808,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBrandAuditRoute: AuthenticatedBrandAuditRoute,
   AuthenticatedEbookRoute: AuthenticatedEbookRoute,
   AuthenticatedEmailTestRoute: AuthenticatedEmailTestRoute,
+  AuthenticatedI18nReportRoute: AuthenticatedI18nReportRoute,
   AuthenticatedPhraseAuditRoute: AuthenticatedPhraseAuditRoute,
   AuthenticatedRaportyRoute: AuthenticatedRaportyRoute,
   AuthenticatedVitalsRoute: AuthenticatedVitalsRoute,
