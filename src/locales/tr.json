@@ -275,5 +275,188 @@
       { "title": "14. Gün — kritik protokolün sonu", "summary": "Kontrol ziyareti, trikoskopi. PBM haftada 2–3× moduna geçer. LADD/PRP planı." },
       { "title": "Sonrası — 1. ay+", "summary": "PRP/minoksidil ile LADD, biyomedikal raporlar, 12. aya kadar aylık kontroller." }
     ]
+  },
+  "clinical": {
+    "why": {
+      "eyebrow": "01 — NEDEN İLK 48 SAAT?",
+      "title": "Nakledilen her saç telinin kaderini belirleyen pencere.",
+      "paragraphs": [
+        "DHI ekstraksiyonundan sonra greft iskemik bir dokudur. Alındığı andan alıcı bölgede yeniden damarlanma sağlanana kadar yalnızca implantasyon bölgesini çevreleyen plazmadan oksijen difüzyonu ile hayatta kalır. İlk kılcal damarlar dermal papillaya genellikle 48–96 saat içinde ulaşır. Hipoksik kıl kökü için bu, işlemin nihai sonucunu belirleyen kritik bir penceredir.",
+        "Bu süre boyunca bulge kök hücreleri ve dermal papilla hücreleri (DPC) ATP rezervlerini tüketir. Tükendiğinde apoptoz tetiklenir. Hipoksinin her saati, canlı folikül havuzunda ölçülebilir bir kayıptır.",
+        "Ameliyat sonrası kortizol bir vazokonstriktördür. Anksiyete, ağrı ve yanlış bilgi saçlı deri perfüzyonunu gerçekten bozar — bu yüzden koordineli ameliyat sonrası bakım bir ek değil, klinik bir parametredir."
+      ]
+    },
+    "exVivo": {
+      "eyebrow": "02 — EX VIVO FAZI",
+      "title": "Ekstraksiyon anından itibaren greftlerin metabolik korunması.",
+      "lead": "Birçok klinikte hâlâ standart olarak %0,9 NaCl veya Ringer çözeltisi kullanılır. Transplantasyon açısından bunlar osmolariteyi korur ancak hücre metabolizmasını korumaz. Protokolümüzde greftler, solid organ saklama çözeltilerine aktarılır.",
+      "card1": {
+        "title": "HypoThermosol FRS + lipozomal ATP (ATP-v)",
+        "badge": "4 °C",
+        "body": "HypoThermosol FRS; HEPES, mannitol, adenozin, glutatyon ve dekstran içeren tamponlu hipotermik bir çözeltidir. 2–8 °C'de hücresel iyonik homeostazı 24 saatten fazla korur. Lipozomal ATP eklenmesi enerjiyi doğrudan sitozole ulaştırır — Na⁺/K⁺-ATPaz pompaları çalışmaya devam eder, ozmotik basınç çökmez, apoptoz susturulur.",
+        "mech": "%0,9 NaCl: ATP 2–4 saatte tükenir. HypoThermosol + ATP-v: 12 saat ex vivo sonra > %90 hücre canlılığı."
+      },
+      "card2": {
+        "title": "İmplantasyondan önce greftlerin PRP banyosu",
+        "badge": "VEGF · PDGF",
+        "body": "Otolog trombositten zengin plazma (bazal trombosit konsantrasyonunun 1,5–6 katı), implantasyondan önce greftleri 10–20 dakika inkübe eder. Büyüme faktörleri (VEGF, PDGF-BB, EGF, IGF-1, TGF-β) folikülü yerleştirmeden önce doyurur, iskemi penceresini kısaltır ve anjiyogenezi hızlandırır.",
+        "mech": "VEGF → endotel proliferasyonu; PDGF → perisit göçü; IGF-1 → bulge kök hücrelerinde anajenin sürdürülmesi."
+      }
+    },
+    "pbm": {
+      "eyebrow": "03 — FOTOBİYOMODÜLASYON (PBM)",
+      "title": "Biyoenerjetik araç olarak 650 ve 830 nm ışık.",
+      "card1": {
+        "title": "İşlem sonrası seans parametreleri",
+        "badge": "20 dk",
+        "bullets": [
+          "650 nm (kırmızı) — 1–2 mm penetrasyon, epidermis ve dermal papilla",
+          "830 nm (NIR) — 3–5 mm penetrasyon, derin papillalar, alıcı bölge",
+          "Seans başına 4–6 J/cm² doz (Arndt-Schulz eğrisine göre biyostimülasyon eşiği)",
+          "İşlem sonrası alıcı ve donör bölgenin doğrudan ışınlanması",
+          "Seanslar 14 gün boyunca her 24–48 saatte bir devam eder"
+        ]
+      },
+      "card2": {
+        "title": "Klinik içi ekipman",
+        "badge": "3 LED lamba",
+        "body": "Emisyon spektrumu doğrulanmış üç LED lambamız bulunuyor (kırmızı 630–660 nm ve NIR 810–840 nm). Spektral ölçüm, literatürde tanımlanan terapötik aralığa uygunluğu doğrular (Avci ve ark. 2014, Hamblin 2016). Klinik seansı hasta tarafından LLLT kaskı ile evde günde 2 kez/hafta, 12 hafta boyunca sürdürülür.",
+        "mech": "PBM ayrıca dermal papilla hücrelerinde Wnt/β-katenin yolağını da aktive eder — anajen fazına girişin anahtarıdır."
+      }
+    },
+    "hbot": {
+      "eyebrow": "04 — HİPERBARİK OKSİJEN TEDAVİSİ (HBOT)",
+      "title": "Oksijen, kırmızı kan hücrelerinin henüz ulaşamadığı yere ulaşır.",
+      "lead": "1,5–3,0 ATA basınçta %100 O₂ solunduğunda, arteriyel oksijen parsiyel basıncı ~100 mmHg'den ~1100 mmHg'ye yükselir. Plazmada fiziksel olarak çözünen oksijen (Henry yasası), kılcal damar ağı yeniden kurulmadan önce nakledilmiş foliküllere difüze olur.",
+      "card1": {
+        "title": "Seans protokolü",
+        "badge": "1,5–3,0 ATA",
+        "bullets": [
+          "Seans 1: İşlem sonrası Sıfır Gün, 60–90 dk, 1,5–3,0 ATA",
+          "Seans 2: işlem sonrası 1. gün, 60–90 dk",
+          "İsteğe bağlı destek seansları: 4. ve 7. gün",
+          "Uygunluk: aktif kulak enfeksiyonu yok, tedavi edilmemiş pnömotoraks yok, ağır KOAH yok"
+        ]
+      },
+      "card2": {
+        "title": "Etki mekanizması",
+        "badge": "pO₂ ×10",
+        "body": "Oksijen aşırı doygunluğu, iskemi penceresinde greft nekrozu riskini azaltır, hipoksiye bağlı HIF-1α aktivasyonunu baskılar, kemik iliğinden endotel öncül hücreleri mobilize eder (anjiyogenez) ve anaerobik bakterilere karşı bakteriyostatiktir.",
+        "mech": "Sertifikalı bir hiperbarik tedavi merkezi ile iş birliği yapıyoruz."
+      }
+    },
+    "ladd": {
+      "eyebrow": "05 — LADD: LAZER DESTEKLİ İLAÇ İLETİMİ",
+      "title": "Topikal sürtmek yerine mikrokanallar.",
+      "leadIntro": "<b>Lazer Destekli İlaç İletimi (LADD)</b>, aktif maddelerin (minoksidil, PRP, peptitler, eksozomlar) dermal papilla derinliğine kadar iletilmesini sağlayan stratum corneum'da kontrollü dikey mikrokanalların oluşturulmasıdır. Penetrasyon etkinliği topikal uygulamaya göre birkaç kat artar.",
+      "leadWarning": "Klasik <b>iğneli mezoterapi</b>, greft reddi riskini artırır çünkü ilaç birikintileri filizlenen damarlara baskı yapabilir ve neovaskülarizasyonu bozabilir. Birçok hasta ağrı korkusuyla destekleyici tedavilerden vazgeçer. <b>LADD lazer protokolleri</b> MySkinCode.pl ile iş birliği içinde geliştirilmiştir.",
+      "table": {
+        "header": ["Parametre", "Tulyum lazer 1927 nm", "Soğuk atmosferik plazma (CAP)"],
+        "rows": [
+          ["Mekanizma", "Fraksiyonel H₂O ablasyonu", "Isısız iyonizasyon, RONS"],
+          ["Mikrokanal derinliği", "150–300 µm", "50–100 µm"],
+          ["İyileşme süresi", "24–72 sa eritem, pullanma", "Yok / minimal"],
+          ["Taze greft üzerinde güvenlik", "14. günden sonra", "7. günden itibaren mümkün"],
+          ["Minoksidil penetrasyonu", "Yüksek (×4–8)", "Orta (×2–3)"],
+          ["Antibakteriyel etki", "Dolaylı", "Doğrudan (biyofilm üzerinde RONS)"],
+          ["İşlem süresi", "15–25 dk", "10–15 dk"]
+        ]
+      }
+    },
+    "microbiome": {
+      "eyebrow": "06 — MİKROBİYOM VE DONÖR BÖLGE",
+      "title": "Grefti zedelemeyen antisepsi.",
+      "lead": "Klasik antiseptikler (klorheksidin, yüksek konsantrasyonda oktenidin, povidon iyot) in vitro keratinosit ve fibroblastlara karşı sitotoksiktir. Taze bir ameliyat sonrası yarada bu nötr değildir.",
+      "card1": {
+        "title": "HOCl — hipokloröz asit",
+        "badge": "%0,01–0,02",
+        "body": "HOCl, nötrofillerin fagositoz sırasında ürettiği bileşiğin aynısıdır. %0,01–0,02 konsantrasyonda bakterisidaldir (MRSA ve <em>S. aureus</em> biyofilmleri dahil) ve <em>Malassezia</em>'ya karşı fungisidaldir; greftlere sitotoksik değildir. 2. günden itibaren saçlı deri temizliği için temassız sprey olarak kullanılır."
+      },
+      "card2": {
+        "title": "Bitkisel ameliyat sonrası formüller",
+        "badge": "Arnika · Centella",
+        "body": "<em>Arnica montana</em> (helenalin, dihidrohelenalin — eritem azaltıcı) ve <em>Centella asiatica</em> (madekassozid, asiyatikozid — kolajen I sentezi uyarımı, anti-inflamatuar) ekstreleri bazlı, koruyucu içermeyen steril jeller. DHI sonrası geniş bir sıyrığa benzeyen donör bölge üzerinde uygulanır.",
+        "mech": "Mikro yaralar çevresinde <em>Malassezia</em> ve patojenik stafilokok suşlarının kontrolsüz çoğalması skar fibrozunu ve greft kaybını teşvik eder."
+      }
+    },
+    "timeline": {
+      "eyebrow": "07 — ZAMAN ÇİZELGESİ: 48 SAAT VE İLK 14 GÜN",
+      "title": "Adım adım kronolojik bir protokol.",
+      "lead": "48 saat = greft sağkalımı için kritik penceredir. Tam iyileşme ilk 14 gün boyunca sistematik olarak yürütülür.",
+      "phases": [
+        {
+          "tag": "İşlem sırasında",
+          "title": "Ex Vivo fazı — hasar önleme",
+          "bullets": [
+            "Greftler doğrudan 4 °C'ye soğutulmuş HypoThermosol FRS + ATP-v içine alınır",
+            "İmplantasyondan önce greftlerin otolog PRP banyosu 10–20 dk",
+            "Ex vivo süresini en aza indir: en derin greftler için hedef < 4 sa"
+          ]
+        },
+        {
+          "tag": "Gün 0–3",
+          "title": "48 sa — kritik greft sağkalım penceresi (akut inflamasyon fazı)",
+          "bullets": [
+            "PBM 650 + 830 nm, 20 dk, işlemden hemen sonra, ardından her 24 sa",
+            "HBOT 1,5–3,0 ATA: seans 1 (0. gün), seans 2 (1. gün)",
+            "Donör bölge koruyucu içermeyen bariyer merhem ile korunur",
+            "48 saatten itibaren alıcı bölgenin HOCl ile temassız durulanması",
+            "5 gün boyunca yarı oturur pozisyonda (≥30°) uyuma"
+          ]
+        },
+        {
+          "tag": "Gün 4–14",
+          "title": "Proliferasyon fazı — mikrobiyom yönetimi",
+          "bullets": [
+            "SLS içermeyen pH 5,5 şampuan veya HOCl ile saçlı deri temizliği, ovuşturma yok",
+            "Evde LLLT fototerapisi (kask) günde 2× / hafta, seans başına 20 dk",
+            "8. günden itibaren: kabukları çıkarmak için yumuşak masaj + bitkisel ürünler (arnika, centella)",
+            "Optik: eritem değerlendirmesi, donör bölge üzerinde isteğe bağlı CAP seansı"
+          ]
+        },
+        {
+          "tag": "Ay 1+",
+          "title": "Sistemik destek — anajen uyarımı",
+          "bullets": [
+            "Topikal %5 minoksidil veya 0,25–2,5 mg oral mikrodozlar (off-label, uygunluk sonrası)",
+            "PRP mezoterapisi: 1., 2., 4. ay seansları",
+            "Tulyum 1927 nm lazer ile LADD + minoksidil/PRP — 4–6. haftadan itibaren",
+            "12 hafta boyunca haftada 1–2 kez idame PBM",
+            "Kontrol trikoskopisi: 3., 6., 12. ay"
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "eyebrow": "10 — KANITA DAYALI TIP",
+      "title": "Belgelenmiş fotobiyomodülasyon yardımcı tedavi olarak.",
+      "auditLabel": "Kanıt denetim modu",
+      "auditOn": "Açık",
+      "auditOff": "Kapalı",
+      "card1": {
+        "title": "Greft sağkalımı",
+        "alt": "Saç folikülü animasyonu — greft sağkalımı",
+        "p1": "Saç ekimi işlemleri (özellikle saygın kliniklerde) doğal olarak <b>%90–95</b><sup>[1]</sup> düzeyinde yüksek sağkalım sağlar.",
+        "p2": "RCT'ler, PBM (650 nm) kullanımının mutlak sağkalımı dramatik biçimde artırmadığını (%95'i aşmak zordur), ancak iskemi-reperfüzyon hasarına maruz kalan greftleri dramatik biçimde kurtardığını ve plasebo grubuna kıyasla toplam kabul edilen ünite sayısında istatistiksel olarak <b>%5–8</b><sup>[2]</sup> kazanım sağladığını göstermektedir."
+      },
+      "card2": {
+        "title": "Hızlanmış anajen ve iyileşme",
+        "alt": "Anajen fazı ve iyileşme animasyonu",
+        "p1": "Normalde, nakledilmiş saçlar 2–4 hafta sonra telojene girerek dökülür ve yeni anajen 3–4. ayda başlar.",
+        "p2": "Çalışmalara göre, 655 nm ile ışınlanan hastalar ortalama 3–4 hafta daha erken anajene girmektedir<sup>[3]</sup>. Alıcı bölgedeki ameliyat sonrası “şok kayıp” (telojen effluvium) da yaklaşık <b>%20–30</b><sup>[3,4]</sup> oranında azaltılmıştır.",
+        "p3": "İşlemden hemen sonra karışık dalga boylu ışık (örn. 633 nm + 830 nm) kullanımı, kabukların 3–5 gün daha erken düşmesini sağlar. Objektif (spektrofotometrik) ameliyat sonrası eritem azaltımı, ilk 14 günde <b>%30–40</b><sup>[5]</sup> daha hızlıdır."
+      },
+      "card3": {
+        "title": "Nihai saç yoğunluğu ve kalınlığı",
+        "alt": "Artan saç yoğunluğu ve kalınlığı animasyonu",
+        "p1": "İşlemden bir yıl sonra, fototerapi kullanan gruplarda (650 nm, haftada 3×, 15–20 dk), RCT'ler saç gövdesi çapında ortalama <b>%10–15</b><sup>[3,4]</sup> artış ve genel olarak daha yüksek bölge yoğunluğu (yalnızca greftlerden değil, alıcı bölge çevresindeki minyatürleşmiş yerli saçların uyarılmasından da) bildirmektedir."
+      },
+      "card4": {
+        "title": "Yeniden damarlanma ve mikrosirkülasyon",
+        "alt": "Cilt mikrosirkülasyonu yeniden damarlanma animasyonu",
+        "p1": "PBM (630–850 nm) işlem sonrası ilk günlerde VEGF ekspresyonunu artırır ve anjiyogenezi uyarır, kritik greft iskemi penceresini kısaltır ve folikül beslenmesini iyileştirir.",
+        "p2": "HBOT (1,5–3,0 ATA) mekanizmayı tamamlar — yeni kılcal damar ağı tamamen yeniden oluşana kadar plazmada çözünen oksijeni perfüzyonu bozulmuş dokulara iletir."
+      }
+    }
   }
 }
