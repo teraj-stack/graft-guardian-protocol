@@ -6,6 +6,8 @@ import {
   verifyEbookAccess,
   type EbookChapter,
 } from "@/lib/ebook.functions";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SiteFooter } from "@/components/SiteFooter";
 
 
 const TITLE = "Patient Journey — przewodnik po pierwszych 14 dniach";
