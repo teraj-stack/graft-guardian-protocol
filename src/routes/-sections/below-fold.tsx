@@ -51,11 +51,13 @@ export function Microbiome() {
 
 export function Timeline() {
   const { t } = useTranslation();
-  const phases = t("clinical.timeline.phases", { returnObjects: true }) as {
+  const pRaw = t("clinical.timeline.phases", { returnObjects: true, defaultValue: [] });
+  const phases = (Array.isArray(pRaw) ? pRaw : []) as {
     tag: string;
     title: string;
     bullets: string[];
   }[];
+
 
   return (
     <Section id="protokol" eyebrow={t("clinical.timeline.eyebrow")}>
