@@ -49,8 +49,34 @@
     "stat4v": "revaskülarizasyon öncesi greft iskemisi kritik penceresi"
   },
   "heroFaq": {
-    "kicker": "Sık sorulan sorular",
-    "title": "Hastaların protokol öncesi en çok sorduğu sorular"
+    "eyebrow": "Sık sorulan sorular",
+    "title": "Hastaların protokol öncesinde en sık sorduğu sorular",
+    "items": [
+      {
+        "q": "DHI saç ekiminden sonra fototerapi ne zaman başlar?",
+        "a": "İlk PBM seansı (630–680 + 830 nm) \"Sıfır\" Gününde — aktif kanama yoksa pansuman uygulandıktan hemen sonra — yapılır. İlk 7 günde her gün veya gün aşırı seans yapıyoruz, ardından 4. haftanın sonuna kadar haftada 2–3 kez devam ediyoruz."
+      },
+      {
+        "q": "İşlemden sonra hiperbarik tedaviye ne zaman başlıyorum?",
+        "a": "HBOT seansı en geç \"Sıfır\" Gününde (işlem gününde) başlar. Optimal program: 0. ve 1. günde 2 seans (basınç 1,5–3,0 ATA, 60–90 dk), ardından 1–2. haftalarda 3–5 seans. Hipoksik dokuyu ne kadar erken oksijenlendirirsek, o kadar fazla greft kritik iskemi penceresini atlatır."
+      },
+      {
+        "q": "Protokol her nakil sonrasında zorunlu mu?",
+        "a": "Zorunlu değildir, ancak her bileşeni randomize kontrollü çalışmalarla (RKÇ) desteklenmektedir. Özellikle 2500'ün üzerinde greft, yoğun alıcı bölge veya önceki nakil başarısızlıklarında öneriyoruz."
+      },
+      {
+        "q": "Tüm paket yerine sadece bir terapi seçebilir miyim?",
+        "a": "Evet, ancak tam sinerjik etki PBM + HBOT + LADD + cilt bakımı kombinasyonuyla elde edilir. Her yöntem farklı bir aşamada etki eder: metabolik koruma (ex vivo), oksijenlendirme (HBOT), mitokondriyal yenilenme (PBM) ve aktif bileşenlerin penetrasyonu (LADD)."
+      },
+      {
+        "q": "Protokolün yoğun fazı ne kadar sürer?",
+        "a": "Yoğun faz 14 gündür — bu süre revaskülarizasyonun kalitesini belirler. Ardından 3–6 ay süren destekleyici faza (PRP/minoksidil ile LADD, biyomedikal raporlar) geçiyoruz."
+      },
+      {
+        "q": "Tüm protokol boyunca Varşova veya Gdańsk'ta kalmam gerekiyor mu?",
+        "a": "Hayır. PBM ve LADD'yi Graftgen.com kliniğinde uyguluyoruz; HBOT sertifikalı bir partner merkezde yapılıyor. Hibrit bir model de mümkündür — işlem kendi kliniğinizde, ameliyat sonrası protokol koordinatörümüzle uzaktan ve haftalık biyomedikal raporlarla yürütülür."
+      }
+    ]
   },
   "sections": {
     "exVivo": "Ex Vivo — greftlerin metabolik korunması",

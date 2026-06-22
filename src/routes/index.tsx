@@ -116,32 +116,8 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const heroFaq = [
-  {
-    q: "Kiedy zaczyna się fototerapia po przeszczepie DHI?",
-    a: "Pierwsza sesja PBM (630–680 + 830 nm) odbywa się w Doba „Zero” — bezpośrednio po założeniu opatrunku, jeśli nie występuje czynne krwawienie. W pierwszych 7 dniach wykonujemy sesje codziennie lub co drugi dzień, a potem 2–3 razy w tygodniu do końca tygodnia 4.",
-  },
-  {
-    q: "Kiedy rozpoczynam hiperbarykę po zabiegu?",
-    a: "Sesja HBOT zaczyna się najpóźniej w Doba „Zero” (dzień zabiegu). Optymalny schemat: 2 sesje w dobie 0. i 1. (ciśnienie 1,5–3,0 ATA, 60–90 min), a następnie 3–5 sesji w tygodniach 1–2. Im wcześniej dotlenimy hipoksyjną tkankę, tym więcej graftów przejdzie krytyczne okno niedokrwienia.",
-  },
-  {
-    q: "Czy protokół jest obowiązkowy po każdym przeszczepie?",
-    a: "Nie jest obowiązkowy, ale każdy jego element ma wsparcie w randomizowanych badaniach (RCT). Zalecamy go szczególnie przy liczbie graftów >2500, gęstej strefie biorczej lub wcześniejszych niepowodzeniach transplantacji.",
-  },
-  {
-    q: "Czy mogę wybrać tylko jedną terapię zamiast całego pakietu?",
-    a: "Tak, ale pełny efekt synergetyczny osiąga się przy połączeniu PBM + HBOT + LADD + pielęgnacji skórnym. Każda metoda działa na innym etapie: ochrona metaboliczna (ex vivo), dotlenienie (HBOT), regeneracja mitochondrialna (PBM) i wnikanie aktywnych składników (LADD).",
-  },
-  {
-    q: "Ile trwa intensywna faza protokołu?",
-    a: "Faza intensywna to 14 dni — Ten okres warunkuje i jakość rewaskularyzacji. Po niej przechodzimy w fazę wspomagającą (LADD z PRP/minoksydylem, raporty biomedyczne), która trwa do 3–6 miesięcy.",
-  },
-  {
-    q: "Czy muszę przebywać w Warszawie lub Gdańsku przez cały protokół?",
-    a: "Nie. PBM i LADD wykonujemy w klinice Graftgen.com; HBOT w certyfikowanym ośrodku partnerskim. Możliwy jest też model hybrydowy — zabieg w Twojej klinice, a protokół pozabiegowy realizowany zdalnie z naszym koordynatorem i tygodniowymi raportami biomedycznymi.",
-  },
-];
+// heroFaq content is sourced from i18n (heroFaq.items) — see src/locales/*.json
+
 
 function Index() {
   return (
@@ -294,17 +270,20 @@ function Nav() {
 /* ---------- Hero FAQ ---------- */
 
 function HeroFAQ() {
+  const { t } = useTranslation();
+  const items = t("heroFaq.items", { returnObjects: true, defaultValue: [] }) as Array<{ q: string; a: string }>;
+  const list = Array.isArray(items) ? items : [];
   return (
     <section id="hero-faq" className="border-b border-border/60">
       <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
-          Najczęstsze pytania
+          {t("heroFaq.eyebrow")}
         </p>
         <h2 className="font-display text-3xl leading-[1.05] md:text-4xl">
-          Co pacjenci pytają najczęściej przed protokołem
+          {t("heroFaq.title")}
         </h2>
         <div className="mt-10 grid gap-8 md:grid-cols-2">
-          {heroFaq.map((item) => (
+          {list.map((item) => (
             <div key={item.q} className="border-l-2 border-accent pl-5">
               <h3 className="text-base font-medium leading-snug">{item.q}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
