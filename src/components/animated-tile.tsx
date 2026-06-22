@@ -92,6 +92,26 @@ export function AnimatedTile({
     return () => clearTimeout(t);
   }, [loaded, videoReady, fallback]);
 
+  // Distinguish autoplay-policy rejection from real load errors.
+  const handlePlayError = (err: unknown) => {
+    const name = err && typeof err === "object" ? (err as { name?: string }).name : undefined;
+    if (name === "NotAllowedError" || name === "SecurityError") {
+      setAutoplayBlocked(true);
+    } else {
+      setFallback(true);
+    }
+  };
+
+  const handleManualPlay = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.play().then(
+      () => setAutoplayBlocked(false),
+      (err) => handlePlayError(err),
+    );
+  };
+
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
