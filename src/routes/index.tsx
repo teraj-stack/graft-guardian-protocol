@@ -579,7 +579,9 @@ function ExVivo() {
 
 function PBM() {
   const { t } = useTranslation();
-  const bullets = t("clinical.pbm.card1.bullets", { returnObjects: true }) as string[];
+  const bRaw = t("clinical.pbm.card1.bullets", { returnObjects: true, defaultValue: [] });
+  const bullets = (Array.isArray(bRaw) ? bRaw : []) as string[];
+
   return (
     <Section id="pbm" eyebrow={t("clinical.pbm.eyebrow")}>
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
