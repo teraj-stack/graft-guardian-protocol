@@ -49,8 +49,34 @@
     "stat4v": "critical graft ischaemia window before revascularisation"
   },
   "heroFaq": {
-    "kicker": "Frequently asked questions",
-    "title": "What patients ask most often before starting the protocol"
+    "eyebrow": "Frequently asked",
+    "title": "What patients most often ask before the protocol",
+    "items": [
+      {
+        "q": "When does phototherapy start after a DHI hair transplant?",
+        "a": "The first PBM session (630–680 + 830 nm) takes place on Day \"Zero\" — immediately after the dressing is applied, provided there is no active bleeding. During the first 7 days we run sessions daily or every other day, then 2–3 times per week through the end of week 4."
+      },
+      {
+        "q": "When do I start hyperbaric therapy after the procedure?",
+        "a": "The HBOT session starts no later than Day \"Zero\" (the day of the procedure). Optimal schedule: 2 sessions on days 0 and 1 (pressure 1.5–3.0 ATA, 60–90 min), followed by 3–5 sessions in weeks 1–2. The sooner we oxygenate hypoxic tissue, the more grafts will survive the critical ischemia window."
+      },
+      {
+        "q": "Is the protocol mandatory after every transplant?",
+        "a": "It is not mandatory, but every element is supported by randomised controlled trials (RCTs). We particularly recommend it for graft counts >2500, dense recipient zones, or previous transplant failures."
+      },
+      {
+        "q": "Can I choose only one therapy instead of the full package?",
+        "a": "Yes, but the full synergistic effect is achieved by combining PBM + HBOT + LADD + skin care. Each method acts at a different stage: metabolic protection (ex vivo), oxygenation (HBOT), mitochondrial regeneration (PBM) and delivery of active ingredients (LADD)."
+      },
+      {
+        "q": "How long does the intensive phase of the protocol last?",
+        "a": "The intensive phase lasts 14 days — this period determines the quality of revascularisation. We then move into a supportive phase (LADD with PRP/minoxidil, biomedical reports) lasting 3–6 months."
+      },
+      {
+        "q": "Do I have to stay in Warsaw or Gdańsk for the entire protocol?",
+        "a": "No. We perform PBM and LADD at the Graftgen.com clinic; HBOT is delivered at a certified partner facility. A hybrid model is also possible — the procedure at your clinic and the post-procedure protocol run remotely with our coordinator and weekly biomedical reports."
+      }
+    ]
   },
   "sections": {
     "exVivo": "Ex Vivo — metabolic graft protection",
