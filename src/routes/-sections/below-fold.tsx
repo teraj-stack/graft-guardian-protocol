@@ -1103,67 +1103,42 @@ const CLAIMS: EvidenceClaim[] = [
 ];
 
 export function EvidenceBasement() {
+  const { t } = useTranslation();
   const [audit, setAudit] = useState(false);
   return (
-    <Section id="evidence" eyebrow="10 — EVIDENCE-BASED MEDICINE">
-      <SectionHeader title="Udokumentowana fotobiomodulacja jako terapia wspomagająca." />
+    <Section id="evidence" eyebrow={t("clinical.evidence.eyebrow")}>
+      <SectionHeader title={t("clinical.evidence.title")} />
       <div className="mb-6 flex items-center justify-end gap-3 text-xs">
-        <span className="text-muted-foreground">Tryb audytu dowodów</span>
+        <span className="text-muted-foreground">{t("clinical.evidence.auditLabel")}</span>
         <button
           type="button"
           onClick={() => setAudit((v) => !v)}
           aria-pressed={audit}
           className={`rounded-sm border px-2 py-0.5 uppercase tracking-wide ${audit ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent"}`}
         >
-          {audit ? "Włączony" : "Wyłączony"}
+          {audit ? t("clinical.evidence.auditOn") : t("clinical.evidence.auditOff")}
         </button>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Przeżywalność graftów">
-          <AnimatedTile src="evidence-1" poster="/videos/evidence-1.jpg" lqip={evidenceLqip["evidence-1"]} alt="Animacja mieszka włosowego — przeżywalność graftów" aspect="16/9" className="mb-4" />
-          <p>
-            Zabiegi przeszczepu włosów (szczególnie w renomowanych klinikach) cechują się naturalnie wysoką przeżywalnością na poziomie{" "}
-            <strong className="text-foreground">90–95%</strong>
-            <sup className="ml-0.5 text-accent">[1]</sup>.
-          </p>
-          <p className="mt-4">
-            Badania RCT wykazują, że stosowanie PBM (650 nm) nie zwiększa w spektakularny sposób samej przeżywalności w liczbach bezwzględnych (trudno przekroczyć granicę 95%), ale dramatycznie ratuje grafty narażone na niedokrwienie (ischemia-reperfusion injury), co statystycznie daje zysk na poziomie{" "}
-            <strong className="text-foreground">5–8%</strong>
-            <sup className="ml-0.5 text-accent">[2]</sup> większej całkowitej liczby przyjętych jednostek w porównaniu do grupy placebo.
-          </p>
+        <Card title={t("clinical.evidence.card1.title")}>
+          <AnimatedTile src="evidence-1" poster="/videos/evidence-1.jpg" lqip={evidenceLqip["evidence-1"]} alt={t("clinical.evidence.card1.alt")} aspect="16/9" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card1.p1") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card1.p2") }} />
         </Card>
-        <Card title="Przyspieszenie anagenu i gojenia">
-          <AnimatedTile src="evidence-2" poster="/videos/evidence-2.jpg" lqip={evidenceLqip["evidence-2"]} alt="Animacja fazy anagenu i gojenia" aspect="1/1" className="mb-4" />
-          <p>
-            Normalnie, przeflancowane włosy wchodzą w fazę telogenu i wypadają po 2–4 tygodniach, a nowy anagen zaczyna się w 3–4 miesiącu.
-          </p>
-          <p className="mt-4">
-            Według badań, u pacjentów naświetlanych falą 655 nm obserwowano wczesne wejście w anagen o średnio 3–4 tygodnie szybciej<sup className="ml-0.5 text-accent">[3]</sup>. Zmniejszeniu ulega również zjawisko „shock loss" (pooperacyjnego łysienia telogenowego) w okolicy biorczej, redukując jego skalę o około{" "}
-            <strong className="text-foreground">20–30%</strong>
-            <sup className="ml-0.5 text-accent">[3,4]</sup>.
-          </p>
-          <p className="mt-4">
-            Stosowanie mieszanego światła (np. 633 nm + 830 nm) tuż po zabiegu prowadzi do szybszego odpadania strupów o około 3–5 dni. Zauważalna obiektywnie (pomiar spektrofotometryczny) redukcja rumienia pozabiegowego jest o{" "}
-            <strong className="text-foreground">30–40%</strong>
-            <sup className="ml-0.5 text-accent">[5]</sup> szybsza w pierwszych 14 dniach.
-          </p>
+        <Card title={t("clinical.evidence.card2.title")}>
+          <AnimatedTile src="evidence-2" poster="/videos/evidence-2.jpg" lqip={evidenceLqip["evidence-2"]} alt={t("clinical.evidence.card2.alt")} aspect="1/1" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card2.p1") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card2.p2") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card2.p3") }} />
         </Card>
-        <Card title="Ostateczna gęstość i grubość włosa">
-          <AnimatedTile src="evidence-3" poster="/videos/evidence-3.jpg" lqip={evidenceLqip["evidence-3"]} alt="Animacja zwiększonej gęstości i grubości włosa" aspect="1/1" className="mb-4" />
-          <p>
-            Rok po zabiegu, w grupach stosujących fototerapię (650 nm, 3× w tygodniu po 15–20 min), badania RCT odnotowują zwiększenie średnicy łodygi włosa średnio o{" "}
-            <strong className="text-foreground">10–15%</strong>
-            <sup className="ml-0.5 text-accent">[3,4]</sup> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej).
-          </p>
+        <Card title={t("clinical.evidence.card3.title")}>
+          <AnimatedTile src="evidence-3" poster="/videos/evidence-3.jpg" lqip={evidenceLqip["evidence-3"]} alt={t("clinical.evidence.card3.alt")} aspect="1/1" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card3.p1") }} />
         </Card>
-        <Card title="Rewaskularyzacja i mikrokrążenie">
-          <AnimatedTile src="evidence-4" poster="/videos/evidence-4.jpg" lqip={evidenceLqip["evidence-4"]} alt="Animacja rewaskularyzacji mikrokrążenia skóry" aspect="1/1" className="mb-4" />
-          <p>
-            PBM (630–850 nm) zwiększa ekspresję VEGF i stymuluje angiogenezę w pierwszych dobach po zabiegu, skracając okno krytycznej ischemii graftów i poprawiając odżywienie mieszków.
-          </p>
-          <p className="mt-4">
-            HBOT (1,5–3,0 ATA) uzupełnia mechanizm — dostarcza tlen rozpuszczony w osoczu do tkanek o upośledzonej perfuzji, dopóki nowa sieć naczyń włosowatych nie zostanie w pełni odtworzona.
-          </p>
+        <Card title={t("clinical.evidence.card4.title")}>
+          <AnimatedTile src="evidence-4" poster="/videos/evidence-4.jpg" lqip={evidenceLqip["evidence-4"]} alt={t("clinical.evidence.card4.alt")} aspect="1/1" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card4.p1") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card4.p2") }} />
         </Card>
         <SourcesCard />
         {audit && <EvidenceAuditCard />}
@@ -1171,6 +1146,7 @@ export function EvidenceBasement() {
     </Section>
   );
 }
+
 
 function EvidenceAuditCard() {
   const summary = CLAIMS.reduce(
