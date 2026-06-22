@@ -960,5 +960,36 @@
       "Hiperbarik tedavi, laserobaria, manyetik alan, fototerapi ve fotobiyomodülasyona dayalı protokoller geliştiriyor. En iyi teknolojinin bile empati ve hastayla kurulan ortaklık ilişkisi olmadan değersiz olduğunu her zaman vurguluyor."
     ],
     "imgAlt": "Dr Bujok — Graftgen.com protokolünün yaratıcısı"
+  },
+  "creatorReviews": {
+    "profileLabel": "ZnanyLekarz.pl",
+    "profileSubtitle": "Çevrimiçi profil",
+    "ratingMax": "/ 5",
+    "ratingCount": "316 hasta yorumu",
+    "viewProfile": "Profili görüntüle →",
+    "heading": "Hasta yorumları",
+    "intro": "Aşağıda Dr. Bujok'un hizmetlerinden yararlanan kişilerin yorumları yer almaktadır. Tüm yorumları ZnanyLekarz.pl üzerinde okumak için yandaki bağlantıya tıklayın.",
+    "items": [
+      {
+        "quote": "Kendini işine adamış mükemmel bir hekim. En son ne zaman böyle bir doktora gittiğimi hatırlamıyorum. Sorunu ayrıntılı şekilde açıklıyor, tedaviyi tam olarak anlatıyor ve gerektiğinde ziyaret sonrasında hastasıyla iletişimde kalarak tedaviyi mümkün olduğunca etkili olacak şekilde uyarlıyor. Sonunda huzurla uyuyorum ve bunu doktora borçluyum, teşekkür ederim ;)",
+        "author": "Agata",
+        "date": "7 Ocak 2026"
+      },
+      {
+        "quote": "Doktor ayrıntılı bir anamnez aldı ve her şeyi açıkladı. Hastaya hiç acele etmeden zaman ayırdı. Uygun tedavi yöntemlerini sundu.",
+        "author": "KK",
+        "date": "25 Şubat 2026"
+      },
+      {
+        "quote": "Doktor Bey rahatsızlıkları net bir şekilde ve özveriyle açıklıyor. Hasta kendini gerçekten iyi bakılmış hissediyor.",
+        "author": "Marcin",
+        "date": "3 Mart 2026"
+      },
+      {
+        "quote": "Profesyonellik ve titizlik. Ayrıntılı anamnez ve hastaya tedavi seçeneklerinin nazikçe anlatılması.",
+        "author": "Paweł Olejnik",
+        "date": "17 Şubat 2026"
+      }
+    ]
   }
 }
