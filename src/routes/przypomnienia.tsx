@@ -19,7 +19,34 @@ export const Route = createFileRoute("/przypomnienia")({
       { name: "twitter:description", content: DESCRIPTION },
     ],
     links: [{ rel: "canonical", href: "https://graftgen.com/przypomnienia" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: TITLE,
+          description: DESCRIPTION,
+          url: "https://graftgen.com/przypomnienia",
+          inLanguage: "pl-PL",
+          isPartOf: { "@id": "https://graftgen.com/#website" },
+          publisher: { "@id": "https://graftgen.com/#organization" },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Strona główna", item: "https://graftgen.com/" },
+            { "@type": "ListItem", position: 2, name: "Przypomnienia", item: "https://graftgen.com/przypomnienia" },
+          ],
+        }),
+      },
+    ],
   }),
+
   component: RemindersPage,
 });
 
