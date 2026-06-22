@@ -446,7 +446,7 @@ export function InteractiveSchedule() {
   }
 
   return (
-    <Section id="harmonogram" eyebrow="08 — INTERAKTYWNY HARMONOGRAM 0–14">
+    <Section id="harmonogram" eyebrow={t("schedule.eyebrow")}>
       <SectionHeader
         title="Twoja checklista, dzień po dniu."
         lead="Odhacz każdy krok. Postęp zapisuje się lokalnie w przeglądarce — bez konta, bez chmury."
