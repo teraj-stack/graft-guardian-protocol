@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Play } from "lucide-react";
 import { decode } from "blurhash";
 
 /** Decode a BlurHash string into a small <canvas> placeholder. */
@@ -55,6 +55,7 @@ export function AnimatedTile({
   const [posterReady, setPosterReady] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const [fallback, setFallback] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   const shouldPlayRef = useRef(false);
@@ -91,6 +92,26 @@ export function AnimatedTile({
     return () => clearTimeout(t);
   }, [loaded, videoReady, fallback]);
 
+  // Distinguish autoplay-policy rejection from real load errors.
+  const handlePlayError = (err: unknown) => {
+    const name = err && typeof err === "object" ? (err as { name?: string }).name : undefined;
+    if (name === "NotAllowedError" || name === "SecurityError") {
+      setAutoplayBlocked(true);
+    } else {
+      setFallback(true);
+    }
+  };
+
+  const handleManualPlay = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.play().then(
+      () => setAutoplayBlocked(false),
+      (err) => handlePlayError(err),
+    );
+  };
+
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -108,7 +129,7 @@ export function AnimatedTile({
             setLoaded(true);
             // If sources are already in the DOM (subsequent intersections), play now.
             if (el.querySelector("source")) {
-              el.play().catch(() => setFallback(true));
+              el.play().catch(handlePlayError);
             }
           } else {
             shouldPlayRef.current = false;
@@ -129,7 +150,7 @@ export function AnimatedTile({
     if (!el) return;
     try { el.load(); } catch {}
     if (shouldPlayRef.current) {
-      el.play().catch(() => setFallback(true));
+      el.play().catch(handlePlayError);
     }
   }, [loaded]);
 
@@ -190,11 +211,29 @@ export function AnimatedTile({
         </video>
       )}
       {/* Loading state — visible while video buffers on slow connections */}
-      {showSpinner && !videoReady && !fallback && !reducedMotion && (
+      {showSpinner && !videoReady && !fallback && !autoplayBlocked && !reducedMotion && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/40 text-white transition-opacity duration-300">
           <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
           <span className="text-sm font-medium tracking-wide">Przygotowanie animacji…</span>
         </div>
+      )}
+      {/* Autoplay blocked — let the user start the animation manually. */}
+      {autoplayBlocked && !fallback && !reducedMotion && (
+        <button
+          type="button"
+          onClick={handleManualPlay}
+          aria-label={`Uruchom animację: ${alt}`}
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/55 text-white transition-colors hover:bg-black/65 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/40 backdrop-blur-sm">
+            <Play className="h-6 w-6 translate-x-[1px]" aria-hidden="true" fill="currentColor" />
+          </span>
+          <span className="px-4 text-center text-sm font-medium tracking-wide">
+            Przeglądarka zablokowała automatyczne odtwarzanie.
+            <br />
+            <span className="text-xs font-normal opacity-90">Kliknij, aby uruchomić animację.</span>
+          </span>
+        </button>
       )}
     </div>
   );
