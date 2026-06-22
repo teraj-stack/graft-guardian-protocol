@@ -450,6 +450,7 @@ function EbookPage() {
             ← Strona główna
           </Link>
           <div className="flex items-center gap-3">
+            <LanguageSwitcher compact />
             <button
               onClick={() => {
                 if (confirm("Wyzerować całą checklistę?")) reset();
