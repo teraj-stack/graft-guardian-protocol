@@ -1,16 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, getClientLocale, persistLocale, type Locale } from "@/lib/i18n";
 
 export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { i18n, t } = useTranslation();
-  const current = (i18n.resolvedLanguage || i18n.language || "pl").slice(0, 2) as Locale;
+  const [mounted, setMounted] = useState(false);
 
+  // After hydration: adopt the client-detected locale.
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      document.documentElement.lang = current;
+    setMounted(true);
+    const detected = getClientLocale();
+    if (detected !== i18n.language) {
+      void i18n.changeLanguage(detected);
     }
-  }, [current]);
+    document.documentElement.lang = detected;
+  }, [i18n]);
+
+  const current = (mounted ? (i18n.resolvedLanguage || i18n.language || "pl") : "pl")
+    .slice(0, 2) as Locale;
 
   return (
     <div
@@ -27,12 +34,9 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
             key={lng}
             type="button"
             onClick={() => {
+              persistLocale(lng);
               void i18n.changeLanguage(lng);
-              try {
-                localStorage.setItem("graftgen.lang", lng);
-              } catch {
-                /* ignore */
-              }
+              document.documentElement.lang = lng;
             }}
             aria-pressed={active}
             className={`rounded-sm px-2 py-1 font-medium uppercase tracking-wider transition ${
