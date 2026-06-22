@@ -1860,15 +1860,17 @@ type EbookStatus =
   | { kind: "error"; message: string };
 
 export function EbookLeadMagnet() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState(""); // honeypot
   const [status, setStatus] = useState<EbookStatus>({ kind: "idle" });
+  const bullets = t("ebook.bullets", { returnObjects: true, defaultValue: [] }) as string[];
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!consent) {
-      setStatus({ kind: "error", message: "Zaznacz zgodę, aby otrzymać e-book." });
+      setStatus({ kind: "error", message: t("ebook.errConsent") });
       return;
     }
     setStatus({ kind: "submitting" });
@@ -1888,25 +1890,21 @@ export function EbookLeadMagnet() {
         kind: "error",
         message:
           (err as Error).message === "validation_failed"
-            ? "Sprawdź poprawność adresu e-mail."
-            : "Nie udało się wysłać formularza. Spróbuj ponownie.",
+            ? t("ebook.errValidation")
+            : t("ebook.errGeneric"),
       });
     }
   }
 
   return (
-    <Section id="ebook" eyebrow="13 — E-BOOK: PATIENT JOURNEY">
+    <Section id="ebook" eyebrow={t("ebook.eyebrow")}>
       <div className="grid gap-12 md:grid-cols-12 md:items-start">
         <div className="md:col-span-7">
-          <SectionHeader
-            title={'Pobierz e-book „Patient Journey" — pierwsze 14 dni po zabiegu DHI.'}
-            lead="Konkretny protokół dzień-po-dniu: HBOT, PBM, mikrobiom, mycie, sen, dieta, czego unikać. Bez lania wody — same instrukcje i twarde parametry."
-          />
+          <SectionHeader title={t("ebook.title")} lead={t("ebook.lead")} />
           <ul className="mt-2 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
-            <li>· 8 rozdziałów (Dzień 0 → Dzień 14)</li>
-            <li>· Parametry kliniczne (nm, J/cm², ATA)</li>
-            <li>· Checklista: czego unikać 14 dni</li>
-            <li>· Wersja do druku / PDF</li>
+            {bullets.map((b, i) => (
+              <li key={i}>· {b}</li>
+            ))}
           </ul>
         </div>
 
@@ -1914,36 +1912,29 @@ export function EbookLeadMagnet() {
           {status.kind === "success" ? (
             <div className="rounded-sm border border-accent/40 bg-accent/5 p-6">
               <p className="text-xs uppercase tracking-[0.2em] text-accent">
-                Dostęp przyznany
+                {t("ebook.successKicker")}
               </p>
-              <h3 className="mt-2 font-display text-2xl">
-                E-book jest gotowy.
-              </h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Twój prywatny link dostępu — zachowaj go, aby wrócić do treści.
-              </p>
+              <h3 className="mt-2 font-display text-2xl">{t("ebook.successTitle")}</h3>
+              <p className="mt-3 text-sm text-muted-foreground">{t("ebook.successDesc")}</p>
               <a
                 href={status.accessUrl}
                 className="mt-5 inline-flex w-full items-center justify-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background hover:bg-foreground/90"
               >
-                Otwórz e-book →
+                {t("ebook.successCta")}
               </a>
             </div>
           ) : (
-            <form
-              onSubmit={onSubmit}
-              className="rounded-sm border border-border bg-card p-6"
-            >
+            <form onSubmit={onSubmit} className="rounded-sm border border-border bg-card p-6">
               <label className="block">
                 <span className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">
-                  Adres e-mail
+                  {t("ebook.emailLabel")}
                 </span>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ty@przyklad.pl"
+                  placeholder={t("ebook.emailPlaceholder")}
                   className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm"
                 />
               </label>
@@ -1967,14 +1958,12 @@ export function EbookLeadMagnet() {
                   className="mt-0.5"
                   required
                 />
-                <span>
-                  Wyrażam zgodę na przetwarzanie adresu e-mail w celu
-                  udostępnienia e-booka „Patient Journey" (
-                  <Link to="/prywatnosc" className="underline">
-                    polityka prywatności
-                  </Link>
-                  ).
-                </span>
+                <Trans
+                  i18nKey="ebook.consent"
+                  components={{
+                    privacy: <Link to="/prywatnosc" className="underline" />,
+                  }}
+                />
               </label>
 
               {status.kind === "error" && (
@@ -1988,9 +1977,7 @@ export function EbookLeadMagnet() {
                 disabled={status.kind === "submitting"}
                 className="mt-5 inline-flex w-full items-center justify-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90 disabled:opacity-50"
               >
-                {status.kind === "submitting"
-                  ? "Wysyłanie…"
-                  : "Pobierz e-book →"}
+                {status.kind === "submitting" ? t("ebook.submitting") : t("ebook.submit")}
               </button>
             </form>
           )}
