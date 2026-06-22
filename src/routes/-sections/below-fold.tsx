@@ -1719,16 +1719,13 @@ export function FAQSection() {
 /* ---------- Pricing ---------- */
 
 export function Pricing() {
+  const { t } = useTranslation();
   return (
-    <Section id="cennik" eyebrow="11 — SKLEP">
+    <Section id="cennik" eyebrow={t("pricing.eyebrow")}>
       <SectionHeader
-        title="Pełny cennik i zakup pakietów — w sklepie."
+        title={t("pricing.title")}
         lead={
-          <>
-            Cennik zabiegów wspierających przeniesiony do <strong>sklepu Graftgen.com.</strong>.
-            Pakiety 1 / 5 / 10 / 20 sesji z natychmiastową rezerwacją, bezpieczna płatność
-            online, faktura VAT.&nbsp;
-          </>
+          <Trans i18nKey="pricing.leadHtml" components={{ strong: <strong /> }} />
         }
       />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -1747,14 +1744,14 @@ export function Pricing() {
               {p.params}
             </p>
             <div className="mt-6 flex items-baseline justify-between">
-              <span className="text-xs text-muted-foreground">od</span>
+              <span className="text-xs text-muted-foreground">{t("pricing.from")}</span>
               <span className="font-display text-2xl text-foreground">{p.single.price}</span>
             </div>
             <p className="mt-1 text-right text-[11px] text-muted-foreground">
-              pakiet 20: {p.packs[2].unitPrice}/sesja
+              {t("pricing.pack20")}: {p.packs[2].unitPrice}{t("pricing.perSession")}
             </p>
             <span className="mt-6 inline-flex items-center text-sm text-accent transition group-hover:translate-x-1">
-              Zobacz w sklepie →
+              {t("pricing.viewInShop")}
             </span>
           </Link>
         ))}
@@ -1762,19 +1759,19 @@ export function Pricing() {
 
       <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Pełne opisy pakietów, kalkulator czasu terapii, FAQ rozliczeniowe oraz koszyk
-          z płatnością online znajdziesz na stronie sklepu.
+          {t("pricing.footerNote")}
         </p>
         <Link
           to="/sklep"
           className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
         >
-          Przejdź do sklepu →
+          {t("pricing.goToShop")}
         </Link>
       </div>
     </Section>
   );
 }
+
 
 /* ---------- CTA ---------- */
 
