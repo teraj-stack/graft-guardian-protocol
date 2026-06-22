@@ -406,6 +406,13 @@ function Creator() {
 /* ---------- Creator Reviews ---------- */
 
 function CreatorReviews() {
+  const { t } = useTranslation();
+  const items = t("creatorReviews.items", { returnObjects: true, defaultValue: [] }) as Array<{
+    quote: string;
+    author: string;
+    date: string;
+  }>;
+  const list = Array.isArray(items) ? items : [];
   return (
     <section className="border-b border-border/60" aria-labelledby="creator-reviews-heading">
       <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
@@ -425,66 +432,40 @@ function CreatorReviews() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">ZnanyLekarz.pl</p>
-                  <p className="text-xs text-muted-foreground">Profil online</p>
+                  <p className="text-sm font-medium">{t("creatorReviews.profileLabel")}</p>
+                  <p className="text-xs text-muted-foreground">{t("creatorReviews.profileSubtitle")}</p>
                 </div>
               </div>
               <div className="mt-6 flex items-baseline gap-2">
                 <span className="font-display text-5xl text-accent">5,0</span>
-                <span className="text-sm text-muted-foreground">/ 5</span>
+                <span className="text-sm text-muted-foreground">{t("creatorReviews.ratingMax")}</span>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">316 opinii pacjentów</p>
+              <p className="mt-2 text-sm text-muted-foreground">{t("creatorReviews.ratingCount")}</p>
               <p className="mt-4 text-xs text-accent group-hover:underline">
-                Zobacz profil →
+                {t("creatorReviews.viewProfile")}
               </p>
             </a>
           </div>
 
           <div className="md:col-span-8">
             <h2 id="creator-reviews-heading" className="font-display text-2xl leading-[1.1] md:text-3xl">
-              Opinie pacjentów
+              {t("creatorReviews.heading")}
             </h2>
             <p className="mt-3 text-sm text-muted-foreground">
-              Poniżej znajdują się wypowiedzi osób, które skorzystały z usług dr. Bujoka.
-              Kliknij link obok, aby przeczytać wszystkie opinie na ZnanyLekarz.pl.
+              {t("creatorReviews.intro")}
             </p>
             <div className="mt-8 grid gap-6 md:grid-cols-2">
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  „Świetny lekarz z zaangażowaniem. Nie pamiętam kiedy ostatnio u takiego byłam. Szczegółowo wyjaśnia problem, tłumaczy dokładnie leczenie i w razie potrzeby pozostaje z pacjentem w kontakcie po wizycie i modyfikuje leczenie, tak żeby było jak najbardziej skuteczne. W końcu śpię spokojnie, a to wszystko zasługa doktora, dziękuję ;)"
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Agata, 7 stycznia 2026</footer>
-              </blockquote>
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  „Dr Przeprowadził wywiad i wszystko wyjaśnił. Poświęcił czas pacjentowi bez żadnego pośpiechu. Przedstawił odpowiednie metody leczenia."
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— KK, 25 lutego 2026</footer>
-              </blockquote>
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  „Pan Doktor rzeczowo wyjaśnia schorzenia, z zaangażowaniem. Pacjent może poczuć się zaopiekowany."
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Marcin, 3 marca 2026</footer>
-              </blockquote>
-              <blockquote className="rounded-sm border border-border/60 bg-card p-5">
-                <div className="flex gap-1 text-accent">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                </div>
-                <p className="mt-3 text-sm italic text-muted-foreground">
-                  „Profesjonalizm i dociekliwość. Dokładny wywiad, życzliwe wyjaśnianie pacjentowi możliwości leczenia."
-                </p>
-                <footer className="mt-3 text-xs text-muted-foreground/70">— Paweł Olejnik, 17 lutego 2026</footer>
-              </blockquote>
+              {list.map((item, idx) => (
+                <blockquote key={idx} className="rounded-sm border border-border/60 bg-card p-5">
+                  <div className="flex gap-1 text-accent" aria-label="5/5">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                  </div>
+                  <p className="mt-3 text-sm italic text-muted-foreground">
+                    „{item.quote}"
+                  </p>
+                  <footer className="mt-3 text-xs text-muted-foreground/70">— {item.author}, {item.date}</footer>
+                </blockquote>
+              ))}
             </div>
           </div>
         </div>
@@ -492,6 +473,7 @@ function CreatorReviews() {
     </section>
   );
 }
+
 
 /* ---------- Why ---------- */
 
