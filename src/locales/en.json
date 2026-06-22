@@ -960,5 +960,36 @@
       "Designs protocols based on hyperbaric therapy, laserobaria, magnetic field, phototherapy and photobiomodulation. Always emphasises that the best technology is worthless without empathy and a partnership-based relationship with the patient."
     ],
     "imgAlt": "Dr Bujok — creator of the Graftgen.com protocol"
+  },
+  "creatorReviews": {
+    "profileLabel": "ZnanyLekarz.pl",
+    "profileSubtitle": "Online profile",
+    "ratingMax": "/ 5",
+    "ratingCount": "316 patient reviews",
+    "viewProfile": "View profile →",
+    "heading": "Patient reviews",
+    "intro": "Below are statements from people who have used Dr. Bujok's services. Click the link to read all reviews on ZnanyLekarz.pl.",
+    "items": [
+      {
+        "quote": "An excellent, dedicated doctor. I can't remember the last time I saw one like him. He explains the problem in detail, walks you through the treatment thoroughly, and — if needed — stays in touch with the patient after the visit and adjusts the treatment to make it as effective as possible. I finally sleep peacefully, and it's all thanks to the doctor, thank you ;)",
+        "author": "Agata",
+        "date": "January 7, 2026"
+      },
+      {
+        "quote": "The doctor took a full history and explained everything. He gave the patient his time without any rush and proposed appropriate treatment options.",
+        "author": "KK",
+        "date": "February 25, 2026"
+      },
+      {
+        "quote": "The doctor explains conditions clearly and with commitment. The patient really feels taken care of.",
+        "author": "Marcin",
+        "date": "March 3, 2026"
+      },
+      {
+        "quote": "Professionalism and thoroughness. A detailed interview and a kind explanation of the treatment options.",
+        "author": "Paweł Olejnik",
+        "date": "February 17, 2026"
+      }
+    ]
   }
 }

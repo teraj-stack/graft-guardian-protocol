@@ -960,5 +960,36 @@
       "Tworzy protokoły oparte na hiperbarii, laserobarii, polu magnetycznym, fototerapii i fotobiomodulacji. Zawsze podkreśla, że najlepsza technologia jest bezwartościowa bez empatii i partnerskiej relacji z pacjentem."
     ],
     "imgAlt": "Dr Bujok — twórca protokołu Graftgen.com"
+  },
+  "creatorReviews": {
+    "profileLabel": "ZnanyLekarz.pl",
+    "profileSubtitle": "Profil online",
+    "ratingMax": "/ 5",
+    "ratingCount": "316 opinii pacjentów",
+    "viewProfile": "Zobacz profil →",
+    "heading": "Opinie pacjentów",
+    "intro": "Poniżej znajdują się wypowiedzi osób, które skorzystały z usług dr. Bujoka. Kliknij link obok, aby przeczytać wszystkie opinie na ZnanyLekarz.pl.",
+    "items": [
+      {
+        "quote": "Świetny lekarz z zaangażowaniem. Nie pamiętam kiedy ostatnio u takiego byłam. Szczegółowo wyjaśnia problem, tłumaczy dokładnie leczenie i w razie potrzeby pozostaje z pacjentem w kontakcie po wizycie i modyfikuje leczenie, tak żeby było jak najbardziej skuteczne. W końcu śpię spokojnie, a to wszystko zasługa doktora, dziękuję ;)",
+        "author": "Agata",
+        "date": "7 stycznia 2026"
+      },
+      {
+        "quote": "Dr Przeprowadził wywiad i wszystko wyjaśnił. Poświęcił czas pacjentowi bez żadnego pośpiechu. Przedstawił odpowiednie metody leczenia.",
+        "author": "KK",
+        "date": "25 lutego 2026"
+      },
+      {
+        "quote": "Pan Doktor rzeczowo wyjaśnia schorzenia, z zaangażowaniem. Pacjent może poczuć się zaopiekowany.",
+        "author": "Marcin",
+        "date": "3 marca 2026"
+      },
+      {
+        "quote": "Profesjonalizm i dociekliwość. Dokładny wywiad, życzliwe wyjaśnianie pacjentowi możliwości leczenia.",
+        "author": "Paweł Olejnik",
+        "date": "17 lutego 2026"
+      }
+    ]
   }
 }
