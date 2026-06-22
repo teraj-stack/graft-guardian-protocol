@@ -107,7 +107,48 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "@id": "https://graftgen.com/#organization",
+          name: "Graftgen.com",
+          legalName: "Medical Lasers and STEM Cells Solutions Sp. z o.o.",
+          url: "https://graftgen.com",
+          logo: "https://graftgen.com/icon-512x512.png",
+          description:
+            "Zintegrowany protokół pozabiegowy po przeszczepie włosów DHI: PBM, HBOT, LADD i zarządzanie mikrobiomem.",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "ul. Kard. Bolesława Kominka 44",
+            postalCode: "44-217",
+            addressLocality: "Rybnik",
+            addressCountry: "PL",
+          },
+          identifier: [
+            { "@type": "PropertyValue", propertyID: "KRS", value: "0000791172" },
+            { "@type": "PropertyValue", propertyID: "NIP", value: "6423218241" },
+            { "@type": "PropertyValue", propertyID: "REGON", value: "383695904" },
+          ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": "https://graftgen.com/#website",
+          name: "Graftgen.com",
+          url: "https://graftgen.com",
+          inLanguage: "pl-PL",
+          publisher: { "@id": "https://graftgen.com/#organization" },
+        }),
+      },
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
