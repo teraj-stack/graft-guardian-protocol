@@ -303,12 +303,7 @@ function PanelPage() {
         )}
       </main>
 
-      <footer className="border-t border-border bg-background">
-        <div className="mx-auto max-w-6xl px-6 py-10 text-xs text-muted-foreground">
-          Materiały edukacyjne. Nie zastępują indywidualnej konsultacji lekarskiej.
-          Postęp przechowywany lokalnie (localStorage) — nie synchronizuje się między urządzeniami.
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
