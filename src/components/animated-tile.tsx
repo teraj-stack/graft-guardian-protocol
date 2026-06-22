@@ -156,28 +156,41 @@ export function AnimatedTile({
           loading="lazy"
           decoding="async"
           onLoad={() => setPosterReady(true)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-0" : posterReady ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            videoReady && !fallback
+              ? "opacity-0"
+              : posterReady
+                ? "opacity-100"
+                : "opacity-0"
+          }`}
         />
       )}
-      <video
-        ref={ref}
-        muted
-        loop
-        playsInline
-        preload="none"
-        aria-label={alt}
-        onLoadedData={() => setVideoReady(true)}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
-      >
-        {loaded && (
-          <>
-            <source src={`/videos/${src}.webm`} type="video/webm" />
-            <source src={`/videos/${src}.mp4`} type="video/mp4" />
-          </>
-        )}
-      </video>
+      {!fallback && !reducedMotion && (
+        <video
+          ref={ref}
+          muted
+          loop
+          playsInline
+          preload="none"
+          aria-label={alt}
+          onLoadedData={() => setVideoReady(true)}
+          onError={() => setFallback(true)}
+          onStalled={() => {
+            // If stalled before any frame is available, fall back to poster.
+            if (ref.current && ref.current.readyState < 2) setFallback(true);
+          }}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
+        >
+          {loaded && (
+            <>
+              <source src={`/videos/${src}.webm`} type="video/webm" />
+              <source src={`/videos/${src}.mp4`} type="video/mp4" />
+            </>
+          )}
+        </video>
+      )}
       {/* Loading state — visible while video buffers on slow connections */}
-      {showSpinner && !videoReady && (
+      {showSpinner && !videoReady && !fallback && !reducedMotion && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/40 text-white transition-opacity duration-300">
           <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
           <span className="text-sm font-medium tracking-wide">Przygotowanie animacji…</span>
