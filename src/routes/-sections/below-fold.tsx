@@ -1737,31 +1737,37 @@ const DAY_TIPS: DayTip[] = [
 ];
 
 export function FAQSection() {
-  const [selectedStage, setSelectedStage] = useState<Stage | "all">("all");
-  const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
+  const { t } = useTranslation();
+  const { items, stages, topics, dayMatch } = useFaq();
+  const dayTips = t("faq.dayTips", { returnObjects: true, defaultValue: [] }) as {
+    day: number;
+    label: string;
+    headline: string;
+    tip: string;
+  }[];
+
+  const [selectedStage, setSelectedStage] = useState<StageKey | "all">("all");
+  const [selectedTopic, setSelectedTopic] = useState<TopicKey | "all">("all");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
-  const activeDay = selectedDay !== null ? DAY_TIPS[selectedDay] : null;
+  const activeDayTip = selectedDay !== null ? dayTips[selectedDay] : null;
+  const activeDayRegex = selectedDay !== null ? dayMatch[selectedDay] : null;
 
-  const filtered = FAQ.filter((f) => {
-    const stageMatch = selectedStage === "all" || f.stages.includes(selectedStage);
-    const topicMatch = selectedTopic === "all" || f.topics.includes(selectedTopic);
+  const filtered = items.filter((f) => {
+    const stageMatch = selectedStage === "all" || f.stageKeys.includes(selectedStage);
+    const topicMatch = selectedTopic === "all" || f.topicKeys.includes(selectedTopic);
     const searchMatch =
       normalizedQuery.length === 0 ||
       f.q.toLowerCase().includes(normalizedQuery) ||
       f.a.toLowerCase().includes(normalizedQuery);
-    const dayMatch =
-      !activeDay || activeDay.match.test(f.q) || activeDay.match.test(f.a);
-    return stageMatch && topicMatch && searchMatch && dayMatch;
+    const dayOk =
+      !activeDayRegex || activeDayRegex.test(f.q) || activeDayRegex.test(f.a);
+    return stageMatch && topicMatch && searchMatch && dayOk;
   });
 
-  const chip = (
-    label: string,
-    active: boolean,
-    onClick: () => void,
-  ) => (
+  const chip = (label: string, active: boolean, onClick: () => void) => (
     <button
       type="button"
       onClick={onClick}
@@ -1776,32 +1782,31 @@ export function FAQSection() {
   );
 
   return (
-    <Section id="faq" eyebrow="12 — PYTANIA PACJENTÓW">
-      <SectionHeader title="To, o co pytacie najczęściej." />
+    <Section id="faq" eyebrow={t("faq.eyebrow")}>
+      <SectionHeader title={t("faq.title")} />
 
-      {/* Interaktywna oś czasu Dzień 0–14 */}
       <div className="mb-8 rounded-sm border border-border bg-card/40 p-4 md:p-6">
         <div className="mb-3 flex items-center justify-between gap-4">
           <span className="text-xs uppercase tracking-[0.25em] text-accent">
-            Oś czasu — Dzień 0–14
+            {t("faq.timelineLabel")}
           </span>
-          {activeDay && (
+          {activeDayTip && (
             <button
               type="button"
               onClick={() => setSelectedDay(null)}
               className="text-xs uppercase tracking-wide text-muted-foreground transition hover:text-accent"
             >
-              Wyczyść
+              {t("common.clear", { defaultValue: "Clear" })}
             </button>
           )}
         </div>
 
         <div
           role="tablist"
-          aria-label="Wybierz dobę po zabiegu"
+          aria-label={t("faq.selectDay")}
           className="flex gap-1.5 overflow-x-auto pb-2 [scrollbar-width:thin]"
         >
-          {DAY_TIPS.map((d, i) => {
+          {dayTips.map((d, i) => {
             const active = selectedDay === i;
             return (
               <button
@@ -1817,7 +1822,7 @@ export function FAQSection() {
                 }`}
               >
                 <span className="text-[10px] uppercase tracking-wide opacity-70">
-                  Doba
+                  {t("faq.dayShort")}
                 </span>
                 <span className="font-display text-xl leading-none">{d.day}</span>
               </button>
@@ -1825,21 +1830,21 @@ export function FAQSection() {
           })}
         </div>
 
-        {activeDay && (
+        {activeDayTip && (
           <div className="mt-4 border-t border-border pt-4">
             <div className="flex items-baseline gap-3">
               <span className="font-display text-3xl text-accent">
-                {activeDay.label}
+                {activeDayTip.label}
               </span>
               <span className="text-sm uppercase tracking-wide text-muted-foreground">
-                {activeDay.headline}
+                {activeDayTip.headline}
               </span>
             </div>
             <p className="mt-2 max-w-3xl text-sm text-foreground md:text-base">
-              {activeDay.tip}
+              {activeDayTip.tip}
             </p>
             <p className="mt-3 text-xs uppercase tracking-wide text-muted-foreground">
-              ↓ Powiązane pytania ({filtered.length})
+              ↓ {t("faq.relatedQuestions", { count: filtered.length })}
             </p>
           </div>
         )}
@@ -1851,26 +1856,26 @@ export function FAQSection() {
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Szukaj w pytaniach i odpowiedziach…"
+            placeholder={t("faq.searchPlaceholder")}
             className="w-full max-w-md rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
-            Etap:
+            {t("faq.stageLabel")}
           </span>
-          {chip("Wszystkie", selectedStage === "all", () => setSelectedStage("all"))}
-          {STAGES.map((s) =>
-            chip(s, selectedStage === s, () => setSelectedStage(s)),
+          {chip(t("faq.all"), selectedStage === "all", () => setSelectedStage("all"))}
+          {stages.map((s) =>
+            chip(s.label, selectedStage === s.key, () => setSelectedStage(s.key)),
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
-            Temat:
+            {t("faq.topicLabel")}
           </span>
-          {chip("Wszystkie", selectedTopic === "all", () => setSelectedTopic("all"))}
-          {TOPICS.map((t) =>
-            chip(t, selectedTopic === t, () => setSelectedTopic(t)),
+          {chip(t("faq.all"), selectedTopic === "all", () => setSelectedTopic("all"))}
+          {topics.map((tp) =>
+            chip(tp.label, selectedTopic === tp.key, () => setSelectedTopic(tp.key)),
           )}
         </div>
       </div>
@@ -1878,11 +1883,9 @@ export function FAQSection() {
       <div className="divide-y divide-border border-y border-border">
         {filtered.length > 0 ? (
           filtered.map((f) => (
-            <details key={f.q} className="group py-6">
+            <details key={f.id} className="group py-6">
               <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-                <h3 className="font-display text-xl break-words md:text-2xl">
-                  {f.q}
-                </h3>
+                <h3 className="font-display text-xl break-words md:text-2xl">{f.q}</h3>
                 <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
                   +
                 </span>
@@ -1893,9 +1896,7 @@ export function FAQSection() {
             </details>
           ))
         ) : (
-          <p className="py-8 text-sm text-muted-foreground">
-            Brak pytań dla wybranych filtrów i wyszukiwania. Zmień etap, temat lub frazę.
-          </p>
+          <p className="py-8 text-sm text-muted-foreground">{t("faq.empty")}</p>
         )}
       </div>
     </Section>
