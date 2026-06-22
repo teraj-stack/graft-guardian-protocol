@@ -1,3 +1,6 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 export type ScheduleTask = { id: string; label: string; tone?: "critical" | "default" };
 export type ScheduleDay = {
   day: number;
