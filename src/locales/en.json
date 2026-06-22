@@ -275,5 +275,188 @@
       { "title": "Day 14 — end of the critical protocol", "summary": "Follow-up visit, trichoscopy. PBM switches to 2–3×/week. LADD/PRP plan." },
       { "title": "What next — month 1+", "summary": "LADD with PRP/minoxidil, biomedical reports, monthly check-ups through month 12." }
     ]
+  },
+  "clinical": {
+    "why": {
+      "eyebrow": "01 — WHY THE FIRST 48 HOURS?",
+      "title": "The window that decides the fate of every transplanted hair.",
+      "paragraphs": [
+        "After DHI extraction the graft is an ischemic tissue. From the moment it is harvested until revascularization in the recipient bed, it survives only through oxygen diffusion from the plasma surrounding the implantation site. The first capillaries usually reach the dermal papilla between 48–96 h. For the hypoxic follicle this is a critical window that determines the final outcome of the procedure.",
+        "During this time the bulge stem cells and dermal papilla cells (DPC) consume their ATP reserves. Once depleted, apoptosis is triggered. Every hour of hypoxia is a measurable loss in the pool of viable follicles.",
+        "Post-operative cortisol is a vasoconstrictor. Anxiety, pain and misinformation genuinely impair scalp perfusion — which is why coordinated aftercare is not an add-on but a clinical parameter."
+      ]
+    },
+    "exVivo": {
+      "eyebrow": "02 — EX VIVO PHASE",
+      "title": "Metabolic protection of grafts from the moment of extraction.",
+      "lead": "Many clinics still default to 0.9% saline or Ringer's solution. From a transplantation standpoint these maintain osmolarity but do not protect cellular metabolism. In our protocol grafts are transferred to solutions used in solid-organ preservation.",
+      "card1": {
+        "title": "HypoThermosol FRS + liposomal ATP (ATP-v)",
+        "badge": "4 °C",
+        "body": "HypoThermosol FRS is a buffered hypothermic solution containing HEPES, mannitol, adenosine, glutathione and dextran. It maintains cellular ionic homeostasis at 2–8 °C for over 24 h. Adding liposomal ATP delivers energy directly into the cytosol — Na⁺/K⁺-ATPase pumps keep working, osmotic pressure does not collapse, apoptosis is silenced.",
+        "mech": "0.9% saline: ATP depleted in 2–4 h. HypoThermosol + ATP-v: > 90% cell viability after 12 h ex vivo."
+      },
+      "card2": {
+        "title": "Graft bath in PRP before implantation",
+        "badge": "VEGF · PDGF",
+        "body": "Autologous platelet-rich plasma (1.5–6× baseline platelet concentration) incubates the grafts for 10–20 min before implantation. Growth factors (VEGF, PDGF-BB, EGF, IGF-1, TGF-β) saturate the follicle before placement, shortening the ischemic window and accelerating angiogenesis.",
+        "mech": "VEGF → endothelial proliferation; PDGF → pericyte migration; IGF-1 → maintenance of anagen in bulge stem cells."
+      }
+    },
+    "pbm": {
+      "eyebrow": "03 — PHOTOBIOMODULATION (PBM)",
+      "title": "650 and 830 nm light as a bioenergetic tool.",
+      "card1": {
+        "title": "Post-procedure session parameters",
+        "badge": "20 min",
+        "bullets": [
+          "650 nm (red) — 1–2 mm penetration, epidermis and dermal papilla",
+          "830 nm (NIR) — 3–5 mm penetration, deep papillae, recipient bed",
+          "Dose 4–6 J/cm² per session (biostimulation threshold per Arndt-Schulz curve)",
+          "Irradiation of recipient and donor area immediately after the procedure",
+          "Sessions continued every 24–48 h for 14 days"
+        ]
+      },
+      "card2": {
+        "title": "In-office equipment",
+        "badge": "3 LED lamps",
+        "body": "We use three LED lamps with verified emission spectra (red 630–660 nm and NIR 810–840 nm). Spectral measurement confirms compliance with the therapeutic range described in the literature (e.g. Avci et al. 2014, Hamblin 2016). The in-office session is continued at home by the patient with an LLLT helmet 2× daily/week for 12 weeks.",
+        "mech": "PBM also activates the Wnt/β-catenin pathway in dermal papilla cells — key for entering the anagen phase."
+      }
+    },
+    "hbot": {
+      "eyebrow": "04 — HYPERBARIC OXYGEN THERAPY (HBOT)",
+      "title": "Oxygen reaches where red blood cells cannot yet go.",
+      "lead": "At 1.5–3.0 ATA breathing 100% O₂, arterial oxygen partial pressure rises from ~100 mmHg to ~1100 mmHg. Oxygen physically dissolved in plasma (Henry's law) diffuses into the transplanted follicles before their capillary network is restored.",
+      "card1": {
+        "title": "Session protocol",
+        "badge": "1.5–3.0 ATA",
+        "bullets": [
+          "Session 1: Day Zero post-procedure, 60–90 min, 1.5–3.0 ATA",
+          "Session 2: day 1 post-procedure, 60–90 min",
+          "Optional booster sessions: day 4 and 7",
+          "Eligibility: no active ear infection, no untreated pneumothorax, no severe COPD"
+        ]
+      },
+      "card2": {
+        "title": "Mechanism of action",
+        "badge": "pO₂ ×10",
+        "body": "Oxygen oversaturation reduces the risk of graft necrosis during the ischemic window, suppresses HIF-1α activation linked to hypoxia, mobilizes endothelial progenitor cells from bone marrow (angiogenesis), and is bacteriostatic against anaerobic bacteria.",
+        "mech": "We partner with a certified hyperbaric therapy centre."
+      }
+    },
+    "ladd": {
+      "eyebrow": "05 — LADD: LASER-ASSISTED DRUG DELIVERY",
+      "title": "Microchannels instead of topical rubbing.",
+      "leadIntro": "<b>Laser-Assisted Drug Delivery</b> is the controlled creation of vertical microchannels in the stratum corneum, enabling delivery of active substances (minoxidil, PRP, peptides, exosomes) down to the depth of the dermal papilla. Penetration efficacy increases several-fold compared with topical application.",
+      "leadWarning": "Classical <b>needle mesotherapy</b> increases the risk of graft rejection because drug deposits can compress sprouting vessels and disrupt neovascularization. Many patients give up on follow-up treatments due to fear of pain. <b>LADD laser protocols</b> have been developed in collaboration with MySkinCode.pl",
+      "table": {
+        "header": ["Parameter", "Thulium laser 1927 nm", "Cold atmospheric plasma (CAP)"],
+        "rows": [
+          ["Mechanism", "Fractional H₂O ablation", "Non-thermal ionization, RONS"],
+          ["Microchannel depth", "150–300 µm", "50–100 µm"],
+          ["Downtime", "24–72 h erythema, flaking", "None / minimal"],
+          ["Safety over fresh grafts", "From day 14+", "Possible from day 7"],
+          ["Minoxidil penetration", "High (×4–8)", "Moderate (×2–3)"],
+          ["Antibacterial action", "Indirect", "Direct (RONS on biofilm)"],
+          ["Procedure time", "15–25 min", "10–15 min"]
+        ]
+      }
+    },
+    "microbiome": {
+      "eyebrow": "06 — MICROBIOME AND DONOR AREA",
+      "title": "Antisepsis that does not damage the graft.",
+      "lead": "Classical antiseptics (chlorhexidine, octenidine at higher concentrations, povidone-iodine) are cytotoxic to keratinocytes and fibroblasts in vitro. On a fresh post-procedural wound this is not neutral.",
+      "card1": {
+        "title": "HOCl — hypochlorous acid",
+        "badge": "0.01–0.02%",
+        "body": "HOCl is the same compound that neutrophils produce during phagocytosis. At 0.01–0.02% it is bactericidal (including MRSA and <em>S. aureus</em> biofilms) and fungicidal against <em>Malassezia</em>, without cytotoxicity to grafts. Used as a contact-free spray for scalp cleansing from day 2."
+      },
+      "card2": {
+        "title": "Botanical post-procedure formulas",
+        "badge": "Arnica · Centella",
+        "body": "Sterile preservative-free gels based on extracts of <em>Arnica montana</em> (helenalin, dihydrohelenalin — erythema reduction) and <em>Centella asiatica</em> (madecassoside, asiaticoside — collagen I synthesis stimulation, anti-inflammatory). Applied over the donor area, which after DHI resembles an extensive abrasion.",
+        "mech": "Uncontrolled overgrowth of <em>Malassezia</em> and pathogenic Staphylococcus strains around micro-wounds promotes scar fibrosis and graft loss."
+      }
+    },
+    "timeline": {
+      "eyebrow": "07 — TIMELINE: 48H AND THE FIRST 14 DAYS",
+      "title": "A chronological protocol, step by step.",
+      "lead": "48 hours = the critical window for graft survival. Full recovery is conducted systematically over the first 14 days.",
+      "phases": [
+        {
+          "tag": "During the procedure",
+          "title": "Ex Vivo phase — damage prevention",
+          "bullets": [
+            "Grafts collected directly into HypoThermosol FRS + ATP-v, chilled to 4 °C",
+            "Graft bath in autologous PRP 10–20 min before implantation",
+            "Minimize ex vivo time: target < 4 h for the deepest grafts"
+          ]
+        },
+        {
+          "tag": "Day 0–3",
+          "title": "48h — critical graft survival window (acute inflammation phase)",
+          "bullets": [
+            "PBM 650 + 830 nm, 20 min, immediately after the procedure, then every 24 h",
+            "HBOT 1.5–3.0 ATA: session 1 (day 0), session 2 (day 1)",
+            "Donor area protected with preservative-free barrier ointment",
+            "Contact-free rinsing of the recipient area with HOCl from 48 h",
+            "Sleep in semi-sitting position (≥30°) for 5 days"
+          ]
+        },
+        {
+          "tag": "Day 4–14",
+          "title": "Proliferation phase — microbiome management",
+          "bullets": [
+            "Scalp cleansing with HOCl or pH 5.5 shampoo without SLS, no rubbing",
+            "Home LLLT phototherapy (helmet) 2× daily/week, 20 min per session",
+            "From day 8: gentle massage to remove scabs + botanicals (arnica, centella)",
+            "Optical: erythema assessment, optional CAP session over the donor area"
+          ]
+        },
+        {
+          "tag": "Month 1+",
+          "title": "Systemic support — anagen stimulation",
+          "bullets": [
+            "Topical 5% minoxidil or oral microdoses 0.25–2.5 mg (off-label, after qualification)",
+            "PRP mesotherapy: sessions at month 1, 2, 4",
+            "LADD with thulium 1927 nm laser + minoxidil/PRP — from week 4–6",
+            "Maintenance PBM 1–2×/week for 12 weeks",
+            "Follow-up trichoscopy: month 3, 6, 12"
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "eyebrow": "10 — EVIDENCE-BASED MEDICINE",
+      "title": "Documented photobiomodulation as adjunctive therapy.",
+      "auditLabel": "Evidence audit mode",
+      "auditOn": "On",
+      "auditOff": "Off",
+      "card1": {
+        "title": "Graft survival",
+        "alt": "Hair follicle animation — graft survival",
+        "p1": "Hair transplant procedures (especially at reputable clinics) inherently achieve high survival of <b>90–95%</b><sup>[1]</sup>.",
+        "p2": "RCTs show that using PBM (650 nm) does not spectacularly raise absolute survival (it is hard to exceed 95%), but it dramatically rescues grafts exposed to ischemia-reperfusion injury, statistically yielding <b>5–8%</b><sup>[2]</sup> more total accepted units compared to the placebo group."
+      },
+      "card2": {
+        "title": "Faster anagen and healing",
+        "alt": "Anagen phase and healing animation",
+        "p1": "Normally, transplanted hairs enter telogen and shed after 2–4 weeks, with new anagen starting at month 3–4.",
+        "p2": "Studies show that patients irradiated with 655 nm enter anagen on average 3–4 weeks earlier<sup>[3]</sup>. Post-operative “shock loss” (telogen effluvium in the recipient area) is also reduced by about <b>20–30%</b><sup>[3,4]</sup>.",
+        "p3": "Mixed-wavelength light (e.g. 633 nm + 830 nm) right after the procedure leads to scabs falling off 3–5 days faster. Objective (spectrophotometric) post-procedure erythema reduction is <b>30–40%</b><sup>[5]</sup> faster in the first 14 days."
+      },
+      "card3": {
+        "title": "Final hair density and thickness",
+        "alt": "Animation of increased hair density and thickness",
+        "p1": "One year post-procedure, in groups using phototherapy (650 nm, 3×/week for 15–20 min), RCTs report an average increase of hair shaft diameter by <b>10–15%</b><sup>[3,4]</sup> and overall higher area density (not just from grafts, but also from stimulating miniaturized native hairs around the recipient zone)."
+      },
+      "card4": {
+        "title": "Revascularization and microcirculation",
+        "alt": "Animation of skin microcirculation revascularization",
+        "p1": "PBM (630–850 nm) increases VEGF expression and stimulates angiogenesis in the first days after the procedure, shortening the critical graft ischemia window and improving follicle nutrition.",
+        "p2": "HBOT (1.5–3.0 ATA) complements the mechanism — delivering plasma-dissolved oxygen to tissues with impaired perfusion until the new capillary network is fully restored."
+      }
+    }
   }
 }
