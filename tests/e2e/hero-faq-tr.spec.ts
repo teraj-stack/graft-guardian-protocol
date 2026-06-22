@@ -16,12 +16,13 @@ test.describe("HeroFAQ — Turkish locale", () => {
   test("renders correct Turkish content after switching language and reloading", async ({ page }) => {
     await page.goto("/");
 
-    // Switch to Turkish via the header language switcher.
-    await page.getByRole("group", { name: /dil|language|język/i }).first()
-      .getByRole("button", { name: /^tr$/i }).first()
-      .click();
+    // Switch to Turkish via the header language switcher group.
+    const switcher = page
+      .getByRole("group", { name: /dil|language|język/i })
+      .first();
+    await switcher.getByRole("button", { name: /^tr$/i }).first().click();
 
-    // Reload to ensure the locale persists.
+    // Reload to ensure the locale persists across navigations.
     await page.reload();
 
     await expect(page.locator("html")).toHaveAttribute("lang", "tr");
@@ -29,24 +30,23 @@ test.describe("HeroFAQ — Turkish locale", () => {
     const section = page.locator("#hero-faq");
     await section.scrollIntoViewIfNeeded();
 
+    // Eyebrow + title.
     await expect(section).toContainText(tr.heroFaq.eyebrow);
-    await expect(section.getByRole("heading", { name: tr.heroFaq.title })).toBeVisible();
+    await expect(
+      section.getByRole("heading", { level: 2, name: tr.heroFaq.title }),
+    ).toBeVisible();
 
+    // Exactly 6 Q/A pairs are expected.
     expect(tr.heroFaq.items).toHaveLength(6);
 
     for (const { q, a } of tr.heroFaq.items) {
-      const trigger = section.getByRole("button", { name: q });
-      await expect(trigger).toBeVisible();
-
-      // Open the accordion item if collapsed.
-      const expanded = await trigger.getAttribute("aria-expanded");
-      if (expanded !== "true") {
-        await trigger.click();
-      }
-
-      // Match a robust prefix to avoid whitespace/quote-normalization issues.
-      const snippet = a.slice(0, 40);
-      await expect(section.getByText(snippet, { exact: false }).first()).toBeVisible();
+      await expect(
+        section.getByRole("heading", { level: 3, name: q }),
+      ).toBeVisible();
+      // Match a stable answer prefix (avoids whitespace/quote normalization issues).
+      const snippet = a.slice(0, 60);
+      await expect(section.getByText(snippet, { exact: false }).first())
+        .toBeVisible();
     }
 
     // No raw i18n placeholders should leak into the rendered section.
