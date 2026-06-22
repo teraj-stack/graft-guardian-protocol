@@ -150,7 +150,7 @@ export function AnimatedTile({
     if (!el) return;
     try { el.load(); } catch {}
     if (shouldPlayRef.current) {
-      el.play().catch(() => setFallback(true));
+      el.play().catch(handlePlayError);
     }
   }, [loaded]);
 
