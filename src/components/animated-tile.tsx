@@ -55,6 +55,7 @@ export function AnimatedTile({
   const [posterReady, setPosterReady] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const [fallback, setFallback] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   const shouldPlayRef = useRef(false);
