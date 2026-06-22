@@ -830,11 +830,11 @@ export function InteractiveSchedule() {
               </div>
             </div>
             <ul className="space-y-2 md:col-span-8">
-              {d.tasks.map((t) => {
-                const checked = !!done[t.id];
-                const critical = t.tone === "critical";
+              {d.tasks.map((task) => {
+                const checked = !!done[task.id];
+                const critical = task.tone === "critical";
                 return (
-                  <li key={t.id}>
+                  <li key={task.id}>
                     <label
                       className={[
                         "flex cursor-pointer items-start gap-3 border p-3 text-sm transition",
@@ -848,7 +848,7 @@ export function InteractiveSchedule() {
                       <input
                         type="checkbox"
                         checked={checked}
-                        onChange={() => toggle(t.id)}
+                        onChange={() => toggle(task.id)}
                         className="mt-1 h-4 w-4 shrink-0 accent-[hsl(var(--accent))]"
                       />
                       <span className="flex-1">
@@ -857,7 +857,7 @@ export function InteractiveSchedule() {
                             {t("schedule.criticalBadge")}
                           </span>
                         )}
-                        {t.label}
+                        {task.label}
                       </span>
                     </label>
                   </li>
