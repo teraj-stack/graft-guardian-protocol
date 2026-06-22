@@ -18,7 +18,35 @@ export const Route = createFileRoute("/prywatnosc")({
       { property: "og:url", content: "https://graftgen.com/prywatnosc" },
     ],
     links: [{ rel: "canonical", href: "https://graftgen.com/prywatnosc" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Polityka prywatności — Graftgen.com",
+          description:
+            "Polityka prywatności RODO: kto przetwarza dane, podstawy prawne, okresy retencji, prawa pacjenta oraz kontakt IOD.",
+          url: "https://graftgen.com/prywatnosc",
+          inLanguage: "pl-PL",
+          isPartOf: { "@id": "https://graftgen.com/#website" },
+          publisher: { "@id": "https://graftgen.com/#organization" },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Strona główna", item: "https://graftgen.com/" },
+            { "@type": "ListItem", position: 2, name: "Polityka prywatności", item: "https://graftgen.com/prywatnosc" },
+          ],
+        }),
+      },
+    ],
   }),
+
   component: PrivacyPage,
 });
 
