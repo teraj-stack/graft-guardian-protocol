@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState, type ReactNode, type FormEvent } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { PRICING } from "@/lib/pricing-data";
-import { FAQ, STAGES, TOPICS, useFaq, type Stage, type Topic } from "@/lib/faq-data";
+import { useFaq } from "@/lib/faq-data";
 import type { StageKey, TopicKey } from "@/lib/faq-meta";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
