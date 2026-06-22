@@ -840,6 +840,18 @@
         "p1": "PBM (630–850 nm) zwiększa ekspresję VEGF i stymuluje angiogenezę w pierwszych dobach po zabiegu, skracając okno krytycznej ischemii graftów i poprawiając odżywienie mieszków.",
         "p2": "HBOT (1,5–3,0 ATA) uzupełnia mechanizm — dostarcza tlen rozpuszczony w osoczu do tkanek o upośledzonej perfuzji, dopóki nowa sieć naczyń włosowatych nie zostanie w pełni odtworzona."
       }
+    },
+    "ledResults": {
+      "eyebrow": "03B — REZULTATY",
+      "title": "Fototerapia LED — efekty po 1 miesiącu",
+      "lead": "Protokół: 3 sesje tygodniowo × 10 minut. Dokumentacja dwóch przypadków: pacjent 10 lat po przeszczepie włosów oraz pacjent bez przeszczepu z androgenowym przerzedzeniem.",
+      "case1Title": "Pacjent 10 lat po przeszczepie włosów",
+      "case1Caption": "Stabilizacja gęstości w strefie biorczej, redukcja zaczerwienienia skóry, równomierny wzrost mieszków.",
+      "case2Title": "Pacjent bez przeszczepu — przerzedzenie wierzchołka",
+      "case2Caption": "Zagęszczenie obszaru wertex, poprawa jakości łodygi włosa, ograniczenie odsłonięcia skóry.",
+      "before": "PRZED",
+      "after": "PO 1 MIESIĄCU",
+      "disclaimer": "Wyniki indywidualne. Dokumentacja kliniczna Graftgen.com — zgoda pacjentów na publikację."
     }
   },
   "pricing": {
