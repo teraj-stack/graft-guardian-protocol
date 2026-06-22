@@ -420,7 +420,7 @@ export function InteractiveSchedule() {
 
 
 
-  const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
+  const totalTasks = schedule.reduce((n, d) => n + d.tasks.length, 0);
   const doneCount = Object.values(done).filter(Boolean).length;
   const pct = Math.round((doneCount / totalTasks) * 100);
 
@@ -786,7 +786,7 @@ export function InteractiveSchedule() {
 
       <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
 
-        {SCHEDULE.map((d) => {
+        {schedule.map((d) => {
           const dayDone = d.tasks.every((t) => done[t.id]);
           const dayPartial = !dayDone && d.tasks.some((t) => done[t.id]);
           const active = openDay === d.day;
@@ -812,7 +812,7 @@ export function InteractiveSchedule() {
         })}
       </div>
 
-      {SCHEDULE.filter((d) => d.day === openDay).map((d) => {
+      {schedule.filter((d) => d.day === openDay).map((d) => {
         const dayDoneCount = d.tasks.filter((t) => done[t.id]).length;
         return (
           <div
