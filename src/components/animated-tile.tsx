@@ -54,18 +54,42 @@ export function AnimatedTile({
   const [videoReady, setVideoReady] = useState(false);
   const [posterReady, setPosterReady] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [fallback, setFallback] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   const shouldPlayRef = useRef(false);
 
-  // Delay spinner so it doesn't flash on fast connections
+  // Detect reduced motion / autoplay-off — keep poster as the final state.
   useEffect(() => {
-    if (videoReady) {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+
+  // Delay spinner so it doesn't flash on fast connections.
+  // Stop spinning once we've decided to show the static fallback.
+  useEffect(() => {
+    if (videoReady || fallback || reducedMotion) {
       setShowSpinner(false);
       return;
     }
     const t = setTimeout(() => setShowSpinner(true), 300);
     return () => clearTimeout(t);
-  }, [videoReady]);
+  }, [videoReady, fallback, reducedMotion]);
+
+  // Watchdog: if the video never reports loadeddata within 8s after sources
+  // mount, treat as failed and keep the poster as the persistent fallback.
+  useEffect(() => {
+    if (!loaded || videoReady || fallback) return;
+    const t = setTimeout(() => {
+      if (!ref.current) return;
+      // readyState < HAVE_CURRENT_DATA (2) means we still have no frame.
+      if (ref.current.readyState < 2) setFallback(true);
+    }, 8000);
+    return () => clearTimeout(t);
+  }, [loaded, videoReady, fallback]);
 
   useEffect(() => {
     const el = ref.current;
