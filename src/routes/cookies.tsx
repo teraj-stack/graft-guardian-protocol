@@ -12,7 +12,35 @@ export const Route = createFileRoute("/cookies")({
       { property: "og:url", content: "https://graft-guardian-protocol.lovable.app/cookies" },
     ],
     links: [{ rel: "canonical", href: "https://graft-guardian-protocol.lovable.app/cookies" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Polityka cookies — Protokół Po Przeszczepie",
+          description:
+            "Kategorie plików cookies używanych w serwisie, podstawy prawne (RODO/ePrivacy) oraz panel zarządzania zgodami.",
+          url: "https://graftgen.com/cookies",
+          inLanguage: "pl-PL",
+          isPartOf: { "@id": "https://graftgen.com/#website" },
+          publisher: { "@id": "https://graftgen.com/#organization" },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Strona główna", item: "https://graftgen.com/" },
+            { "@type": "ListItem", position: 2, name: "Polityka cookies", item: "https://graftgen.com/cookies" },
+          ],
+        }),
+      },
+    ],
   }),
+
   component: CookiesPage,
 });
 
