@@ -535,30 +535,15 @@ function CreatorReviews() {
 /* ---------- Why ---------- */
 
 function Why() {
+  const { t } = useTranslation();
+  const paragraphs = t("clinical.why.paragraphs", { returnObjects: true }) as string[];
   return (
-    <Section id="dlaczego" eyebrow="01 — DLACZEGO PIERWSZE 48 GODZIN?">
-      <SectionHeader title="Okno, w którym decyduje się los każdego przeszczepionego włosa." />
+    <Section id="dlaczego" eyebrow={t("clinical.why.eyebrow")}>
+      <SectionHeader title={t("clinical.why.title")} />
       <div className="grid gap-8 md:grid-cols-3">
-        <Para>
-          Po ekstrakcji metodą DHI graft jest tkanką niedokrwioną. Od momentu
-          pobrania do rewaskularyzacji w łożysku biorczym przeżywa wyłącznie
-          dzięki dyfuzji tlenu z osocza otaczającego miejsce przeszczepu.
-          Pierwsze naczynia włosowate dochodzą do brodawki włosa zwykle między
-          48 - 96godz. Dla niedotlenionej cebulki włosa to krytyczny okres,
-          który determinuje przyjęcie ostateczny efekt zabiegu.
-        </Para>
-        <Para>
-          W tym czasie komórki macierzyste wybrzuszenia (bulge) i komórki
-          brodawki włosowej (DPC) zużywają zapasy ATP. Po ich wyczerpaniu
-          uruchamia się apoptoza. Każda godzina niedotlenienia to mierzalny
-          spadek puli żywych mieszków.
-        </Para>
-        <Para>
-          Kortyzol pacjenta w stresie pozabiegowym jest wazokonstryktorem.
-          Lęk, ból i dezinformacja realnie pogarszają perfuzję skóry głowy
-          — dlatego koordynacja opieki pozabiegowej nie jest dodatkiem,
-          tylko parametrem klinicznym.
-        </Para>
+        {paragraphs.map((p, i) => (
+          <Para key={i}>{p}</Para>
+        ))}
       </div>
     </Section>
   );
@@ -567,40 +552,21 @@ function Why() {
 /* ---------- Ex Vivo ---------- */
 
 function ExVivo() {
+  const { t } = useTranslation();
   return (
-    <Section id="ex-vivo" eyebrow="02 — FAZA EX VIVO">
+    <Section id="ex-vivo" eyebrow={t("clinical.exVivo.eyebrow")}>
       <SectionHeader
-        title="Ochrona metaboliczna graftów od momentu ekstrakcji."
-        lead="Standardem w wielu klinikach wciąż jest 0,9% NaCl lub płyn Ringera. Z punktu widzenia transplantologii są to roztwory podtrzymujące osmolarność, nie chroniące metabolizmu komórki. W naszym protokole grafty trafiają do roztworów stosowanych w przechowywaniu narządów do przeszczepu."
+        title={t("clinical.exVivo.title")}
+        lead={t("clinical.exVivo.lead")}
       />
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="HypoThermosol FRS + liposomalny ATP (ATP-v)" badge="4 °C">
-          <p>
-            HypoThermosol FRS to buforowany roztwór hipotermiczny zawierający
-            HEPES, mannitol, adenozynę, glutation, dekstran. Utrzymuje
-            homeostazę jonową komórki w 2–8 °C ponad 24 h. Dodatek
-            liposomalnego ATP dostarcza energii bezpośrednio do cytozolu
-            — pompy Na⁺/K⁺-ATPazy działają, ciśnienie osmotyczne nie pęka,
-            apoptoza zostaje wyciszona.
-          </p>
-          <Mech>
-            0,9% NaCl: ATP wyczerpane w 2–4 h. HypoThermosol + ATP-v:
-            żywotność komórek &gt; 90% po 12 h ex vivo.
-          </Mech>
+        <Card title={t("clinical.exVivo.card1.title")} badge={t("clinical.exVivo.card1.badge")}>
+          <p>{t("clinical.exVivo.card1.body")}</p>
+          <Mech>{t("clinical.exVivo.card1.mech")}</Mech>
         </Card>
-        <Card title="Kąpiel graftów w PRP przed implantacją" badge="VEGF · PDGF">
-          <p>
-            Autologiczne osocze bogatopłytkowe (1,5–6× koncentracji płytek
-            bazowych) inkubuje grafty 10–20 min przed implantacją.
-            Czynniki wzrostu (VEGF, PDGF-BB, EGF, IGF-1, TGF-β) wysycają
-            mieszek jeszcze przed wszczepieniem, co skraca okno
-            niedokrwienia i przyspiesza angiogenezę.
-          </p>
-          <Mech>
-            VEGF → proliferacja komórek śródbłonka; PDGF → migracja
-            pericytów; IGF-1 → utrzymanie anagenu komórek macierzystych
-            bulge.
-          </Mech>
+        <Card title={t("clinical.exVivo.card2.title")} badge={t("clinical.exVivo.card2.badge")}>
+          <p>{t("clinical.exVivo.card2.body")}</p>
+          <Mech>{t("clinical.exVivo.card2.mech")}</Mech>
         </Card>
       </div>
     </Section>
@@ -610,36 +576,24 @@ function ExVivo() {
 /* ---------- PBM ---------- */
 
 function PBM() {
+  const { t } = useTranslation();
+  const bullets = t("clinical.pbm.card1.bullets", { returnObjects: true }) as string[];
   return (
-    <Section id="pbm" eyebrow="03 — FOTOBIOMODULACJA (PBM)">
+    <Section id="pbm" eyebrow={t("clinical.pbm.eyebrow")}>
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-        <SectionHeader
-          title="Światło 650 i 830 nm jako narzędzie bioenergetyczne."
-        />
+        <SectionHeader title={t("clinical.pbm.title")} />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Parametry sesji pozabiegowej" badge="20 min">
+        <Card title={t("clinical.pbm.card1.title")} badge={t("clinical.pbm.card1.badge")}>
           <ul className="space-y-2 text-sm">
-            <li>• 650 nm (czerwone) — penetracja 1–2 mm, naskórek i brodawka włosa</li>
-            <li>• 830 nm (NIR) — penetracja 3–5 mm, głębokie brodawki, łożysko biorcze</li>
-            <li>• Dawka 4–6 J/cm² na sesję (próg biostymulacji wg krzywej Arndta-Schulza)</li>
-            <li>• Naświetlanie obszaru biorczego i dawczego bezpośrednio po zabiegu</li>
-            <li>• Sesje kontynuowane co 24–48 h przez 14 dni</li>
+            {bullets.map((b, i) => (
+              <li key={i}>• {b}</li>
+            ))}
           </ul>
         </Card>
-        <Card title="Sprzęt w gabinecie" badge="3 lampy LED">
-          <p>
-            Dysponujemy trzema lampami LED o zweryfikowanym spektrum emisji
-            (czerwone 630–660 nm oraz NIR 810–840 nm). Pomiar spektralny
-            potwierdza zgodność z zakresem terapeutycznym opisanym w
-            literaturze (m.in. Avci et al. 2014, Hamblin 2016). Sesja
-            gabinetowa jest kontynuowana w domu przez pacjenta hełmem LLLT
-            2x dziennie/tydz. przez 12 tygodni.
-          </p>
-          <Mech>
-            PBM aktywuje również ścieżkę Wnt/β-katenina w komórkach
-            brodawki włosa — kluczową dla wejścia w fazę anagenu.
-          </Mech>
+        <Card title={t("clinical.pbm.card2.title")} badge={t("clinical.pbm.card2.badge")}>
+          <p>{t("clinical.pbm.card2.body")}</p>
+          <Mech>{t("clinical.pbm.card2.mech")}</Mech>
         </Card>
       </div>
     </Section>
@@ -649,35 +603,27 @@ function PBM() {
 /* ---------- HBOT ---------- */
 
 function HBOT() {
+  const { t } = useTranslation();
+  const bullets = t("clinical.hbot.card1.bullets", { returnObjects: true }) as string[];
   return (
-    <Section id="hbot" eyebrow="04 — TLENOTERAPIA HIPERBARYCZNA (HBOT)">
+    <Section id="hbot" eyebrow={t("clinical.hbot.eyebrow")}>
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <SectionHeader
-          title="Tlen dociera tam, gdzie krwinki czerwone jeszcze nie mogą dotrzeć."
-          lead="Pod ciśnieniem 1,5–3,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w surowicy krwi (prawo Henry'ego) dyfunduje do przeszczepionych cebulek zanim zostanie odtworzona ich sieć kapilarna."
+          title={t("clinical.hbot.title")}
+          lead={t("clinical.hbot.lead")}
         />
       </div>
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Protokół sesji" badge="1,5–3,0 ATA">
+        <Card title={t("clinical.hbot.card1.title")} badge={t("clinical.hbot.card1.badge")}>
           <ul className="space-y-2 text-sm">
-            <li>• Sesja 1: Doba "Zero" po zabiegu, 60–90 min, 1,5–3,0 ATA</li>
-            <li>• Sesja 2: doba 1 po zabiegu, 60–90 min</li>
-            <li>• Opcjonalne sesje uzupełniające: doba 4 i 7</li>
-            <li>• Kwalifikacja: brak czynnej infekcji ucha, brak nieleczonej odmy, brak ciężkiej POChP</li>
+            {bullets.map((b, i) => (
+              <li key={i}>• {b}</li>
+            ))}
           </ul>
         </Card>
-        <Card title="Mechanizm działania" badge="pO₂ ×10">
-          <p>
-            Przesycenie tlenem redukuje ryzyko martwicy graftu w oknie
-            niedokrwienia, hamuje aktywację HIF-1α związaną z hipoksją,
-            mobilizuje progenitorowe komórki śródbłonka ze szpiku
-            (angiogeneza), działa bakteriostatycznie na bakterie
-            beztlenowe.
-          </p>
-          <Mech>
-            Współpracujemy z certyfikowanym ośrodkiem terapii
-            hiperbarycznej.
-          </Mech>
+        <Card title={t("clinical.hbot.card2.title")} badge={t("clinical.hbot.card2.badge")}>
+          <p>{t("clinical.hbot.card2.body")}</p>
+          <Mech>{t("clinical.hbot.card2.mech")}</Mech>
         </Card>
       </div>
     </Section>
@@ -687,8 +633,10 @@ function HBOT() {
 /* ---------- LADD ---------- */
 
 function LADD() {
+  const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  
+  const header = t("clinical.ladd.table.header", { returnObjects: true }) as string[];
+  const rows = t("clinical.ladd.table.rows", { returnObjects: true }) as string[][];
 
   useEffect(() => {
     const video = videoRef.current;
@@ -710,18 +658,18 @@ function LADD() {
   }, []);
 
   return (
-    <Section id="ladd" eyebrow="05 — LADD: LASER-ASSISTED DRUG DELIVERY">
+    <Section id="ladd" eyebrow={t("clinical.ladd.eyebrow")}>
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-1 flex-col">
           <SectionHeader
-            title="Mikrokanały zamiast wcierania."
+            title={t("clinical.ladd.title")}
             lead={
               <>
-                <strong className="font-bold">Laser-Assisted Drug Delivery</strong> to kontrolowane utworzenie pionowych mikrokanałów w warstwie rogowej, umożliwiających dostarczenie aktywnej substancji (minoksydyl, PRP, peptydy, eksosomy) na głębokość brodawki włosa. Skuteczność penetracji rośnie kilkukrotnie w porównaniu z aplikacją topową.
+                <span dangerouslySetInnerHTML={{ __html: t("clinical.ladd.leadIntro") }} />
                 <br />
                 -----------------------------------------------------
                 <br />
-                Klasyczna <strong className="font-bold">mezoterapia igłowa</strong> zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia, zaburzać neowaskularyzacj. Wielu pacjentów rezygnuje z zabiegów uzupełniających z obawy przed bólem. <strong className="font-bold">Protokoły laserowe LADD</strong> opracowano we współpracy z MySkinCode.pl
+                <span dangerouslySetInnerHTML={{ __html: t("clinical.ladd.leadWarning") }} />
               </>
             }
           />
@@ -766,19 +714,15 @@ function LADD() {
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead className="border-b border-border bg-secondary/60 text-xs uppercase tracking-wider text-muted-foreground">
             <tr>
-              <th className="px-5 py-4 font-medium">Parametr</th>
-              <th className="px-5 py-4 font-medium">Laser tulowy 1927 nm</th>
-              <th className="px-5 py-4 font-medium">Zimna plazma atmosferyczna (CAP)</th>
+              {header.map((h, i) => (
+                <th key={i} className="px-5 py-4 font-medium">{h}</th>
+              ))}
             </tr>
           </thead>
           <tbody className="[&>tr]:border-b [&>tr]:border-border [&>tr:last-child]:border-b-0">
-            <Row label="Mechanizm" a="Ablacja frakcyjna H₂O" b="Nietermiczna jonizacja, RONS" />
-            <Row label="Głębokość mikrokanałów" a="150–300 µm" b="50–100 µm" />
-            <Row label="Downtime" a="24–72 h rumień, łuszczenie" b="Brak / minimalny" />
-            <Row label="Bezpieczeństwo nad świeżym graftem" a="Od doby 14+" b="Możliwe od doby 7" />
-            <Row label="Penetracja minoksydylu" a="Wysoka (×4–8)" b="Umiarkowana (×2–3)" />
-            <Row label="Działanie antybakteryjne" a="Pośrednie" b="Bezpośrednie (RONS na biofilm)" />
-            <Row label="Czas zabiegu" a="15–25 min" b="10–15 min" />
+            {rows.map((r, i) => (
+              <Row key={i} label={r[0]} a={r[1]} b={r[2]} />
+            ))}
           </tbody>
         </table>
       </div>
@@ -796,6 +740,7 @@ function Row({ label, a, b }: { label: string; a: string; b: string }) {
     </tr>
   );
 }
+
 
 /* ---------- Footer ---------- */
 
