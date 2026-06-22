@@ -933,56 +933,39 @@ export function InteractiveSchedule() {
 /* ---------- Patient journey ---------- */
 
 export function Journey() {
+  const { t } = useTranslation();
+  const bullets = t("journey.bullets", { returnObjects: true, defaultValue: [] }) as string[];
   return (
-    <Section id="journey" eyebrow="09 — PATIENT JOURNEY">
+    <Section id="journey" eyebrow={t("journey.eyebrow")}>
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-7">
-          <h2 className="font-display text-4xl md:text-5xl">
-            Pacjent wyedukowany, to pacjent współpracujący.
-          </h2>
-          <p className="mt-6 text-muted-foreground">
-            Pacjent opuszczający klinikę z zakrwawioną głową, bez planu,
-            bez kontaktu — to nie tylko złe doświadczenie. Kortyzol w
-            stresie pozabiegowym upośledza krążenie skórne. Lęk realnie
-            pogarsza perfuzję skóry głowy i zwiększa ryzyko mechanicznej
-            utraty graftów (drapanie, niewłaściwe mycie, zdejmowanie
-            strupów przed czasem).
-          </p>
-          <p className="mt-4 text-muted-foreground">
-            Każdy pacjent po zalogowaniu na Naszą stronę ma dostęp do
-            materiałów dostępnych online (pełna dokumentacja oraz
-            najnowsze trendy w medycynie regeneracyjnej, anti-aging) oraz
-            e-book &bdquo;Patient Journey&rdquo; z instrukcjami na każdy z
-            pierwszych 14 dni — co robić rano, wieczorem, czego nie
-            robić, kiedy się niepokoić. Dodatkowo: bezpośredni kontakt do
-            prowadzącego przez pierwsze 30 dni.
-          </p>
+          <h2 className="font-display text-4xl md:text-5xl">{t("journey.title")}</h2>
+          <p className="mt-6 text-muted-foreground">{t("journey.p1")}</p>
+          <p className="mt-4 text-muted-foreground">{t("journey.p2")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/panel"
               className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
-              Wejdź do panelu pacjenta →
+              {t("journey.ctaPanel")}
             </Link>
             <Link
               to="/przypomnienia"
               className="inline-flex items-center rounded-sm border border-foreground/80 px-5 py-3 text-sm font-medium text-foreground transition hover:bg-secondary"
             >
-              Ustaw przypomnienia e-mail/SMS
+              {t("journey.ctaReminders")}
             </Link>
           </div>
         </div>
         <aside className="md:col-span-5">
           <div className="rounded-sm border border-border bg-card p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              W e-booku
+              {t("journey.inEbook")}
             </p>
             <ul className="mt-5 space-y-3 text-sm">
-              <li>· Checklist na każdy z 14 dni</li>
-              <li>· Lista zakupowa preparatów (HOCI, szampon pH 5,5, maść)</li>
-              <li>· Diagramy: pozycja spania, technika mycia, kąt natrysku</li>
-              <li>· Czerwone flagi wymagające kontaktu z kliniką</li>
-              <li>· Plan powrotu do aktywności (sport, sauna, basen, słońce)</li>
+              {bullets.map((b, i) => (
+                <li key={i}>· {b}</li>
+              ))}
             </ul>
           </div>
         </aside>
