@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ALL_WEEKS, WEEK_PRESETS, materialsForWeek } from "@/lib/materials";
 import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/reminders/schema";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const TITLE = "Przypomnienia po przeszczepie — e-mail i SMS";
 const DESCRIPTION =
@@ -129,7 +131,8 @@ function RemindersPage() {
             <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">przypomnienia</span>
           </Link>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher compact />
             <Link
               to="/panel"
               className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
@@ -319,11 +322,7 @@ function RemindersPage() {
         )}
       </main>
 
-      <footer className="border-t border-border bg-background">
-        <div className="mx-auto max-w-4xl px-6 py-10 text-xs text-muted-foreground">
-          Dane kontaktowe przechowywane są wyłącznie w celu wysyłki przypomnień. Nie udostępniamy ich osobom trzecim.
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

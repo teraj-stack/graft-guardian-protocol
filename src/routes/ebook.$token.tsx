@@ -6,6 +6,8 @@ import {
   verifyEbookAccess,
   type EbookChapter,
 } from "@/lib/ebook.functions";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SiteFooter } from "@/components/SiteFooter";
 
 
 const TITLE = "Patient Journey — przewodnik po pierwszych 14 dniach";
@@ -448,6 +450,7 @@ function EbookPage() {
             ← Strona główna
           </Link>
           <div className="flex items-center gap-3">
+            <LanguageSwitcher compact />
             <button
               onClick={() => {
                 if (confirm("Wyzerować całą checklistę?")) reset();
@@ -532,10 +535,11 @@ function EbookPage() {
           })}
         </div>
 
-        <footer className="mt-16 border-t border-border/60 pt-8 text-xs text-muted-foreground print:mt-8">
-          © {new Date().getFullYear()} Graftgen.com. Materiał edukacyjny — nie zastępuje konsultacji lekarskiej.
-        </footer>
       </main>
+
+      <div className="print:hidden">
+        <SiteFooter />
+      </div>
 
 
       <style>{`

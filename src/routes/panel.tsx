@@ -3,6 +3,8 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useMemo, useState } from "react";
 import { usePanelProgress } from "@/hooks/use-panel-progress";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const TITLE = "Panel pacjenta — biblioteka materiałów pozabiegowych";
 const DESCRIPTION =
@@ -238,7 +240,8 @@ function PanelPage() {
             <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">panel pacjenta</span>
           </Link>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher compact />
             <Link
               to="/przypomnienia"
               className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
@@ -254,6 +257,7 @@ function PanelPage() {
           </div>
         </div>
       </header>
+
 
       <main className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <p className="mb-4 text-xs uppercase tracking-[0.25em] text-accent">Biblioteka materiałów</p>
@@ -299,12 +303,7 @@ function PanelPage() {
         )}
       </main>
 
-      <footer className="border-t border-border bg-background">
-        <div className="mx-auto max-w-6xl px-6 py-10 text-xs text-muted-foreground">
-          Materiały edukacyjne. Nie zastępują indywidualnej konsultacji lekarskiej.
-          Postęp przechowywany lokalnie (localStorage) — nie synchronizuje się między urządzeniami.
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
