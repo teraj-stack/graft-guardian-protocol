@@ -760,46 +760,44 @@ function Row({ label, a, b }: { label: string; a: string; b: string }) {
 /* ---------- Footer ---------- */
 
 function Footer() {
+  const { t } = useTranslation();
+  const disclaimers = t("footer.disclaimers", { returnObjects: true, defaultValue: [] }) as string[];
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-6">
-            <p className="font-display text-2xl">Protokół po przeszczepie</p>
+            <p className="font-display text-2xl">{t("footer.brand")}</p>
             <p className="mt-3 max-w-md text-sm text-muted-foreground">
-              Materiał edukacyjny dla pacjentów po przeszczepie włosów
-              metodą DHI. Treści mają charakter informacyjny i nie
-              zastępują indywidualnej konsultacji lekarskiej. Decyzje
-              terapeutyczne podejmuje lekarz na podstawie pełnego wywiadu
-              i badania.
+              {t("footer.about")}
             </p>
           </div>
           <div className="md:col-span-3">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Sekcje
+              {t("footer.sectionsTitle")}
             </p>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><a href="#ex-vivo" className="hover:text-accent">Faza Ex Vivo</a></li>
-              <li><a href="#pbm" className="hover:text-accent">Fotobiomodulacja</a></li>
-              <li><a href="#hbot" className="hover:text-accent">HBOT</a></li>
-              <li><a href="#ladd" className="hover:text-accent">LADD</a></li>
-              <li><a href="#protokol" className="hover:text-accent">Oś czasu 14 dni</a></li>
+              <li><a href="#ex-vivo" className="hover:text-accent">{t("footer.sections.exVivo")}</a></li>
+              <li><a href="#pbm" className="hover:text-accent">{t("footer.sections.pbm")}</a></li>
+              <li><a href="#hbot" className="hover:text-accent">{t("footer.sections.hbot")}</a></li>
+              <li><a href="#ladd" className="hover:text-accent">{t("footer.sections.ladd")}</a></li>
+              <li><a href="#protokol" className="hover:text-accent">{t("footer.sections.timeline")}</a></li>
             </ul>
           </div>
           <div className="md:col-span-3">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Zastrzeżenia
+              {t("footer.disclaimersTitle")}
             </p>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <li>Brak gwarancji wyniku terapii</li>
-              <li>Minoksydyl doustny — off-label</li>
-              <li>HBOT — wskazanie komercyjne, nierefundowane</li>
+              {Array.isArray(disclaimers) && disclaimers.map((d, i) => (
+                <li key={i}>{d}</li>
+              ))}
             </ul>
           </div>
         </div>
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-            Współtwórcy projektu
+            {t("footer.partnersTitle")}
           </p>
           <div className="mt-6 grid grid-cols-1 items-center gap-6 sm:grid-cols-3">
             <div className="flex items-center justify-center rounded-md bg-white p-4 h-24">
@@ -814,10 +812,10 @@ function Footer() {
           </div>
         </div>
         <div className="mt-10 border-t border-border pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} Protokół po przeszczepie. Wszystkie prawa zastrzeżone.</span>
+          <span>{t("footer.copyright", { year: new Date().getFullYear() })}</span>
           <div className="flex flex-wrap gap-x-4 gap-y-1">
-            <Link to="/prywatnosc" className="hover:text-accent">Polityka prywatności i RODO</Link>
-            <Link to="/cookies" className="hover:text-accent">Polityka cookies</Link>
+            <Link to="/prywatnosc" className="hover:text-accent">{t("footer.privacy")}</Link>
+            <Link to="/cookies" className="hover:text-accent">{t("footer.cookies")}</Link>
           </div>
         </div>
       </div>

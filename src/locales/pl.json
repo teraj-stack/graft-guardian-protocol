@@ -96,8 +96,26 @@
     "contact": "Kontakt"
   },
   "footer": {
+    "brand": "Protokół po przeszczepie",
+    "about": "Materiał edukacyjny dla pacjentów po przeszczepie włosów metodą DHI. Treści mają charakter informacyjny i nie zastępują indywidualnej konsultacji lekarskiej. Decyzje terapeutyczne podejmuje lekarz na podstawie pełnego wywiadu i badania.",
+    "sectionsTitle": "Sekcje",
+    "sections": {
+      "exVivo": "Faza Ex Vivo",
+      "pbm": "Fotobiomodulacja",
+      "hbot": "HBOT",
+      "ladd": "LADD",
+      "timeline": "Oś czasu 14 dni"
+    },
+    "disclaimersTitle": "Zastrzeżenia",
+    "disclaimers": [
+      "Brak gwarancji wyniku terapii",
+      "Minoksydyl doustny — off-label",
+      "HBOT — wskazanie komercyjne, nierefundowane"
+    ],
+    "partnersTitle": "Współtwórcy projektu",
+    "copyright": "© {{year}} Protokół po przeszczepie. Wszystkie prawa zastrzeżone.",
     "rights": "Wszelkie prawa zastrzeżone.",
-    "privacy": "Polityka prywatności",
+    "privacy": "Polityka prywatności i RODO",
     "cookies": "Polityka cookies"
   },
   "languageSwitcher": {

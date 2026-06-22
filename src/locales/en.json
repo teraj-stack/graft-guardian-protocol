@@ -96,9 +96,27 @@
     "contact": "Contact"
   },
   "footer": {
+    "brand": "Post-Transplant Protocol",
+    "about": "Educational material for patients after DHI hair transplantation. The content is informational and does not replace individual medical consultation. Therapeutic decisions are made by a physician based on a full history and examination.",
+    "sectionsTitle": "Sections",
+    "sections": {
+      "exVivo": "Ex Vivo Phase",
+      "pbm": "Photobiomodulation",
+      "hbot": "HBOT",
+      "ladd": "LADD",
+      "timeline": "14-day Timeline"
+    },
+    "disclaimersTitle": "Disclaimers",
+    "disclaimers": [
+      "No guarantee of therapeutic outcome",
+      "Oral minoxidil — off-label",
+      "HBOT — commercial indication, not reimbursed"
+    ],
+    "partnersTitle": "Project contributors",
+    "copyright": "© {{year}} Post-Transplant Protocol. All rights reserved.",
     "rights": "All rights reserved.",
-    "privacy": "Privacy policy",
-    "cookies": "Cookie policy"
+    "privacy": "Privacy Policy & GDPR",
+    "cookies": "Cookie Policy"
   },
   "languageSwitcher": {
     "label": "Choose language"
