@@ -131,7 +131,8 @@ function RemindersPage() {
             <span className="font-display text-2xl font-light leading-none tracking-wide">Protokół</span>
             <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">przypomnienia</span>
           </Link>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher compact />
             <Link
               to="/panel"
               className="inline-flex items-center rounded-sm border border-border px-4 py-2 text-sm text-foreground transition hover:bg-secondary"
