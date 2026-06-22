@@ -23,37 +23,22 @@ import {
 /* ---------- Microbiome ---------- */
 
 export function Microbiome() {
+  const { t } = useTranslation();
   return (
-    <Section id="mikrobiom" eyebrow="06 — MIKROBIOM I STREFA DAWCZA">
+    <Section id="mikrobiom" eyebrow={t("clinical.microbiome.eyebrow")}>
       <SectionHeader
-        title="Antyseptyka, która nie uszkadza graftu."
-        lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
+        title={t("clinical.microbiome.title")}
+        lead={t("clinical.microbiome.lead")}
       />
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="HOCI — kwas podchlorawy" badge="0,01–0,02%">
-          <p>
-            HOCI to ten sam związek, który neutrofile produkują podczas
-            fagocytozy. W stężeniach 0,01–0,02% działa bakteriobójczo
-            (w tym na MRSA i biofilmy <em>S. aureus</em>) oraz
-            grzybobójczo wobec <em>Malassezia</em>, nie wykazując
-            cytotoksyczności wobec graftów. Stosowany jako bezdotykowy
-            spray do mycia skóry głowy od doby 2.
-          </p>
+        <Card title={t("clinical.microbiome.card1.title")} badge={t("clinical.microbiome.card1.badge")}>
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.microbiome.card1.body") }} />
         </Card>
         <div className="flex flex-col gap-6">
-          <Card title="Botaniczne formuły pozabiegowe" badge="Arnica · Centella">
-            <p>
-              Sterylne żele bez konserwantów na bazie wyciągów z
-              <em> Arnica montana</em> (helenalina, dihydrohelenalina —
-              redukcja erytemy) oraz <em>Centella asiatica</em>
-              (madekasozyd, asiatykozyd — stymulacja syntezy kolagenu I,
-              redukcja stanu zapalnego). Zastosowanie nad strefą dawczą,
-              która po DHI przypomina rozległe otarcie.
-            </p>
+          <Card title={t("clinical.microbiome.card2.title")} badge={t("clinical.microbiome.card2.badge")}>
+            <p dangerouslySetInnerHTML={{ __html: t("clinical.microbiome.card2.body") }} />
             <Mech>
-              Niekontrolowane namnażanie <em>Malassezia</em> i
-              patogennych szczepów gronkowca wokół mikroran sprzyja
-              włóknieniu bliznowatemu i utracie graftów.
+              <span dangerouslySetInnerHTML={{ __html: t("clinical.microbiome.card2.mech") }} />
             </Mech>
           </Card>
         </div>
@@ -65,55 +50,18 @@ export function Microbiome() {
 /* ---------- Timeline ---------- */
 
 export function Timeline() {
-  const phases: { tag: string; title: string; bullets: string[] }[] = [
-    {
-      tag: "Podczas zabiegu",
-      title: "Faza Ex Vivo — prewencja uszkodzeń",
-      bullets: [
-        "Pobieranie graftów bezpośrednio do HypoThermosol FRS + ATP-v, schłodzonego do 4 °C",
-        "Kąpiel graftów w autologicznym PRP 10–20 min przed implantacją",
-        "Minimalizacja czasu ex vivo: target < 4 h dla najgłębszych graftów",
-      ],
-    },
-    {
-      tag: "Doba 0–3",
-      title: "48h — krytyczne okno przeżywalności graftów (faza ostrego zapalenia)",
-      bullets: [
-        "PBM 650 + 830 nm, 20 min, bezpośrednio po zabiegu, dalej co 24 h",
-        "HBOT 1,5–3,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
-        "Strefa dawcza zabezpieczona maścią barierową bez konserwantów",
-        "Bezdotykowe spłukiwanie obszaru biorczego HOCI od 48 h",
-        "Spanie w pozycji półsiedzącej (≥30°) przez 5 dni",
-      ],
-    },
-    {
-      tag: "Doba 4–14",
-      title: "Faza proliferacji — zarządzanie mikrobiomem",
-      bullets: [
-        "Mycie skóry głowy HOCI lub szamponem pH 5,5 bez SLS, bez tarcia",
-        "Domowa fototerapia LLLT (hełm) 2x dziennie/tydz., 20 min na sesję",
-        "Od 8. doby: miękki masaż usuwający strupy + botaniki (arnika, centella)",
-        "Optycznie: ocena erytemy, ewentualna sesja CAP nad strefą dawczą",
-      ],
-    },
-    {
-      tag: "Miesiąc 1+",
-      title: "Wsparcie systemowe — stymulacja anagenu",
-      bullets: [
-        "Minoksydyl miejscowo 5% lub doustnie w mikrodawkach 0,25–2,5 mg (off-label, po kwalifikacji)",
-        "Mezoterapia PRP: sesje w miesiącu 1, 2, 4",
-        "LADD z laserem tulowym 1927 nm + minoksydyl/PRP — od 4–6 tygodnia",
-        "Kontrolne PBM 1–2×/tydzień przez 12 tygodni",
-        "Trichoskopia kontrolna: miesiąc 3, 6, 12",
-      ],
-    },
-  ];
+  const { t } = useTranslation();
+  const phases = t("clinical.timeline.phases", { returnObjects: true }) as {
+    tag: string;
+    title: string;
+    bullets: string[];
+  }[];
 
   return (
-    <Section id="protokol" eyebrow="07 — OŚ CZASU: 48H I PIERWSZE 14 DNI">
+    <Section id="protokol" eyebrow={t("clinical.timeline.eyebrow")}>
       <SectionHeader
-        title="Chronologiczny protokół, krok po kroku."
-        lead="48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni."
+        title={t("clinical.timeline.title")}
+        lead={t("clinical.timeline.lead")}
       />
       <ol className="space-y-12">
         {phases.map((p, i) => (
@@ -144,6 +92,7 @@ export function Timeline() {
     </Section>
   );
 }
+
 
 /* ---------- Interactive Day 0–14 Schedule ---------- */
 
