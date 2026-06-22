@@ -2286,50 +2286,32 @@ function Field({
 /* ---------- Risks & Contraindications ---------- */
 
 export function RisksAndContraindications() {
+  const { t } = useTranslation();
+  const c1 = t("risks.card1.items", { returnObjects: true, defaultValue: [] }) as string[];
+  const c2 = t("risks.card2.items", { returnObjects: true, defaultValue: [] }) as string[];
+  const c3 = t("risks.card3.items", { returnObjects: true, defaultValue: [] }) as string[];
   return (
-    <Section id="ryzyko" eyebrow="10 — RYZYKO I PRZECIWWSKAZANIA">
-      <SectionHeader
-        title="Co może się zdarzyć i kiedy należy natychmiast przerwać protokół."
-        lead="Każdy zabieg transplantacji włosów DHI wiąże się z naturalnymi, przewidywalnymi reakcjami organizmu. Poniżej lista typowych działań niepożądanych, przeciwwskazań oraz sygnałów alarmowych, przy których konieczny jest kontakt z kliniką."
-      />
+    <Section id="ryzyko" eyebrow={t("risks.eyebrow")}>
+      <SectionHeader title={t("risks.title")} lead={t("risks.lead")} />
       <div className="grid gap-6 md:grid-cols-3">
-        <Card title="Działania niepożądane" badge="Częste / rzadkie" badgeTone="red">
+        <Card title={t("risks.card1.title")} badge={t("risks.card1.badge")} badgeTone="red">
           <ul className="list-disc space-y-2 pl-5">
-            <li>Obrzęk twarzy i czoła, szczególnie między 2. a 4. dobą po zabiegu.</li>
-            <li>Delikatne punktowe krwawienie z mikroran — typowe do 24–48 h.</li>
-            <li>Ból, ucisk i uczucie napięcia skóry głowy w strefie dawczej i biorczej.</li>
-            <li>„Shock loss" — przejściowa utrata natywnych włosów wokół nowych graftów.</li>
-            <li>Zaburzenia czucia (drętwienie, mrowienie) — zazwyczaj ustępują w ciągu 3–6 miesięcy.</li>
-            <li>Świąd i łuszczenie skóry głowy podczas gojenia.</li>
-            <li>Zakażenie — rzadkie (&lt;1%) przy przestrzeganiu protokołu antyseptycznego.</li>
+            {Array.isArray(c1) && c1.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </Card>
-        <Card title="Przeciwwskazania" badge="Kwalifikacja" badgeTone="red">
+        <Card title={t("risks.card2.title")} badge={t("risks.card2.badge")} badgeTone="red">
           <ul className="list-disc space-y-2 pl-5">
-            <li>Aktywne infekcje bakteryjne, wirusowe lub grzybicze skóry głowy.</li>
-            <li>Zaburzenia krzepliwości krwi lub przyjmowanie leków przeciwzakrzepowych (doufnych).</li>
-            <li>Nieustabilizowana cukrzyca — znacząco utrudnia gojenie.</li>
-            <li>Aktywne palenie tytoniu — obniża przeżywalność graftów o 20–30%.</li>
-            <li>Ciąża i karmienie piersią (przy niektórych elementach farmakologicznych protokołu).</li>
-            <li>Padaczka lub historia drgawek — wymaga konsultacji przed HBOT.</li>
-            <li>Choroba pęcherzykowa płuc lub nieprawidłowa odpowiedź na ciśnienie — przeciwwskazanie do hiperbarii.</li>
+            {Array.isArray(c2) && c2.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
         </Card>
-        <Card title="Kontakt z kliniką — alarmy" badge="Natychmiast" badgeTone="red">
+        <Card title={t("risks.card3.title")} badge={t("risks.card3.badge")} badgeTone="red">
           <ul className="list-disc space-y-2 pl-5">
-            <li>Gorączka &gt;38 °C po 2. dobie od zabiegu.</li>
-            <li>Silny, narastający ból po 3. dobie (zamiast ustępować).</li>
-            <li>Zaczerwienienie, obrzęk i ropna wydzielina z obszaru biorczego lub dawczego.</li>
-            <li>Otwarte ranki, częściowe wypadanie lub „wypychanie" się graftów.</li>
-            <li>Objawy alergiczne: pokrzywka, duszności, obrzęk twarzy.</li>
-            <li>Zasłabnięcie, silne zawroty głowy lub bóry w uszach po sesji HBOT.</li>
-            <li>Krwawienie, które nie ustępuje po 10 min ucisku gazikiem.</li>
+            {Array.isArray(c3) && c3.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
-          <Mech>
-            Nie czekaj z kontaktem „do rana". W krytycznym oknie 48 h każda godzina opóźnienia może wpłynąć na przeżywalność graftów.
-          </Mech>
+          <Mech>{t("risks.card3.mech")}</Mech>
         </Card>
       </div>
     </Section>
   );
 }
+
