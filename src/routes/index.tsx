@@ -758,6 +758,6 @@ function Row({ label, a, b }: { label: string; a: string; b: string }) {
 
 
 /* ---------- Footer ---------- */
+/* Footer is imported from "@/components/SiteFooter" at the top of this file. */
 
-import { SiteFooter as Footer } from "@/components/SiteFooter";
 
