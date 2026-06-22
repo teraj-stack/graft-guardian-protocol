@@ -322,11 +322,7 @@ function RemindersPage() {
         )}
       </main>
 
-      <footer className="border-t border-border bg-background">
-        <div className="mx-auto max-w-4xl px-6 py-10 text-xs text-muted-foreground">
-          Dane kontaktowe przechowywane są wyłącznie w celu wysyłki przypomnień. Nie udostępniamy ich osobom trzecim.
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
