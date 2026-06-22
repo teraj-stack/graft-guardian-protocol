@@ -1961,6 +1961,7 @@ type ContactStatus =
   | { kind: "error"; message: string };
 
 export function Contact() {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<ContactStatus>({ kind: "idle" });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -1993,10 +1994,10 @@ export function Contact() {
             if (Array.isArray(v) && v[0]) errs[k] = String(v[0]);
           }
           setFieldErrors(errs);
-          setStatus({ kind: "error", message: "Sprawdź zaznaczone pola." });
+          setStatus({ kind: "error", message: t("contact.errCheckFields") });
           return;
         }
-        setStatus({ kind: "error", message: "Nie udało się wysłać wiadomości. Spróbuj ponownie." });
+        setStatus({ kind: "error", message: t("contact.errSubmit") });
         return;
       }
       form.reset();
@@ -2006,22 +2007,26 @@ export function Contact() {
         notifications: data.notifications,
       });
     } catch {
-      setStatus({ kind: "error", message: "Błąd połączenia. Spróbuj ponownie." });
+      setStatus({ kind: "error", message: t("contact.errNetwork") });
     }
   }
 
+  const statusLabel = (s: string) =>
+    s === "sent"
+      ? t("contact.statusSent")
+      : s === "skipped"
+        ? t("contact.statusSkipped")
+        : t("contact.statusError");
+
+  const attemptsLabel = (n: number) => {
+    if (n === 1) return t("contact.attemptsOne", { count: n });
+    if (n < 5) return t("contact.attemptsFew", { count: n });
+    return t("contact.attemptsMany", { count: n });
+  };
+
   return (
-    <Section id="kontakt" eyebrow="14 — KONTAKT">
-      <SectionHeader
-        title="Napisz do nas"
-        lead={
-          <>
-            Masz pytanie o protokół, kwalifikację do HBOT lub LADD, albo chcesz
-            zaprosić nas do współpracy? Wyślij wiadomość — odpowiadamy w ciągu
-            2 dni roboczych.
-          </>
-        }
-      />
+    <Section id="kontakt" eyebrow={t("contact.eyebrow")}>
+      <SectionHeader title={t("contact.title")} lead={t("contact.lead")} />
       <div className="grid gap-10 md:grid-cols-12">
         <div className="md:col-span-7">
           {status.kind === "success" ? (
@@ -2031,14 +2036,17 @@ export function Contact() {
               className="rounded-sm border border-accent/40 bg-secondary/40 p-6 md:p-8"
             >
               <p className="text-xs uppercase tracking-[0.25em] text-accent">
-                Wiadomość wysłana
+                {t("contact.successKicker")}
               </p>
               <h3 className="mt-3 font-display text-2xl md:text-3xl">
-                Dziękujemy — odezwiemy się.
+                {t("contact.successTitle")}
               </h3>
               <p className="mt-3 text-sm text-muted-foreground md:text-base">
-                Potwierdzenie przyjęcia: {new Date(status.receivedAt).toLocaleString("pl-PL")}.
-                Sprawdź skrzynkę e-mail (również SPAM) w ciągu 2 dni roboczych.
+                <Trans
+                  i18nKey="contact.successDescHtml"
+                  values={{ time: new Date(status.receivedAt).toLocaleString(t("contact.locale")) }}
+                  components={{ time: <time /> }}
+                />
               </p>
 
               {status.notifications && (
@@ -2059,9 +2067,9 @@ export function Contact() {
                           s.status === "sent" ? "bg-emerald-400" : s.status === "skipped" ? "bg-muted-foreground" : "bg-destructive"
                         }`}
                       />
-                      SMS {s.status === "sent" ? "wysłano" : s.status === "skipped" ? "pominięto" : "błąd"}
+                      {t("contact.smsLabel")} {statusLabel(s.status)}
                       {s.attempts > 0 && (
-                        <span className="ml-1 opacity-70">· {s.attempts} {s.attempts === 1 ? "próba" : s.attempts < 5 ? "próby" : "prób"}</span>
+                        <span className="ml-1 opacity-70">· {attemptsLabel(s.attempts)}</span>
                       )}
                     </span>
                   ))}
@@ -2084,7 +2092,7 @@ export function Contact() {
                             : "bg-destructive"
                       }`}
                     />
-                    E-mail {status.notifications.email === "sent" ? "wysłano" : status.notifications.email === "skipped" ? "pominięto" : "błąd"}
+                    {t("contact.emailLabel")} {statusLabel(status.notifications.email)}
                   </span>
                 </div>
               )}
@@ -2093,7 +2101,7 @@ export function Contact() {
                 onClick={() => setStatus({ kind: "idle" })}
                 className="mt-6 inline-flex items-center rounded-sm border border-border px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground transition hover:bg-secondary"
               >
-                Wyślij kolejną wiadomość
+                {t("contact.sendAnother")}
               </button>
             </div>
           ) : (
@@ -2101,12 +2109,12 @@ export function Contact() {
               {/* Honeypot */}
               <div className="hidden" aria-hidden="true">
                 <label>
-                  Strona WWW
+                  {t("contact.fields.websiteHoneypot")}
                   <input type="text" name="website" tabIndex={-1} autoComplete="off" />
                 </label>
               </div>
 
-              <Field label="Imię i nazwisko" name="name" error={fieldErrors.name}>
+              <Field label={t("contact.fields.name")} name="name" error={fieldErrors.name}>
                 <input
                   id="contact-name"
                   name="name"
@@ -2118,7 +2126,7 @@ export function Contact() {
                 />
               </Field>
 
-              <Field label="E-mail" name="email" error={fieldErrors.email}>
+              <Field label={t("contact.fields.email")} name="email" error={fieldErrors.email}>
                 <input
                   id="contact-email"
                   name="email"
@@ -2130,7 +2138,7 @@ export function Contact() {
                 />
               </Field>
 
-              <Field label="Temat" name="topic" error={fieldErrors.topic}>
+              <Field label={t("contact.fields.topic")} name="topic" error={fieldErrors.topic}>
                 <select
                   id="contact-topic"
                   name="topic"
@@ -2139,16 +2147,16 @@ export function Contact() {
                   className="w-full rounded-sm border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-accent"
                 >
                   <option value="" disabled>
-                    Wybierz temat…
+                    {t("contact.fields.topicPlaceholder")}
                   </option>
-                  <option value="konsultacja">Konsultacja</option>
-                  <option value="zabieg">Zabieg</option>
-                  <option value="ladd_prp">LADD / PRP + minoksydyl</option>
-                  <option value="inne">Inne</option>
+                  <option value="konsultacja">{t("contact.fields.topicConsultation")}</option>
+                  <option value="zabieg">{t("contact.fields.topicProcedure")}</option>
+                  <option value="ladd_prp">{t("contact.fields.topicLadd")}</option>
+                  <option value="inne">{t("contact.fields.topicOther")}</option>
                 </select>
               </Field>
 
-              <Field label="Wiadomość" name="message" error={fieldErrors.message}>
+              <Field label={t("contact.fields.message")} name="message" error={fieldErrors.message}>
                 <textarea
                   id="contact-message"
                   name="message"
@@ -2168,12 +2176,12 @@ export function Contact() {
                   className="mt-1 h-4 w-4 rounded-sm border-border accent-[color:var(--accent)]"
                 />
                 <span>
-                  Wyrażam zgodę na przetwarzanie moich danych w celu odpowiedzi na
-                  zapytanie zgodnie z{" "}
-                  <Link to="/prywatnosc" className="underline underline-offset-2 hover:text-foreground">
-                    Polityką prywatności
-                  </Link>
-                  .
+                  <Trans
+                    i18nKey="contact.consentHtml"
+                    components={{
+                      priv: <Link to="/prywatnosc" className="underline underline-offset-2 hover:text-foreground" />,
+                    }}
+                  />
                 </span>
               </label>
               {fieldErrors.consent && (
@@ -2191,7 +2199,7 @@ export function Contact() {
                 disabled={status.kind === "submitting"}
                 className="inline-flex items-center rounded-sm bg-accent px-6 py-3 text-sm font-medium uppercase tracking-[0.2em] text-accent-foreground transition hover:opacity-90 disabled:opacity-60"
               >
-                {status.kind === "submitting" ? "Wysyłanie…" : "Wyślij wiadomość"}
+                {status.kind === "submitting" ? t("contact.submitting") : t("contact.submit")}
               </button>
             </form>
           )}
@@ -2200,16 +2208,16 @@ export function Contact() {
         <aside className="md:col-span-5">
           <div className="rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)] md:p-8">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-              Kontakt bezpośredni
+              {t("contact.direct")}
             </p>
-            <p className="mt-4 font-display text-2xl">Medical Lasers and STEM Cells Solutions Sp. z o.o.</p>
+            <p className="mt-4 font-display text-2xl">{t("contact.companyName")}</p>
             <p className="mt-2 text-sm text-muted-foreground">
-              ul. Kard. Bolesława Kominka 44<br />
-              44-217 Rybnik
+              {t("contact.addressLine1")}<br />
+              {t("contact.addressLine2")}
             </p>
             <dl className="mt-6 space-y-3 text-sm">
               <div>
-                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">E-mail</dt>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("contact.labelEmail")}</dt>
                 <dd className="mt-1">
                   <a href="mailto:mila.skrzynska@gmail.com" className="underline underline-offset-2">
                     mila.skrzynska@gmail.com
@@ -2217,7 +2225,7 @@ export function Contact() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Telefon</dt>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("contact.labelPhone")}</dt>
                 <dd className="mt-1">
                   <a href="tel:+48510432361" className="underline underline-offset-2">
                     +48 510 432 361
@@ -2225,7 +2233,7 @@ export function Contact() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">WhatsApp</dt>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("contact.labelWhatsApp")}</dt>
                 <dd className="mt-1">
                   <a
                     href="https://wa.me/48510432361"
@@ -2236,13 +2244,13 @@ export function Contact() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                     </svg>
-                    Napisz na WhatsApp
+                    {t("contact.whatsAppCta")}
                   </a>
                 </dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Czas odpowiedzi</dt>
-                <dd className="mt-1 text-muted-foreground">do 2 dni roboczych</dd>
+                <dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{t("contact.labelResponseTime")}</dt>
+                <dd className="mt-1 text-muted-foreground">{t("contact.responseTime")}</dd>
               </div>
             </dl>
           </div>
@@ -2251,6 +2259,7 @@ export function Contact() {
     </Section>
   );
 }
+
 
 function Field({
   label,
