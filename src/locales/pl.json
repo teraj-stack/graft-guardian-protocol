@@ -113,6 +113,8 @@
     "dayLabel": "Dzień",
     "focusLabel": "Fokus",
     "edu": "Materiał edukacyjny, nie zastępuje zaleceń lekarza.",
+    "stepsDone": "kroków ukończonych",
+
     "days": [
       { "phase": "Doba „Zero”", "focus": "Bezpośrednio po zabiegu — start protokołu", "tasks": [
         "PBM 630–680 + 830 nm, 20 min — pierwsza sesja jeszcze w klinice",

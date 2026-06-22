@@ -113,6 +113,8 @@
     "dayLabel": "Gün",
     "focusLabel": "Odak",
     "edu": "Eğitim materyalidir; doktorunuzun talimatlarının yerine geçmez.",
+    "stepsDone": "adım tamamlandı",
+
     "days": [
       { "phase": "Sıfır Gün", "focus": "Operasyondan hemen sonra — protokol başlar", "tasks": [
         "PBM 630–680 + 830 nm, 20 dk — ilk seans hâlâ klinikte",

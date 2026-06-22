@@ -17,7 +17,9 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 const STORAGE_KEY = "graftgen.lang";
 
 if (!i18n.isInitialized) {
-  void i18n
+  // Synchronous init so SSR renders translated strings (no raw keys, no
+  // hydration mismatches). initImmediate:false is the documented switch for this.
+  i18n
     .use(initReactI18next)
     .init({
       resources: {
@@ -27,14 +29,17 @@ if (!i18n.isInitialized) {
       },
       lng: "pl", // stable for SSR; client switches via LanguageSwitcher useEffect
       fallbackLng: "en", // patients without TR/PL get English, not Polish
-
       supportedLngs: [...SUPPORTED_LOCALES],
       nonExplicitSupportedLngs: true,
       load: "languageOnly",
+      initAsync: false,
       interpolation: { escapeValue: false },
+      returnNull: false,
+      returnEmptyString: false,
       react: { useSuspense: false },
     });
 }
+
 
 /** Read persisted/browser language client-side. Runs only after hydration. */
 export function getClientLocale(): Locale {
