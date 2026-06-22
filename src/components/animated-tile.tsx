@@ -99,11 +99,16 @@ export function AnimatedTile({
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            shouldPlayRef.current = !reduce;
+            if (reduce) {
+              // Honor reduced motion / autoplay-off: keep poster as final state.
+              shouldPlayRef.current = false;
+              continue;
+            }
+            shouldPlayRef.current = true;
             setLoaded(true);
             // If sources are already in the DOM (subsequent intersections), play now.
-            if (!reduce && el.querySelector("source")) {
-              el.play().catch(() => {});
+            if (el.querySelector("source")) {
+              el.play().catch(() => setFallback(true));
             }
           } else {
             shouldPlayRef.current = false;
