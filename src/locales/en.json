@@ -113,6 +113,8 @@
     "dayLabel": "Day",
     "focusLabel": "Focus",
     "edu": "Educational content; does not replace your doctor's instructions.",
+    "stepsDone": "steps completed",
+
     "days": [
       { "phase": "Day Zero", "focus": "Right after the procedure — protocol starts", "tasks": [
         "PBM 630–680 + 830 nm, 20 min — first session still at the clinic",
