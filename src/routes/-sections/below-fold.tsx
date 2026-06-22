@@ -2,8 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState, type ReactNode, type FormEvent } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { PRICING } from "@/lib/pricing-data";
-import { FAQ, STAGES, TOPICS, type Stage, type Topic } from "@/lib/faq-data";
+import { useFaq } from "@/lib/faq-data";
+import type { StageKey, TopicKey } from "@/lib/faq-meta";
 import { validateReferences, type RefValidation } from "@/lib/references.functions";
 import { Section, SectionHeader, Card, Mech } from "@/components/section-primitives";
 import { AnimatedTile } from "@/components/animated-tile";
@@ -15,6 +17,7 @@ import {
   buildPlainText,
   buildShortMessage,
   todayIso,
+  useSchedule,
 } from "@/lib/schedule-data";
 
 /* ---------- Microbiome ---------- */
@@ -159,6 +162,8 @@ function loadProgress(): Record<string, boolean> {
 
 
 export function InteractiveSchedule() {
+  const { t } = useTranslation();
+  const schedule = useSchedule();
   const [openDay, setOpenDay] = useState<number>(0);
   const [done, setDone] = useState<Record<string, boolean>>(() => loadProgress());
   const [surgeryDate, setSurgeryDate] = useState<string>(todayIso());
@@ -415,7 +420,7 @@ export function InteractiveSchedule() {
 
 
 
-  const totalTasks = SCHEDULE.reduce((n, d) => n + d.tasks.length, 0);
+  const totalTasks = schedule.reduce((n, d) => n + d.tasks.length, 0);
   const doneCount = Object.values(done).filter(Boolean).length;
   const pct = Math.round((doneCount / totalTasks) * 100);
 
@@ -441,7 +446,7 @@ export function InteractiveSchedule() {
   }
 
   return (
-    <Section id="harmonogram" eyebrow="08 — INTERAKTYWNY HARMONOGRAM 0–14">
+    <Section id="harmonogram" eyebrow={t("schedule.eyebrow")}>
       <SectionHeader
         title="Twoja checklista, dzień po dniu."
         lead="Odhacz każdy krok. Postęp zapisuje się lokalnie w przeglądarce — bez konta, bez chmury."
@@ -781,7 +786,7 @@ export function InteractiveSchedule() {
 
       <div className="mb-6 grid grid-cols-5 gap-1.5 sm:grid-cols-8 md:grid-cols-[repeat(15,minmax(0,1fr))]">
 
-        {SCHEDULE.map((d) => {
+        {schedule.map((d) => {
           const dayDone = d.tasks.every((t) => done[t.id]);
           const dayPartial = !dayDone && d.tasks.some((t) => done[t.id]);
           const active = openDay === d.day;
@@ -799,7 +804,7 @@ export function InteractiveSchedule() {
                 dayDone ? "bg-accent/10" : dayPartial ? "bg-accent/5" : "",
               ].join(" ")}
             >
-              <span className="text-[10px] uppercase tracking-widest opacity-70">Dzień</span>
+              <span className="text-[10px] uppercase tracking-widest opacity-70">{t("schedule.dayLabel")}</span>
               <span className="font-display text-lg leading-none">{d.day}</span>
               {dayDone && <span className="mt-0.5 text-[10px]">✓</span>}
             </button>
@@ -807,7 +812,7 @@ export function InteractiveSchedule() {
         })}
       </div>
 
-      {SCHEDULE.filter((d) => d.day === openDay).map((d) => {
+      {schedule.filter((d) => d.day === openDay).map((d) => {
         const dayDoneCount = d.tasks.filter((t) => done[t.id]).length;
         return (
           <div
@@ -821,15 +826,15 @@ export function InteractiveSchedule() {
               <div className="mt-2 font-display text-3xl">{d.phase}</div>
               <p className="mt-3 text-sm text-muted-foreground">{d.focus}</p>
               <div className="mt-4 text-xs text-muted-foreground">
-                {dayDoneCount}/{d.tasks.length} kroków ukończonych
+                {dayDoneCount}/{d.tasks.length} {t("schedule.stepsDone", { defaultValue: "kroków ukończonych" })}
               </div>
             </div>
             <ul className="space-y-2 md:col-span-8">
-              {d.tasks.map((t) => {
-                const checked = !!done[t.id];
-                const critical = t.tone === "critical";
+              {d.tasks.map((task) => {
+                const checked = !!done[task.id];
+                const critical = task.tone === "critical";
                 return (
-                  <li key={t.id}>
+                  <li key={task.id}>
                     <label
                       className={[
                         "flex cursor-pointer items-start gap-3 border p-3 text-sm transition",
@@ -843,16 +848,16 @@ export function InteractiveSchedule() {
                       <input
                         type="checkbox"
                         checked={checked}
-                        onChange={() => toggle(t.id)}
+                        onChange={() => toggle(task.id)}
                         className="mt-1 h-4 w-4 shrink-0 accent-[hsl(var(--accent))]"
                       />
                       <span className="flex-1">
                         {critical && !checked && (
                           <span className="mr-2 inline-block border border-red-500/60 px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-red-500">
-                            Krytyczne
+                            {t("schedule.criticalBadge")}
                           </span>
                         )}
-                        {t.label}
+                        {task.label}
                       </span>
                     </label>
                   </li>
@@ -864,8 +869,7 @@ export function InteractiveSchedule() {
       })}
 
       <p className="mt-8 text-xs text-muted-foreground">
-        Harmonogram ma charakter edukacyjny i nie zastępuje indywidualnych zaleceń lekarza
-        prowadzącego. W razie wątpliwości — skontaktuj się z koordynatorem.
+        {t("schedule.edu")}
       </p>
 
       {showEmailPreview && (
@@ -929,56 +933,39 @@ export function InteractiveSchedule() {
 /* ---------- Patient journey ---------- */
 
 export function Journey() {
+  const { t } = useTranslation();
+  const bullets = t("journey.bullets", { returnObjects: true, defaultValue: [] }) as string[];
   return (
-    <Section id="journey" eyebrow="09 — PATIENT JOURNEY">
+    <Section id="journey" eyebrow={t("journey.eyebrow")}>
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-7">
-          <h2 className="font-display text-4xl md:text-5xl">
-            Pacjent wyedukowany, to pacjent współpracujący.
-          </h2>
-          <p className="mt-6 text-muted-foreground">
-            Pacjent opuszczający klinikę z zakrwawioną głową, bez planu,
-            bez kontaktu — to nie tylko złe doświadczenie. Kortyzol w
-            stresie pozabiegowym upośledza krążenie skórne. Lęk realnie
-            pogarsza perfuzję skóry głowy i zwiększa ryzyko mechanicznej
-            utraty graftów (drapanie, niewłaściwe mycie, zdejmowanie
-            strupów przed czasem).
-          </p>
-          <p className="mt-4 text-muted-foreground">
-            Każdy pacjent po zalogowaniu na Naszą stronę ma dostęp do
-            materiałów dostępnych online (pełna dokumentacja oraz
-            najnowsze trendy w medycynie regeneracyjnej, anti-aging) oraz
-            e-book &bdquo;Patient Journey&rdquo; z instrukcjami na każdy z
-            pierwszych 14 dni — co robić rano, wieczorem, czego nie
-            robić, kiedy się niepokoić. Dodatkowo: bezpośredni kontakt do
-            prowadzącego przez pierwsze 30 dni.
-          </p>
+          <h2 className="font-display text-4xl md:text-5xl">{t("journey.title")}</h2>
+          <p className="mt-6 text-muted-foreground">{t("journey.p1")}</p>
+          <p className="mt-4 text-muted-foreground">{t("journey.p2")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/panel"
               className="inline-flex items-center rounded-sm border border-foreground/80 bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
-              Wejdź do panelu pacjenta →
+              {t("journey.ctaPanel")}
             </Link>
             <Link
               to="/przypomnienia"
               className="inline-flex items-center rounded-sm border border-foreground/80 px-5 py-3 text-sm font-medium text-foreground transition hover:bg-secondary"
             >
-              Ustaw przypomnienia e-mail/SMS
+              {t("journey.ctaReminders")}
             </Link>
           </div>
         </div>
         <aside className="md:col-span-5">
           <div className="rounded-sm border border-border bg-card p-6">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              W e-booku
+              {t("journey.inEbook")}
             </p>
             <ul className="mt-5 space-y-3 text-sm">
-              <li>· Checklist na każdy z 14 dni</li>
-              <li>· Lista zakupowa preparatów (HOCI, szampon pH 5,5, maść)</li>
-              <li>· Diagramy: pozycja spania, technika mycia, kąt natrysku</li>
-              <li>· Czerwone flagi wymagające kontaktu z kliniką</li>
-              <li>· Plan powrotu do aktywności (sport, sauna, basen, słońce)</li>
+              {bullets.map((b, i) => (
+                <li key={i}>· {b}</li>
+              ))}
             </ul>
           </div>
         </aside>
@@ -990,57 +977,64 @@ export function Journey() {
 /* ---------- Day 0–3 Quick Guide ---------- */
 
 export function DayZeroToThree() {
+  const { t } = useTranslation();
+  const cards = [
+    { key: "card0", tone: "red" as const },
+    { key: "card1", tone: "red" as const },
+    { key: "card2", tone: undefined as undefined | "red" },
+  ];
+  const avoid = t("dayZeroToThree.avoid", { returnObjects: true, defaultValue: [] }) as {
+    type: "bad" | "good";
+    text: string;
+  }[];
+  const half = Math.ceil(avoid.length / 2);
+  const col1 = avoid.slice(0, half);
+  const col2 = avoid.slice(half);
   return (
-    <Section id="dzien-0-3" eyebrow="00 — TWÓJ PLAN: DZIEŃ 0–3">
+    <Section id="dzien-0-3" eyebrow={t("schedule.eyebrow")}>
       <SectionHeader
-        title="Pierwsze 72 h decydują o przeżyciu przeszczepionych cebulek"
-        lead="Instrukcje wzięte bezpośrednio z e-booka Patient Journey. Wykonuj krok po kroku — nie improwizuj."
+        title={t("dayZeroToThree.title")}
+        lead={t("dayZeroToThree.lead")}
       />
       <div className="grid gap-6 md:grid-cols-3">
-        <Card title="Doba zero" badge="Bezpośrednio po zabiegu" badgeTone="red">
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-accent">✓</span> PBM 650/830 nm, 4–6 J/cm², bezpośrednio po zabiegu</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsza sesja HBOT 1,5–3,0 ATA w ciągu 6 h</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spanie w pozycji pół-siedzącej (30–45°)</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Lód na czoło (nie na strefę biorczą)</li>
-          </ul>
-          <Mech>Zero dotykania, drapania, mycia strefy biorczej.</Mech>
-        </Card>
-        <Card title="Doba 1–2" badge="Krytyczne okno" badgeTone="red">
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-accent">✓</span> Druga sesja HBOT (24 h po pierwszej)</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> PBM co 24 h, 20–30 min</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spray HOCl 0,01–0,02% na strefę dawczą</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spanie z głową uniesioną na 2 poduszkach</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Nawodnienie ≥ 2,5 l wody / dobę</li>
-          </ul>
-          <Mech>Alkohol, palenie i kofeina obniżają perfuzję — absolutnie zakazane.</Mech>
-        </Card>
-        <Card title="Dni 3–4" badge="Pierwsze mycie">
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-accent">✓</span> Pierwsze mycie wg instrukcji koordynatora (pH 5,5, bez SLS)</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Spray HOCl 2× dziennie</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Żele z arniką / centellą na strefę dawczą</li>
-            <li className="flex gap-2"><span className="text-accent">✓</span> Kontynuacja PBM co 24 h</li>
-          </ul>
-          <Mech>Nie zrywaj strupków — myj delikatnie, bez tarcia.</Mech>
-        </Card>
+        {cards.map((c) => {
+          const items = t(`dayZeroToThree.${c.key}.items`, { returnObjects: true, defaultValue: [] }) as string[];
+          return (
+            <Card
+              key={c.key}
+              title={t(`dayZeroToThree.${c.key}.title`)}
+              badge={t(`dayZeroToThree.${c.key}.badge`)}
+              badgeTone={c.tone}
+            >
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {items.map((it, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="text-accent">✓</span> {it}
+                  </li>
+                ))}
+              </ul>
+              <Mech>{t(`dayZeroToThree.${c.key}.mech`)}</Mech>
+            </Card>
+          );
+        })}
       </div>
       <div className="mt-10 rounded-sm border border-border bg-card p-6">
-        <h3 className="font-display text-xl">Checklista „czego unikać” — Dzień 0–14</h3>
+        <h3 className="font-display text-xl">{t("dayZeroToThree.avoidTitle")}</h3>
         <div className="mt-4 grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
-          <div className="space-y-2">
-            <p><span className="text-red-400">✗</span> Alkohol, palenie (vasokonstrykcja)</p>
-            <p><span className="text-red-400">✗</span> Aspiryna, ibuprofen (pierwsze 48 h)</p>
-            <p><span className="text-red-400">✗</span> Sauna, basen, słońce</p>
-            <p><span className="text-red-400">✗</span> Intensywny trening, podnoszenie ciężarów</p>
-          </div>
-          <div className="space-y-2">
-            <p><span className="text-red-400">✗</span> Czapki, kaski, hełmy ściskające skórę głowy</p>
-            <p><span className="text-red-400">✗</span> Drapanie, zrywanie strupków</p>
-            <p><span className="text-emerald-400">✓</span> Dieta bogata w białko, żelazo, cynk, witaminy B</p>
-            <p><span className="text-emerald-400">✓</span> Regularny kontakt z koordynatorem</p>
-          </div>
+          {[col1, col2].map((col, ci) => (
+            <div key={ci} className="space-y-2">
+              {col.map((row, i) => (
+                <p key={i}>
+                  {row.type === "bad" ? (
+                    <span className="text-red-400">✗</span>
+                  ) : (
+                    <span className="text-emerald-400">✓</span>
+                  )}{" "}
+                  {row.text}
+                </p>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </Section>
@@ -1625,149 +1619,40 @@ function SourcesCard() {
 
 /* ---------- FAQ ---------- */
 
-type DayTip = {
-  day: number;
-  label: string;
-  headline: string;
-  tip: string;
-  /** Regex matching question/answer text for FAQ filtering */
-  match: RegExp;
-};
 
-const DAY_TIPS: DayTip[] = [
-  {
-    day: 0,
-    label: "Doba 0",
-    headline: "Dzień zabiegu",
-    tip: "Sen półsiedząco (≥30°). Nie zdejmuj opaski czołowej. Nie dotykaj graftów. Tylko paracetamol — bez NLPZ/aspiryny. Pierwsza sesja PBM/HBOT zgodnie z planem.",
-    match: /doba\s*0\b|dzień\s*zabiegu|po\s*wyjściu\s*z\s*kliniki/i,
-  },
-  {
-    day: 1,
-    label: "Doba 1",
-    headline: "Pierwsze 24 h",
-    tip: "Strupki zaczynają się formować. Lekki spacer dozwolony. Bez schylania i podnoszenia >5 kg. Bez mycia głowy. Zimne okłady tylko na czoło, nie na grafty.",
-    match: /doba\s*1\b/i,
-  },
-  {
-    day: 2,
-    label: "Doba 2",
-    headline: "Start spryskiwania",
-    tip: "Od 48 h: delikatne nawilżanie strefy biorczej solą fizjologiczną lub HOCl co 2–3 h z odległości 15–20 cm. Pozwól wyschnąć powietrzem.",
-    match: /48\s*godzin|doba\s*2\b|sol[aą]\s*fizjologiczn/i,
-  },
-  {
-    day: 3,
-    label: "Doba 3",
-    headline: "Szczyt obrzęku",
-    tip: "Obrzęk czoła/powiek kulminuje. Kontynuuj sen ≥30° i chłodne okłady na czoło. Niepokojące: gorączka >38 °C, ropny wyciek, duszność — kontakt z kliniką.",
-    match: /doba\s*[2-3]|obrzęk/i,
-  },
-  {
-    day: 4,
-    label: "Doba 4",
-    headline: "Pierwsze mycie",
-    tip: "Pre-wash (emolient 15–20 min) → spłukanie z dłoni → szampon pH 5,5 bez SLS opuszkami palców → osuszenie mikrofibrą bez pocierania. 1×/dobę do doby 14.",
-    match: /doba\s*4\b|pierwsze\s*mycie|szampon/i,
-  },
-  {
-    day: 5,
-    label: "Doba 5",
-    headline: "Rewaskularyzacja",
-    tip: "Nowe naczynia kapilarne wrastają w grafty (inoskulacja). Wspieraj: HBOT, PBM 650/830 nm, brak nikotyny. Adhezja graftów wciąż słaba — bez czapek opinających.",
-    match: /doba\s*5|rewaskularyzacj|inoskulacj/i,
-  },
-  {
-    day: 6,
-    label: "Doba 6",
-    headline: "Rewaskularyzacja c.d.",
-    tip: "Kontynuuj mycie wg protokołu z doby 4. Sesje PBM zgodnie z harmonogramem. Spanie nadal pod kątem. Bez sportu siłowego.",
-    match: /doba\s*5[-–]7|doba\s*6/i,
-  },
-  {
-    day: 7,
-    label: "Doba 7",
-    headline: "Koniec okna 0–7",
-    tip: "Koniec krytycznego okna rewaskularyzacji. Pierwsze strupki zaczynają schodzić samoistnie. Nie zdrapuj. Możliwy powrót do pracy biurowej.",
-    match: /doba\s*5[-–]7|doba\s*7|rewaskularyzacj/i,
-  },
-  {
-    day: 8,
-    label: "Doba 8",
-    headline: "Miękki masaż",
-    tip: "Od doby 8 dozwolony miękki masaż okrężny opuszkami podczas mycia — pomaga schodzić strupkom. Bez paznokci, szczotek i prysznica bezpośrednio na grafty.",
-    match: /doba\s*8/i,
-  },
-  {
-    day: 9,
-    label: "Doba 9",
-    headline: "Strupki schodzą",
-    tip: "Większość strupków odchodzi między dobą 7 a 14. Strefa biorcza różowieje. Kontynuuj PBM i minoksydyl wg protokołu (jeśli wdrożony).",
-    match: /doba\s*8[-–]10|doba\s*9|strupki/i,
-  },
-  {
-    day: 10,
-    label: "Doba 10",
-    headline: "Powrót do biura",
-    tip: "Strefa biorcza mniej rumieniowa. Praca biurowa OK. Nadal bez sauny, basenu, intensywnego słońca. Swędzenie skóry to znak gojenia — nie drapać.",
-    match: /doba\s*8[-–]10|doba\s*10|swędzenie/i,
-  },
-  {
-    day: 11,
-    label: "Doba 11",
-    headline: "Finisz fazy krytycznej",
-    tip: "Adhezja graftów ~100%. Można wracać do delikatnego treningu siłowego. Nadal bez sauny i basenu (do doby 14–21).",
-    match: /doba\s*11[-–]14|doba\s*11/i,
-  },
-  {
-    day: 12,
-    label: "Doba 12",
-    headline: "Normalizacja mycia",
-    tip: "Mycie głowy bez ograniczeń techniki, dalej szampon pH 5,5. Delikatna odżywka OK. Bez farbowania (min. 4 tygodnie).",
-    match: /doba\s*11[-–]14|doba\s*12/i,
-  },
-  {
-    day: 13,
-    label: "Doba 13",
-    headline: "Przygotowanie do kontroli",
-    tip: "Zaplanuj kontrolę 14-dniową w klinice. Zrób fotografie kontrolne w tych samych kątach co przed zabiegiem (do porównania).",
-    match: /doba\s*11[-–]14|doba\s*13|kontrol/i,
-  },
-  {
-    day: 14,
-    label: "Doba 14",
-    headline: "Koniec protokołu krytycznego",
-    tip: "Strupki zeszły. Kontynuuj PBM, minoksydyl, HBOT zgodnie z planem długoterminowym. Słońce z UPF 50+. Shock loss (tydz. 2–6) to oczekiwana faza.",
-    match: /doba\s*14|shock\s*loss|tydz/i,
-  },
-];
 
 export function FAQSection() {
-  const [selectedStage, setSelectedStage] = useState<Stage | "all">("all");
-  const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
+  const { t } = useTranslation();
+  const { items, stages, topics, dayMatch } = useFaq();
+  const dayTips = t("faq.dayTips", { returnObjects: true, defaultValue: [] }) as {
+    day: number;
+    label: string;
+    headline: string;
+    tip: string;
+  }[];
+
+  const [selectedStage, setSelectedStage] = useState<StageKey | "all">("all");
+  const [selectedTopic, setSelectedTopic] = useState<TopicKey | "all">("all");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
-  const activeDay = selectedDay !== null ? DAY_TIPS[selectedDay] : null;
+  const activeDayTip = selectedDay !== null ? dayTips[selectedDay] : null;
+  const activeDayRegex = selectedDay !== null ? dayMatch[selectedDay] : null;
 
-  const filtered = FAQ.filter((f) => {
-    const stageMatch = selectedStage === "all" || f.stages.includes(selectedStage);
-    const topicMatch = selectedTopic === "all" || f.topics.includes(selectedTopic);
+  const filtered = items.filter((f) => {
+    const stageMatch = selectedStage === "all" || f.stageKeys.includes(selectedStage);
+    const topicMatch = selectedTopic === "all" || f.topicKeys.includes(selectedTopic);
     const searchMatch =
       normalizedQuery.length === 0 ||
       f.q.toLowerCase().includes(normalizedQuery) ||
       f.a.toLowerCase().includes(normalizedQuery);
-    const dayMatch =
-      !activeDay || activeDay.match.test(f.q) || activeDay.match.test(f.a);
-    return stageMatch && topicMatch && searchMatch && dayMatch;
+    const dayOk =
+      !activeDayRegex || activeDayRegex.test(f.q) || activeDayRegex.test(f.a);
+    return stageMatch && topicMatch && searchMatch && dayOk;
   });
 
-  const chip = (
-    label: string,
-    active: boolean,
-    onClick: () => void,
-  ) => (
+  const chip = (label: string, active: boolean, onClick: () => void) => (
     <button
       type="button"
       onClick={onClick}
@@ -1782,32 +1667,31 @@ export function FAQSection() {
   );
 
   return (
-    <Section id="faq" eyebrow="12 — PYTANIA PACJENTÓW">
-      <SectionHeader title="To, o co pytacie najczęściej." />
+    <Section id="faq" eyebrow={t("faq.eyebrow")}>
+      <SectionHeader title={t("faq.title")} />
 
-      {/* Interaktywna oś czasu Dzień 0–14 */}
       <div className="mb-8 rounded-sm border border-border bg-card/40 p-4 md:p-6">
         <div className="mb-3 flex items-center justify-between gap-4">
           <span className="text-xs uppercase tracking-[0.25em] text-accent">
-            Oś czasu — Dzień 0–14
+            {t("faq.timelineLabel")}
           </span>
-          {activeDay && (
+          {activeDayTip && (
             <button
               type="button"
               onClick={() => setSelectedDay(null)}
               className="text-xs uppercase tracking-wide text-muted-foreground transition hover:text-accent"
             >
-              Wyczyść
+              {t("common.clear", { defaultValue: "Clear" })}
             </button>
           )}
         </div>
 
         <div
           role="tablist"
-          aria-label="Wybierz dobę po zabiegu"
+          aria-label={t("faq.selectDay")}
           className="flex gap-1.5 overflow-x-auto pb-2 [scrollbar-width:thin]"
         >
-          {DAY_TIPS.map((d, i) => {
+          {dayTips.map((d, i) => {
             const active = selectedDay === i;
             return (
               <button
@@ -1823,7 +1707,7 @@ export function FAQSection() {
                 }`}
               >
                 <span className="text-[10px] uppercase tracking-wide opacity-70">
-                  Doba
+                  {t("faq.dayShort")}
                 </span>
                 <span className="font-display text-xl leading-none">{d.day}</span>
               </button>
@@ -1831,21 +1715,21 @@ export function FAQSection() {
           })}
         </div>
 
-        {activeDay && (
+        {activeDayTip && (
           <div className="mt-4 border-t border-border pt-4">
             <div className="flex items-baseline gap-3">
               <span className="font-display text-3xl text-accent">
-                {activeDay.label}
+                {activeDayTip.label}
               </span>
               <span className="text-sm uppercase tracking-wide text-muted-foreground">
-                {activeDay.headline}
+                {activeDayTip.headline}
               </span>
             </div>
             <p className="mt-2 max-w-3xl text-sm text-foreground md:text-base">
-              {activeDay.tip}
+              {activeDayTip.tip}
             </p>
             <p className="mt-3 text-xs uppercase tracking-wide text-muted-foreground">
-              ↓ Powiązane pytania ({filtered.length})
+              ↓ {t("faq.relatedQuestions", { count: filtered.length })}
             </p>
           </div>
         )}
@@ -1857,26 +1741,26 @@ export function FAQSection() {
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Szukaj w pytaniach i odpowiedziach…"
+            placeholder={t("faq.searchPlaceholder")}
             className="w-full max-w-md rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
-            Etap:
+            {t("faq.stageLabel")}
           </span>
-          {chip("Wszystkie", selectedStage === "all", () => setSelectedStage("all"))}
-          {STAGES.map((s) =>
-            chip(s, selectedStage === s, () => setSelectedStage(s)),
+          {chip(t("faq.all"), selectedStage === "all", () => setSelectedStage("all"))}
+          {stages.map((s) =>
+            chip(s.label, selectedStage === s.key, () => setSelectedStage(s.key)),
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 text-xs uppercase tracking-wide text-muted-foreground">
-            Temat:
+            {t("faq.topicLabel")}
           </span>
-          {chip("Wszystkie", selectedTopic === "all", () => setSelectedTopic("all"))}
-          {TOPICS.map((t) =>
-            chip(t, selectedTopic === t, () => setSelectedTopic(t)),
+          {chip(t("faq.all"), selectedTopic === "all", () => setSelectedTopic("all"))}
+          {topics.map((tp) =>
+            chip(tp.label, selectedTopic === tp.key, () => setSelectedTopic(tp.key)),
           )}
         </div>
       </div>
@@ -1884,11 +1768,9 @@ export function FAQSection() {
       <div className="divide-y divide-border border-y border-border">
         {filtered.length > 0 ? (
           filtered.map((f) => (
-            <details key={f.q} className="group py-6">
+            <details key={f.id} className="group py-6">
               <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
-                <h3 className="font-display text-xl break-words md:text-2xl">
-                  {f.q}
-                </h3>
+                <h3 className="font-display text-xl break-words md:text-2xl">{f.q}</h3>
                 <span className="mt-2 shrink-0 font-display text-2xl text-accent transition group-open:rotate-45">
                   +
                 </span>
@@ -1899,9 +1781,7 @@ export function FAQSection() {
             </details>
           ))
         ) : (
-          <p className="py-8 text-sm text-muted-foreground">
-            Brak pytań dla wybranych filtrów i wyszukiwania. Zmień etap, temat lub frazę.
-          </p>
+          <p className="py-8 text-sm text-muted-foreground">{t("faq.empty")}</p>
         )}
       </div>
     </Section>
@@ -1980,15 +1860,17 @@ type EbookStatus =
   | { kind: "error"; message: string };
 
 export function EbookLeadMagnet() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState(""); // honeypot
   const [status, setStatus] = useState<EbookStatus>({ kind: "idle" });
+  const bullets = t("ebook.bullets", { returnObjects: true, defaultValue: [] }) as string[];
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!consent) {
-      setStatus({ kind: "error", message: "Zaznacz zgodę, aby otrzymać e-book." });
+      setStatus({ kind: "error", message: t("ebook.errConsent") });
       return;
     }
     setStatus({ kind: "submitting" });
@@ -2008,25 +1890,21 @@ export function EbookLeadMagnet() {
         kind: "error",
         message:
           (err as Error).message === "validation_failed"
-            ? "Sprawdź poprawność adresu e-mail."
-            : "Nie udało się wysłać formularza. Spróbuj ponownie.",
+            ? t("ebook.errValidation")
+            : t("ebook.errGeneric"),
       });
     }
   }
 
   return (
-    <Section id="ebook" eyebrow="13 — E-BOOK: PATIENT JOURNEY">
+    <Section id="ebook" eyebrow={t("ebook.eyebrow")}>
       <div className="grid gap-12 md:grid-cols-12 md:items-start">
         <div className="md:col-span-7">
-          <SectionHeader
-            title={'Pobierz e-book „Patient Journey" — pierwsze 14 dni po zabiegu DHI.'}
-            lead="Konkretny protokół dzień-po-dniu: HBOT, PBM, mikrobiom, mycie, sen, dieta, czego unikać. Bez lania wody — same instrukcje i twarde parametry."
-          />
+          <SectionHeader title={t("ebook.title")} lead={t("ebook.lead")} />
           <ul className="mt-2 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
-            <li>· 8 rozdziałów (Dzień 0 → Dzień 14)</li>
-            <li>· Parametry kliniczne (nm, J/cm², ATA)</li>
-            <li>· Checklista: czego unikać 14 dni</li>
-            <li>· Wersja do druku / PDF</li>
+            {bullets.map((b, i) => (
+              <li key={i}>· {b}</li>
+            ))}
           </ul>
         </div>
 
@@ -2034,36 +1912,29 @@ export function EbookLeadMagnet() {
           {status.kind === "success" ? (
             <div className="rounded-sm border border-accent/40 bg-accent/5 p-6">
               <p className="text-xs uppercase tracking-[0.2em] text-accent">
-                Dostęp przyznany
+                {t("ebook.successKicker")}
               </p>
-              <h3 className="mt-2 font-display text-2xl">
-                E-book jest gotowy.
-              </h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Twój prywatny link dostępu — zachowaj go, aby wrócić do treści.
-              </p>
+              <h3 className="mt-2 font-display text-2xl">{t("ebook.successTitle")}</h3>
+              <p className="mt-3 text-sm text-muted-foreground">{t("ebook.successDesc")}</p>
               <a
                 href={status.accessUrl}
                 className="mt-5 inline-flex w-full items-center justify-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background hover:bg-foreground/90"
               >
-                Otwórz e-book →
+                {t("ebook.successCta")}
               </a>
             </div>
           ) : (
-            <form
-              onSubmit={onSubmit}
-              className="rounded-sm border border-border bg-card p-6"
-            >
+            <form onSubmit={onSubmit} className="rounded-sm border border-border bg-card p-6">
               <label className="block">
                 <span className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">
-                  Adres e-mail
+                  {t("ebook.emailLabel")}
                 </span>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ty@przyklad.pl"
+                  placeholder={t("ebook.emailPlaceholder")}
                   className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm"
                 />
               </label>
@@ -2087,14 +1958,12 @@ export function EbookLeadMagnet() {
                   className="mt-0.5"
                   required
                 />
-                <span>
-                  Wyrażam zgodę na przetwarzanie adresu e-mail w celu
-                  udostępnienia e-booka „Patient Journey" (
-                  <Link to="/prywatnosc" className="underline">
-                    polityka prywatności
-                  </Link>
-                  ).
-                </span>
+                <Trans
+                  i18nKey="ebook.consent"
+                  components={{
+                    priv: <Link to="/prywatnosc" className="underline" />,
+                  }}
+                />
               </label>
 
               {status.kind === "error" && (
@@ -2108,9 +1977,7 @@ export function EbookLeadMagnet() {
                 disabled={status.kind === "submitting"}
                 className="mt-5 inline-flex w-full items-center justify-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90 disabled:opacity-50"
               >
-                {status.kind === "submitting"
-                  ? "Wysyłanie…"
-                  : "Pobierz e-book →"}
+                {status.kind === "submitting" ? t("ebook.submitting") : t("ebook.submit")}
               </button>
             </form>
           )}

@@ -1,3 +1,6 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 export type ScheduleTask = { id: string; label: string; tone?: "critical" | "default" };
 export type ScheduleDay = {
   day: number;
@@ -254,4 +257,28 @@ export function buildIcs(surgeryDate: string): string {
   }
   out.push("END:VCALENDAR");
   return out.join("\r\n");
+}
+
+// ----- Localized hook for UI components -----
+// Translates day phases, focus and task labels per active language.
+// Task IDs and `tone` are preserved from the static SCHEDULE so that
+// progress (localStorage) remains stable across languages.
+export function useSchedule(): ScheduleDay[] {
+  const { t, i18n } = useTranslation();
+  return useMemo(() => {
+    return SCHEDULE.map((d, idx) => {
+      const phase = t(`schedule.days.${idx}.phase`, { defaultValue: d.phase });
+      const focus = t(`schedule.days.${idx}.focus`, { defaultValue: d.focus });
+      const tasksI18n = t(`schedule.days.${idx}.tasks`, {
+        returnObjects: true,
+        defaultValue: d.tasks.map((x) => x.label),
+      }) as unknown as string[];
+      const tasks = d.tasks.map((task, ti) => ({
+        ...task,
+        label: tasksI18n?.[ti] ?? task.label,
+      }));
+      return { ...d, phase, focus, tasks };
+    });
+    // re-translate on language change
+  }, [t, i18n.language]);
 }

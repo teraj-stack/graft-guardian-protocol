@@ -1,6 +1,5 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 
 import pl from "@/locales/pl.json";
 import en from "@/locales/en.json";
@@ -15,9 +14,10 @@ export const LOCALE_LABELS: Record<Locale, string> = {
   tr: "Türkçe",
 };
 
+const STORAGE_KEY = "graftgen.lang";
+
 if (!i18n.isInitialized) {
   void i18n
-    .use(LanguageDetector)
     .use(initReactI18next)
     .init({
       resources: {
@@ -25,18 +25,37 @@ if (!i18n.isInitialized) {
         en: { translation: en },
         tr: { translation: tr },
       },
+      lng: "pl", // stable for SSR; client switches via applyClientLocale()
       fallbackLng: "pl",
       supportedLngs: [...SUPPORTED_LOCALES],
       nonExplicitSupportedLngs: true,
       load: "languageOnly",
       interpolation: { escapeValue: false },
-      detection: {
-        order: ["localStorage", "navigator", "htmlTag"],
-        caches: ["localStorage"],
-        lookupLocalStorage: "graftgen.lang",
-      },
       react: { useSuspense: false },
     });
+}
+
+/** Read persisted/browser language client-side. Runs only after hydration. */
+export function getClientLocale(): Locale {
+  if (typeof window === "undefined") return "pl";
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored && (SUPPORTED_LOCALES as readonly string[]).includes(stored)) {
+      return stored as Locale;
+    }
+  } catch {
+    /* ignore */
+  }
+  const nav = (navigator.language || "pl").slice(0, 2).toLowerCase();
+  return (SUPPORTED_LOCALES as readonly string[]).includes(nav) ? (nav as Locale) : "pl";
+}
+
+export function persistLocale(lng: Locale) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, lng);
+  } catch {
+    /* ignore */
+  }
 }
 
 export default i18n;

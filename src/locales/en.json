@@ -1,55 +1,29 @@
 {
   "nav": {
-    "exVivo": "Ex Vivo",
-    "pbm": "PBM",
-    "hbot": "HBOT",
-    "ladd": "LADD",
-    "protocol14": "14 days",
-    "shop": "Shop",
-    "panel": "Patient panel",
-    "reminders": "Reminders",
-    "faq": "FAQ",
-    "contact": "Contact",
-    "bookConsult": "Book a consultation",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "exVivo": "Ex Vivo", "pbm": "PBM", "hbot": "HBOT", "ladd": "LADD",
+    "protocol14": "14 days", "shop": "Shop", "panel": "Patient panel",
+    "reminders": "Reminders", "faq": "FAQ", "contact": "Contact",
+    "bookConsult": "Book a consultation", "openMenu": "Open menu", "closeMenu": "Close menu"
   },
   "common": {
-    "back": "Back",
-    "goHome": "Back to homepage",
-    "tryAgain": "Try again",
-    "loading": "Loading…",
-    "languageSwitcher": "Language"
+    "back": "Back", "goHome": "Back to homepage", "tryAgain": "Try again",
+    "loading": "Loading…", "languageSwitcher": "Language", "clear": "Clear", "search": "Search"
   },
-  "notFound": {
-    "title": "Page not found",
-    "description": "The page you're looking for doesn't exist or has been moved."
-  },
-  "error": {
-    "title": "This page didn't load",
-    "description": "Something went wrong on our end. Try refreshing or head back home."
-  },
+  "notFound": { "title": "Page not found", "description": "The page you're looking for doesn't exist or has been moved." },
+  "error": { "title": "This page didn't load", "description": "Something went wrong on our end. Try refreshing or head back home." },
   "hero": {
     "kicker": "Clinical protocol · DHI · evidence-based",
     "title": "Post-procedure protocol built on metabolic graft protection, photobiomodulation, <em>HBOT</em> and LADD.",
     "lead": "The first 48 hours determine graft survival. Instead of saline and passive healing — an integrated plan combining transplantology-grade preservation solutions, 650/830 nm photobiomodulation, hyperbaric oxygen therapy at 1.5–3.0 ATA and laser-assisted drug delivery (LADD).",
     "subLead": "48 hours = the critical window for graft survival. Full recovery is guided systematically across the first 14 days.",
-    "ctaBook": "Book a consultation",
-    "ctaTimeline": "See the 14-day timeline →",
+    "ctaBook": "Book a consultation", "ctaTimeline": "See the 14-day timeline →",
     "statsTitle": "Hard numbers",
-    "stat1k": "650 / 830 nm",
-    "stat1v": "PBM wavelengths applied immediately after the procedure",
-    "stat2k": "1.5–3.0 ATA",
-    "stat2v": "HBOT session pressure on day 0 and day 1",
-    "stat3k": "4 °C",
-    "stat3v": "target temperature for HypoThermosol + ATP-v solution",
-    "stat4k": "48–72 h",
-    "stat4v": "critical graft ischaemia window before revascularisation"
+    "stat1k": "650 / 830 nm", "stat1v": "PBM wavelengths applied immediately after the procedure",
+    "stat2k": "1.5–3.0 ATA", "stat2v": "HBOT session pressure on day 0 and day 1",
+    "stat3k": "4 °C", "stat3v": "target temperature for HypoThermosol + ATP-v solution",
+    "stat4k": "48–72 h", "stat4v": "critical graft ischaemia window before revascularisation"
   },
-  "heroFaq": {
-    "kicker": "Frequently asked questions",
-    "title": "What patients ask most often before starting the protocol"
-  },
+  "heroFaq": { "kicker": "Frequently asked questions", "title": "What patients ask most often before starting the protocol" },
   "sections": {
     "exVivo": "Ex Vivo — metabolic graft protection",
     "pbm": "PBM — photobiomodulation at 650 / 830 nm",
@@ -67,12 +41,239 @@
     "cta": "Start the protocol",
     "contact": "Contact"
   },
-  "footer": {
-    "rights": "All rights reserved.",
-    "privacy": "Privacy policy",
-    "cookies": "Cookie policy"
+  "footer": { "rights": "All rights reserved.", "privacy": "Privacy policy", "cookies": "Cookie policy" },
+  "languageSwitcher": { "label": "Choose language" },
+
+  "faq": {
+    "eyebrow": "12 — PATIENT QUESTIONS",
+    "title": "The questions you ask most often.",
+    "timelineLabel": "Timeline — Day 0–14",
+    "dayShort": "Day",
+    "selectDay": "Select a day after the procedure",
+    "relatedQuestions": "↓ Related questions ({{count}})",
+    "searchPlaceholder": "Search questions and answers…",
+    "stageLabel": "Stage:",
+    "topicLabel": "Topic:",
+    "all": "All",
+    "empty": "No questions match the selected filters and search. Try a different stage, topic or phrase.",
+    "stages": { "day0_3": "Day 0–3", "day4_14": "Day 4–14", "month1plus": "Month 1+" },
+    "topics": { "led": "LED", "hbot": "HBOT", "ladd_prp": "LADD/PRP", "home_care": "home care", "healing": "healing" },
+    "dayTips": [
+      { "headline": "Procedure day", "tip": "First PBM (650/830 nm) and HBOT (1.5–3.0 ATA) session on the same day. Sleep semi-upright ≥30°. Do not touch the scalp." },
+      { "headline": "Critical reperfusion window", "tip": "Second HBOT session. 20-min PBM. Touch-free saline/HOCl spray every 2–3 h. No hats." },
+      { "headline": "Graft stabilisation", "tip": "HOCl rinsing from 48 h, touch-free stream. 20–30 min walk without bending forward. PBM 20 min." },
+      { "headline": "Swelling peak", "tip": "Forehead and eyelid swelling peaks on day 2–3. Sleep ≥30°, cool compresses on the forehead (never on the grafts)." },
+      { "headline": "First wash", "tip": "Emollient → lukewarm water from the palms → mild pH 5.5 shampoo → microfibre towel (no rubbing). No SLS." },
+      { "headline": "Microbiome management", "tip": "Wash 1×/day. Light activity OK without sweating on the scalp. Continue PBM daily." },
+      { "headline": "Erythema check", "tip": "Trichoscopy follow-up photo. If redness stays intense — contact your coordinator." },
+      { "headline": "Week 1 — report", "tip": "Checkpoint: weekly report (anagen %, tolerance). Video call with the coordinator." },
+      { "headline": "Crusts come off", "tip": "From day 8 soft fingertip massage during washing. Crusts shed on their own — do not scratch or peel." },
+      { "headline": "Microbiome + hydration", "tip": "HOCl mist 2–3×/day. Anti-inflammatory diet: omega-3, polyphenols, protein 1.2–1.6 g/kg." },
+      { "headline": "Donor area", "tip": "PBM with special focus on the donor area. Optional cold atmospheric plasma (CAP)." },
+      { "headline": "Back to everyday life", "tip": "Return to moderate sport (no overhead barbells). Loose hat is OK in the sun — never tight." },
+      { "headline": "Consolidation", "tip": "Wash with standard pH 5.5 shampoo. Gentle conditioner OK. No hair dye for at least 4 weeks." },
+      { "headline": "Preparing for follow-up", "tip": "Schedule the 14-day check-up. Full photo set in the same angles as before the procedure." },
+      { "headline": "End of the critical protocol", "tip": "Crusts gone. Continue PBM, minoxidil, HBOT per the long-term plan. UPF 50+ sun protection. Shock loss (week 2–6) is expected." }
+    ],
+    "items": {
+      "pbm-650-vs-830": { "q": "What is the difference between 650 nm and 830 nm in scalp photobiomodulation?", "a": "650 nm (red) penetrates 1–2 mm and acts mainly on the epidermis, dermis and hair papilla. 830 nm (near-infrared) reaches 3–5 mm — deeper follicles and oedematous subcutaneous tissue. Both activate cytochrome-c oxidase (complex IV of the respiratory chain), boosting mitochondrial ATP production." },
+      "first-wash": { "q": "When can I wash my head after DHI?", "a": "Gentle, touch-free rinsing of the recipient area with saline or HOCl — from 48 h. Full wash with a pH 5.5 SLS-free shampoo — from day 4. Rubbing and crust removal only after day 8. Early rubbing is the most common mechanical cause of graft loss." },
+      "hbot-nfz": { "q": "Is HBOT after a hair transplant reimbursed by public healthcare?", "a": "No. Reimbursed indications include CO poisoning, decompression sickness, radionecrosis and diabetic foot. HBOT in hair transplantology is a commercial procedure performed in private centres." },
+      "minoxidil-oral": { "q": "Is low-dose oral minoxidil safe?", "a": "At 0.25–2.5 mg/day the safety profile in healthy adults is well documented (Sinclair 2018, Randolph & Tosti 2021). Requires medical qualification, blood pressure assessment and exclusion of cardiac contraindications. Not registered for this indication — used off-label." },
+      "prp-in-holding": { "q": "Why use PRP in the graft holding solution?", "a": "Platelet-rich plasma contains VEGF, PDGF, EGF, IGF-1 and TGF-β. Incubating grafts in PRP before implantation saturates them with growth factors, accelerating angiogenesis and shortening the 48–72 h post-implant ischaemia window." },
+      "hypothermosol": { "q": "How does HypoThermosol differ from saline?", "a": "0.9% NaCl has osmolarity ~308 mOsm/L and contains no energy buffer — cells stored in it at 4 °C exhaust ATP within 2–4 h. HypoThermosol FRS is a buffered hypothermic solution (HEPES, mannitol, adenosine, glutathione) designed for transplant organs, maintaining ionic homeostasis at 2–8 °C for over 24 h." },
+      "tulium-vs-plasma": { "q": "Thulium 1927 nm laser or cold plasma — what to choose for LADD?", "a": "Fractional thulium 1927 nm is the LADD standard: controlled microchannels 150–300 µm deep, short downtime, well-documented penetration of minoxidil and peptides. Cold atmospheric plasma (CAP) is non-thermal — it generates RONS and increases stratum corneum permeability without ablation, but drug delivery depth is smaller (~50–100 µm). Thulium: deeper penetration, more energy in tissue. CAP: safer directly over fresh grafts." },
+      "alcohol-nicotine": { "q": "Can I drink alcohol and smoke after the procedure?", "a": "Nicotine causes peripheral vasoconstriction for up to 90 min after each dose — during the revascularisation window (day 0–7) it increases the risk of graft necrosis. Alcohol impairs haemostasis and increases swelling. Recommended abstinence: at least 14 days." },
+      "final-result": { "q": "When will I see the final result?", "a": "Shock loss of transplanted hairs: weeks 2–6. Anagen entry: months 3–4. First visible density: month 6. Final result: 12–15 months after the procedure." },
+      "sport-sauna-sun": { "q": "When can I return to sport, sauna, swimming pool and sun after DHI?", "a": "Light sport (walking, yoga without inversions) — from day 3. Strength training and running — from week 2, when crusts have shed. Dry and steam sauna — no earlier than 14 days post-procedure. Chlorinated pool — 14 days, sea water — 21 days. Direct sun — avoid for 30 days; then UPF 50+ hat. Tanning beds — 4 weeks." },
+      "first-48h-normal": { "q": "What is normal in the first 48 hours after DHI?", "a": "On day 0–3 it is normal to have: mild forehead and temple swelling, slight redness in the recipient zone, a tight ‘squeezing’ sensation, tiny serum droplets on the grafts and mild pain responding to medication. These are signs of inflammation, micro-bleeding and fluid retention. Sleep semi-upright (≥30°) for the first 5 days." },
+      "forehead-swelling": { "q": "Is forehead and face swelling after the procedure normal?", "a": "Yes — forehead, eyelid and upper-face swelling occurs in 60–80% of patients on days 1–3. It is due to post-procedure fluid migrating along the loose subcutaneous tissue of the forehead. Usually resolves in 48–72 h. Accelerated by: head-up sleep, cold compresses around (not on) the recipient area and prescribed medication." },
+      "pain-pressure": { "q": "Is pain and pressure in the recipient area normal on day 0–3?", "a": "Yes. A ‘tight’ feeling, mild pulsing or burning is typical for the acute inflammation phase. Pain should be easily controlled (paracetamol + ibuprofen). If pain worsens after day 2–3, with fever >38 °C, purulent discharge or spreading redness — contact the clinic." },
+      "scab-removal": { "q": "When will crusts wash off and can I remove them myself?", "a": "Crusts form from day 2 and shed between day 7 and 14. Do not scratch them off or soak them under a strong stream — mechanical detachment can tear out a graft. From day 8 you may use a gentle fingertip massage during washing with a pH 5.5 shampoo." },
+      "itching": { "q": "Is scalp itching during weeks 1–2 normal?", "a": "Yes. Itching in the recipient area between day 4 and 10 is a sign of healing. Do not scratch. What helps: HOCl mist, mild shampoo, short antihistamine course after consultation. If itching is intense or accompanied by a rash — notify your coordinator." },
+      "shock-loss": { "q": "Is shedding of transplanted hairs in weeks 2–6 normal?", "a": "Yes — this is shock loss. Transplanted hairs enter telogen and shed 2–6 weeks after the procedure. The bulbs remain in the skin. New hair starts to grow in months 3–4. PBM reduces shock loss severity." },
+      "call-clinic": { "q": "When should I contact the clinic immediately?", "a": "Fever >38 °C after day 2, purulent discharge from the recipient area, rapidly spreading redness and warmth, severe pain not controlled by medication, bleeding >30 min, large bruises outside the forehead area, allergic reaction, visible graft loss." },
+      "sleep-position": { "q": "Can I sleep on my side after a hair transplant?", "a": "For the first 4–5 days — sleep on your back with the head elevated ≥30° (wedge pillow). Side sleeping increases pressure and friction. From day 5 you may carefully try a side position. Full return after 10–14 days, once graft adhesion is stable." },
+      "day-0": { "q": "Day 0 (procedure day) — what to do after coming home?", "a": "Do not remove the forehead band before the time noted on your card (usually 24 h). Sleep semi-upright (≥30°). Do not touch the recipient area. Do not wash the head. Avoid aspirin and NSAIDs unless prescribed — paracetamol is safe. Drink 2–3 L of water. The first PBM/HBOT session is usually on day 0 or +1." },
+      "day-1": { "q": "Day 1 — what to expect?", "a": "Recipient area: small crusts, mild redness, tingling discomfort. Donor area: dull pain, tightness. Possible first signs of forehead swelling. Continue head-up sleep, cold compresses on the forehead, medication per your card. Allowed: a short walk, a light protein-rich meal." },
+      "day-2-hocl": { "q": "Day 2 — when to start saline / HOCl spraying?", "a": "From 48 h start gentle, touch-free hydration of the recipient area with sterile saline or HOCl — spray from 15–20 cm every 2–3 h. Goal: a moist environment (faster revascularisation), softening crusts, limiting bacterial colonisation. Do not rub." },
+      "day-3-swelling-peak": { "q": "Day 3 — peak of swelling, is it a reason to worry?", "a": "No. Forehead, eyelid and nasal-bridge swelling peaks on day 2–3 and subsides in 48–72 h. What helps: sleep ≥30°, cold compresses, walking. Warning signs: asymmetric swelling with severe pain, neck/throat swelling, shortness of breath, rash — contact the clinic." },
+      "day-4-first-wash": { "q": "Day 4 — the first wash: step by step?", "a": "1) Apply a thin layer of emollient to the recipient area; leave 15–20 min. 2) Rinse with lukewarm water from your palms — not from the shower head. 3) Foam a mild pH 5.5 (SLS-free) shampoo in your hands and dab the foam with fingertips, no rubbing. 4) Rinse with water from your palms. 5) Pat dry with a microfibre towel — no rubbing. Repeat 1×/day through day 14." },
+      "day-5-7-revasc": { "q": "Day 5–7 — what happens to grafts biologically?", "a": "Revascularisation window: new capillaries grow from the recipient bed into the transplanted follicles. Grafts move from imbibition to inosculation. Supported by: oxygenation (HBOT, no nicotine), PBM 650/830 nm, avoiding blood pressure spikes and mechanical injury. Graft adhesion is weak — no tight hats." },
+      "day-8-10-massage": { "q": "Day 8–10 — when can I gently massage the scalp?", "a": "From day 8 — soft circular fingertip massage during washing. Helps crusts shed and improves microcirculation. Do not use nails, brushes or irrigators. Continue PBM per protocol. Return to office work is OK — redness decreases." },
+      "day-11-14": { "q": "Day 11–14 — end of the critical phase, what next?", "a": "Most crusts shed by day 14. Recipient area: pink, smooth. Grafts stably anchored. You may: strength training, normal washing, a gentle conditioner. Still avoid sauna, swimming pool and intense sun until day 21–30. Book the 14-day follow-up and bring control photos." },
+      "post-erythema": { "q": "Is recipient-area redness persisting for 2–4 weeks normal?", "a": "Yes. Pink-red discoloration persists in most patients for 2–6 weeks, and up to 8 weeks in fair skin. Soothed by: PBM 650 nm, UPF 50+, avoiding alcohol and sauna. Warning signs: warm, painful, spreading redness — consult (suspected folliculitis/cellulitis)." },
+      "diet": { "q": "What to eat and drink during days 0–14 to support healing?", "a": "Protein: 1.2–1.6 g/kg body weight/day. Vitamin C 500–1000 mg + zinc 15–25 mg — collagen cofactor. Iron, D3, B12 — if deficient. Omega-3 (2–3 g EPA/DHA). Water: 30–35 ml/kg. Avoid: alcohol (14 days), excess sugars, high-dose garlic/ginkgo/turmeric (antiplatelet effect)." }
+    }
   },
-  "languageSwitcher": {
-    "label": "Choose language"
+
+  "schedule": {
+    "eyebrow": "08 — YOUR PLAN: DAY 0–14",
+    "criticalBadge": "CRITICAL",
+    "dayLabel": "Day",
+    "focusLabel": "Focus",
+    "edu": "Educational content; does not replace your doctor's instructions.",
+    "days": [
+      { "phase": "Day Zero", "focus": "Right after the procedure — protocol starts", "tasks": [
+        "PBM 630–680 + 830 nm, 20 min — first session still at the clinic",
+        "HBOT 1.5–3.0 ATA — first session on Day Zero",
+        "Sleep semi-upright ≥30° (wedge pillow)",
+        "Cold compresses around the forehead (never on the recipient area)",
+        "Medication per discharge card: antibiotic, analgesic, anti-swelling",
+        "No alcohol, no smoking, no exertion, no bending forward"
+      ]},
+      { "phase": "Day 1", "focus": "Critical reperfusion window", "tasks": [
+        "HBOT — second session", "PBM 20 min",
+        "Touch-free saline / HOCl spray every 2–3 h",
+        "Sleep ≥30°, no touching, no hat"
+      ]},
+      { "phase": "Day 2", "focus": "Graft stabilisation", "tasks": [
+        "PBM 20 min", "HOCl rinsing from 48 h — touch-free stream",
+        "20–30 min walk, no bending the head forward"
+      ]},
+      { "phase": "Day 3", "focus": "End of acute inflammation", "tasks": [
+        "PBM 20 min", "First gentle wash per clinic instructions",
+        "Control photo (top, sides, back) — add to the patient panel"
+      ]},
+      { "phase": "Day 4", "focus": "Proliferation phase starts", "tasks": [
+        "PBM 20 min", "Wash scalp with pH 5.5 SLS-free shampoo, no rubbing",
+        "May sleep flat (no pressure on the recipient area)"
+      ]},
+      { "phase": "Day 5", "focus": "Microbiome management", "tasks": [
+        "PBM 20 min", "Wash 1×/day, gentle towel drying (no rubbing)",
+        "Light activity OK — no scalp sweating"
+      ]},
+      { "phase": "Day 6", "focus": "Erythema check", "tasks": [
+        "PBM 20 min", "Trichoscopy follow-up photo (patient panel)",
+        "Redness assessment — if persistent: contact the coordinator"
+      ]},
+      { "phase": "Day 7 — week 1", "focus": "Weekly checkpoint", "tasks": [
+        "PBM 20 min", "Weekly report: anagen %, thickness, skin tolerance",
+        "Phone / video contact with the coordinator"
+      ]},
+      { "phase": "Day 8", "focus": "Crust removal", "tasks": [
+        "PBM 20 min", "Soft crust-removing massage + botanicals (arnica, centella)",
+        "Strictly no scratching — crusts shed on their own with water"
+      ]},
+      { "phase": "Day 9", "focus": "Microbiome + hydration", "tasks": [
+        "PBM 20 min", "HOCl / saline mist 2–3×/day",
+        "Anti-inflammatory diet: omega-3, polyphenols, protein"
+      ]},
+      { "phase": "Day 10", "focus": "Donor area", "tasks": [
+        "PBM 20 min — with special focus on the donor area",
+        "Optional: cold plasma (CAP) session on the donor area",
+        "Donor area photo (patient panel)"
+      ]},
+      { "phase": "Day 11", "focus": "Back to everyday life", "tasks": [
+        "PBM 20 min", "Return to moderate sport (no overhead barbells)",
+        "Loose hat OK in the sun — never tight"
+      ]},
+      { "phase": "Day 12", "focus": "Consolidation", "tasks": [
+        "PBM 20 min", "Wash with a standard pH 5.5 shampoo"
+      ]},
+      { "phase": "Day 13", "focus": "Preparing for follow-up", "tasks": [
+        "PBM 20 min", "Full set of control photos (5 angles)",
+        "Write down questions for the follow-up visit"
+      ]},
+      { "phase": "Day 14 — end of the 14-day protocol", "focus": "Check-up + month 1+ plan", "tasks": [
+        "Follow-up visit at the clinic (trichoscopy)",
+        "PBM switches to 2–3×/week",
+        "Set the LADD / PRP / minoxidil plan for month 1+",
+        "Final report for the acute phase (patient panel)"
+      ]}
+    ]
+  },
+
+  "dayZeroToThree": {
+    "title": "The first 72 h determine the survival of transplanted bulbs",
+    "lead": "Instructions taken directly from the Patient Journey e-book. Follow them step by step — do not improvise.",
+    "card0": { "title": "Day Zero", "badge": "Right after the procedure", "items": [
+      "PBM 650/830 nm, 4–6 J/cm², immediately after the procedure",
+      "First HBOT session 1.5–3.0 ATA within 6 h",
+      "Sleep semi-upright (30–45°)",
+      "Ice on the forehead (not on the recipient area)"
+    ], "mech": "No touching, scratching or washing of the recipient area." },
+    "card1": { "title": "Day 1–2", "badge": "Critical window", "items": [
+      "Second HBOT session (24 h after the first)",
+      "PBM every 24 h, 20–30 min",
+      "HOCl 0.01–0.02% spray on the donor area",
+      "Sleep with the head elevated on 2 pillows",
+      "Hydration ≥ 2.5 L of water / day"
+    ], "mech": "Alcohol, smoking and caffeine reduce perfusion — strictly forbidden." },
+    "card2": { "title": "Day 3–4", "badge": "First wash", "items": [
+      "First wash per coordinator's instructions (pH 5.5, SLS-free)",
+      "HOCl spray 2× per day",
+      "Arnica / centella gels on the donor area",
+      "Continue PBM every 24 h"
+    ], "mech": "Do not peel off crusts — wash gently, no rubbing." },
+    "avoidTitle": "‘What to avoid’ checklist — Day 0–14",
+    "avoid": [
+      { "type": "bad", "text": "Alcohol, smoking (vasoconstriction)" },
+      { "type": "bad", "text": "Aspirin, ibuprofen (first 48 h)" },
+      { "type": "bad", "text": "Sauna, swimming pool, sun" },
+      { "type": "bad", "text": "Intense training, weight lifting" },
+      { "type": "bad", "text": "Hats, helmets squeezing the scalp" },
+      { "type": "bad", "text": "Scratching, peeling crusts" },
+      { "type": "good", "text": "Diet rich in protein, iron, zinc, B vitamins" },
+      { "type": "good", "text": "Regular contact with the coordinator" }
+    ]
+  },
+
+  "journey": {
+    "eyebrow": "09 — PATIENT JOURNEY",
+    "title": "An educated patient is a cooperating patient.",
+    "p1": "A patient leaving the clinic with a bloodied head, without a plan and without contact — that is not just a bad experience. Post-procedure stress cortisol impairs cutaneous circulation. Anxiety meaningfully reduces scalp perfusion and increases the risk of mechanical graft loss (scratching, improper washing, early crust removal).",
+    "p2": "Every patient who logs into our site has access to online materials (full documentation and the latest regenerative / anti-aging medicine trends) as well as the “Patient Journey” e-book with instructions for each of the first 14 days — what to do in the morning, in the evening, what not to do, when to worry. Plus: direct contact with the supervising doctor for the first 30 days.",
+    "ctaPanel": "Open the patient panel →",
+    "ctaReminders": "Set up email/SMS reminders",
+    "inEbook": "In the e-book",
+    "bullets": [
+      "Checklist for each of the 14 days",
+      "Shopping list of products (HOCl, pH 5.5 shampoo, ointment)",
+      "Diagrams: sleeping position, washing technique, shower angle",
+      "Red flags requiring clinic contact",
+      "Plan for returning to activity (sport, sauna, swimming pool, sun)"
+    ]
+  },
+
+  "ebook": {
+    "eyebrow": "13 — E-BOOK: PATIENT JOURNEY",
+    "title": "Download the Patient Journey e-book — the first 14 days after DHI.",
+    "lead": "A concrete day-by-day protocol: HBOT, PBM, microbiome, washing, sleep, diet, what to avoid. No filler — only instructions and hard parameters.",
+    "bullets": [
+      "8 chapters (Day 0 → Day 14)",
+      "Clinical parameters (nm, J/cm², ATA)",
+      "‘What to avoid’ checklist — 14 days",
+      "Print-ready / PDF version"
+    ],
+    "successKicker": "Access granted",
+    "successTitle": "The e-book is ready.",
+    "successDesc": "Your private access link — save it to return to the content.",
+    "successCta": "Open the e-book →",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "consent": "I agree to the processing of my email for the purpose of sharing the Patient Journey e-book (<priv>privacy policy</priv>).",
+    "errConsent": "Tick the consent box to receive the e-book.",
+    "errValidation": "Please check that the email address is valid.",
+    "errGeneric": "Could not submit the form. Please try again.",
+    "submit": "Download the e-book →",
+    "submitting": "Sending…",
+    "chapters": [
+      { "title": "Day 0 — protocol starts", "summary": "First PBM and HBOT session on the same day. Sleep ≥30°. No touching, washing or hats." },
+      { "title": "Day 1 — critical reperfusion window", "summary": "Second HBOT session. Touch-free HOCl spray. Medication per card. Short walk, a light protein meal." },
+      { "title": "Day 2 — hydration starts", "summary": "From 48 h gently mist the recipient area every 2–3 h. Moist environment = faster revascularisation." },
+      { "title": "Day 3 — swelling peak", "summary": "Forehead swelling peaks, subsides within 48–72 h. Sleep ≥30°, cool compresses, light activity." },
+      { "title": "Day 4 — first wash", "summary": "Emollient → water from the palms → pH 5.5 SLS-free shampoo → microfibre towel. No rubbing." },
+      { "title": "Day 5 — microbiome", "summary": "Wash 1×/day. Light activity without scalp sweating. Anti-inflammatory diet." },
+      { "title": "Day 6 — erythema check", "summary": "Trichoscopy photo. If redness is intense — contact the coordinator." },
+      { "title": "Day 7 — weekly checkpoint", "summary": "First report: anagen %, thickness, tolerance. Video consultation." },
+      { "title": "Day 8–9 — crusts come off", "summary": "Soft fingertip massage during washing. Crusts shed on their own — do not peel." },
+      { "title": "Day 10 — donor area", "summary": "PBM on the donor area. Optional cold plasma (CAP)." },
+      { "title": "Day 11 — back to activity", "summary": "Moderate sport. Loose hat in the sun. No sauna or swimming pool." },
+      { "title": "Day 12 — washing normalises", "summary": "Standard pH 5.5 shampoo. Gentle conditioner. No hair dye." },
+      { "title": "Day 13 — preparing for follow-up", "summary": "Control photos in the same angles. Write down questions." },
+      { "title": "Day 14 — end of the critical protocol", "summary": "Follow-up visit, trichoscopy. PBM switches to 2–3×/week. LADD/PRP plan." },
+      { "title": "What next — month 1+", "summary": "LADD with PRP/minoxidil, biomedical reports, monthly check-ups through month 12." }
+    ]
   }
 }

@@ -1,78 +1,279 @@
 {
   "nav": {
-    "exVivo": "Ex Vivo",
-    "pbm": "PBM",
-    "hbot": "HBOT",
-    "ladd": "LADD",
-    "protocol14": "14 gün",
-    "shop": "Mağaza",
-    "panel": "Hasta paneli",
-    "reminders": "Hatırlatıcılar",
-    "faq": "SSS",
-    "contact": "İletişim",
-    "bookConsult": "Konsültasyon planla",
-    "openMenu": "Menüyü aç",
-    "closeMenu": "Menüyü kapat"
+    "exVivo": "Ex Vivo", "pbm": "PBM", "hbot": "HBOT", "ladd": "LADD",
+    "protocol14": "14 gün", "shop": "Mağaza", "panel": "Hasta paneli",
+    "reminders": "Hatırlatmalar", "faq": "SSS", "contact": "İletişim",
+    "bookConsult": "Konsültasyon randevusu", "openMenu": "Menüyü aç", "closeMenu": "Menüyü kapat"
   },
   "common": {
-    "back": "Geri",
-    "goHome": "Ana sayfaya dön",
-    "tryAgain": "Tekrar dene",
-    "loading": "Yükleniyor…",
-    "languageSwitcher": "Dil"
+    "back": "Geri", "goHome": "Ana sayfaya dön", "tryAgain": "Tekrar dene",
+    "loading": "Yükleniyor…", "languageSwitcher": "Dil", "clear": "Temizle", "search": "Ara"
   },
-  "notFound": {
-    "title": "Sayfa bulunamadı",
-    "description": "Aradığınız sayfa mevcut değil veya taşınmış olabilir."
-  },
-  "error": {
-    "title": "Bu sayfa yüklenemedi",
-    "description": "Bizim tarafımızda bir sorun oluştu. Sayfayı yenileyin ya da ana sayfaya dönün."
-  },
+  "notFound": { "title": "Sayfa bulunamadı", "description": "Aradığınız sayfa mevcut değil veya taşınmış olabilir." },
+  "error": { "title": "Sayfa yüklenemedi", "description": "Bizim tarafımızda bir şeyler ters gitti. Sayfayı yenileyin veya ana sayfaya dönün." },
   "hero": {
     "kicker": "Klinik protokol · DHI · kanıta dayalı",
     "title": "Greftlerin metabolik korunması, fotobiyomodülasyon, <em>HBOT</em> ve LADD üzerine kurulu operasyon sonrası protokol.",
-    "lead": "İlk 48 saat greft sağkalımını belirler. Salin ve pasif iyileşme yerine — transplantoloji düzeyinde koruma solüsyonları, 650/830 nm fotobiyomodülasyon, 1,5–3,0 ATA hiperbarik oksijen tedavisi ve lazer destekli ilaç dağıtımını (LADD) birleştiren entegre bir plan.",
-    "subLead": "48 saat = greft sağkalımı için kritik penceredir. Tam iyileşme ilk 14 gün boyunca sistematik olarak yönetilir.",
-    "ctaBook": "Konsültasyon planla",
-    "ctaTimeline": "14 günlük zaman çizelgesini gör →",
-    "statsTitle": "Sert rakamlar",
-    "stat1k": "650 / 830 nm",
-    "stat1v": "operasyon hemen sonrası uygulanan PBM dalga boyları",
-    "stat2k": "1,5–3,0 ATA",
-    "stat2v": "0. ve 1. gün HBOT seansı basıncı",
-    "stat3k": "4 °C",
-    "stat3v": "HypoThermosol + ATP-v solüsyonu için hedef sıcaklık",
-    "stat4k": "48–72 sa",
-    "stat4v": "revaskülarizasyon öncesi kritik greft iskemi penceresi"
+    "lead": "İlk 48 saat greftlerin yaşamını belirler. Serum fizyolojik ve pasif iyileşme yerine — transplantasyon düzeyinde koruyucu solüsyonlar, 650/830 nm fotobiyomodülasyon, 1,5–3,0 ATA hiperbarik oksijen tedavisi ve lazer destekli ilaç iletimini (LADD) birleştiren entegre bir plan.",
+    "subLead": "48 saat = greft hayatta kalmasının kritik penceresi. Tam iyileşme ilk 14 gün boyunca sistematik olarak yürütülür.",
+    "ctaBook": "Konsültasyon randevusu", "ctaTimeline": "14 günlük zaman çizelgesini görüntüle →",
+    "statsTitle": "Net sayılar",
+    "stat1k": "650 / 830 nm", "stat1v": "operasyondan hemen sonra uygulanan PBM dalga boyları",
+    "stat2k": "1,5–3,0 ATA", "stat2v": "0. ve 1. günde HBOT seans basıncı",
+    "stat3k": "4 °C", "stat3v": "HypoThermosol + ATP-v solüsyonu için hedef sıcaklık",
+    "stat4k": "48–72 sa", "stat4v": "revaskülarizasyon öncesi greft iskemisi kritik penceresi"
   },
-  "heroFaq": {
-    "kicker": "Sık sorulan sorular",
-    "title": "Hastaların protokol öncesi en sık sorduğu sorular"
-  },
+  "heroFaq": { "kicker": "Sık sorulan sorular", "title": "Hastaların protokol öncesi en çok sorduğu sorular" },
   "sections": {
-    "exVivo": "Ex Vivo — metabolik greft koruması",
+    "exVivo": "Ex Vivo — greftlerin metabolik korunması",
     "pbm": "PBM — 650 / 830 nm fotobiyomodülasyon",
     "hbot": "HBOT — hiperbarik oksijen tedavisi",
-    "ladd": "LADD — lazer destekli ilaç dağıtımı",
+    "ladd": "LADD — lazer destekli ilaç iletimi",
     "microbiome": "Mikrobiyom yönetimi",
     "timeline": "Zaman çizelgesi — 14 günlük protokol",
-    "schedule": "Planınız: 0–14. gün",
-    "journey": "Hasta yolculuğu",
-    "evidence": "Kanıta dayalı tıp",
+    "schedule": "Planınız: 0–14. günler",
+    "journey": "Hasta Yolculuğu",
+    "evidence": "Kanıta Dayalı Tıp",
     "pricing": "Mağaza",
     "faq": "Sorular ve cevaplar",
     "risks": "Riskler ve kontrendikasyonlar",
-    "ebook": "E-kitap: Hasta yolculuğu",
+    "ebook": "E-kitap: Hasta Yolculuğu",
     "cta": "Protokole başla",
     "contact": "İletişim"
   },
-  "footer": {
-    "rights": "Tüm hakları saklıdır.",
-    "privacy": "Gizlilik politikası",
-    "cookies": "Çerez politikası"
+  "footer": { "rights": "Tüm hakları saklıdır.", "privacy": "Gizlilik politikası", "cookies": "Çerez politikası" },
+  "languageSwitcher": { "label": "Dil seçin" },
+
+  "faq": {
+    "eyebrow": "12 — HASTA SORULARI",
+    "title": "En sık sorduklarınız.",
+    "timelineLabel": "Zaman çizelgesi — 0–14. gün",
+    "dayShort": "Gün",
+    "selectDay": "Operasyondan sonraki günü seçin",
+    "relatedQuestions": "↓ İlgili sorular ({{count}})",
+    "searchPlaceholder": "Soru ve cevaplarda ara…",
+    "stageLabel": "Aşama:",
+    "topicLabel": "Konu:",
+    "all": "Tümü",
+    "empty": "Seçilen filtreler ve aramayla eşleşen soru yok. Farklı aşama, konu veya ifade deneyin.",
+    "stages": { "day0_3": "Gün 0–3", "day4_14": "Gün 4–14", "month1plus": "1. Ay+" },
+    "topics": { "led": "LED", "hbot": "HBOT", "ladd_prp": "LADD/PRP", "home_care": "evde bakım", "healing": "iyileşme" },
+    "dayTips": [
+      { "headline": "Operasyon günü", "tip": "Aynı gün ilk PBM (650/830 nm) ve HBOT (1,5–3,0 ATA) seansı. Yarı oturur uyuyun (≥30°). Saç derisine dokunmayın." },
+      { "headline": "Kritik reperfüzyon penceresi", "tip": "İkinci HBOT seansı. 20 dakika PBM. Her 2–3 saatte bir temassız serum fizyolojik/HOCl sprey. Şapka yok." },
+      { "headline": "Greft stabilizasyonu", "tip": "48 saatten itibaren HOCl ile durulama, temassız akış. Başı öne eğmeden 20–30 dk yürüyüş. 20 dk PBM." },
+      { "headline": "Şişlik zirvesi", "tip": "Alın ve göz kapağı şişliği 2.–3. günde zirve yapar. Uyku ≥30°, alına soğuk kompres (greftlere değil)." },
+      { "headline": "İlk yıkama", "tip": "Yumuşatıcı → avuçtan ılık su → pH 5,5 yumuşak şampuan → mikrofiber havlu (ovmayın). SLS yok." },
+      { "headline": "Mikrobiyom yönetimi", "tip": "Günde 1× yıkayın. Saç derisinde terleme olmadan hafif aktivite OK. PBM'ye günlük devam." },
+      { "headline": "Eritem kontrolü", "tip": "Trikoskopi takip fotoğrafı. Kızarıklık yoğun kalırsa — koordinatörle iletişime geçin." },
+      { "headline": "Hafta 1 — rapor", "tip": "Kontrol noktası: haftalık rapor (anagen %, tolerans). Koordinatörle görüntülü görüşme." },
+      { "headline": "Kabuklar dökülüyor", "tip": "8. günden itibaren yıkama sırasında parmak ucuyla yumuşak masaj. Kabuklar kendi kendine dökülür — kazımayın." },
+      { "headline": "Mikrobiyom + nemlendirme", "tip": "Günde 2–3× HOCl sis. Antienflamatuar diyet: omega-3, polifenoller, protein 1,2–1,6 g/kg." },
+      { "headline": "Donör alanı", "tip": "Donör alanına özel odaklı PBM. İsteğe bağlı soğuk atmosferik plazma (CAP)." },
+      { "headline": "Günlük hayata dönüş", "tip": "Ölçülü spora geri dönüş (baş üstü halter yok). Güneşte gevşek şapka OK — asla sıkı değil." },
+      { "headline": "Konsolidasyon", "tip": "Standart pH 5,5 şampuanla yıkama. Yumuşak saç kremi OK. En az 4 hafta boya yok." },
+      { "headline": "Kontrole hazırlık", "tip": "14. gün kontrolünü planlayın. Operasyondan önceki açılarla aynı tam fotoğraf seti." },
+      { "headline": "Kritik protokolün sonu", "tip": "Kabuklar gitti. Uzun vadeli plana göre PBM, minoksidil, HBOT'a devam. UPF 50+ güneş koruması. Şok dökülmesi (2.–6. hafta) beklenen bir aşamadır." }
+    ],
+    "items": {
+      "pbm-650-vs-830": { "q": "Saç derisi fotobiyomodülasyonunda 650 nm ile 830 nm arasındaki fark nedir?", "a": "650 nm (kırmızı) 1–2 mm penetre olur ve esas olarak epidermis, dermis ve saç papillası üzerinde etkilidir. 830 nm (yakın kızılötesi) 3–5 mm derine ulaşır — daha derindeki foliküllere ve ödemli subkutan dokuya. Her ikisi de sitokrom-c oksidazı (solunum zinciri kompleks IV) aktive ederek mitokondriyal ATP üretimini artırır." },
+      "first-wash": { "q": "DHI'dan sonra başımı ne zaman yıkayabilirim?", "a": "Alıcı bölgenin serum fizyolojik veya HOCl ile yumuşak, temassız durulanması — 48. saatten itibaren. pH 5,5 SLS içermeyen şampuanla tam yıkama — 4. günden itibaren. Ovma ve kabuk çıkarma yalnızca 8. günden sonra. Erken ovma, greft kaybının en yaygın mekanik nedenidir." },
+      "hbot-nfz": { "q": "Saç ekimi sonrası HBOT kamu sağlık sigortası tarafından karşılanıyor mu?", "a": "Hayır. Karşılanan endikasyonlar arasında CO zehirlenmesi, dekompresyon hastalığı, radyonekroz ve diyabetik ayak bulunur. Saç transplantolojisinde HBOT, özel merkezlerde gerçekleştirilen ticari bir işlemdir." },
+      "minoxidil-oral": { "q": "Düşük doz oral minoksidil güvenli mi?", "a": "0,25–2,5 mg/gün dozlarında sağlıklı yetişkinlerde güvenlik profili iyi belgelenmiştir (Sinclair 2018, Randolph & Tosti 2021). Tıbbi kalifikasyon, kan basıncı değerlendirmesi ve kardiyak kontrendikasyonların dışlanmasını gerektirir. Bu endikasyon için kayıtlı değildir — endikasyon dışı kullanılır." },
+      "prp-in-holding": { "q": "Greft saklama solüsyonunda neden PRP kullanılır?", "a": "Trombositten zengin plazma VEGF, PDGF, EGF, IGF-1 ve TGF-β içerir. Greftlerin implantasyon öncesi PRP'de inkübasyonu onları büyüme faktörleriyle doyurur, anjiyogenezi hızlandırır ve implant sonrası 48–72 saatlik iskemi penceresini kısaltır." },
+      "hypothermosol": { "q": "HypoThermosol serum fizyolojikten nasıl farklıdır?", "a": "%0,9 NaCl ~308 mOsm/L osmolariteye sahiptir ve enerji tamponu içermez — 4 °C'de saklanan hücreler 2–4 saat içinde ATP'yi tüketir. HypoThermosol FRS, transplant organlar için tasarlanmış tamponlu hipotermik bir solüsyondur (HEPES, mannitol, adenozin, glutatyon); 2–8 °C'de 24 saatten fazla iyonik homeostazı korur." },
+      "tulium-vs-plasma": { "q": "Thulium 1927 nm lazer mi yoksa soğuk plazma mı — LADD için hangisini seçmeli?", "a": "Fraksiyonel thulium 1927 nm LADD'nin standardıdır: 150–300 µm derinliğinde kontrollü mikrokanallar, kısa downtime, minoksidil ve peptidlerin iyi belgelenmiş penetrasyonu. Soğuk atmosferik plazma (CAP) termal değildir — RONS üretir ve ablasyon olmadan stratum korneum geçirgenliğini artırır, ancak ilaç iletim derinliği daha düşüktür (~50–100 µm). Thulium: daha derin penetrasyon, dokuda daha fazla enerji. CAP: taze greftler üzerinde doğrudan daha güvenli." },
+      "alcohol-nicotine": { "q": "Operasyondan sonra alkol kullanabilir, sigara içebilir miyim?", "a": "Nikotin her dozdan sonra 90 dakikaya kadar periferik vazokonstriksiyona neden olur — revaskülarizasyon penceresinde (0–7. gün) greft nekrozu riskini artırır. Alkol hemostazı bozar ve şişliği artırır. Önerilen kesinti: en az 14 gün." },
+      "final-result": { "q": "Sonucu ne zaman göreceğim?", "a": "Nakledilen kılların şok dökülmesi: 2.–6. haftalar. Anagene giriş: 3.–4. aylar. İlk görünür yoğunluk: 6. ay. Nihai sonuç: operasyondan 12–15 ay sonra." },
+      "sport-sauna-sun": { "q": "DHI sonrası spora, saunaya, havuza ve güneşe ne zaman dönebilirim?", "a": "Hafif spor (yürüyüş, inversiyonsuz yoga) — 3. günden itibaren. Kuvvet antrenmanı ve koşu — 2. haftadan itibaren, kabuklar döküldükten sonra. Kuru ve buharlı sauna — operasyondan 14 günden önce değil. Klorlu havuz — 14 gün, deniz suyu — 21 gün. Doğrudan güneş — 30 gün kaçının; sonra UPF 50+ şapka. Solaryum — 4 hafta." },
+      "first-48h-normal": { "q": "DHI'dan sonraki ilk 48 saatte ne normaldir?", "a": "0–3. günlerde şunlar normaldir: hafif alın ve şakak şişliği, alıcı bölgede hafif kızarıklık, sıkı bir 'sıkma' hissi, greftler üzerinde küçük serum damlacıkları ve ilaca yanıt veren hafif ağrı. Bunlar iltihap, mikro-kanama ve sıvı tutulumunun belirtileridir. İlk 5 gün yarı oturur uyuyun (≥30°)." },
+      "forehead-swelling": { "q": "Operasyondan sonra alın ve yüz şişliği normal mi?", "a": "Evet — hastaların %60–80'inde 1.–3. günlerde alın, göz kapağı ve üst yüz şişliği görülür. Operasyon sonrası sıvının alnın gevşek subkutan dokusu boyunca göç etmesinden kaynaklanır. Genellikle 48–72 saat içinde geçer. Hızlandırır: başı yukarı kaldırarak uyku, alın çevresine (alıcı bölgeye değil) soğuk kompres ve reçete edilen ilaçlar." },
+      "pain-pressure": { "q": "0–3. günde alıcı bölgede ağrı ve basınç normal mi?", "a": "Evet. 'Sıkma' hissi, hafif zonklama veya yanma akut iltihap evresi için tipiktir. Ağrı kolayca kontrol edilebilmelidir (parasetamol + ibuprofen). 2.–3. günden sonra ağrı artarsa, ateş >38 °C, pürülan akıntı veya yayılan kızarıklıkla birlikteyse — kliniğe başvurun." },
+      "scab-removal": { "q": "Kabuklar ne zaman dökülmeye başlar ve onları kendim çıkarabilir miyim?", "a": "Kabuklar 2. günden itibaren oluşur ve 7.–14. gün arasında dökülür. Kazımayın ve güçlü akıntı altında ıslatmayın — mekanik kopma bir grefti söküp atabilir. 8. günden itibaren pH 5,5 şampuanla yıkama sırasında nazik parmak ucu masajı yapabilirsiniz." },
+      "itching": { "q": "1.–2. haftada saç derisi kaşıntısı normal mi?", "a": "Evet. Alıcı bölgede 4.–10. günler arası kaşıntı iyileşmenin işaretidir. Kaşımayın. Yardımcı olan: HOCl sis, yumuşak şampuan, konsültasyondan sonra kısa antihistaminik kürü. Yoğun kaşıntı veya döküntü varsa — koordinatörünüze bildirin." },
+      "shock-loss": { "q": "Nakledilen kılların 2.–6. haftalarda dökülmesi normal mi?", "a": "Evet — buna şok dökülmesi denir. Nakledilen kıllar telojene girer ve operasyondan 2–6 hafta sonra dökülür. Soğanlar deride kalır. Yeni kıl 3.–4. ayda büyümeye başlar. PBM şok dökülmesinin şiddetini azaltır." },
+      "call-clinic": { "q": "Ne zaman derhal kliniğe başvurmalıyım?", "a": "2. günden sonra ateş >38 °C, alıcı bölgeden pürülan akıntı, hızla yayılan kızarıklık ve sıcaklık, ilaçla kontrol edilemeyen şiddetli ağrı, >30 dk kanama, alın bölgesi dışında büyük morluklar, alerjik reaksiyon, görünür greft kaybı." },
+      "sleep-position": { "q": "Saç ekiminden sonra yan yatabilir miyim?", "a": "İlk 4–5 gün — baş ≥30° yükseltilmiş şekilde sırtüstü uyuyun (kama yastık). Yan uyku basınç ve sürtünmeyi artırır. 5. günden itibaren yan pozisyonu dikkatli deneyebilirsiniz. 10–14 günden sonra greft adezyonu stabil olduğunda tam dönüş." },
+      "day-0": { "q": "0. gün (operasyon günü) — eve döndükten sonra ne yapmalı?", "a": "Kartınızda belirtilen süreden önce alın bandını çıkarmayın (genellikle 24 sa). Yarı oturur uyuyun (≥30°). Alıcı bölgeye dokunmayın. Başınızı yıkamayın. Reçete edilmedikçe aspirin ve NSAİİ'lerden kaçının — parasetamol güvenlidir. 2–3 L su için. İlk PBM/HBOT seansı genellikle 0. veya +1. gündedir." },
+      "day-1": { "q": "1. gün — ne beklemeli?", "a": "Alıcı bölge: küçük kabuklar, hafif kızarıklık, karıncalanma. Donör bölge: donuk ağrı, gerginlik. İlk alın şişliği belirtileri olası. Başı yukarıda uyumaya, alına soğuk kompres uygulamaya ve kartınıza göre ilaç almaya devam edin. İzin verilen: kısa yürüyüş, hafif protein zengini yemek." },
+      "day-2-hocl": { "q": "2. gün — serum fizyolojik / HOCl spreyine ne zaman başlamalı?", "a": "48 saatten itibaren alıcı bölgeyi steril serum fizyolojik veya HOCl ile yumuşak, temassız nemlendirmeye başlayın — 15–20 cm'den her 2–3 saatte bir sıkın. Amaç: nemli ortam (daha hızlı revaskülarizasyon), kabukları yumuşatmak, bakteriyel kolonizasyonu sınırlamak. Ovmayın." },
+      "day-3-swelling-peak": { "q": "3. gün — şişlik zirvesi, endişe sebebi mi?", "a": "Hayır. Alın, göz kapağı ve burun köprüsü şişliği 2.–3. günde zirve yapar ve 48–72 sa içinde geçer. Yardımcı olan: uyku ≥30°, soğuk kompresler, yürüyüş. Uyarı işaretleri: şiddetli ağrıyla asimetrik şişlik, boyun/boğaz şişliği, nefes darlığı, döküntü — kliniğe başvurun." },
+      "day-4-first-wash": { "q": "4. gün — ilk yıkama adım adım nasıl?", "a": "1) Alıcı bölgeye ince bir yumuşatıcı katmanı uygulayın; 15–20 dk bekletin. 2) Avuçlarınızdan ılık suyla durulayın — duş başlığından değil. 3) Yumuşak pH 5,5 (SLS'siz) şampuanı ellerinizde köpürtün ve parmak uçlarıyla köpüğü yedirin, ovmayın. 4) Avuçlarınızdan suyla durulayın. 5) Mikrofiber havluyla kurulayın — ovmayın. 14. güne kadar günde 1× tekrarlayın." },
+      "day-5-7-revasc": { "q": "5.–7. gün — greftlerde biyolojik olarak ne olur?", "a": "Revaskülarizasyon penceresi: yeni kapillerler alıcı yataktan nakledilen foliküllere büyür. Greftler imbibisyondan inoskülasyona geçer. Destekleyen: oksijenasyon (HBOT, nikotin yok), PBM 650/830 nm, kan basıncı artışı ve mekanik travmadan kaçınma. Greft adezyonu zayıftır — sıkı şapka yok." },
+      "day-8-10-massage": { "q": "8.–10. gün — saç derisine ne zaman hafif masaj yapabilirim?", "a": "8. günden itibaren — yıkama sırasında parmak uçlarıyla yumuşak dairesel masaj. Kabukların dökülmesine yardımcı olur ve mikro dolaşımı iyileştirir. Tırnak, fırça veya irigatör kullanmayın. PBM seanslarına protokole göre devam edin. Ofis işine dönüş OK — kızarıklık azalır." },
+      "day-11-14": { "q": "11.–14. gün — kritik fazın sonu, sonraki adım?", "a": "Çoğu kabuk 14. güne kadar dökülür. Alıcı bölge: pembe, pürüzsüz. Greftler stabil olarak yerleşmiş. Yapabilirsiniz: kuvvet antrenmanı, normal yıkama, yumuşak saç kremi. 21.–30. güne kadar hâlâ sauna, havuz ve yoğun güneşten kaçının. 14. gün kontrolünü planlayın." },
+      "post-erythema": { "q": "Alıcı bölgede 2–4 hafta devam eden kızarıklık normal mi?", "a": "Evet. Pembe-kırmızı renklenme çoğu hastada 2–6 hafta, açık tenlilerde 8 haftaya kadar devam eder. Yatıştırır: PBM 650 nm, UPF 50+, alkol ve saunadan kaçınma. Uyarı işaretleri: sıcak, ağrılı, yayılan kızarıklık — konsültasyon (folikülit/sellülit şüphesi)." },
+      "diet": { "q": "İyileşmeyi desteklemek için 0–14. günlerde ne yiyip içmeli?", "a": "Protein: 1,2–1,6 g/kg vücut ağırlığı/gün. C vitamini 500–1000 mg + çinko 15–25 mg — kolajen kofaktörü. Demir, D3, B12 — eksiklik varsa. Omega-3 (2–3 g EPA/DHA). Su: 30–35 ml/kg. Kaçının: alkol (14 gün), aşırı şeker, yüksek doz sarımsak/ginkgo/zerdeçal (antiplatelet etki)." }
+    }
   },
-  "languageSwitcher": {
-    "label": "Dil seç"
+
+  "schedule": {
+    "eyebrow": "08 — PLANINIZ: GÜN 0–14",
+    "criticalBadge": "KRİTİK",
+    "dayLabel": "Gün",
+    "focusLabel": "Odak",
+    "edu": "Eğitim materyalidir; doktorunuzun talimatlarının yerine geçmez.",
+    "days": [
+      { "phase": "Sıfır Gün", "focus": "Operasyondan hemen sonra — protokol başlar", "tasks": [
+        "PBM 630–680 + 830 nm, 20 dk — ilk seans hâlâ klinikte",
+        "HBOT 1,5–3,0 ATA — Sıfır Gün'de ilk seans",
+        "Yarı oturur uyku ≥30° (kama yastık)",
+        "Alın çevresine soğuk kompres (asla alıcı bölgeye değil)",
+        "Çıkış kartına göre ilaçlar: antibiyotik, ağrı kesici, ödem giderici",
+        "Alkol yok, sigara yok, eforlanma yok, öne eğilme yok"
+      ]},
+      { "phase": "1. Gün", "focus": "Kritik reperfüzyon penceresi", "tasks": [
+        "HBOT — ikinci seans", "PBM 20 dk",
+        "Her 2–3 saatte bir temassız serum fizyolojik / HOCl sprey",
+        "Uyku ≥30°, dokunmadan, şapkasız"
+      ]},
+      { "phase": "2. Gün", "focus": "Greft stabilizasyonu", "tasks": [
+        "PBM 20 dk", "48 saatten itibaren HOCl durulama — temassız akış",
+        "20–30 dk yürüyüş, başı öne eğmeden"
+      ]},
+      { "phase": "3. Gün", "focus": "Akut iltihabın sonu", "tasks": [
+        "PBM 20 dk", "Klinik talimatlarına göre ilk yumuşak yıkama",
+        "Kontrol fotoğrafı (üst, yanlar, arka) — hasta paneline ekleyin"
+      ]},
+      { "phase": "4. Gün", "focus": "Proliferasyon fazı başlar", "tasks": [
+        "PBM 20 dk", "Saç derisini pH 5,5 SLS'siz şampuanla yıkayın, ovmayın",
+        "Düz uyuyabilirsiniz (alıcı bölgeye baskı yok)"
+      ]},
+      { "phase": "5. Gün", "focus": "Mikrobiyom yönetimi", "tasks": [
+        "PBM 20 dk", "Günde 1× yıkama, havluyla yumuşak kurulama (ovmadan)",
+        "Hafif aktivite OK — saç derisinde terleme yok"
+      ]},
+      { "phase": "6. Gün", "focus": "Eritem kontrolü", "tasks": [
+        "PBM 20 dk", "Trikoskopi takip fotoğrafı (hasta paneli)",
+        "Kızarıklık değerlendirmesi — devam ederse: koordinatöre başvurun"
+      ]},
+      { "phase": "7. Gün — 1. hafta", "focus": "Haftalık kontrol noktası", "tasks": [
+        "PBM 20 dk", "Haftalık rapor: anagen %, kalınlık, cilt toleransı",
+        "Koordinatörle telefon / görüntülü iletişim"
+      ]},
+      { "phase": "8. Gün", "focus": "Kabuk giderme", "tasks": [
+        "PBM 20 dk", "Kabuk gideren yumuşak masaj + botanikler (arnika, centella)",
+        "Kesinlikle kazımayın — kabuklar suyla kendi kendine dökülür"
+      ]},
+      { "phase": "9. Gün", "focus": "Mikrobiyom + nemlendirme", "tasks": [
+        "PBM 20 dk", "Günde 2–3× HOCl / serum fizyolojik sis",
+        "Antienflamatuar diyet: omega-3, polifenoller, protein"
+      ]},
+      { "phase": "10. Gün", "focus": "Donör alanı", "tasks": [
+        "PBM 20 dk — donör alanına özel odak",
+        "İsteğe bağlı: donör alanına soğuk plazma (CAP) seansı",
+        "Donör alanı fotoğrafı (hasta paneli)"
+      ]},
+      { "phase": "11. Gün", "focus": "Günlük hayata dönüş", "tasks": [
+        "PBM 20 dk", "Ölçülü spora geri dönüş (baş üstü halter yok)",
+        "Güneşte gevşek şapka OK — asla sıkı değil"
+      ]},
+      { "phase": "12. Gün", "focus": "Konsolidasyon", "tasks": [
+        "PBM 20 dk", "Standart pH 5,5 şampuanla yıkama"
+      ]},
+      { "phase": "13. Gün", "focus": "Kontrole hazırlık", "tasks": [
+        "PBM 20 dk", "Tam kontrol fotoğraf seti (5 açı)",
+        "Kontrol ziyareti için soruları yazın"
+      ]},
+      { "phase": "14. Gün — 14 günlük protokolün sonu", "focus": "Kontrol + 1. ay+ planı", "tasks": [
+        "Klinikte kontrol ziyareti (trikoskopi)",
+        "PBM haftada 2–3× moduna geçer",
+        "1. ay+ için LADD / PRP / minoksidil planını belirleme",
+        "Akut faz nihai raporu (hasta paneli)"
+      ]}
+    ]
+  },
+
+  "dayZeroToThree": {
+    "title": "İlk 72 saat nakledilen soğanların hayatta kalmasını belirler",
+    "lead": "Hasta Yolculuğu e-kitabından doğrudan alınan talimatlar. Adım adım uygulayın — doğaçlama yapmayın.",
+    "card0": { "title": "Sıfır Gün", "badge": "Operasyondan hemen sonra", "items": [
+      "PBM 650/830 nm, 4–6 J/cm², operasyondan hemen sonra",
+      "6 saat içinde ilk HBOT seansı 1,5–3,0 ATA",
+      "Yarı oturur uyku (30–45°)",
+      "Alına buz (alıcı bölgeye değil)"
+    ], "mech": "Alıcı bölgeye dokunma, kaşıma, yıkama yok." },
+    "card1": { "title": "1.–2. Gün", "badge": "Kritik pencere", "items": [
+      "İkinci HBOT seansı (ilkinden 24 sa sonra)",
+      "Her 24 saatte PBM, 20–30 dk",
+      "Donör alanına HOCl %0,01–0,02 sprey",
+      "Baş 2 yastıkla yükseltilmiş şekilde uyku",
+      "Hidrasyon ≥ 2,5 L su / gün"
+    ], "mech": "Alkol, sigara ve kafein perfüzyonu azaltır — kesinlikle yasak." },
+    "card2": { "title": "3.–4. Gün", "badge": "İlk yıkama", "items": [
+      "Koordinatörün talimatlarına göre ilk yıkama (pH 5,5, SLS'siz)",
+      "Günde 2× HOCl sprey",
+      "Donör alanına arnika / centella jelleri",
+      "Her 24 saatte PBM'ye devam"
+    ], "mech": "Kabukları kazımayın — yumuşakça, ovmadan yıkayın." },
+    "avoidTitle": "‘Kaçınılması gerekenler’ kontrol listesi — Gün 0–14",
+    "avoid": [
+      { "type": "bad", "text": "Alkol, sigara (vazokonstriksiyon)" },
+      { "type": "bad", "text": "Aspirin, ibuprofen (ilk 48 sa)" },
+      { "type": "bad", "text": "Sauna, havuz, güneş" },
+      { "type": "bad", "text": "Yoğun antrenman, ağırlık kaldırma" },
+      { "type": "bad", "text": "Saç derisini sıkan şapka, kask, miğfer" },
+      { "type": "bad", "text": "Kaşıma, kabuk koparma" },
+      { "type": "good", "text": "Protein, demir, çinko, B vitamini açısından zengin diyet" },
+      { "type": "good", "text": "Koordinatörle düzenli iletişim" }
+    ]
+  },
+
+  "journey": {
+    "eyebrow": "09 — HASTA YOLCULUĞU",
+    "title": "Eğitimli hasta, işbirliği yapan hastadır.",
+    "p1": "Klinikten kanlı bir başla, plansız ve iletişimsiz ayrılan bir hasta — bu sadece kötü bir deneyim değil. Operasyon sonrası stres kortizolü deri dolaşımını bozar. Anksiyete saç derisi perfüzyonunu gerçekten azaltır ve mekanik greft kaybı riskini artırır (kaşıma, hatalı yıkama, kabukların erken çıkarılması).",
+    "p2": "Sitemize giriş yapan her hasta, çevrimiçi materyallere (tam dokümantasyon ve en güncel rejeneratif/anti-aging tıp trendleri) ve ilk 14 günün her biri için talimatlar içeren ‘Hasta Yolculuğu’ e-kitabına erişebilir — sabah, akşam ne yapılır, ne yapılmaz, ne zaman endişelenilir. Ayrıca: ilk 30 gün boyunca tedaviyi yürüten doktorla doğrudan iletişim.",
+    "ctaPanel": "Hasta paneline gir →",
+    "ctaReminders": "E-posta/SMS hatırlatmalarını ayarla",
+    "inEbook": "E-kitapta",
+    "bullets": [
+      "14 günün her biri için kontrol listesi",
+      "Ürün alışveriş listesi (HOCl, pH 5,5 şampuan, krem)",
+      "Diyagramlar: uyku pozisyonu, yıkama tekniği, duş açısı",
+      "Klinik iletişimi gerektiren kırmızı bayraklar",
+      "Aktiviteye dönüş planı (spor, sauna, havuz, güneş)"
+    ]
+  },
+
+  "ebook": {
+    "eyebrow": "13 — E-KİTAP: HASTA YOLCULUĞU",
+    "title": "Hasta Yolculuğu e-kitabını indirin — DHI sonrası ilk 14 gün.",
+    "lead": "Somut günlük protokol: HBOT, PBM, mikrobiyom, yıkama, uyku, diyet, kaçınılması gerekenler. Boş söz yok — sadece talimatlar ve net parametreler.",
+    "bullets": [
+      "8 bölüm (0. Gün → 14. Gün)",
+      "Klinik parametreler (nm, J/cm², ATA)",
+      "Kontrol listesi: 14 gün kaçınılması gerekenler",
+      "Baskıya hazır / PDF sürümü"
+    ],
+    "successKicker": "Erişim verildi",
+    "successTitle": "E-kitap hazır.",
+    "successDesc": "Özel erişim bağlantınız — içeriğe dönmek için saklayın.",
+    "successCta": "E-kitabı aç →",
+    "emailLabel": "E-posta adresi",
+    "emailPlaceholder": "siz@ornek.com",
+    "consent": "Hasta Yolculuğu e-kitabını paylaşmak amacıyla e-posta adresimin işlenmesine onay veriyorum (<priv>gizlilik politikası</priv>).",
+    "errConsent": "E-kitabı almak için onay kutusunu işaretleyin.",
+    "errValidation": "Lütfen e-posta adresinizin doğru olduğunu kontrol edin.",
+    "errGeneric": "Form gönderilemedi. Lütfen tekrar deneyin.",
+    "submit": "E-kitabı indir →",
+    "submitting": "Gönderiliyor…",
+    "chapters": [
+      { "title": "0. Gün — protokol başlar", "summary": "Aynı gün ilk PBM ve HBOT seansı. Uyku ≥30°. Dokunma, yıkama, şapka yok." },
+      { "title": "1. Gün — kritik reperfüzyon penceresi", "summary": "İkinci HBOT seansı. Temassız HOCl sprey. Karta göre ilaçlar. Kısa yürüyüş, hafif protein yemeği." },
+      { "title": "2. Gün — nemlendirme başlar", "summary": "48 saatten itibaren alıcı bölgeyi her 2–3 saatte bir nazikçe sisleyin. Nemli ortam = daha hızlı revaskülarizasyon." },
+      { "title": "3. Gün — şişlik zirvesi", "summary": "Alın şişliği zirve yapar, 48–72 sa içinde geçer. Uyku ≥30°, soğuk kompresler, hafif aktivite." },
+      { "title": "4. Gün — ilk yıkama", "summary": "Yumuşatıcı → avuçtan su → pH 5,5 SLS'siz şampuan → mikrofiber havlu. Ovma yok." },
+      { "title": "5. Gün — mikrobiyom", "summary": "Günde 1× yıkama. Saç derisi terlemesi olmadan hafif aktivite. Antienflamatuar diyet." },
+      { "title": "6. Gün — eritem kontrolü", "summary": "Trikoskopi fotoğrafı. Kızarıklık yoğunsa — koordinatöre başvurun." },
+      { "title": "7. Gün — haftalık kontrol", "summary": "İlk rapor: anagen %, kalınlık, tolerans. Görüntülü konsültasyon." },
+      { "title": "8.–9. Gün — kabuklar dökülüyor", "summary": "Yıkama sırasında parmak ucu yumuşak masaj. Kabuklar kendi kendine dökülür — koparmayın." },
+      { "title": "10. Gün — donör alanı", "summary": "Donör alanına PBM. İsteğe bağlı soğuk plazma (CAP)." },
+      { "title": "11. Gün — aktiviteye dönüş", "summary": "Ölçülü spor. Güneşte gevşek şapka. Sauna ve havuz yok." },
+      { "title": "12. Gün — yıkama normalleşir", "summary": "Standart pH 5,5 şampuan. Yumuşak saç kremi. Boya yok." },
+      { "title": "13. Gün — kontrole hazırlık", "summary": "Aynı açılarda kontrol fotoğrafları. Soruları yazın." },
+      { "title": "14. Gün — kritik protokolün sonu", "summary": "Kontrol ziyareti, trikoskopi. PBM haftada 2–3× moduna geçer. LADD/PRP planı." },
+      { "title": "Sonrası — 1. ay+", "summary": "PRP/minoksidil ile LADD, biyomedikal raporlar, 12. aya kadar aylık kontroller." }
+    ]
   }
 }
