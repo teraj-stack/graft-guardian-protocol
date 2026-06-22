@@ -1961,7 +1961,7 @@ export function EbookLeadMagnet() {
                 <Trans
                   i18nKey="ebook.consent"
                   components={{
-                    privacy: <Link to="/prywatnosc" className="underline" />,
+                    priv: <Link to="/prywatnosc" className="underline" />,
                   }}
                 />
               </label>
