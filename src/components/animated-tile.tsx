@@ -211,11 +211,29 @@ export function AnimatedTile({
         </video>
       )}
       {/* Loading state — visible while video buffers on slow connections */}
-      {showSpinner && !videoReady && !fallback && !reducedMotion && (
+      {showSpinner && !videoReady && !fallback && !autoplayBlocked && !reducedMotion && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/40 text-white transition-opacity duration-300">
           <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
           <span className="text-sm font-medium tracking-wide">Przygotowanie animacji…</span>
         </div>
+      )}
+      {/* Autoplay blocked — let the user start the animation manually. */}
+      {autoplayBlocked && !fallback && !reducedMotion && (
+        <button
+          type="button"
+          onClick={handleManualPlay}
+          aria-label={`Uruchom animację: ${alt}`}
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/55 text-white transition-colors hover:bg-black/65 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/40 backdrop-blur-sm">
+            <Play className="h-6 w-6 translate-x-[1px]" aria-hidden="true" fill="currentColor" />
+          </span>
+          <span className="px-4 text-center text-sm font-medium tracking-wide">
+            Przeglądarka zablokowała automatyczne odtwarzanie.
+            <br />
+            <span className="text-xs font-normal opacity-90">Kliknij, aby uruchomić animację.</span>
+          </span>
+        </button>
       )}
     </div>
   );
