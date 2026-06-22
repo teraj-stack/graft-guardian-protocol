@@ -321,53 +321,51 @@ function HeroFAQ() {
 /* ---------- Hero ---------- */
 
 function Hero() {
+  const { t } = useTranslation();
   return (
     <section className="relative overflow-hidden border-b border-border/60">
       <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-8">
           <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent">
-            Protokół kliniczny · DHI · evidence-based
+            {t("hero.kicker")}
           </p>
           <h1 className="font-display text-4xl leading-[1.02] break-words sm:text-5xl md:text-7xl">
-            Protokół pozabiegowy oparty na ochronie metabolicznej graftów,
-            fotobiomodulacji, <em className="text-accent">HBOT</em> i LADD.
+            <Trans
+              i18nKey="hero.title"
+              components={{ em: <em className="text-accent" /> }}
+            />
           </h1>
           <p className="mt-8 max-w-2xl text-base text-muted-foreground md:text-lg">
-            Pierwsze 48 godzin decyduje o przeżywalności graftów. Zamiast soli
-            fizjologicznej i pasywnego gojenia — zintegrowany plan oparty
-            na transplantologicznych płynach ochronnych, fotobiomodulacji
-            650/830 nm, tlenoterapii hiperbarycznej 1,5–3,0 ATA oraz
-            laserowo wspomaganym dostarczaniu leków (LADD).
+            {t("hero.lead")}
           </p>
           <p className="mt-4 max-w-2xl text-sm text-muted-foreground/70">
-            48 godzin = krytyczne okno przeżywalności graftów. Pełną
-            rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni.
+            {t("hero.subLead")}
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <a
               href="#konsultacja"
               className="inline-flex items-center rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:bg-foreground/90"
             >
-              Umów konsultację
+              {t("hero.ctaBook")}
             </a>
             <a
               href="#protokol"
               className="inline-flex items-center rounded-sm border border-border px-5 py-3 text-sm font-medium text-foreground transition hover:bg-secondary"
             >
-              Zobacz oś czasu 14 dni →
+              {t("hero.ctaTimeline")}
             </a>
           </div>
         </div>
         <aside className="md:col-span-4">
           <div className="rounded-sm border border-border bg-card p-6 shadow-[var(--shadow-editorial)]">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Twarde liczby
+              {t("hero.statsTitle")}
             </p>
             <dl className="mt-6 space-y-5">
-              <Stat k="650 / 830 nm" v="długości fal PBM stosowane bezpośrednio po zabiegu" />
-              <Stat k="1,5–3,0 ATA" v="ciśnienie sesji HBOT w dobie 0. i 1." />
-              <Stat k="4 °C" v="docelowa temperatura roztworu HypoThermosol + ATP-v" />
-              <Stat k="48–72 h" v="okno krytycznego niedokrwienia graftu przed rewaskularyzacją" />
+              <Stat k={t("hero.stat1k")} v={t("hero.stat1v")} />
+              <Stat k={t("hero.stat2k")} v={t("hero.stat2v")} />
+              <Stat k={t("hero.stat3k")} v={t("hero.stat3v")} />
+              <Stat k={t("hero.stat4k")} v={t("hero.stat4v")} />
             </dl>
           </div>
         </aside>
