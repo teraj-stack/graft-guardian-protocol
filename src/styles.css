@@ -6,6 +6,7 @@
 @font-face {
   font-family: "Cormorant Fallback";
   src: local("Georgia");
+  font-display: swap;
   size-adjust: 105%;
   ascent-override: 90%;
   descent-override: 25%;
@@ -14,6 +15,7 @@
 @font-face {
   font-family: "Inter Fallback";
   src: local("Arial");
+  font-display: swap;
   size-adjust: 107%;
   ascent-override: 90%;
   descent-override: 22%;
