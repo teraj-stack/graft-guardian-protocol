@@ -32,7 +32,7 @@ if (!i18n.isInitialized) {
       supportedLngs: [...SUPPORTED_LOCALES],
       nonExplicitSupportedLngs: true,
       load: "languageOnly",
-      initImmediate: false,
+      initAsync: false,
       interpolation: { escapeValue: false },
       returnNull: false,
       returnEmptyString: false,
