@@ -386,18 +386,20 @@ function Stat({ k, v }: { k: string; v: string }) {
 /* ---------- Creator ---------- */
 
 function Creator() {
+  const { t } = useTranslation();
+  const bullets = t("creator.bullets", { returnObjects: true, defaultValue: [] }) as string[];
   return (
     <section className="border-b border-border/60" aria-labelledby="creator-heading">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
         <p className="mb-6 text-xs uppercase tracking-[0.25em] text-accent" aria-hidden="true">
-          TWÓRCA PROJEKTU
+          {t("creator.eyebrow")}
         </p>
         <div className="grid items-start gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <div className="overflow-hidden rounded-sm border border-border/60">
               <img
                 src={drBujok.url}
-                alt="Dr Bujok — twórca protokołu Graftgen.com"
+                alt={t("creator.imgAlt")}
                 width={600}
                 height={800}
                 decoding="async"
@@ -408,32 +410,12 @@ function Creator() {
           </div>
           <div className="md:col-span-8">
             <h2 id="creator-heading" className="font-display text-3xl leading-[1.05] sm:text-4xl md:text-5xl">
-
-              Specjalista chirurgii ogólnej, którego zawodową pasją są
-              nowoczesne technologie stosowane w medycynie.
+              {t("creator.heading")}
             </h2>
             <ul className="mt-8 list-disc space-y-5 pl-6 text-muted-foreground md:text-lg">
-              <li>
-                Twórca MySkinCode.pl — aplikacji MedTech SaaS wykorzystującej
-                autorski AI engine do budowania złożonych protokołów
-                zabiegowych z użyciem różnych technologii laserowych,
-                rewitalizujących i Anti-Aging
-              </li>
-              <li>
-                Twórca Projektu Mazowieckie Centrum Medycyny Laserowej — łączy
-                doświadczenie chirurgiczne z potrzebami pacjenta, budując nowy
-                model wczesnej opieki pooperacyjnej.
-              </li>
-              <li>
-                Prowadzi autorskie szkolenia dla lekarzy z zakresu technologii
-                laserowych w zabiegach mało inwazyjnych i rozwiązań skracających
-                rekonwalescencję.
-              </li>
-              <li>
-                Tworzy protokoły oparte na hiperbarii, laserobarii, polu
-                magnetycznym, fototerapii i fotobiomodulacji. Zawsze podkreśla, że
-                najlepsza technologia jest bezwartościowa bez empatii i partnerskiej relacji z pacjentem.
-              </li>
+              {(Array.isArray(bullets) ? bullets : []).map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
             </ul>
           </div>
         </div>
