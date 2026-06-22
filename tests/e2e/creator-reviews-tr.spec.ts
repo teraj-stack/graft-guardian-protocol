@@ -75,10 +75,8 @@ test.describe("CreatorReviews — Turkish locale", () => {
       const quoteSnippet = item.quote.slice(0, 80);
       const quoteLocator = section.getByText(quoteSnippet, { exact: false }).first();
       await expect(quoteLocator).toBeVisible();
-      // Author + date footer must be visible within the same blockquote.
-      await expect(
-        section.locator("blockquote", { hasText: item.author }).first(),
-      ).toContainText(item.date);
+      // Author + date footer must be visible in the section.
+      await expect(section).toContainText(`— ${item.author}, ${item.date}`);
     }
 
     // No raw i18n placeholders should leak into the rendered section.
