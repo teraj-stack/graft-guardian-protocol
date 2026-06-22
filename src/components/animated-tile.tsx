@@ -54,18 +54,42 @@ export function AnimatedTile({
   const [videoReady, setVideoReady] = useState(false);
   const [posterReady, setPosterReady] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [fallback, setFallback] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   const shouldPlayRef = useRef(false);
 
-  // Delay spinner so it doesn't flash on fast connections
+  // Detect reduced motion / autoplay-off — keep poster as the final state.
   useEffect(() => {
-    if (videoReady) {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+
+  // Delay spinner so it doesn't flash on fast connections.
+  // Stop spinning once we've decided to show the static fallback.
+  useEffect(() => {
+    if (videoReady || fallback || reducedMotion) {
       setShowSpinner(false);
       return;
     }
     const t = setTimeout(() => setShowSpinner(true), 300);
     return () => clearTimeout(t);
-  }, [videoReady]);
+  }, [videoReady, fallback, reducedMotion]);
+
+  // Watchdog: if the video never reports loadeddata within 8s after sources
+  // mount, treat as failed and keep the poster as the persistent fallback.
+  useEffect(() => {
+    if (!loaded || videoReady || fallback) return;
+    const t = setTimeout(() => {
+      if (!ref.current) return;
+      // readyState < HAVE_CURRENT_DATA (2) means we still have no frame.
+      if (ref.current.readyState < 2) setFallback(true);
+    }, 8000);
+    return () => clearTimeout(t);
+  }, [loaded, videoReady, fallback]);
 
   useEffect(() => {
     const el = ref.current;
@@ -75,11 +99,16 @@ export function AnimatedTile({
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            shouldPlayRef.current = !reduce;
+            if (reduce) {
+              // Honor reduced motion / autoplay-off: keep poster as final state.
+              shouldPlayRef.current = false;
+              continue;
+            }
+            shouldPlayRef.current = true;
             setLoaded(true);
             // If sources are already in the DOM (subsequent intersections), play now.
-            if (!reduce && el.querySelector("source")) {
-              el.play().catch(() => {});
+            if (el.querySelector("source")) {
+              el.play().catch(() => setFallback(true));
             }
           } else {
             shouldPlayRef.current = false;
@@ -100,7 +129,7 @@ export function AnimatedTile({
     if (!el) return;
     try { el.load(); } catch {}
     if (shouldPlayRef.current) {
-      el.play().catch(() => {});
+      el.play().catch(() => setFallback(true));
     }
   }, [loaded]);
 
@@ -127,28 +156,41 @@ export function AnimatedTile({
           loading="lazy"
           decoding="async"
           onLoad={() => setPosterReady(true)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-0" : posterReady ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            videoReady && !fallback
+              ? "opacity-0"
+              : posterReady
+                ? "opacity-100"
+                : "opacity-0"
+          }`}
         />
       )}
-      <video
-        ref={ref}
-        muted
-        loop
-        playsInline
-        preload="none"
-        aria-label={alt}
-        onLoadedData={() => setVideoReady(true)}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
-      >
-        {loaded && (
-          <>
-            <source src={`/videos/${src}.webm`} type="video/webm" />
-            <source src={`/videos/${src}.mp4`} type="video/mp4" />
-          </>
-        )}
-      </video>
+      {!fallback && !reducedMotion && (
+        <video
+          ref={ref}
+          muted
+          loop
+          playsInline
+          preload="none"
+          aria-label={alt}
+          onLoadedData={() => setVideoReady(true)}
+          onError={() => setFallback(true)}
+          onStalled={() => {
+            // If stalled before any frame is available, fall back to poster.
+            if (ref.current && ref.current.readyState < 2) setFallback(true);
+          }}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
+        >
+          {loaded && (
+            <>
+              <source src={`/videos/${src}.webm`} type="video/webm" />
+              <source src={`/videos/${src}.mp4`} type="video/mp4" />
+            </>
+          )}
+        </video>
+      )}
       {/* Loading state — visible while video buffers on slow connections */}
-      {showSpinner && !videoReady && (
+      {showSpinner && !videoReady && !fallback && !reducedMotion && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/40 text-white transition-opacity duration-300">
           <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
           <span className="text-sm font-medium tracking-wide">Przygotowanie animacji…</span>
