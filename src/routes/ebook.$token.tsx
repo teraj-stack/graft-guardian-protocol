@@ -535,10 +535,11 @@ function EbookPage() {
           })}
         </div>
 
-        <footer className="mt-16 border-t border-border/60 pt-8 text-xs text-muted-foreground print:mt-8">
-          © {new Date().getFullYear()} Graftgen.com. Materiał edukacyjny — nie zastępuje konsultacji lekarskiej.
-        </footer>
       </main>
+
+      <div className="print:hidden">
+        <SiteFooter />
+      </div>
 
 
       <style>{`
