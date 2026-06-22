@@ -162,6 +162,8 @@ function loadProgress(): Record<string, boolean> {
 
 
 export function InteractiveSchedule() {
+  const { t } = useTranslation();
+  const schedule = useSchedule();
   const [openDay, setOpenDay] = useState<number>(0);
   const [done, setDone] = useState<Record<string, boolean>>(() => loadProgress());
   const [surgeryDate, setSurgeryDate] = useState<string>(todayIso());
