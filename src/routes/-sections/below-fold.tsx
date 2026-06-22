@@ -23,37 +23,22 @@ import {
 /* ---------- Microbiome ---------- */
 
 export function Microbiome() {
+  const { t } = useTranslation();
   return (
-    <Section id="mikrobiom" eyebrow="06 — MIKROBIOM I STREFA DAWCZA">
+    <Section id="mikrobiom" eyebrow={t("clinical.microbiome.eyebrow")}>
       <SectionHeader
-        title="Antyseptyka, która nie uszkadza graftu."
-        lead="Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne."
+        title={t("clinical.microbiome.title")}
+        lead={t("clinical.microbiome.lead")}
       />
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="HOCI — kwas podchlorawy" badge="0,01–0,02%">
-          <p>
-            HOCI to ten sam związek, który neutrofile produkują podczas
-            fagocytozy. W stężeniach 0,01–0,02% działa bakteriobójczo
-            (w tym na MRSA i biofilmy <em>S. aureus</em>) oraz
-            grzybobójczo wobec <em>Malassezia</em>, nie wykazując
-            cytotoksyczności wobec graftów. Stosowany jako bezdotykowy
-            spray do mycia skóry głowy od doby 2.
-          </p>
+        <Card title={t("clinical.microbiome.card1.title")} badge={t("clinical.microbiome.card1.badge")}>
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.microbiome.card1.body") }} />
         </Card>
         <div className="flex flex-col gap-6">
-          <Card title="Botaniczne formuły pozabiegowe" badge="Arnica · Centella">
-            <p>
-              Sterylne żele bez konserwantów na bazie wyciągów z
-              <em> Arnica montana</em> (helenalina, dihydrohelenalina —
-              redukcja erytemy) oraz <em>Centella asiatica</em>
-              (madekasozyd, asiatykozyd — stymulacja syntezy kolagenu I,
-              redukcja stanu zapalnego). Zastosowanie nad strefą dawczą,
-              która po DHI przypomina rozległe otarcie.
-            </p>
+          <Card title={t("clinical.microbiome.card2.title")} badge={t("clinical.microbiome.card2.badge")}>
+            <p dangerouslySetInnerHTML={{ __html: t("clinical.microbiome.card2.body") }} />
             <Mech>
-              Niekontrolowane namnażanie <em>Malassezia</em> i
-              patogennych szczepów gronkowca wokół mikroran sprzyja
-              włóknieniu bliznowatemu i utracie graftów.
+              <span dangerouslySetInnerHTML={{ __html: t("clinical.microbiome.card2.mech") }} />
             </Mech>
           </Card>
         </div>
@@ -65,55 +50,18 @@ export function Microbiome() {
 /* ---------- Timeline ---------- */
 
 export function Timeline() {
-  const phases: { tag: string; title: string; bullets: string[] }[] = [
-    {
-      tag: "Podczas zabiegu",
-      title: "Faza Ex Vivo — prewencja uszkodzeń",
-      bullets: [
-        "Pobieranie graftów bezpośrednio do HypoThermosol FRS + ATP-v, schłodzonego do 4 °C",
-        "Kąpiel graftów w autologicznym PRP 10–20 min przed implantacją",
-        "Minimalizacja czasu ex vivo: target < 4 h dla najgłębszych graftów",
-      ],
-    },
-    {
-      tag: "Doba 0–3",
-      title: "48h — krytyczne okno przeżywalności graftów (faza ostrego zapalenia)",
-      bullets: [
-        "PBM 650 + 830 nm, 20 min, bezpośrednio po zabiegu, dalej co 24 h",
-        "HBOT 1,5–3,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
-        "Strefa dawcza zabezpieczona maścią barierową bez konserwantów",
-        "Bezdotykowe spłukiwanie obszaru biorczego HOCI od 48 h",
-        "Spanie w pozycji półsiedzącej (≥30°) przez 5 dni",
-      ],
-    },
-    {
-      tag: "Doba 4–14",
-      title: "Faza proliferacji — zarządzanie mikrobiomem",
-      bullets: [
-        "Mycie skóry głowy HOCI lub szamponem pH 5,5 bez SLS, bez tarcia",
-        "Domowa fototerapia LLLT (hełm) 2x dziennie/tydz., 20 min na sesję",
-        "Od 8. doby: miękki masaż usuwający strupy + botaniki (arnika, centella)",
-        "Optycznie: ocena erytemy, ewentualna sesja CAP nad strefą dawczą",
-      ],
-    },
-    {
-      tag: "Miesiąc 1+",
-      title: "Wsparcie systemowe — stymulacja anagenu",
-      bullets: [
-        "Minoksydyl miejscowo 5% lub doustnie w mikrodawkach 0,25–2,5 mg (off-label, po kwalifikacji)",
-        "Mezoterapia PRP: sesje w miesiącu 1, 2, 4",
-        "LADD z laserem tulowym 1927 nm + minoksydyl/PRP — od 4–6 tygodnia",
-        "Kontrolne PBM 1–2×/tydzień przez 12 tygodni",
-        "Trichoskopia kontrolna: miesiąc 3, 6, 12",
-      ],
-    },
-  ];
+  const { t } = useTranslation();
+  const phases = t("clinical.timeline.phases", { returnObjects: true }) as {
+    tag: string;
+    title: string;
+    bullets: string[];
+  }[];
 
   return (
-    <Section id="protokol" eyebrow="07 — OŚ CZASU: 48H I PIERWSZE 14 DNI">
+    <Section id="protokol" eyebrow={t("clinical.timeline.eyebrow")}>
       <SectionHeader
-        title="Chronologiczny protokół, krok po kroku."
-        lead="48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni."
+        title={t("clinical.timeline.title")}
+        lead={t("clinical.timeline.lead")}
       />
       <ol className="space-y-12">
         {phases.map((p, i) => (
@@ -144,6 +92,7 @@ export function Timeline() {
     </Section>
   );
 }
+
 
 /* ---------- Interactive Day 0–14 Schedule ---------- */
 
@@ -1154,67 +1103,42 @@ const CLAIMS: EvidenceClaim[] = [
 ];
 
 export function EvidenceBasement() {
+  const { t } = useTranslation();
   const [audit, setAudit] = useState(false);
   return (
-    <Section id="evidence" eyebrow="10 — EVIDENCE-BASED MEDICINE">
-      <SectionHeader title="Udokumentowana fotobiomodulacja jako terapia wspomagająca." />
+    <Section id="evidence" eyebrow={t("clinical.evidence.eyebrow")}>
+      <SectionHeader title={t("clinical.evidence.title")} />
       <div className="mb-6 flex items-center justify-end gap-3 text-xs">
-        <span className="text-muted-foreground">Tryb audytu dowodów</span>
+        <span className="text-muted-foreground">{t("clinical.evidence.auditLabel")}</span>
         <button
           type="button"
           onClick={() => setAudit((v) => !v)}
           aria-pressed={audit}
           className={`rounded-sm border px-2 py-0.5 uppercase tracking-wide ${audit ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent"}`}
         >
-          {audit ? "Włączony" : "Wyłączony"}
+          {audit ? t("clinical.evidence.auditOn") : t("clinical.evidence.auditOff")}
         </button>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Przeżywalność graftów">
-          <AnimatedTile src="evidence-1" poster="/videos/evidence-1.jpg" lqip={evidenceLqip["evidence-1"]} alt="Animacja mieszka włosowego — przeżywalność graftów" aspect="16/9" className="mb-4" />
-          <p>
-            Zabiegi przeszczepu włosów (szczególnie w renomowanych klinikach) cechują się naturalnie wysoką przeżywalnością na poziomie{" "}
-            <strong className="text-foreground">90–95%</strong>
-            <sup className="ml-0.5 text-accent">[1]</sup>.
-          </p>
-          <p className="mt-4">
-            Badania RCT wykazują, że stosowanie PBM (650 nm) nie zwiększa w spektakularny sposób samej przeżywalności w liczbach bezwzględnych (trudno przekroczyć granicę 95%), ale dramatycznie ratuje grafty narażone na niedokrwienie (ischemia-reperfusion injury), co statystycznie daje zysk na poziomie{" "}
-            <strong className="text-foreground">5–8%</strong>
-            <sup className="ml-0.5 text-accent">[2]</sup> większej całkowitej liczby przyjętych jednostek w porównaniu do grupy placebo.
-          </p>
+        <Card title={t("clinical.evidence.card1.title")}>
+          <AnimatedTile src="evidence-1" poster="/videos/evidence-1.jpg" lqip={evidenceLqip["evidence-1"]} alt={t("clinical.evidence.card1.alt")} aspect="16/9" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card1.p1") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card1.p2") }} />
         </Card>
-        <Card title="Przyspieszenie anagenu i gojenia">
-          <AnimatedTile src="evidence-2" poster="/videos/evidence-2.jpg" lqip={evidenceLqip["evidence-2"]} alt="Animacja fazy anagenu i gojenia" aspect="1/1" className="mb-4" />
-          <p>
-            Normalnie, przeflancowane włosy wchodzą w fazę telogenu i wypadają po 2–4 tygodniach, a nowy anagen zaczyna się w 3–4 miesiącu.
-          </p>
-          <p className="mt-4">
-            Według badań, u pacjentów naświetlanych falą 655 nm obserwowano wczesne wejście w anagen o średnio 3–4 tygodnie szybciej<sup className="ml-0.5 text-accent">[3]</sup>. Zmniejszeniu ulega również zjawisko „shock loss" (pooperacyjnego łysienia telogenowego) w okolicy biorczej, redukując jego skalę o około{" "}
-            <strong className="text-foreground">20–30%</strong>
-            <sup className="ml-0.5 text-accent">[3,4]</sup>.
-          </p>
-          <p className="mt-4">
-            Stosowanie mieszanego światła (np. 633 nm + 830 nm) tuż po zabiegu prowadzi do szybszego odpadania strupów o około 3–5 dni. Zauważalna obiektywnie (pomiar spektrofotometryczny) redukcja rumienia pozabiegowego jest o{" "}
-            <strong className="text-foreground">30–40%</strong>
-            <sup className="ml-0.5 text-accent">[5]</sup> szybsza w pierwszych 14 dniach.
-          </p>
+        <Card title={t("clinical.evidence.card2.title")}>
+          <AnimatedTile src="evidence-2" poster="/videos/evidence-2.jpg" lqip={evidenceLqip["evidence-2"]} alt={t("clinical.evidence.card2.alt")} aspect="1/1" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card2.p1") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card2.p2") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card2.p3") }} />
         </Card>
-        <Card title="Ostateczna gęstość i grubość włosa">
-          <AnimatedTile src="evidence-3" poster="/videos/evidence-3.jpg" lqip={evidenceLqip["evidence-3"]} alt="Animacja zwiększonej gęstości i grubości włosa" aspect="1/1" className="mb-4" />
-          <p>
-            Rok po zabiegu, w grupach stosujących fototerapię (650 nm, 3× w tygodniu po 15–20 min), badania RCT odnotowują zwiększenie średnicy łodygi włosa średnio o{" "}
-            <strong className="text-foreground">10–15%</strong>
-            <sup className="ml-0.5 text-accent">[3,4]</sup> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej).
-          </p>
+        <Card title={t("clinical.evidence.card3.title")}>
+          <AnimatedTile src="evidence-3" poster="/videos/evidence-3.jpg" lqip={evidenceLqip["evidence-3"]} alt={t("clinical.evidence.card3.alt")} aspect="1/1" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card3.p1") }} />
         </Card>
-        <Card title="Rewaskularyzacja i mikrokrążenie">
-          <AnimatedTile src="evidence-4" poster="/videos/evidence-4.jpg" lqip={evidenceLqip["evidence-4"]} alt="Animacja rewaskularyzacji mikrokrążenia skóry" aspect="1/1" className="mb-4" />
-          <p>
-            PBM (630–850 nm) zwiększa ekspresję VEGF i stymuluje angiogenezę w pierwszych dobach po zabiegu, skracając okno krytycznej ischemii graftów i poprawiając odżywienie mieszków.
-          </p>
-          <p className="mt-4">
-            HBOT (1,5–3,0 ATA) uzupełnia mechanizm — dostarcza tlen rozpuszczony w osoczu do tkanek o upośledzonej perfuzji, dopóki nowa sieć naczyń włosowatych nie zostanie w pełni odtworzona.
-          </p>
+        <Card title={t("clinical.evidence.card4.title")}>
+          <AnimatedTile src="evidence-4" poster="/videos/evidence-4.jpg" lqip={evidenceLqip["evidence-4"]} alt={t("clinical.evidence.card4.alt")} aspect="1/1" className="mb-4" />
+          <p dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card4.p1") }} />
+          <p className="mt-4" dangerouslySetInnerHTML={{ __html: t("clinical.evidence.card4.p2") }} />
         </Card>
         <SourcesCard />
         {audit && <EvidenceAuditCard />}
@@ -1222,6 +1146,7 @@ export function EvidenceBasement() {
     </Section>
   );
 }
+
 
 function EvidenceAuditCard() {
   const summary = CLAIMS.reduce(

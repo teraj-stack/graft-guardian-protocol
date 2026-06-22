@@ -275,5 +275,188 @@
       { "title": "Doba 14 — koniec protokołu krytycznego", "summary": "Wizyta kontrolna, trichoskopia. PBM przechodzi w tryb 2–3×/tydz. Plan LADD/PRP." },
       { "title": "Co dalej — miesiąc 1+", "summary": "LADD z PRP/minoksydylem, raporty biomedyczne, kontrole comiesięczne do 12. miesiąca." }
     ]
+  },
+  "clinical": {
+    "why": {
+      "eyebrow": "01 — DLACZEGO PIERWSZE 48 GODZIN?",
+      "title": "Okno, w którym decyduje się los każdego przeszczepionego włosa.",
+      "paragraphs": [
+        "Po ekstrakcji metodą DHI graft jest tkanką niedokrwioną. Od momentu pobrania do rewaskularyzacji w łożysku biorczym przeżywa wyłącznie dzięki dyfuzji tlenu z osocza otaczającego miejsce przeszczepu. Pierwsze naczynia włosowate dochodzą do brodawki włosa zwykle między 48–96 h. Dla niedotlenionej cebulki to krytyczny okres, który determinuje ostateczny efekt zabiegu.",
+        "W tym czasie komórki macierzyste wybrzuszenia (bulge) i komórki brodawki włosowej (DPC) zużywają zapasy ATP. Po ich wyczerpaniu uruchamia się apoptoza. Każda godzina niedotlenienia to mierzalny spadek puli żywych mieszków.",
+        "Kortyzol pacjenta w stresie pozabiegowym jest wazokonstryktorem. Lęk, ból i dezinformacja realnie pogarszają perfuzję skóry głowy — dlatego koordynacja opieki pozabiegowej nie jest dodatkiem, tylko parametrem klinicznym."
+      ]
+    },
+    "exVivo": {
+      "eyebrow": "02 — FAZA EX VIVO",
+      "title": "Ochrona metaboliczna graftów od momentu ekstrakcji.",
+      "lead": "Standardem w wielu klinikach wciąż jest 0,9% NaCl lub płyn Ringera. Z punktu widzenia transplantologii są to roztwory podtrzymujące osmolarność, nie chroniące metabolizmu komórki. W naszym protokole grafty trafiają do roztworów stosowanych w przechowywaniu narządów do przeszczepu.",
+      "card1": {
+        "title": "HypoThermosol FRS + liposomalny ATP (ATP-v)",
+        "badge": "4 °C",
+        "body": "HypoThermosol FRS to buforowany roztwór hipotermiczny zawierający HEPES, mannitol, adenozynę, glutation, dekstran. Utrzymuje homeostazę jonową komórki w 2–8 °C ponad 24 h. Dodatek liposomalnego ATP dostarcza energii bezpośrednio do cytozolu — pompy Na⁺/K⁺-ATPazy działają, ciśnienie osmotyczne nie pęka, apoptoza zostaje wyciszona.",
+        "mech": "0,9% NaCl: ATP wyczerpane w 2–4 h. HypoThermosol + ATP-v: żywotność komórek > 90% po 12 h ex vivo."
+      },
+      "card2": {
+        "title": "Kąpiel graftów w PRP przed implantacją",
+        "badge": "VEGF · PDGF",
+        "body": "Autologiczne osocze bogatopłytkowe (1,5–6× koncentracji płytek bazowych) inkubuje grafty 10–20 min przed implantacją. Czynniki wzrostu (VEGF, PDGF-BB, EGF, IGF-1, TGF-β) wysycają mieszek jeszcze przed wszczepieniem, co skraca okno niedokrwienia i przyspiesza angiogenezę.",
+        "mech": "VEGF → proliferacja komórek śródbłonka; PDGF → migracja pericytów; IGF-1 → utrzymanie anagenu komórek macierzystych bulge."
+      }
+    },
+    "pbm": {
+      "eyebrow": "03 — FOTOBIOMODULACJA (PBM)",
+      "title": "Światło 650 i 830 nm jako narzędzie bioenergetyczne.",
+      "card1": {
+        "title": "Parametry sesji pozabiegowej",
+        "badge": "20 min",
+        "bullets": [
+          "650 nm (czerwone) — penetracja 1–2 mm, naskórek i brodawka włosa",
+          "830 nm (NIR) — penetracja 3–5 mm, głębokie brodawki, łożysko biorcze",
+          "Dawka 4–6 J/cm² na sesję (próg biostymulacji wg krzywej Arndta-Schulza)",
+          "Naświetlanie obszaru biorczego i dawczego bezpośrednio po zabiegu",
+          "Sesje kontynuowane co 24–48 h przez 14 dni"
+        ]
+      },
+      "card2": {
+        "title": "Sprzęt w gabinecie",
+        "badge": "3 lampy LED",
+        "body": "Dysponujemy trzema lampami LED o zweryfikowanym spektrum emisji (czerwone 630–660 nm oraz NIR 810–840 nm). Pomiar spektralny potwierdza zgodność z zakresem terapeutycznym opisanym w literaturze (m.in. Avci et al. 2014, Hamblin 2016). Sesja gabinetowa jest kontynuowana w domu przez pacjenta hełmem LLLT 2× dziennie/tydz. przez 12 tygodni.",
+        "mech": "PBM aktywuje również ścieżkę Wnt/β-katenina w komórkach brodawki włosa — kluczową dla wejścia w fazę anagenu."
+      }
+    },
+    "hbot": {
+      "eyebrow": "04 — TLENOTERAPIA HIPERBARYCZNA (HBOT)",
+      "title": "Tlen dociera tam, gdzie krwinki czerwone jeszcze nie mogą dotrzeć.",
+      "lead": "Pod ciśnieniem 1,5–3,0 ATA przy oddychaniu 100% O₂ ciśnienie parcjalne tlenu we krwi tętniczej rośnie z ~100 mmHg do ~1100 mmHg. Tlen rozpuszczony fizycznie w surowicy krwi (prawo Henry'ego) dyfunduje do przeszczepionych cebulek zanim zostanie odtworzona ich sieć kapilarna.",
+      "card1": {
+        "title": "Protokół sesji",
+        "badge": "1,5–3,0 ATA",
+        "bullets": [
+          "Sesja 1: Doba „Zero” po zabiegu, 60–90 min, 1,5–3,0 ATA",
+          "Sesja 2: doba 1 po zabiegu, 60–90 min",
+          "Opcjonalne sesje uzupełniające: doba 4 i 7",
+          "Kwalifikacja: brak czynnej infekcji ucha, brak nieleczonej odmy, brak ciężkiej POChP"
+        ]
+      },
+      "card2": {
+        "title": "Mechanizm działania",
+        "badge": "pO₂ ×10",
+        "body": "Przesycenie tlenem redukuje ryzyko martwicy graftu w oknie niedokrwienia, hamuje aktywację HIF-1α związaną z hipoksją, mobilizuje progenitorowe komórki śródbłonka ze szpiku (angiogeneza), działa bakteriostatycznie na bakterie beztlenowe.",
+        "mech": "Współpracujemy z certyfikowanym ośrodkiem terapii hiperbarycznej."
+      }
+    },
+    "ladd": {
+      "eyebrow": "05 — LADD: LASER-ASSISTED DRUG DELIVERY",
+      "title": "Mikrokanały zamiast wcierania.",
+      "leadIntro": "<b>Laser-Assisted Drug Delivery</b> to kontrolowane utworzenie pionowych mikrokanałów w warstwie rogowej, umożliwiających dostarczenie aktywnej substancji (minoksydyl, PRP, peptydy, eksosomy) na głębokość brodawki włosa. Skuteczność penetracji rośnie kilkukrotnie w porównaniu z aplikacją topową.",
+      "leadWarning": "Klasyczna <b>mezoterapia igłowa</b> zwiększa ryzyko odrzucenia graftu cebulki włosa, ponieważ depozyt leku może uciskać pączkujące naczynia i zaburzać neowaskularyzację. Wielu pacjentów rezygnuje z zabiegów uzupełniających z obawy przed bólem. <b>Protokoły laserowe LADD</b> opracowano we współpracy z MySkinCode.pl",
+      "table": {
+        "header": ["Parametr", "Laser tulowy 1927 nm", "Zimna plazma atmosferyczna (CAP)"],
+        "rows": [
+          ["Mechanizm", "Ablacja frakcyjna H₂O", "Nietermiczna jonizacja, RONS"],
+          ["Głębokość mikrokanałów", "150–300 µm", "50–100 µm"],
+          ["Downtime", "24–72 h rumień, łuszczenie", "Brak / minimalny"],
+          ["Bezpieczeństwo nad świeżym graftem", "Od doby 14+", "Możliwe od doby 7"],
+          ["Penetracja minoksydylu", "Wysoka (×4–8)", "Umiarkowana (×2–3)"],
+          ["Działanie antybakteryjne", "Pośrednie", "Bezpośrednie (RONS na biofilm)"],
+          ["Czas zabiegu", "15–25 min", "10–15 min"]
+        ]
+      }
+    },
+    "microbiome": {
+      "eyebrow": "06 — MIKROBIOM I STREFA DAWCZA",
+      "title": "Antyseptyka, która nie uszkadza graftu.",
+      "lead": "Klasyczne antyseptyki (chlorheksydyna, octenidyna w wyższych stężeniach, jodopowidon) wykazują cytotoksyczność wobec keratynocytów i fibroblastów in vitro. Na świeżej ranie pozabiegowej to nie jest neutralne.",
+      "card1": {
+        "title": "HOCI — kwas podchlorawy",
+        "badge": "0,01–0,02%",
+        "body": "HOCI to ten sam związek, który neutrofile produkują podczas fagocytozy. W stężeniach 0,01–0,02% działa bakteriobójczo (w tym na MRSA i biofilmy <em>S. aureus</em>) oraz grzybobójczo wobec <em>Malassezia</em>, nie wykazując cytotoksyczności wobec graftów. Stosowany jako bezdotykowy spray do mycia skóry głowy od doby 2."
+      },
+      "card2": {
+        "title": "Botaniczne formuły pozabiegowe",
+        "badge": "Arnica · Centella",
+        "body": "Sterylne żele bez konserwantów na bazie wyciągów z <em>Arnica montana</em> (helenalina, dihydrohelenalina — redukcja erytemy) oraz <em>Centella asiatica</em> (madekasozyd, asiatykozyd — stymulacja syntezy kolagenu I, redukcja stanu zapalnego). Zastosowanie nad strefą dawczą, która po DHI przypomina rozległe otarcie.",
+        "mech": "Niekontrolowane namnażanie <em>Malassezia</em> i patogennych szczepów gronkowca wokół mikroran sprzyja włóknieniu bliznowatemu i utracie graftów."
+      }
+    },
+    "timeline": {
+      "eyebrow": "07 — OŚ CZASU: 48H I PIERWSZE 14 DNI",
+      "title": "Chronologiczny protokół, krok po kroku.",
+      "lead": "48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni.",
+      "phases": [
+        {
+          "tag": "Podczas zabiegu",
+          "title": "Faza Ex Vivo — prewencja uszkodzeń",
+          "bullets": [
+            "Pobieranie graftów bezpośrednio do HypoThermosol FRS + ATP-v, schłodzonego do 4 °C",
+            "Kąpiel graftów w autologicznym PRP 10–20 min przed implantacją",
+            "Minimalizacja czasu ex vivo: target < 4 h dla najgłębszych graftów"
+          ]
+        },
+        {
+          "tag": "Doba 0–3",
+          "title": "48h — krytyczne okno przeżywalności graftów (faza ostrego zapalenia)",
+          "bullets": [
+            "PBM 650 + 830 nm, 20 min, bezpośrednio po zabiegu, dalej co 24 h",
+            "HBOT 1,5–3,0 ATA: sesja 1. (doba 0), sesja 2. (doba 1)",
+            "Strefa dawcza zabezpieczona maścią barierową bez konserwantów",
+            "Bezdotykowe spłukiwanie obszaru biorczego HOCI od 48 h",
+            "Spanie w pozycji półsiedzącej (≥30°) przez 5 dni"
+          ]
+        },
+        {
+          "tag": "Doba 4–14",
+          "title": "Faza proliferacji — zarządzanie mikrobiomem",
+          "bullets": [
+            "Mycie skóry głowy HOCI lub szamponem pH 5,5 bez SLS, bez tarcia",
+            "Domowa fototerapia LLLT (hełm) 2× dziennie/tydz., 20 min na sesję",
+            "Od 8. doby: miękki masaż usuwający strupy + botaniki (arnika, centella)",
+            "Optycznie: ocena erytemy, ewentualna sesja CAP nad strefą dawczą"
+          ]
+        },
+        {
+          "tag": "Miesiąc 1+",
+          "title": "Wsparcie systemowe — stymulacja anagenu",
+          "bullets": [
+            "Minoksydyl miejscowo 5% lub doustnie w mikrodawkach 0,25–2,5 mg (off-label, po kwalifikacji)",
+            "Mezoterapia PRP: sesje w miesiącu 1, 2, 4",
+            "LADD z laserem tulowym 1927 nm + minoksydyl/PRP — od 4–6 tygodnia",
+            "Kontrolne PBM 1–2×/tydzień przez 12 tygodni",
+            "Trichoskopia kontrolna: miesiąc 3, 6, 12"
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "eyebrow": "10 — EVIDENCE-BASED MEDICINE",
+      "title": "Udokumentowana fotobiomodulacja jako terapia wspomagająca.",
+      "auditLabel": "Tryb audytu dowodów",
+      "auditOn": "Włączony",
+      "auditOff": "Wyłączony",
+      "card1": {
+        "title": "Przeżywalność graftów",
+        "alt": "Animacja mieszka włosowego — przeżywalność graftów",
+        "p1": "Zabiegi przeszczepu włosów (szczególnie w renomowanych klinikach) cechują się naturalnie wysoką przeżywalnością na poziomie <b>90–95%</b><sup>[1]</sup>.",
+        "p2": "Badania RCT wykazują, że stosowanie PBM (650 nm) nie zwiększa w spektakularny sposób samej przeżywalności w liczbach bezwzględnych (trudno przekroczyć granicę 95%), ale dramatycznie ratuje grafty narażone na niedokrwienie (ischemia-reperfusion injury), co statystycznie daje zysk na poziomie <b>5–8%</b><sup>[2]</sup> większej całkowitej liczby przyjętych jednostek w porównaniu do grupy placebo."
+      },
+      "card2": {
+        "title": "Przyspieszenie anagenu i gojenia",
+        "alt": "Animacja fazy anagenu i gojenia",
+        "p1": "Normalnie, przeflancowane włosy wchodzą w fazę telogenu i wypadają po 2–4 tygodniach, a nowy anagen zaczyna się w 3–4 miesiącu.",
+        "p2": "Według badań, u pacjentów naświetlanych falą 655 nm obserwowano wczesne wejście w anagen o średnio 3–4 tygodnie szybciej<sup>[3]</sup>. Zmniejszeniu ulega również zjawisko „shock loss” (pooperacyjnego łysienia telogenowego) w okolicy biorczej, redukując jego skalę o około <b>20–30%</b><sup>[3,4]</sup>.",
+        "p3": "Stosowanie mieszanego światła (np. 633 nm + 830 nm) tuż po zabiegu prowadzi do szybszego odpadania strupów o około 3–5 dni. Zauważalna obiektywnie (pomiar spektrofotometryczny) redukcja rumienia pozabiegowego jest o <b>30–40%</b><sup>[5]</sup> szybsza w pierwszych 14 dniach."
+      },
+      "card3": {
+        "title": "Ostateczna gęstość i grubość włosa",
+        "alt": "Animacja zwiększonej gęstości i grubości włosa",
+        "p1": "Rok po zabiegu, w grupach stosujących fototerapię (650 nm, 3× w tygodniu po 15–20 min), badania RCT odnotowują zwiększenie średnicy łodygi włosa średnio o <b>10–15%</b><sup>[3,4]</sup> oraz ogólną wyższą gęstość obszaru (nie tylko dzięki graftom, ale stymulacji zminiaturyzowanych włosów natywnych wokół strefy biorczej)."
+      },
+      "card4": {
+        "title": "Rewaskularyzacja i mikrokrążenie",
+        "alt": "Animacja rewaskularyzacji mikrokrążenia skóry",
+        "p1": "PBM (630–850 nm) zwiększa ekspresję VEGF i stymuluje angiogenezę w pierwszych dobach po zabiegu, skracając okno krytycznej ischemii graftów i poprawiając odżywienie mieszków.",
+        "p2": "HBOT (1,5–3,0 ATA) uzupełnia mechanizm — dostarcza tlen rozpuszczony w osoczu do tkanek o upośledzonej perfuzji, dopóki nowa sieć naczyń włosowatych nie zostanie w pełni odtworzona."
+      }
+    }
   }
 }
