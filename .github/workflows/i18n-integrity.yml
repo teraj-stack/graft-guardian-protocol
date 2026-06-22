@@ -1,0 +1,52 @@
+name: i18n integrity
+
+# Detects missing keys, empty values, mixed-language leaks and raw
+# placeholders in built HTML before they ship. Publishes JSON + SARIF
+# reports as artifacts and uploads SARIF to Code Scanning.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  i18n:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Source-level i18n check (fast feedback)
+        run: node scripts/check-i18n-integrity.mjs --ci
+
+      - name: Build + dist-level i18n check
+        run: |
+          bun run vite build
+          node scripts/check-i18n-integrity.mjs --ci --dist
+
+      - name: Upload i18n JSON report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i18n-report
+          path: dist/_i18n-report.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: dist/_i18n.sarif
+          category: i18n-integrity
