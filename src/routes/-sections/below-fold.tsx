@@ -1912,6 +1912,7 @@ export function EbookLeadMagnet() {
 }
 
 export function CTA() {
+  const { t } = useTranslation();
   return (
     <section
       id="konsultacja"
@@ -1921,16 +1922,13 @@ export function CTA() {
         <div className="grid gap-10 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
             <p className="text-xs uppercase tracking-[0.25em] text-accent">
-              Konsultacja kwalifikacyjna
+              {t("cta.eyebrow")}
             </p>
             <h2 className="mt-4 font-display text-4xl md:text-6xl">
-              Sprawdźmy, które elementy protokołu mają sens w Twoim
-              przypadku.
+              {t("cta.title")}
             </h2>
             <p className="mt-6 max-w-2xl text-primary-foreground/70">
-              Konsultacja obejmuje trichoskopię, ocenę strefy dawczej,
-              przegląd przeciwwskazań do HBOT i farmakoterapii oraz
-              indywidualny plan na 90 dni. Czas: 45–60 minut.
+              {t("cta.lead")}
             </p>
           </div>
           <div className="md:col-span-4">
@@ -1938,7 +1936,7 @@ export function CTA() {
               href="mailto:kontakt@protokol.example"
               className="flex w-full items-center justify-center rounded-sm bg-accent px-6 py-4 text-base font-medium text-accent-foreground transition hover:opacity-90"
             >
-              Umów konsultację →
+              {t("cta.book")}
             </a>
           </div>
         </div>
@@ -1946,6 +1944,7 @@ export function CTA() {
     </section>
   );
 }
+
 
 /* ---------- Contact ---------- */
 
