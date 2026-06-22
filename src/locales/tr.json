@@ -458,5 +458,113 @@
         "p2": "HBOT (1,5–3,0 ATA) mekanizmayı tamamlar — yeni kılcal damar ağı tamamen yeniden oluşana kadar plazmada çözünen oksijeni perfüzyonu bozulmuş dokulara iletir."
       }
     }
+  },
+  "pricing": {
+    "eyebrow": "11 — MAĞAZA",
+    "title": "Tüm fiyat listesi ve paket satın alma — mağazada.",
+    "leadHtml": "Destekleyici tedavilerin fiyatlandırması <strong>Graftgen.com mağazasına</strong> taşındı. 1 / 5 / 10 / 20 seanslık paketler, anında rezervasyon, güvenli çevrimiçi ödeme ve KDV faturası.",
+    "from": "şu fiyattan",
+    "perSession": "/seans",
+    "pack20": "20 seanslık paket",
+    "viewInShop": "Mağazada görüntüle →",
+    "footerNote": "Tam paket açıklamaları, tedavi süresi hesaplayıcı, faturalandırma SSS ve çevrimiçi ödemeli sepet mağaza sayfasında mevcuttur.",
+    "goToShop": "Mağazaya git →"
+  },
+  "cta": {
+    "eyebrow": "Kalifikasyon konsültasyonu",
+    "title": "Protokolün hangi unsurlarının sizin durumunuzda anlamlı olduğunu birlikte değerlendirelim.",
+    "lead": "Konsültasyon trikoskopi, donör alan değerlendirmesi, HBOT ve farmakoterapi için kontrendikasyonların gözden geçirilmesi ve bireysel 90 günlük planı içerir. Süre: 45–60 dakika.",
+    "book": "Konsültasyon ayırt →"
+  },
+  "contact": {
+    "eyebrow": "14 — İLETİŞİM",
+    "title": "Bize yazın",
+    "lead": "Protokol, HBOT veya LADD kalifikasyonu hakkında bir sorunuz mu var ya da iş birliği yapmak ister misiniz? Bize bir mesaj gönderin — 2 iş günü içinde yanıt veriyoruz.",
+    "fields": {
+      "name": "Ad Soyad",
+      "email": "E-posta",
+      "topic": "Konu",
+      "topicPlaceholder": "Konu seçin…",
+      "topicConsultation": "Konsültasyon",
+      "topicProcedure": "Prosedür",
+      "topicLadd": "LADD / PRP + minoksidil",
+      "topicOther": "Diğer",
+      "message": "Mesaj",
+      "websiteHoneypot": "Web sitesi"
+    },
+    "consentHtml": "Verilerimin sorgumu yanıtlamak amacıyla işlenmesine <priv>Gizlilik Politikası</priv> uyarınca onay veriyorum.",
+    "submit": "Mesaj gönder",
+    "submitting": "Gönderiliyor…",
+    "errCheckFields": "Lütfen işaretlenen alanları kontrol edin.",
+    "errSubmit": "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    "errNetwork": "Bağlantı hatası. Lütfen tekrar deneyin.",
+    "successKicker": "Mesaj gönderildi",
+    "successTitle": "Teşekkürler — sizinle iletişime geçeceğiz.",
+    "successDescHtml": "Alındı onayı: <time>{{time}}</time>. Lütfen 2 iş günü içinde gelen kutunuzu (SPAM dahil) kontrol edin.",
+    "sendAnother": "Başka bir mesaj gönder",
+    "smsLabel": "SMS",
+    "emailLabel": "E-posta",
+    "statusSent": "gönderildi",
+    "statusSkipped": "atlandı",
+    "statusError": "hata",
+    "attemptsOne": "{{count}} deneme",
+    "attemptsFew": "{{count}} deneme",
+    "attemptsMany": "{{count}} deneme",
+    "direct": "Doğrudan iletişim",
+    "companyName": "Medical Lasers and STEM Cells Solutions Sp. z o.o.",
+    "addressLine1": "ul. Kard. Bolesława Kominka 44",
+    "addressLine2": "44-217 Rybnik, Polonya",
+    "labelEmail": "E-posta",
+    "labelPhone": "Telefon",
+    "labelWhatsApp": "WhatsApp",
+    "labelResponseTime": "Yanıt süresi",
+    "whatsAppCta": "WhatsApp'tan yazın",
+    "responseTime": "2 iş günü içinde",
+    "locale": "tr-TR"
+  },
+  "risks": {
+    "eyebrow": "10 — RİSKLER VE KONTRENDİKASYONLAR",
+    "title": "Ne olabilir ve protokol ne zaman derhal durdurulmalıdır.",
+    "lead": "Her DHI saç ekimi prosedürü, doğal ve öngörülebilir vücut tepkilerini içerir. Aşağıda yaygın yan etkilerin, kontrendikasyonların ve klinikle derhal iletişim gerektiren uyarı işaretlerinin bir listesi bulunmaktadır.",
+    "card1": {
+      "title": "Yan etkiler",
+      "badge": "Yaygın / nadir",
+      "items": [
+        "Özellikle prosedürden sonraki 2. ve 4. günler arasında yüz ve alın şişmesi.",
+        "Mikro yaralardan hafif noktasal kanama — 24–48 saat boyunca tipik.",
+        "Donör ve alıcı bölgelerinde saç derisinde ağrı, baskı ve gerginlik.",
+        "\"Şok dökülmesi\" — yeni greftlerin çevresindeki doğal saçların geçici kaybı.",
+        "Duyusal bozukluklar (uyuşma, karıncalanma) — genellikle 3–6 ay içinde geçer.",
+        "İyileşme sırasında saç derisinde kaşıntı ve pul pul dökülme.",
+        "Enfeksiyon — antiseptik protokole uyulduğunda nadir (<%1)."
+      ]
+    },
+    "card2": {
+      "title": "Kontrendikasyonlar",
+      "badge": "Kalifikasyon",
+      "items": [
+        "Saç derisinin aktif bakteriyel, viral veya mantar enfeksiyonları.",
+        "Pıhtılaşma bozuklukları veya (oral) antikoagülan kullanımı.",
+        "Kontrolsüz diyabet — iyileşmeyi önemli ölçüde bozar.",
+        "Aktif sigara kullanımı — greft sağkalımını %20–30 azaltır.",
+        "Gebelik ve emzirme (protokolün bazı farmakolojik unsurları için).",
+        "Epilepsi veya nöbet öyküsü — HBOT öncesi konsültasyon gerektirir.",
+        "Büllöz akciğer hastalığı veya anormal basınç tepkisi — hiperbarik tedaviye kontrendikasyon."
+      ]
+    },
+    "card3": {
+      "title": "Klinikle iletişim — alarmlar",
+      "badge": "Derhal",
+      "items": [
+        "Prosedürden sonraki 2. günden sonra ateş >38 °C.",
+        "3. günden sonra (azalmak yerine) artan şiddetli ağrı.",
+        "Alıcı veya donör alanından kızarıklık, şişme ve pürülan akıntı.",
+        "Açık yaralar, greftlerin kısmen kaybı veya \"dışarı çıkması\".",
+        "Alerjik belirtiler: ürtiker, nefes darlığı, yüz şişmesi.",
+        "HBOT seansından sonra bayılma, şiddetli baş dönmesi veya kulak ağrısı.",
+        "10 dakika gazlı bezle bastırmaya rağmen durmayan kanama."
+      ],
+      "mech": "İletişim için \"sabaha kadar\" beklemeyin. Kritik 48 saatlik pencerede her gecikme saati greft sağkalımını etkileyebilir."
+    }
   }
 }
