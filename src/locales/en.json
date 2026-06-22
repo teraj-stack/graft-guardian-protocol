@@ -840,6 +840,18 @@
         "p1": "PBM (630–850 nm) increases VEGF expression and stimulates angiogenesis in the first days after the procedure, shortening the critical graft ischemia window and improving follicle nutrition.",
         "p2": "HBOT (1.5–3.0 ATA) complements the mechanism — delivering plasma-dissolved oxygen to tissues with impaired perfusion until the new capillary network is fully restored."
       }
+    },
+    "ledResults": {
+      "eyebrow": "03B — RESULTS",
+      "title": "LED Phototherapy — 1-month outcomes",
+      "lead": "Protocol: 3 sessions per week × 10 minutes. Two documented cases: a patient 10 years post-hair-transplant and a non-transplant patient with androgenetic thinning.",
+      "case1Title": "Patient 10 years after hair transplant",
+      "case1Caption": "Density stabilization in the recipient zone, reduced scalp erythema, even follicular regrowth.",
+      "case2Title": "Non-transplant patient — vertex thinning",
+      "case2Caption": "Vertex densification, improved hair shaft quality, reduced scalp visibility.",
+      "before": "BEFORE",
+      "after": "AFTER 1 MONTH",
+      "disclaimer": "Individual results. Clinical documentation by Graftgen.com — published with patient consent."
     }
   },
   "pricing": {

@@ -840,6 +840,18 @@
         "p1": "PBM (630–850 nm) işlem sonrası ilk günlerde VEGF ekspresyonunu artırır ve anjiyogenezi uyarır, kritik greft iskemi penceresini kısaltır ve folikül beslenmesini iyileştirir.",
         "p2": "HBOT (1,5–3,0 ATA) mekanizmayı tamamlar — yeni kılcal damar ağı tamamen yeniden oluşana kadar plazmada çözünen oksijeni perfüzyonu bozulmuş dokulara iletir."
       }
+    },
+    "ledResults": {
+      "eyebrow": "03B — SONUÇLAR",
+      "title": "LED Fototerapi — 1 aylık sonuçlar",
+      "lead": "Protokol: Haftada 3 seans × 10 dakika. İki belgelenmiş vaka: saç ekiminden 10 yıl sonra bir hasta ve androgenetik incelmesi olan ekim yapılmamış bir hasta.",
+      "case1Title": "Saç ekiminden 10 yıl sonraki hasta",
+      "case1Caption": "Alıcı bölgede yoğunluk stabilizasyonu, saç derisi kızarıklığında azalma, eşit foliküler yeniden büyüme.",
+      "case2Title": "Ekim yapılmamış hasta — tepe bölgesi incelmesi",
+      "case2Caption": "Tepe bölgesinde yoğunlaşma, saç teli kalitesinde iyileşme, saç derisi görünürlüğünde azalma.",
+      "before": "ÖNCE",
+      "after": "1 AY SONRA",
+      "disclaimer": "Bireysel sonuçlar. Graftgen.com klinik belgelendirmesi — hasta onayı ile yayınlanmıştır."
     }
   },
   "pricing": {
