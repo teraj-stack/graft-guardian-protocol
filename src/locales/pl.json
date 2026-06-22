@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "exVivo": "Ex Vivo",
+    "pbm": "PBM",
+    "hbot": "HBOT",
+    "ladd": "LADD",
+    "protocol14": "14 dni",
+    "shop": "Sklep",
+    "panel": "Panel pacjenta",
+    "reminders": "Przypomnienia",
+    "faq": "FAQ",
+    "contact": "Kontakt",
+    "bookConsult": "Umów konsultację",
+    "openMenu": "Otwórz menu",
+    "closeMenu": "Zamknij menu"
+  },
+  "common": {
+    "back": "Powrót",
+    "goHome": "Wróć na stronę główną",
+    "tryAgain": "Spróbuj ponownie",
+    "loading": "Ładowanie…",
+    "languageSwitcher": "Język"
+  },
+  "notFound": {
+    "title": "Strona nie znaleziona",
+    "description": "Strona, której szukasz, nie istnieje lub została przeniesiona."
+  },
+  "error": {
+    "title": "Ta strona się nie załadowała",
+    "description": "Coś poszło nie tak po naszej stronie. Spróbuj odświeżyć lub wróć na stronę główną."
+  },
+  "hero": {
+    "kicker": "Protokół kliniczny · DHI · evidence-based",
+    "title": "Protokół pozabiegowy oparty na ochronie metabolicznej graftów, fotobiomodulacji, <em>HBOT</em> i LADD.",
+    "lead": "Pierwsze 48 godzin decyduje o przeżywalności graftów. Zamiast soli fizjologicznej i pasywnego gojenia — zintegrowany plan oparty na transplantologicznych płynach ochronnych, fotobiomodulacji 650/830 nm, tlenoterapii hiperbarycznej 1,5–3,0 ATA oraz laserowo wspomaganym dostarczaniu leków (LADD).",
+    "subLead": "48 godzin = krytyczne okno przeżywalności graftów. Pełną rekonwalescencję prowadzimy systematycznie przez pierwsze 14 dni.",
+    "ctaBook": "Umów konsultację",
+    "ctaTimeline": "Zobacz oś czasu 14 dni →",
+    "statsTitle": "Twarde liczby",
+    "stat1k": "650 / 830 nm",
+    "stat1v": "długości fal PBM stosowane bezpośrednio po zabiegu",
+    "stat2k": "1,5–3,0 ATA",
+    "stat2v": "ciśnienie sesji HBOT w dobie 0. i 1.",
+    "stat3k": "4 °C",
+    "stat3v": "docelowa temperatura roztworu HypoThermosol + ATP-v",
+    "stat4k": "48–72 h",
+    "stat4v": "okno krytycznego niedokrwienia graftu przed rewaskularyzacją"
+  },
+  "heroFaq": {
+    "kicker": "Najczęstsze pytania",
+    "title": "Co pacjenci pytają najczęściej przed protokołem"
+  },
+  "sections": {
+    "exVivo": "Ex Vivo — ochrona metaboliczna graftów",
+    "pbm": "PBM — fotobiomodulacja 650 / 830 nm",
+    "hbot": "HBOT — tlenoterapia hiperbaryczna",
+    "ladd": "LADD — laserowo wspomagane dostarczanie leków",
+    "microbiome": "Zarządzanie mikrobiomem",
+    "timeline": "Oś czasu — 14 dni protokołu",
+    "schedule": "Twój plan: Dzień 0–14",
+    "journey": "Patient Journey",
+    "evidence": "Evidence-Based Medicine",
+    "pricing": "Sklep",
+    "faq": "Pytania i odpowiedzi",
+    "risks": "Ryzyka i przeciwwskazania",
+    "ebook": "E-book: Patient Journey",
+    "cta": "Zacznij protokół",
+    "contact": "Kontakt"
+  },
+  "footer": {
+    "rights": "Wszelkie prawa zastrzeżone.",
+    "privacy": "Polityka prywatności",
+    "cookies": "Polityka cookies"
+  },
+  "languageSwitcher": {
+    "label": "Wybierz język"
+  }
+}

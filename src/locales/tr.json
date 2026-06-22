@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "exVivo": "Ex Vivo",
+    "pbm": "PBM",
+    "hbot": "HBOT",
+    "ladd": "LADD",
+    "protocol14": "14 gün",
+    "shop": "Mağaza",
+    "panel": "Hasta paneli",
+    "reminders": "Hatırlatıcılar",
+    "faq": "SSS",
+    "contact": "İletişim",
+    "bookConsult": "Konsültasyon planla",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
+  },
+  "common": {
+    "back": "Geri",
+    "goHome": "Ana sayfaya dön",
+    "tryAgain": "Tekrar dene",
+    "loading": "Yükleniyor…",
+    "languageSwitcher": "Dil"
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Aradığınız sayfa mevcut değil veya taşınmış olabilir."
+  },
+  "error": {
+    "title": "Bu sayfa yüklenemedi",
+    "description": "Bizim tarafımızda bir sorun oluştu. Sayfayı yenileyin ya da ana sayfaya dönün."
+  },
+  "hero": {
+    "kicker": "Klinik protokol · DHI · kanıta dayalı",
+    "title": "Greftlerin metabolik korunması, fotobiyomodülasyon, <em>HBOT</em> ve LADD üzerine kurulu operasyon sonrası protokol.",
+    "lead": "İlk 48 saat greft sağkalımını belirler. Salin ve pasif iyileşme yerine — transplantoloji düzeyinde koruma solüsyonları, 650/830 nm fotobiyomodülasyon, 1,5–3,0 ATA hiperbarik oksijen tedavisi ve lazer destekli ilaç dağıtımını (LADD) birleştiren entegre bir plan.",
+    "subLead": "48 saat = greft sağkalımı için kritik penceredir. Tam iyileşme ilk 14 gün boyunca sistematik olarak yönetilir.",
+    "ctaBook": "Konsültasyon planla",
+    "ctaTimeline": "14 günlük zaman çizelgesini gör →",
+    "statsTitle": "Sert rakamlar",
+    "stat1k": "650 / 830 nm",
+    "stat1v": "operasyon hemen sonrası uygulanan PBM dalga boyları",
+    "stat2k": "1,5–3,0 ATA",
+    "stat2v": "0. ve 1. gün HBOT seansı basıncı",
+    "stat3k": "4 °C",
+    "stat3v": "HypoThermosol + ATP-v solüsyonu için hedef sıcaklık",
+    "stat4k": "48–72 sa",
+    "stat4v": "revaskülarizasyon öncesi kritik greft iskemi penceresi"
+  },
+  "heroFaq": {
+    "kicker": "Sık sorulan sorular",
+    "title": "Hastaların protokol öncesi en sık sorduğu sorular"
+  },
+  "sections": {
+    "exVivo": "Ex Vivo — metabolik greft koruması",
+    "pbm": "PBM — 650 / 830 nm fotobiyomodülasyon",
+    "hbot": "HBOT — hiperbarik oksijen tedavisi",
+    "ladd": "LADD — lazer destekli ilaç dağıtımı",
+    "microbiome": "Mikrobiyom yönetimi",
+    "timeline": "Zaman çizelgesi — 14 günlük protokol",
+    "schedule": "Planınız: 0–14. gün",
+    "journey": "Hasta yolculuğu",
+    "evidence": "Kanıta dayalı tıp",
+    "pricing": "Mağaza",
+    "faq": "Sorular ve cevaplar",
+    "risks": "Riskler ve kontrendikasyonlar",
+    "ebook": "E-kitap: Hasta yolculuğu",
+    "cta": "Protokole başla",
+    "contact": "İletişim"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır.",
+    "privacy": "Gizlilik politikası",
+    "cookies": "Çerez politikası"
+  },
+  "languageSwitcher": {
+    "label": "Dil seç"
+  }
+}
