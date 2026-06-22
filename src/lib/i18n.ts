@@ -25,8 +25,9 @@ if (!i18n.isInitialized) {
         en: { translation: en },
         tr: { translation: tr },
       },
-      lng: "pl", // stable for SSR; client switches via applyClientLocale()
-      fallbackLng: "pl",
+      lng: "pl", // stable for SSR; client switches via LanguageSwitcher useEffect
+      fallbackLng: "en", // patients without TR/PL get English, not Polish
+
       supportedLngs: [...SUPPORTED_LOCALES],
       nonExplicitSupportedLngs: true,
       load: "languageOnly",
