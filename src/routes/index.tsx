@@ -10,6 +10,10 @@ import drBujok from "@/assets/dr-bujok.jpg.asset.json";
 
 import laddVideo from "@/assets/ladd.mp4.asset.json";
 import laddPoster from "@/assets/ladd-poster.jpg";
+import ledTxBefore from "@/assets/led-transplant-before.png.asset.json";
+import ledTxAfter from "@/assets/led-transplant-after.png.asset.json";
+import ledNoTxBefore from "@/assets/led-no-transplant-before.png.asset.json";
+import ledNoTxAfter from "@/assets/led-no-transplant-after.png.asset.json";
 import { CartDrawer } from "@/components/CartDrawer";
 import { LazyMount } from "@/components/LazyMount";
 import { Section, SectionHeader, Para, Card, Mech } from "@/components/section-primitives";
@@ -132,6 +136,7 @@ function Index() {
         <Why />
         <ExVivo />
         <PBM />
+        <LedResults />
         <HBOT />
         <LADD />
         <LazyMount minHeight={900} fallback={<MicrobiomeSkeleton />}><Microbiome /></LazyMount>
@@ -546,6 +551,64 @@ function PBM() {
     </Section>
   );
 }
+
+/* ---------- LED Results (Before/After) ---------- */
+
+function LedResults() {
+  const { t } = useTranslation();
+  const cases = [
+    {
+      title: t("clinical.ledResults.case1Title"),
+      caption: t("clinical.ledResults.case1Caption"),
+      before: ledTxBefore.url,
+      after: ledTxAfter.url,
+    },
+    {
+      title: t("clinical.ledResults.case2Title"),
+      caption: t("clinical.ledResults.case2Caption"),
+      before: ledNoTxBefore.url,
+      after: ledNoTxAfter.url,
+    },
+  ];
+
+  return (
+    <Section id="led-results" eyebrow={t("clinical.ledResults.eyebrow")}>
+      <SectionHeader
+        title={t("clinical.ledResults.title")}
+        lead={t("clinical.ledResults.lead")}
+      />
+      <div className="grid gap-8 md:grid-cols-2">
+        {cases.map((c) => (
+          <Card key={c.title} title={c.title}>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: t("clinical.ledResults.before"), src: c.before },
+                { label: t("clinical.ledResults.after"), src: c.after },
+              ].map((img) => (
+                <figure key={img.label} className="relative overflow-hidden rounded-sm border border-border/60 bg-secondary/30">
+                  <img
+                    src={img.src}
+                    alt={`${c.title} — ${img.label}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-[3/4] w-full object-cover"
+                  />
+                  <figcaption className="absolute left-2 top-2 rounded-sm bg-background/80 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-accent backdrop-blur">
+                    {img.label}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">{c.caption}</p>
+          </Card>
+        ))}
+      </div>
+      <p className="mt-6 text-xs text-muted-foreground">{t("clinical.ledResults.disclaimer")}</p>
+    </Section>
+  );
+}
+
+
 
 /* ---------- HBOT ---------- */
 
