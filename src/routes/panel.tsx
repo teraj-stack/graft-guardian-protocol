@@ -480,6 +480,7 @@ function Filters({
   const prevParams = useRef({ week, cat, type, q });
 
   useEffect(() => {
+    console.log("effect run", { isFirst: isFirstRender.current, prev: prevParams.current, curr: { week, cat, type, q } });
     if (isFirstRender.current) {
       isFirstRender.current = false;
       prevParams.current = { week, cat, type, q };
@@ -490,11 +491,13 @@ function Filters({
       cat !== prevParams.current.cat ||
       type !== prevParams.current.type ||
       q !== prevParams.current.q;
+    console.log("changed", changed);
     if (changed) {
       const message =
         total === 0
           ? t("panel.filters.liveUpdateZero")
           : t("panel.filters.liveUpdate", { count: total, label: countLabel });
+      console.log("setting message", message);
       setLiveMessage(message);
       const timer = setTimeout(() => setLiveMessage(""), 1500);
       prevParams.current = { week, cat, type, q };
