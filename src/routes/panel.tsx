@@ -206,9 +206,7 @@ export const Route = createFileRoute("/panel")({
 });
 
 function PanelPage() {
-  const search = Route.useSearch();
-  console.log("Route.useSearch() raw", search);
-  const { week, cat, type, q } = search;
+  const { week, cat, type, q } = Route.useSearch();
   const { t } = useTranslation();
   const { progress, hydrated, toggleMaterial, toggleWeek, reset, isMaterialDone, isWeekDone } =
     usePanelProgress();
