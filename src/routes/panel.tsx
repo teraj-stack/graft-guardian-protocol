@@ -245,6 +245,7 @@ function PanelPage() {
         : t("panel.filters.resultsMany");
 
   useEffect(() => {
+    console.log("PanelPage effect", { prev: prevFilterRef.current, curr: { week, cat, type, q }, changed: week !== prevFilterRef.current.week || cat !== prevFilterRef.current.cat || type !== prevFilterRef.current.type || q !== prevFilterRef.current.q });
     const prev = prevFilterRef.current;
     const changed =
       week !== prev.week || cat !== prev.cat || type !== prev.type || q !== prev.q;
