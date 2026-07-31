@@ -1075,7 +1075,15 @@
       "reset": "Filtreleri sıfırla",
       "resetAria": "Tüm filtreleri ve aramayı sıfırla",
       "liveUpdate": "Sonuçlar güncellendi: {{count}} {{label}}.",
-      "liveUpdateZero": "Seçilen filtreler için sonuç yok."
+      "liveUpdateZero": "Seçilen filtreler için sonuç yok.",
+      "presets": {
+        "heading": "Kayıtlı filtre ön ayarları",
+        "nameLabel": "Ön ayar adı",
+        "namePlaceholder": "Ön ayar adı (isteğe bağlı)",
+        "save": "Mevcut filtreleri kaydet",
+        "empty": "Henüz kayıtlı ön ayar yok. Filtreleri ayarlayıp kombinasyonu kaydedin.",
+        "deleteAria": "{{name}} ön ayarını sil"
+      }
     }
   }
 }

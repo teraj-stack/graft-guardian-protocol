@@ -4,6 +4,8 @@ import { z } from "zod";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePanelProgress } from "@/hooks/use-panel-progress";
+import { usePanelFilterPresets } from "@/lib/filter-presets";
+
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -563,7 +565,7 @@ function Filters({
 
           </div>
         </div>
-
+      <FilterPresets week={week} cat={cat} type={type} q={q} searchRef={searchRef} />
 
 
       <FilterRow label={t("panel.filters.week")} paramKey="week" current={String(week)} options={[
@@ -583,6 +585,114 @@ function Filters({
     </section>
   );
 }
+
+function FilterPresets({
+  week,
+  cat,
+  type,
+  q,
+  searchRef,
+}: {
+  week: number | "all";
+  cat: string;
+  type: string;
+  q: string;
+  searchRef: React.RefObject<HTMLInputElement | null>;
+}) {
+  const { t } = useTranslation();
+  const navigate = useNavigate({ from: "/panel" });
+  const { presets, hydrated, savePreset, removePreset } = usePanelFilterPresets();
+  const [name, setName] = useState("");
+
+  if (!hydrated) return null;
+
+  const describe = (p: { week: number | "all"; cat: string; type: string; q: string }) =>
+    [
+      p.week === "all" ? null : `T${p.week}`,
+      p.cat === "all" ? null : p.cat,
+      p.type === "all" ? null : p.type,
+      p.q.trim() ? `"${p.q.trim()}"` : null,
+    ]
+      .filter(Boolean)
+      .join(" · ") || t("panel.filters.all");
+
+  return (
+    <div className="mt-6 border-t border-border pt-5">
+      <h3 className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        {t("panel.filters.presets.heading")}
+      </h3>
+
+      <form
+        className="mt-3 flex flex-wrap items-center gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          savePreset({ name: name || describe({ week, cat, type, q }), week, cat, type, q });
+          setName("");
+        }}
+      >
+        <label htmlFor="preset-name" className="sr-only">
+          {t("panel.filters.presets.nameLabel")}
+        </label>
+        <input
+          id="preset-name"
+          value={name}
+          maxLength={40}
+          onChange={(e) => setName(e.target.value)}
+          placeholder={t("panel.filters.presets.namePlaceholder")}
+          className="w-full max-w-xs rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-accent focus:outline-none"
+        />
+        <button
+          type="submit"
+          className="rounded-sm border border-border px-3 py-2 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-foreground/40 hover:text-foreground"
+        >
+          {t("panel.filters.presets.save")}
+        </button>
+      </form>
+
+      {presets.length === 0 ? (
+        <p className="mt-3 text-xs text-muted-foreground">{t("panel.filters.presets.empty")}</p>
+      ) : (
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {presets.map((p) => {
+            const active = p.week === week && p.cat === cat && p.type === type && p.q === q;
+            return (
+              <li key={p.id} className="flex items-stretch overflow-hidden rounded-sm border border-border">
+                <button
+                  type="button"
+                  aria-pressed={active}
+                  title={describe(p)}
+                  onClick={async () => {
+                    await navigate({
+                      to: "/panel",
+                      search: { week: p.week, cat: p.cat, type: p.type, q: p.q },
+                    });
+                    setTimeout(() => searchRef.current?.focus(), 100);
+                  }}
+                  className={`px-3 py-1.5 text-xs transition ${
+                    active
+                      ? "bg-foreground text-background"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {p.name}
+                </button>
+                <button
+                  type="button"
+                  aria-label={t("panel.filters.presets.deleteAria", { name: p.name })}
+                  onClick={() => removePreset(p.id)}
+                  className="border-l border-border px-2 text-xs text-muted-foreground transition hover:text-foreground"
+                >
+                  ×
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 
 function SearchBox({ value, inputRef }: { value: string; inputRef: React.RefObject<HTMLInputElement | null> }) {
   const { t } = useTranslation();

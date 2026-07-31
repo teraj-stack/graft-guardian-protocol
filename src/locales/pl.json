@@ -1075,7 +1075,15 @@
       "reset": "Resetuj filtry",
       "resetAria": "Resetuj wszystkie filtry i wyszukiwanie",
       "liveUpdate": "Wyniki zaktualizowane: {{count}} {{label}}.",
-      "liveUpdateZero": "Brak wyników dla wybranych filtrów."
+      "liveUpdateZero": "Brak wyników dla wybranych filtrów.",
+      "presets": {
+        "heading": "Zapisane presety filtrów",
+        "nameLabel": "Nazwa presetu",
+        "namePlaceholder": "Nazwa presetu (opcjonalnie)",
+        "save": "Zapisz obecne filtry",
+        "empty": "Brak zapisanych presetów. Ustaw filtry i zapisz kombinację, aby szybko do niej wracać.",
+        "deleteAria": "Usuń preset {{name}}"
+      }
     }
   }
 }
