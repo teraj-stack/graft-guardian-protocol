@@ -548,15 +548,25 @@ function Filters({
             {hasActiveFilters ? (
               <button
                 type="button"
-                onClick={() => {
-                  navigate({ to: "/panel", search: {} });
-                  setTimeout(() => searchRef.current?.focus(), 100);
+                onClick={async () => {
+                  console.log("reset click", searchRef.current?.id);
+                  try {
+                    await navigate({ to: "/panel", search: { week: "all", cat: "all", type: "all", q: "" } });
+                    console.log("navigate resolved");
+                    setTimeout(() => {
+                      searchRef.current?.focus();
+                      console.log("focus after reset", document.activeElement?.id);
+                    }, 100);
+                  } catch (e) {
+                    console.error("navigate error", e);
+                  }
                 }}
                 aria-label={t("panel.filters.resetAria")}
                 className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-foreground/40 hover:text-foreground"
               >
                 {t("panel.filters.reset")}
               </button>
+
             ) : null}
 
           </div>
