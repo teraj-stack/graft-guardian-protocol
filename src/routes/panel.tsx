@@ -473,6 +473,8 @@ function Filters({
       : total >= 2 && total <= 4
         ? t("panel.filters.resultsFew")
         : t("panel.filters.resultsMany");
+  const hasActiveFilters = week !== "all" || cat !== "all" || type !== "all" || q.trim() !== "";
+
   return (
     <section
       aria-labelledby="filters-heading"
@@ -488,10 +490,23 @@ function Filters({
           </label>
           <SearchBox value={q} />
         </div>
-        <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          {total} {countLabel}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {total} {countLabel}
+          </p>
+          {hasActiveFilters ? (
+            <Link
+              to="/panel"
+              search={() => ({})}
+              aria-label={t("panel.filters.resetAria")}
+              className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-foreground/40 hover:text-foreground"
+            >
+              {t("panel.filters.reset")}
+            </Link>
+          ) : null}
+        </div>
       </div>
+
 
       <FilterRow label={t("panel.filters.week")} paramKey="week" current={String(week)} options={[
         { value: "all", label: t("panel.filters.all") },

@@ -1071,7 +1071,9 @@
         "Wideo": "Video",
         "PDF": "PDF",
         "Checklist": "Checklist"
-      }
+      },
+      "reset": "Reset filters",
+      "resetAria": "Reset all filters and search"
     }
   }
 }
