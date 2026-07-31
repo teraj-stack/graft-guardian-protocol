@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -211,6 +211,8 @@ function PanelPage() {
   const { progress, hydrated, toggleMaterial, toggleWeek, reset, isMaterialDone, isWeekDone } =
     usePanelProgress();
   const [hideDone, setHideDone] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
+
 
   const baseFiltered = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -310,7 +312,16 @@ function PanelPage() {
           setHideDone={setHideDone}
         />
 
-        <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} liveMessage={liveMessage} />
+        <Filters
+          week={week}
+          cat={cat}
+          type={type}
+          q={q}
+          total={filtered.length}
+          liveMessage={liveMessage}
+          searchRef={searchRef}
+        />
+
 
         {filtered.length === 0 ? (
           <section
@@ -325,11 +336,15 @@ function PanelPage() {
               <Link
                 to="/panel"
                 search={() => ({})}
+                onClick={() => {
+                  setTimeout(() => searchRef.current?.focus(), 0);
+                }}
                 className="inline-flex items-center rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
               >
                 {t("panel.empty.clearFilters")}
               </Link>
             </div>
+
           </section>
         ) : (
           <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -486,6 +501,7 @@ function Filters({
   q,
   total,
   liveMessage,
+  searchRef,
 }: {
   week: number | "all";
   cat: string;
@@ -493,8 +509,12 @@ function Filters({
   q: string;
   total: number;
   liveMessage: string;
+  searchRef: React.RefObject<HTMLInputElement | null>;
 }) {
+
   const { t } = useTranslation();
+  const navigate = useNavigate({ from: "/panel" });
+
   const countLabel =
     total === 1
       ? t("panel.filters.resultsOne")
@@ -514,29 +534,36 @@ function Filters({
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveMessage || " "}
       </div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex-1">
-          <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {t("panel.filters.searchLabel")}
-          </label>
-          <SearchBox value={q} />
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex-1">
+            <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              {t("panel.filters.searchLabel")}
+            </label>
+            <SearchBox value={q} inputRef={searchRef} />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              {total} {countLabel}
+            </p>
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={async () => {
+                  await navigate({ to: "/panel", search: { week: "all", cat: "all", type: "all", q: "" } });
+                  setTimeout(() => searchRef.current?.focus(), 100);
+                }}
+                aria-label={t("panel.filters.resetAria")}
+                className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-foreground/40 hover:text-foreground"
+              >
+                {t("panel.filters.reset")}
+              </button>
+
+
+            ) : null}
+
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {total} {countLabel}
-          </p>
-          {hasActiveFilters ? (
-            <Link
-              to="/panel"
-              search={() => ({})}
-              aria-label={t("panel.filters.resetAria")}
-              className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-foreground/40 hover:text-foreground"
-            >
-              {t("panel.filters.reset")}
-            </Link>
-          ) : null}
-        </div>
-      </div>
+
 
 
       <FilterRow label={t("panel.filters.week")} paramKey="week" current={String(week)} options={[
@@ -557,7 +584,7 @@ function Filters({
   );
 }
 
-function SearchBox({ value }: { value: string }) {
+function SearchBox({ value, inputRef }: { value: string; inputRef: React.RefObject<HTMLInputElement | null> }) {
   const { t } = useTranslation();
   return (
     <form
@@ -567,6 +594,7 @@ function SearchBox({ value }: { value: string }) {
     >
       <input
         id="panel-search"
+        ref={inputRef}
         type="search"
         name="q"
         aria-describedby="panel-search-hint"
@@ -574,6 +602,7 @@ function SearchBox({ value }: { value: string }) {
         placeholder={t("panel.filters.searchPlaceholder")}
         className="flex-1 rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-accent focus:outline-none"
       />
+
       <span id="panel-search-hint" className="sr-only">
         {t("panel.filters.searchHint")}
       </span>
