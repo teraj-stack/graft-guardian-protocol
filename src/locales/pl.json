@@ -1021,5 +1021,12 @@
         "date": "17 lutego 2026"
       }
     ]
+  },
+  "panel": {
+    "empty": {
+      "title": "Brak materiałów dla wybranych filtrów",
+      "hint": "Spróbuj zmienić zakres tygodnia, kategorię, typ lub wyszukiwanie. Jeśli włączyłeś „ukryj ukończone”, wyłącz je, aby zobaczyć odznaczone pozycje.",
+      "clearFilters": "Wyczyść filtry"
+    }
   }
 }
