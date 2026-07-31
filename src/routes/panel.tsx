@@ -310,7 +310,7 @@ function PanelPage() {
           setHideDone={setHideDone}
         />
 
-        <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} />
+        <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} liveMessage={liveMessage} />
 
         {filtered.length === 0 ? (
           <section
