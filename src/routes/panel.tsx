@@ -287,10 +287,24 @@ function PanelPage() {
         <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} />
 
         {filtered.length === 0 ? (
-          <div className="mt-12 rounded-sm border border-dashed border-border bg-card p-10 text-center">
-            <p className="font-display text-2xl">Brak materiałów dla wybranych filtrów.</p>
-            <p className="mt-2 text-sm text-muted-foreground">Zmień zakres tygodnia lub odznacz „ukryj ukończone”.</p>
-          </div>
+          <section
+            aria-labelledby="panel-empty-heading"
+            className="mt-12 rounded-sm border border-dashed border-border bg-card p-10 text-center"
+          >
+            <h2 id="panel-empty-heading" className="font-display text-2xl">
+              {t("panel.empty.title")}
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground">{t("panel.empty.hint")}</p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/panel"
+                search={() => ({})}
+                className="inline-flex items-center rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
+              >
+                {t("panel.empty.clearFilters")}
+              </Link>
+            </div>
+          </section>
         ) : (
           <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {filtered.map((m) => (
