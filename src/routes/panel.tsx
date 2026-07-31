@@ -234,6 +234,32 @@ function PanelPage() {
   const totalCount = MATERIALS.length;
   const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
+  const [liveMessage, setLiveMessage] = useState("");
+  const prevFilterRef = useRef({ week, cat, type, q });
+  const filteredCount = filtered.length;
+  const countLabel =
+    filteredCount === 1
+      ? t("panel.filters.resultsOne")
+      : filteredCount >= 2 && filteredCount <= 4
+        ? t("panel.filters.resultsFew")
+        : t("panel.filters.resultsMany");
+
+  useEffect(() => {
+    const prev = prevFilterRef.current;
+    const changed =
+      week !== prev.week || cat !== prev.cat || type !== prev.type || q !== prev.q;
+    if (changed) {
+      const message =
+        filteredCount === 0
+          ? t("panel.filters.liveUpdateZero")
+          : t("panel.filters.liveUpdate", { count: filteredCount, label: countLabel });
+      setLiveMessage(message);
+      const timer = setTimeout(() => setLiveMessage(""), 2000);
+      prevFilterRef.current = { week, cat, type, q };
+      return () => clearTimeout(timer);
+    }
+  }, [week, cat, type, q, filteredCount, t, countLabel]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border/60">
