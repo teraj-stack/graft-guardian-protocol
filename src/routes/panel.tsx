@@ -353,17 +353,27 @@ function PanelPage() {
 
           </section>
         ) : (
-          <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((m) => (
-              <MaterialCard
-                key={m.id}
-                material={m}
-                done={isMaterialDone(m.id)}
-                onToggle={() => toggleMaterial(m.id)}
-              />
-            ))}
-          </ul>
+          <>
+            <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map((m) => (
+                <MaterialCard
+                  key={m.id}
+                  material={m}
+                  done={isMaterialDone(m.id)}
+                  onToggle={() => toggleMaterial(m.id)}
+                />
+              ))}
+            </ul>
+            <Pagination
+              page={safePage}
+              totalPages={totalPages}
+              rangeStart={rangeStart}
+              rangeEnd={rangeEnd}
+              total={filtered.length}
+            />
+          </>
         )}
+
       </main>
 
       <SiteFooter />
