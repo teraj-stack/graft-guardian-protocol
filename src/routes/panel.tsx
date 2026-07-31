@@ -183,12 +183,16 @@ const MATERIALS: Material[] = [
   },
 ];
 
+const PAGE_SIZE = 6;
+
 const searchSchema = z.object({
   week: fallback(z.union([z.literal("all"), z.coerce.number().int()]), "all").default("all"),
   cat: fallback(z.enum(["all", ...CATEGORIES]), "all").default("all"),
   type: fallback(z.enum(["all", ...TYPES]), "all").default("all"),
   q: fallback(z.string(), "").default(""),
+  page: fallback(z.coerce.number().int(), 1).default(1),
 });
+
 
 export const Route = createFileRoute("/panel")({
   validateSearch: zodValidator(searchSchema),
@@ -208,7 +212,7 @@ export const Route = createFileRoute("/panel")({
 });
 
 function PanelPage() {
-  const { week, cat, type, q } = Route.useSearch();
+  const { week, cat, type, q, page } = Route.useSearch();
   const { t } = useTranslation();
   const { progress, hydrated, toggleMaterial, toggleWeek, reset, isMaterialDone, isWeekDone } =
     usePanelProgress();
@@ -233,6 +237,14 @@ function PanelPage() {
     () => (hideDone ? baseFiltered.filter((m) => !isMaterialDone(m.id)) : baseFiltered),
     [baseFiltered, hideDone, isMaterialDone]
   );
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const rangeStart = filtered.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = Math.min(safePage * PAGE_SIZE, filtered.length);
+  const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+
 
   const doneCount = progress.materials.length;
   const totalCount = MATERIALS.length;
@@ -349,17 +361,27 @@ function PanelPage() {
 
           </section>
         ) : (
-          <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((m) => (
-              <MaterialCard
-                key={m.id}
-                material={m}
-                done={isMaterialDone(m.id)}
-                onToggle={() => toggleMaterial(m.id)}
-              />
-            ))}
-          </ul>
+          <>
+            <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map((m) => (
+                <MaterialCard
+                  key={m.id}
+                  material={m}
+                  done={isMaterialDone(m.id)}
+                  onToggle={() => toggleMaterial(m.id)}
+                />
+              ))}
+            </ul>
+            <Pagination
+              page={safePage}
+              totalPages={totalPages}
+              rangeStart={rangeStart}
+              rangeEnd={rangeEnd}
+              total={filtered.length}
+            />
+          </>
         )}
+
       </main>
 
       <SiteFooter />
@@ -693,6 +715,99 @@ function FilterPresets({
   );
 }
 
+function Pagination({
+  page,
+  totalPages,
+  rangeStart,
+  rangeEnd,
+  total,
+}: {
+  page: number;
+  totalPages: number;
+  rangeStart: number;
+  rangeEnd: number;
+  total: number;
+}) {
+  const { t } = useTranslation();
+  if (totalPages <= 1) return null;
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const base =
+    "inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border px-3 py-2 text-sm transition";
+
+  return (
+    <nav
+      aria-label={t("panel.pagination.navAria")}
+      data-testid="panel-pagination"
+      className="mt-10 flex flex-col items-center gap-3 border-t border-border pt-6"
+    >
+      <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        {t("panel.pagination.range", { start: rangeStart, end: rangeEnd, total })}
+      </p>
+      <ul className="flex flex-wrap items-center justify-center gap-2">
+        <li>
+          {page > 1 ? (
+            <Link
+              from="/panel"
+              search={(prev: Record<string, unknown>) => ({ ...prev, page: page - 1 }) as never}
+              aria-label={t("panel.pagination.prevAria")}
+              className={`${base} border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground`}
+            >
+              ← {t("panel.pagination.prev")}
+            </Link>
+          ) : (
+            <span
+              aria-disabled="true"
+              className={`${base} border-border/50 text-muted-foreground/50`}
+            >
+              ← {t("panel.pagination.prev")}
+            </span>
+          )}
+        </li>
+        {pages.map((p) => {
+          const active = p === page;
+          return (
+            <li key={p}>
+              <Link
+                from="/panel"
+                search={(prev: Record<string, unknown>) => ({ ...prev, page: p }) as never}
+                aria-current={active ? "page" : undefined}
+                aria-label={t("panel.pagination.pageAria", { page: p, total: totalPages })}
+                className={`${base} ${
+                  active
+                    ? "border-accent bg-accent font-medium text-accent-foreground"
+                    : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground"
+                }`}
+              >
+                {p}
+              </Link>
+            </li>
+          );
+        })}
+        <li>
+          {page < totalPages ? (
+            <Link
+              from="/panel"
+              search={(prev: Record<string, unknown>) => ({ ...prev, page: page + 1 }) as never}
+              aria-label={t("panel.pagination.nextAria")}
+              className={`${base} border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground`}
+            >
+              {t("panel.pagination.next")} →
+            </Link>
+          ) : (
+            <span
+              aria-disabled="true"
+              className={`${base} border-border/50 text-muted-foreground/50`}
+            >
+              {t("panel.pagination.next")} →
+            </span>
+          )}
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
 
 function SearchBox({ value, inputRef }: { value: string; inputRef: React.RefObject<HTMLInputElement | null> }) {
   const { t } = useTranslation();
@@ -754,6 +869,7 @@ function FilterRow({
               aria-label={`${label}: ${o.label}${active ? ` — ${t("panel.filters.activeSuffix")}` : ""}`}
               search={(prev: Record<string, unknown>) => {
                 const next: Record<string, unknown> = { ...prev };
+                delete next.page;
                 if (o.value === "all") {
                   delete next[paramKey];
                 } else if (paramKey === "week") {
@@ -763,6 +879,7 @@ function FilterRow({
                 }
                 return next as never;
               }}
+
               className={
                 "inline-flex items-center rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
                 (active

@@ -1084,6 +1084,15 @@
         "empty": "Henüz kayıtlı ön ayar yok. Filtreleri ayarlayıp kombinasyonu kaydedin.",
         "deleteAria": "{{name}} ön ayarını sil"
       }
+    },
+    "pagination": {
+      "navAria": "Materyal kitaplığı sonuç sayfalaması",
+      "range": "{{total}} sonuçtan {{start}}–{{end}} gösteriliyor",
+      "prev": "Önceki",
+      "next": "Sonraki",
+      "prevAria": "Önceki sonuç sayfasına git",
+      "nextAria": "Sonraki sonuç sayfasına git",
+      "pageAria": "Sayfa {{page}} / {{total}}"
     }
   }
 }
