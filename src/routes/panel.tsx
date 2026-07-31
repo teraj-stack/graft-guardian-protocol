@@ -183,12 +183,16 @@ const MATERIALS: Material[] = [
   },
 ];
 
+const PAGE_SIZE = 6;
+
 const searchSchema = z.object({
   week: fallback(z.union([z.literal("all"), z.coerce.number().int()]), "all").default("all"),
   cat: fallback(z.enum(["all", ...CATEGORIES]), "all").default("all"),
   type: fallback(z.enum(["all", ...TYPES]), "all").default("all"),
   q: fallback(z.string(), "").default(""),
+  page: fallback(z.coerce.number().int(), 1).default(1),
 });
+
 
 export const Route = createFileRoute("/panel")({
   validateSearch: zodValidator(searchSchema),
