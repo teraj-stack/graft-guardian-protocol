@@ -191,9 +191,23 @@ async def main():
     pages = []
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(headless=True)
-        ctx = await browser.new_context(viewport={"width": 1280, "height": 1800})
+        ctx = await browser.new_context(
+            viewport={"width": 1280, "height": 1800}, locale="pl-PL"
+        )
         page = await ctx.new_page()
+        # ustaw język PL i zgody cookies, aby snapshot nie zawierał bannera
+        await page.goto(args.base, wait_until="domcontentloaded")
+        await page.evaluate(
+            """() => {
+                localStorage.setItem('graftgen.lang', 'pl');
+                localStorage.setItem('cookie-consent-v1', JSON.stringify({
+                  version: 1, necessary: true, analytics: false, functional: false, marketing: false,
+                  timestamp: new Date().toISOString()
+                }));
+            }"""
+        )
         for path, label in ROUTES:
+
             print("snapshot:", path, flush=True)
             try:
                 title, css, body = await snapshot(page, args.base, path, cache)
