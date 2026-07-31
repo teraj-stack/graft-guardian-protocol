@@ -7,10 +7,8 @@ import { Clock, Package, CheckCircle, Calculator, Info } from "lucide-react";
 import { CartDrawer } from "@/components/CartDrawer";
 import mscLogo from "@/assets/msc-logo.jpeg.asset.json";
 import graftgenLogo from "@/assets/graftgen-logo.jpg.asset.json";
-import {
-  STOREFRONT_PRODUCT_BY_HANDLE_QUERY,
-  storefrontApiRequest,
-} from "@/lib/shopify";
+import { fetchProduct } from "@/lib/shopify-product";
+
 
 export const Route = createFileRoute("/product/$handle")({
   loader: ({ params }) => fetchProduct(params.handle),
