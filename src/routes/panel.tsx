@@ -563,7 +563,7 @@ function Filters({
 
           </div>
         </div>
-
+      <FilterPresets week={week} cat={cat} type={type} q={q} searchRef={searchRef} />
 
 
       <FilterRow label={t("panel.filters.week")} paramKey="week" current={String(week)} options={[
