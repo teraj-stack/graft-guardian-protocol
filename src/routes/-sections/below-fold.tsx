@@ -1552,8 +1552,6 @@ export function FAQSection() {
   const { t } = useTranslation();
   const { items, stages, topics, dayMatch } = useFaq();
   const dayTips = t("faq.dayTips", { returnObjects: true, defaultValue: [] }) as {
-    day: number;
-    label: string;
     headline: string;
     tip: string;
   }[];
@@ -1622,7 +1620,7 @@ export function FAQSection() {
             const active = selectedDay === i;
             return (
               <button
-                key={d.day}
+                key={i}
                 role="tab"
                 aria-selected={active}
                 type="button"
@@ -1636,7 +1634,7 @@ export function FAQSection() {
                 <span className="text-[10px] uppercase tracking-wide opacity-70">
                   {t("faq.dayShort")}
                 </span>
-                <span className="font-display text-xl leading-none">{d.day}</span>
+                <span className="font-display text-xl leading-none">{i}</span>
               </button>
             );
           })}
@@ -1646,7 +1644,7 @@ export function FAQSection() {
           <div className="mt-4 border-t border-border pt-4">
             <div className="flex items-baseline gap-3">
               <span className="font-display text-3xl text-accent">
-                {activeDayTip.label}
+                {`${t("faq.dayShort")} ${selectedDay}`}
               </span>
               <span className="text-sm uppercase tracking-wide text-muted-foreground">
                 {activeDayTip.headline}
