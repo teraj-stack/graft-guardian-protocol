@@ -1021,5 +1021,12 @@
         "date": "17 Şubat 2026"
       }
     ]
+  },
+  "panel": {
+    "empty": {
+      "title": "Seçilen filtrelerle eşleşen materyal yok",
+      "hint": "Hafta, kategori, tür veya arama ifadesini değiştirmeyi deneyin. “Tamamlananları gizle” açıksa, işaretlenmemiş öğeleri görmek için kapatın.",
+      "clearFilters": "Filtreleri temizle"
+    }
   }
 }

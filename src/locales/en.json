@@ -1021,5 +1021,12 @@
         "date": "February 17, 2026"
       }
     ]
+  },
+  "panel": {
+    "empty": {
+      "title": "No materials match the selected filters",
+      "hint": "Try changing the week, category, type, or search phrase. If you have enabled “hide completed,” turn it off to see unchecked items.",
+      "clearFilters": "Clear filters"
+    }
   }
 }
