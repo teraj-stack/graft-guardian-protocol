@@ -332,11 +332,16 @@ function ProgressPanel({
   setHideDone: (v: boolean) => void;
 }) {
   return (
-    <section className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6">
+    <section
+      aria-labelledby="progress-heading"
+      className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6"
+    >
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Twój postęp</p>
-          <p className="mt-2 font-display text-3xl">
+          <h2 id="progress-heading" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Twój postęp
+          </h2>
+          <p className="mt-2 font-display text-3xl" aria-live="polite" id="progress-summary">
             {hydrated ? `${doneCount} / ${totalCount}` : "— / —"}
             <span className="ml-3 text-base text-muted-foreground">ukończonych materiałów</span>
           </p>
@@ -345,6 +350,8 @@ function ProgressPanel({
           <button
             type="button"
             onClick={() => setHideDone(!hideDone)}
+            aria-pressed={hideDone}
+            aria-label={hideDone ? "Ukryj ukończone materiały — włączone" : "Ukryj ukończone materiały — wyłączone"}
             className={
               "inline-flex items-center rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
               (hideDone
@@ -359,6 +366,7 @@ function ProgressPanel({
             onClick={() => {
               if (window.confirm("Wyczyścić cały zapisany postęp?")) reset();
             }}
+            aria-describedby="progress-summary"
             className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-destructive hover:text-destructive"
           >
             Wyczyść postęp
@@ -366,7 +374,15 @@ function ProgressPanel({
         </div>
       </div>
 
-      <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-secondary">
+      <div
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={hydrated ? Math.round(pct) : 0}
+        aria-valuetext={`${hydrated ? Math.round(pct) : 0}% ukończonych materiałów`}
+        aria-labelledby="progress-heading"
+        className="mt-5 h-2 w-full overflow-hidden rounded-full bg-secondary"
+      >
         <div
           className="h-full bg-accent transition-all duration-500"
           style={{ width: `${hydrated ? pct : 0}%` }}
@@ -374,10 +390,13 @@ function ProgressPanel({
       </div>
 
       <div className="mt-6 border-t border-border/50 pt-4">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        <p id="weeks-heading" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
           Ukończone tygodnie protokołu
         </p>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <p id="weeks-hint" className="sr-only">
+          Przełącznik statusu tygodnia protokołu. Naciśnij, aby oznaczyć tydzień jako ukończony lub cofnąć oznaczenie.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2" role="group" aria-labelledby="weeks-heading">
           {weeks.map((w) => {
             const done = hydrated && isWeekDone(w);
             return (
@@ -392,9 +411,11 @@ function ProgressPanel({
                     : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")
                 }
                 aria-pressed={done}
+                aria-describedby="weeks-hint"
+                aria-label={`Tydzień ${w} — ${done ? "ukończony" : "nieukończony"}`}
               >
-                <span>{done ? "✓" : "○"}</span>
-                <span>Tydzień {w}</span>
+                <span aria-hidden="true">{done ? "✓" : "○"}</span>
+                <span aria-hidden="true">Tydzień {w}</span>
               </button>
             );
           })}
@@ -418,13 +439,21 @@ function Filters({
   total: number;
 }) {
   return (
-    <section className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6">
+    <section
+      aria-labelledby="filters-heading"
+      className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6"
+    >
+      <h2 id="filters-heading" className="sr-only">
+        Filtry biblioteki materiałów
+      </h2>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex-1">
-          <label className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Szukaj</label>
+          <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Szukaj
+          </label>
           <SearchBox value={q} />
         </div>
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
           {total} {total === 1 ? "materiał" : total >= 2 && total <= 4 ? "materiały" : "materiałów"}
         </p>
       </div>
@@ -455,12 +484,17 @@ function SearchBox({ value }: { value: string }) {
       className="mt-2 flex w-full max-w-md items-center gap-2"
     >
       <input
-        type="text"
+        id="panel-search"
+        type="search"
         name="q"
+        aria-describedby="panel-search-hint"
         defaultValue={value}
         placeholder="np. mycie, HBOT, dieta…"
         className="flex-1 rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-accent focus:outline-none"
       />
+      <span id="panel-search-hint" className="sr-only">
+        Wyszukuje w tytułach i opisach materiałów. Zatwierdź przyciskiem Szukaj.
+      </span>
       <button
         type="submit"
         className="rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
@@ -484,14 +518,18 @@ function FilterRow({
 }) {
   return (
     <div className="mt-5 border-t border-border/50 pt-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <p id={`filter-${paramKey}-label`} className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        {label}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2" role="group" aria-labelledby={`filter-${paramKey}-label`}>
         {options.map((o) => {
           const active = current === o.value;
           return (
             <Link
               key={o.value}
               from="/panel"
+              aria-current={active ? "true" : undefined}
+              aria-label={`${label}: ${o.label}${active ? " — filtr aktywny" : ""}`}
               search={(prev: Record<string, unknown>) => {
                 const next: Record<string, unknown> = { ...prev };
                 if (o.value === "all") {
@@ -510,7 +548,7 @@ function FilterRow({
                   : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")
               }
             >
-              {o.label}
+              <span aria-hidden="true">{active ? "✓ " : ""}{o.label}</span>
             </Link>
           );
         })}
