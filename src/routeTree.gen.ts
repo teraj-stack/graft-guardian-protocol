@@ -9,83 +9,52 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SklepRouteImport } from './routes/sklep'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as RaportRouteImport } from './routes/raport'
-import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
-import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
-import { Route as PanelRouteImport } from './routes/panel'
-import { Route as KosztPrzeszczepuWlosowRouteImport } from './routes/koszt-przeszczepu-wlosow'
-import { Route as CookiesRouteImport } from './routes/cookies'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
-import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
-import { Route as ProductHandleRouteImport } from './routes/product.$handle'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
-import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
-import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
-import { Route as AuthenticatedPhraseAuditRouteImport } from './routes/_authenticated/phrase-audit'
-import { Route as AuthenticatedI18nReportRouteImport } from './routes/_authenticated/i18n-report'
-import { Route as AuthenticatedEmailTestRouteImport } from './routes/_authenticated/email-test'
-import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
-import { Route as AuthenticatedBrandAuditRouteImport } from './routes/_authenticated/brand-audit'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as KosztPrzeszczepuWlosowRouteImport } from './routes/koszt-przeszczepu-wlosow'
+import { Route as PanelRouteImport } from './routes/panel'
+import { Route as PrywatnoscRouteImport } from './routes/prywatnosc'
+import { Route as PrzypomnieniaRouteImport } from './routes/przypomnienia'
+import { Route as RaportRouteImport } from './routes/raport'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SklepRouteImport } from './routes/sklep'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
-import { Route as ApiPublicEbookRequestRouteImport } from './routes/api/public/ebook-request'
+import { Route as AuthenticatedBrandAuditRouteImport } from './routes/_authenticated/brand-audit'
+import { Route as AuthenticatedEbookRouteImport } from './routes/_authenticated/ebook'
+import { Route as AuthenticatedEmailTestRouteImport } from './routes/_authenticated/email-test'
+import { Route as AuthenticatedI18nReportRouteImport } from './routes/_authenticated/i18n-report'
+import { Route as AuthenticatedPhraseAuditRouteImport } from './routes/_authenticated/phrase-audit'
+import { Route as AuthenticatedRaportyRouteImport } from './routes/_authenticated/raporty'
+import { Route as AuthenticatedVitalsRouteImport } from './routes/_authenticated/vitals'
+import { Route as EbookTokenRouteImport } from './routes/ebook.$token'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as PrzypomnieniaWypiszRouteImport } from './routes/przypomnienia.wypisz'
+import { Route as RaportyStatusRouteImport } from './routes/raporty.status'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
-import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
-import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
-import { Route as ApiPublicRemindersSendChecklistRouteImport } from './routes/api/public/reminders/send-checklist'
-import { Route as ApiPublicRemindersPreviewChecklistRouteImport } from './routes/api/public/reminders/preview-checklist'
-import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
-import { Route as ApiPublicHooksSecurityWatchRouteImport } from './routes/api/public/hooks/security-watch'
+import { Route as ApiPublicEbookRequestRouteImport } from './routes/api/public/ebook-request'
+import { Route as ApiPublicVitalsRouteImport } from './routes/api/public/vitals'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicHooksPricingAutoRestoreRouteImport } from './routes/api/public/hooks/pricing-auto-restore'
+import { Route as ApiPublicHooksSecurityWatchRouteImport } from './routes/api/public/hooks/security-watch'
+import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders/dispatch'
+import { Route as ApiPublicRemindersPreviewChecklistRouteImport } from './routes/api/public/reminders/preview-checklist'
+import { Route as ApiPublicRemindersSendChecklistRouteImport } from './routes/api/public/reminders/send-checklist'
+import { Route as ApiPublicRemindersSubscribeRouteImport } from './routes/api/public/reminders/subscribe'
+import { Route as ApiPublicRemindersUnsubscribeRouteImport } from './routes/api/public/reminders/unsubscribe'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 
-const SklepRoute = SklepRouteImport.update({
-  id: '/sklep',
-  path: '/sklep',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RaportRoute = RaportRouteImport.update({
-  id: '/raport',
-  path: '/raport',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrzypomnieniaRoute = PrzypomnieniaRouteImport.update({
-  id: '/przypomnienia',
-  path: '/przypomnienia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrywatnoscRoute = PrywatnoscRouteImport.update({
-  id: '/prywatnosc',
-  path: '/prywatnosc',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PanelRoute = PanelRouteImport.update({
-  id: '/panel',
-  path: '/panel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KosztPrzeszczepuWlosowRoute = KosztPrzeszczepuWlosowRouteImport.update({
-  id: '/koszt-przeszczepu-wlosow',
-  path: '/koszt-przeszczepu-wlosow',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CookiesRoute = CookiesRouteImport.update({
-  id: '/cookies',
-  path: '/cookies',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -93,48 +62,69 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const KosztPrzeszczepuWlosowRoute = KosztPrzeszczepuWlosowRouteImport.update({
+  id: '/koszt-przeszczepu-wlosow',
+  path: '/koszt-przeszczepu-wlosow',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RaportyStatusRoute = RaportyStatusRouteImport.update({
-  id: '/raporty/status',
-  path: '/raporty/status',
+const PanelRoute = PanelRouteImport.update({
+  id: '/panel',
+  path: '/panel',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrzypomnieniaWypiszRoute = PrzypomnieniaWypiszRouteImport.update({
-  id: '/wypisz',
-  path: '/wypisz',
-  getParentRoute: () => PrzypomnieniaRoute,
-} as any)
-const ProductHandleRoute = ProductHandleRouteImport.update({
-  id: '/product/$handle',
-  path: '/product/$handle',
+const PrywatnoscRoute = PrywatnoscRouteImport.update({
+  id: '/prywatnosc',
+  path: '/prywatnosc',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
+const PrzypomnieniaRoute = PrzypomnieniaRouteImport.update({
+  id: '/przypomnienia',
+  path: '/przypomnienia',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EbookTokenRoute = EbookTokenRouteImport.update({
-  id: '/ebook/$token',
-  path: '/ebook/$token',
+const RaportRoute = RaportRouteImport.update({
+  id: '/raport',
+  path: '/raport',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedVitalsRoute = AuthenticatedVitalsRouteImport.update({
-  id: '/vitals',
-  path: '/vitals',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SklepRoute = SklepRouteImport.update({
+  id: '/sklep',
+  path: '/sklep',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
-  id: '/raporty',
-  path: '/raporty',
+const AuthenticatedBrandAuditRoute = AuthenticatedBrandAuditRouteImport.update({
+  id: '/brand-audit',
+  path: '/brand-audit',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEbookRoute = AuthenticatedEbookRouteImport.update({
+  id: '/ebook',
+  path: '/ebook',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEmailTestRoute = AuthenticatedEmailTestRouteImport.update({
+  id: '/email-test',
+  path: '/email-test',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedI18nReportRoute = AuthenticatedI18nReportRouteImport.update({
+  id: '/i18n-report',
+  path: '/i18n-report',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPhraseAuditRoute =
@@ -143,44 +133,39 @@ const AuthenticatedPhraseAuditRoute =
     path: '/phrase-audit',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedI18nReportRoute = AuthenticatedI18nReportRouteImport.update({
-  id: '/i18n-report',
-  path: '/i18n-report',
+const AuthenticatedRaportyRoute = AuthenticatedRaportyRouteImport.update({
+  id: '/raporty',
+  path: '/raporty',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedEmailTestRoute = AuthenticatedEmailTestRouteImport.update({
-  id: '/email-test',
-  path: '/email-test',
+const AuthenticatedVitalsRoute = AuthenticatedVitalsRouteImport.update({
+  id: '/vitals',
+  path: '/vitals',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedEbookRoute = AuthenticatedEbookRouteImport.update({
-  id: '/ebook',
-  path: '/ebook',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedBrandAuditRoute = AuthenticatedBrandAuditRouteImport.update({
-  id: '/brand-audit',
-  path: '/brand-audit',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
+const EbookTokenRoute = EbookTokenRouteImport.update({
+  id: '/ebook/$token',
+  path: '/ebook/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicVitalsRoute = ApiPublicVitalsRouteImport.update({
-  id: '/api/public/vitals',
-  path: '/api/public/vitals',
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicEbookRequestRoute = ApiPublicEbookRequestRouteImport.update({
-  id: '/api/public/ebook-request',
-  path: '/api/public/ebook-request',
+const ProductHandleRoute = ProductHandleRouteImport.update({
+  id: '/product/$handle',
+  path: '/product/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrzypomnieniaWypiszRoute = PrzypomnieniaWypiszRouteImport.update({
+  id: '/wypisz',
+  path: '/wypisz',
+  getParentRoute: () => PrzypomnieniaRoute,
+} as any)
+const RaportyStatusRoute = RaportyStatusRouteImport.update({
+  id: '/raporty/status',
+  path: '/raporty/status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
@@ -188,52 +173,25 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailTransactionalPreviewRoute =
-  LovableEmailTransactionalPreviewRouteImport.update({
-    id: '/lovable/email/transactional/preview',
-    path: '/lovable/email/transactional/preview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicRemindersUnsubscribeRoute =
-  ApiPublicRemindersUnsubscribeRouteImport.update({
-    id: '/api/public/reminders/unsubscribe',
-    path: '/api/public/reminders/unsubscribe',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicRemindersSubscribeRoute =
-  ApiPublicRemindersSubscribeRouteImport.update({
-    id: '/api/public/reminders/subscribe',
-    path: '/api/public/reminders/subscribe',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicRemindersSendChecklistRoute =
-  ApiPublicRemindersSendChecklistRouteImport.update({
-    id: '/api/public/reminders/send-checklist',
-    path: '/api/public/reminders/send-checklist',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicRemindersPreviewChecklistRoute =
-  ApiPublicRemindersPreviewChecklistRouteImport.update({
-    id: '/api/public/reminders/preview-checklist',
-    path: '/api/public/reminders/preview-checklist',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicRemindersDispatchRoute =
-  ApiPublicRemindersDispatchRouteImport.update({
-    id: '/api/public/reminders/dispatch',
-    path: '/api/public/reminders/dispatch',
+const ApiPublicEbookRequestRoute = ApiPublicEbookRequestRouteImport.update({
+  id: '/api/public/ebook-request',
+  path: '/api/public/ebook-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVitalsRoute = ApiPublicVitalsRouteImport.update({
+  id: '/api/public/vitals',
+  path: '/api/public/vitals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHooksPricingAutoRestoreRoute =
+  ApiPublicHooksPricingAutoRestoreRouteImport.update({
+    id: '/api/public/hooks/pricing-auto-restore',
+    path: '/api/public/hooks/pricing-auto-restore',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicHooksSecurityWatchRoute =
@@ -242,10 +200,52 @@ const ApiPublicHooksSecurityWatchRoute =
     path: '/api/public/hooks/security-watch',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicHooksPricingAutoRestoreRoute =
-  ApiPublicHooksPricingAutoRestoreRouteImport.update({
-    id: '/api/public/hooks/pricing-auto-restore',
-    path: '/api/public/hooks/pricing-auto-restore',
+const ApiPublicRemindersDispatchRoute =
+  ApiPublicRemindersDispatchRouteImport.update({
+    id: '/api/public/reminders/dispatch',
+    path: '/api/public/reminders/dispatch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersPreviewChecklistRoute =
+  ApiPublicRemindersPreviewChecklistRouteImport.update({
+    id: '/api/public/reminders/preview-checklist',
+    path: '/api/public/reminders/preview-checklist',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersSendChecklistRoute =
+  ApiPublicRemindersSendChecklistRouteImport.update({
+    id: '/api/public/reminders/send-checklist',
+    path: '/api/public/reminders/send-checklist',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersSubscribeRoute =
+  ApiPublicRemindersSubscribeRouteImport.update({
+    id: '/api/public/reminders/subscribe',
+    path: '/api/public/reminders/subscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersUnsubscribeRoute =
+  ApiPublicRemindersUnsubscribeRouteImport.update({
+    id: '/api/public/reminders/unsubscribe',
+    path: '/api/public/reminders/unsubscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -523,67 +523,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sklep': {
-      id: '/sklep'
-      path: '/sklep'
-      fullPath: '/sklep'
-      preLoaderRoute: typeof SklepRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/raport': {
-      id: '/raport'
-      path: '/raport'
-      fullPath: '/raport'
-      preLoaderRoute: typeof RaportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/przypomnienia': {
-      id: '/przypomnienia'
-      path: '/przypomnienia'
-      fullPath: '/przypomnienia'
-      preLoaderRoute: typeof PrzypomnieniaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prywatnosc': {
-      id: '/prywatnosc'
-      path: '/prywatnosc'
-      fullPath: '/prywatnosc'
-      preLoaderRoute: typeof PrywatnoscRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/panel': {
-      id: '/panel'
-      path: '/panel'
-      fullPath: '/panel'
-      preLoaderRoute: typeof PanelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/koszt-przeszczepu-wlosow': {
-      id: '/koszt-przeszczepu-wlosow'
-      path: '/koszt-przeszczepu-wlosow'
-      fullPath: '/koszt-przeszczepu-wlosow'
-      preLoaderRoute: typeof KosztPrzeszczepuWlosowRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cookies': {
-      id: '/cookies'
-      path: '/cookies'
-      fullPath: '/cookies'
-      preLoaderRoute: typeof CookiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -593,88 +537,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/raporty/status': {
-      id: '/raporty/status'
-      path: '/raporty/status'
-      fullPath: '/raporty/status'
-      preLoaderRoute: typeof RaportyStatusRouteImport
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/przypomnienia/wypisz': {
-      id: '/przypomnienia/wypisz'
-      path: '/wypisz'
-      fullPath: '/przypomnienia/wypisz'
-      preLoaderRoute: typeof PrzypomnieniaWypiszRouteImport
-      parentRoute: typeof PrzypomnieniaRoute
-    }
-    '/product/$handle': {
-      id: '/product/$handle'
-      path: '/product/$handle'
-      fullPath: '/product/$handle'
-      preLoaderRoute: typeof ProductHandleRouteImport
+    '/koszt-przeszczepu-wlosow': {
+      id: '/koszt-przeszczepu-wlosow'
+      path: '/koszt-przeszczepu-wlosow'
+      fullPath: '/koszt-przeszczepu-wlosow'
+      preLoaderRoute: typeof KosztPrzeszczepuWlosowRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+    '/panel': {
+      id: '/panel'
+      path: '/panel'
+      fullPath: '/panel'
+      preLoaderRoute: typeof PanelRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ebook/$token': {
-      id: '/ebook/$token'
-      path: '/ebook/$token'
-      fullPath: '/ebook/$token'
-      preLoaderRoute: typeof EbookTokenRouteImport
+    '/prywatnosc': {
+      id: '/prywatnosc'
+      path: '/prywatnosc'
+      fullPath: '/prywatnosc'
+      preLoaderRoute: typeof PrywatnoscRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/vitals': {
-      id: '/_authenticated/vitals'
-      path: '/vitals'
-      fullPath: '/vitals'
-      preLoaderRoute: typeof AuthenticatedVitalsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/przypomnienia': {
+      id: '/przypomnienia'
+      path: '/przypomnienia'
+      fullPath: '/przypomnienia'
+      preLoaderRoute: typeof PrzypomnieniaRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/raporty': {
-      id: '/_authenticated/raporty'
-      path: '/raporty'
-      fullPath: '/raporty'
-      preLoaderRoute: typeof AuthenticatedRaportyRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/raport': {
+      id: '/raport'
+      path: '/raport'
+      fullPath: '/raport'
+      preLoaderRoute: typeof RaportRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/phrase-audit': {
-      id: '/_authenticated/phrase-audit'
-      path: '/phrase-audit'
-      fullPath: '/phrase-audit'
-      preLoaderRoute: typeof AuthenticatedPhraseAuditRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/i18n-report': {
-      id: '/_authenticated/i18n-report'
-      path: '/i18n-report'
-      fullPath: '/i18n-report'
-      preLoaderRoute: typeof AuthenticatedI18nReportRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/sklep': {
+      id: '/sklep'
+      path: '/sklep'
+      fullPath: '/sklep'
+      preLoaderRoute: typeof SklepRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/email-test': {
-      id: '/_authenticated/email-test'
-      path: '/email-test'
-      fullPath: '/email-test'
-      preLoaderRoute: typeof AuthenticatedEmailTestRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/ebook': {
-      id: '/_authenticated/ebook'
-      path: '/ebook'
-      fullPath: '/ebook'
-      preLoaderRoute: typeof AuthenticatedEbookRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/brand-audit': {
@@ -684,32 +614,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBrandAuditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+    '/_authenticated/ebook': {
+      id: '/_authenticated/ebook'
+      path: '/ebook'
+      fullPath: '/ebook'
+      preLoaderRoute: typeof AuthenticatedEbookRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+    '/_authenticated/email-test': {
+      id: '/_authenticated/email-test'
+      path: '/email-test'
+      fullPath: '/email-test'
+      preLoaderRoute: typeof AuthenticatedEmailTestRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/i18n-report': {
+      id: '/_authenticated/i18n-report'
+      path: '/i18n-report'
+      fullPath: '/i18n-report'
+      preLoaderRoute: typeof AuthenticatedI18nReportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/phrase-audit': {
+      id: '/_authenticated/phrase-audit'
+      path: '/phrase-audit'
+      fullPath: '/phrase-audit'
+      preLoaderRoute: typeof AuthenticatedPhraseAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/raporty': {
+      id: '/_authenticated/raporty'
+      path: '/raporty'
+      fullPath: '/raporty'
+      preLoaderRoute: typeof AuthenticatedRaportyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vitals': {
+      id: '/_authenticated/vitals'
+      path: '/vitals'
+      fullPath: '/vitals'
+      preLoaderRoute: typeof AuthenticatedVitalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/ebook/$token': {
+      id: '/ebook/$token'
+      path: '/ebook/$token'
+      fullPath: '/ebook/$token'
+      preLoaderRoute: typeof EbookTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/vitals': {
-      id: '/api/public/vitals'
-      path: '/api/public/vitals'
-      fullPath: '/api/public/vitals'
-      preLoaderRoute: typeof ApiPublicVitalsRouteImport
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/ebook-request': {
-      id: '/api/public/ebook-request'
-      path: '/api/public/ebook-request'
-      fullPath: '/api/public/ebook-request'
-      preLoaderRoute: typeof ApiPublicEbookRequestRouteImport
+    '/product/$handle': {
+      id: '/product/$handle'
+      path: '/product/$handle'
+      fullPath: '/product/$handle'
+      preLoaderRoute: typeof ProductHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/przypomnienia/wypisz': {
+      id: '/przypomnienia/wypisz'
+      path: '/wypisz'
+      fullPath: '/przypomnienia/wypisz'
+      preLoaderRoute: typeof PrzypomnieniaWypiszRouteImport
+      parentRoute: typeof PrzypomnieniaRoute
+    }
+    '/raporty/status': {
+      id: '/raporty/status'
+      path: '/raporty/status'
+      fullPath: '/raporty/status'
+      preLoaderRoute: typeof RaportyStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/contact': {
@@ -719,60 +698,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+    '/api/public/ebook-request': {
+      id: '/api/public/ebook-request'
+      path: '/api/public/ebook-request'
+      fullPath: '/api/public/ebook-request'
+      preLoaderRoute: typeof ApiPublicEbookRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+    '/api/public/vitals': {
+      id: '/api/public/vitals'
+      path: '/api/public/vitals'
+      fullPath: '/api/public/vitals'
+      preLoaderRoute: typeof ApiPublicVitalsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/reminders/unsubscribe': {
-      id: '/api/public/reminders/unsubscribe'
-      path: '/api/public/reminders/unsubscribe'
-      fullPath: '/api/public/reminders/unsubscribe'
-      preLoaderRoute: typeof ApiPublicRemindersUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/reminders/subscribe': {
-      id: '/api/public/reminders/subscribe'
-      path: '/api/public/reminders/subscribe'
-      fullPath: '/api/public/reminders/subscribe'
-      preLoaderRoute: typeof ApiPublicRemindersSubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/reminders/send-checklist': {
-      id: '/api/public/reminders/send-checklist'
-      path: '/api/public/reminders/send-checklist'
-      fullPath: '/api/public/reminders/send-checklist'
-      preLoaderRoute: typeof ApiPublicRemindersSendChecklistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/reminders/preview-checklist': {
-      id: '/api/public/reminders/preview-checklist'
-      path: '/api/public/reminders/preview-checklist'
-      fullPath: '/api/public/reminders/preview-checklist'
-      preLoaderRoute: typeof ApiPublicRemindersPreviewChecklistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/reminders/dispatch': {
-      id: '/api/public/reminders/dispatch'
-      path: '/api/public/reminders/dispatch'
-      fullPath: '/api/public/reminders/dispatch'
-      preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
+    '/api/public/hooks/pricing-auto-restore': {
+      id: '/api/public/hooks/pricing-auto-restore'
+      path: '/api/public/hooks/pricing-auto-restore'
+      fullPath: '/api/public/hooks/pricing-auto-restore'
+      preLoaderRoute: typeof ApiPublicHooksPricingAutoRestoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/security-watch': {
@@ -782,11 +733,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSecurityWatchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/pricing-auto-restore': {
-      id: '/api/public/hooks/pricing-auto-restore'
-      path: '/api/public/hooks/pricing-auto-restore'
-      fullPath: '/api/public/hooks/pricing-auto-restore'
-      preLoaderRoute: typeof ApiPublicHooksPricingAutoRestoreRouteImport
+    '/api/public/reminders/dispatch': {
+      id: '/api/public/reminders/dispatch'
+      path: '/api/public/reminders/dispatch'
+      fullPath: '/api/public/reminders/dispatch'
+      preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders/preview-checklist': {
+      id: '/api/public/reminders/preview-checklist'
+      path: '/api/public/reminders/preview-checklist'
+      fullPath: '/api/public/reminders/preview-checklist'
+      preLoaderRoute: typeof ApiPublicRemindersPreviewChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders/send-checklist': {
+      id: '/api/public/reminders/send-checklist'
+      path: '/api/public/reminders/send-checklist'
+      fullPath: '/api/public/reminders/send-checklist'
+      preLoaderRoute: typeof ApiPublicRemindersSendChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders/subscribe': {
+      id: '/api/public/reminders/subscribe'
+      path: '/api/public/reminders/subscribe'
+      fullPath: '/api/public/reminders/subscribe'
+      preLoaderRoute: typeof ApiPublicRemindersSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders/unsubscribe': {
+      id: '/api/public/reminders/unsubscribe'
+      path: '/api/public/reminders/unsubscribe'
+      fullPath: '/api/public/reminders/unsubscribe'
+      preLoaderRoute: typeof ApiPublicRemindersUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -864,3 +864,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
