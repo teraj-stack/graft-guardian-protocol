@@ -485,12 +485,14 @@ function Filters({
   type,
   q,
   total,
+  liveMessage,
 }: {
   week: number | "all";
   cat: string;
   type: string;
   q: string;
   total: number;
+  liveMessage: string;
 }) {
   const { t } = useTranslation();
   const countLabel =
@@ -500,36 +502,6 @@ function Filters({
         ? t("panel.filters.resultsFew")
         : t("panel.filters.resultsMany");
   const hasActiveFilters = week !== "all" || cat !== "all" || type !== "all" || q.trim() !== "";
-
-  const [liveMessage, setLiveMessage] = useState("");
-  const isFirstRender = useRef(true);
-  const prevParams = useRef({ week, cat, type, q });
-
-  useEffect(() => {
-    console.log("effect run", { isFirst: isFirstRender.current, prev: prevParams.current, curr: { week, cat, type, q } });
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      prevParams.current = { week, cat, type, q };
-      return;
-    }
-    const changed =
-      week !== prevParams.current.week ||
-      cat !== prevParams.current.cat ||
-      type !== prevParams.current.type ||
-      q !== prevParams.current.q;
-    console.log("changed", changed);
-    if (changed) {
-      const message =
-        total === 0
-          ? t("panel.filters.liveUpdateZero")
-          : t("panel.filters.liveUpdate", { count: total, label: countLabel });
-      console.log("setting message", message);
-      setLiveMessage(message);
-      const timer = setTimeout(() => setLiveMessage(""), 1500);
-      prevParams.current = { week, cat, type, q };
-      return () => clearTimeout(timer);
-    }
-  }, [week, cat, type, q, total, t, countLabel]);
 
   return (
     <section
