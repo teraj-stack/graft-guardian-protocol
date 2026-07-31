@@ -238,6 +238,14 @@ function PanelPage() {
     [baseFiltered, hideDone, isMaterialDone]
   );
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const rangeStart = filtered.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = Math.min(safePage * PAGE_SIZE, filtered.length);
+  const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+
+
   const doneCount = progress.materials.length;
   const totalCount = MATERIALS.length;
   const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
