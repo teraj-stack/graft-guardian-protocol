@@ -1073,7 +1073,9 @@
         "Checklist": "Checklist"
       },
       "reset": "Resetuj filtry",
-      "resetAria": "Resetuj wszystkie filtry i wyszukiwanie"
+      "resetAria": "Resetuj wszystkie filtry i wyszukiwanie",
+      "liveUpdate": "Wyniki zaktualizowane: {{count}} {{label}}.",
+      "liveUpdateZero": "Brak wyników dla wybranych filtrów."
     }
   }
 }

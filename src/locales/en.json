@@ -1073,7 +1073,9 @@
         "Checklist": "Checklist"
       },
       "reset": "Reset filters",
-      "resetAria": "Reset all filters and search"
+      "resetAria": "Reset all filters and search",
+      "liveUpdate": "Results updated: {{count}} {{label}}.",
+      "liveUpdateZero": "No results for the selected filters."
     }
   }
 }

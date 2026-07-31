@@ -1073,7 +1073,9 @@
         "Checklist": "Kontrol listesi"
       },
       "reset": "Filtreleri sıfırla",
-      "resetAria": "Tüm filtreleri ve aramayı sıfırla"
+      "resetAria": "Tüm filtreleri ve aramayı sıfırla",
+      "liveUpdate": "Sonuçlar güncellendi: {{count}} {{label}}.",
+      "liveUpdateZero": "Seçilen filtreler için sonuç yok."
     }
   }
 }
