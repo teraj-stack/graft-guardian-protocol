@@ -347,6 +347,8 @@ function ProgressPanel({
   hideDone: boolean;
   setHideDone: (v: boolean) => void;
 }) {
+  const { t } = useTranslation();
+  const pctRounded = hydrated ? Math.round(pct) : 0;
   return (
     <section
       aria-labelledby="progress-heading"
@@ -355,11 +357,13 @@ function ProgressPanel({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 id="progress-heading" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Twój postęp
+            {t("panel.progress.heading")}
           </h2>
           <p className="mt-2 font-display text-3xl" aria-live="polite" id="progress-summary">
             {hydrated ? `${doneCount} / ${totalCount}` : "— / —"}
-            <span className="ml-3 text-base text-muted-foreground">ukończonych materiałów</span>
+            <span className="ml-3 text-base text-muted-foreground">
+              {t("panel.progress.completedMaterials")}
+            </span>
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -367,7 +371,9 @@ function ProgressPanel({
             type="button"
             onClick={() => setHideDone(!hideDone)}
             aria-pressed={hideDone}
-            aria-label={hideDone ? "Ukryj ukończone materiały — włączone" : "Ukryj ukończone materiały — wyłączone"}
+            aria-label={`${t("panel.progress.hideDone")} — ${
+              hideDone ? t("panel.progress.stateOn") : t("panel.progress.stateOff")
+            }`}
             className={
               "inline-flex items-center rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
               (hideDone
@@ -375,17 +381,17 @@ function ProgressPanel({
                 : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")
             }
           >
-            {hideDone ? "✓ Ukryj ukończone" : "Ukryj ukończone"}
+            {hideDone ? `✓ ${t("panel.progress.hideDone")}` : t("panel.progress.hideDone")}
           </button>
           <button
             type="button"
             onClick={() => {
-              if (window.confirm("Wyczyścić cały zapisany postęp?")) reset();
+              if (window.confirm(t("panel.progress.resetConfirm"))) reset();
             }}
             aria-describedby="progress-summary"
             className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-destructive hover:text-destructive"
           >
-            Wyczyść postęp
+            {t("panel.progress.reset")}
           </button>
         </div>
       </div>
@@ -394,8 +400,8 @@ function ProgressPanel({
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-valuenow={hydrated ? Math.round(pct) : 0}
-        aria-valuetext={`${hydrated ? Math.round(pct) : 0}% ukończonych materiałów`}
+        aria-valuenow={pctRounded}
+        aria-valuetext={t("panel.progress.valueText", { pct: pctRounded })}
         aria-labelledby="progress-heading"
         className="mt-5 h-2 w-full overflow-hidden rounded-full bg-secondary"
       >
@@ -407,10 +413,10 @@ function ProgressPanel({
 
       <div className="mt-6 border-t border-border/50 pt-4">
         <p id="weeks-heading" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Ukończone tygodnie protokołu
+          {t("panel.progress.weeksHeading")}
         </p>
         <p id="weeks-hint" className="sr-only">
-          Przełącznik statusu tygodnia protokołu. Naciśnij, aby oznaczyć tydzień jako ukończony lub cofnąć oznaczenie.
+          {t("panel.progress.weeksHint")}
         </p>
         <div className="mt-3 flex flex-wrap gap-2" role="group" aria-labelledby="weeks-heading">
           {weeks.map((w) => {
@@ -428,10 +434,15 @@ function ProgressPanel({
                 }
                 aria-pressed={done}
                 aria-describedby="weeks-hint"
-                aria-label={`Tydzień ${w} — ${done ? "ukończony" : "nieukończony"}`}
+                aria-label={t("panel.progress.weekAria", {
+                  week: w,
+                  status: done
+                    ? t("panel.progress.weekDone")
+                    : t("panel.progress.weekNotDone"),
+                })}
               >
                 <span aria-hidden="true">{done ? "✓" : "○"}</span>
-                <span aria-hidden="true">Tydzień {w}</span>
+                <span aria-hidden="true">{t("panel.progress.week", { week: w })}</span>
               </button>
             );
           })}
@@ -440,6 +451,7 @@ function ProgressPanel({
     </section>
   );
 }
+
 
 function Filters({
   week,
@@ -454,45 +466,53 @@ function Filters({
   q: string;
   total: number;
 }) {
+  const { t } = useTranslation();
+  const countLabel =
+    total === 1
+      ? t("panel.filters.resultsOne")
+      : total >= 2 && total <= 4
+        ? t("panel.filters.resultsFew")
+        : t("panel.filters.resultsMany");
   return (
     <section
       aria-labelledby="filters-heading"
       className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6"
     >
       <h2 id="filters-heading" className="sr-only">
-        Filtry biblioteki materiałów
+        {t("panel.filters.heading")}
       </h2>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex-1">
           <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Szukaj
+            {t("panel.filters.searchLabel")}
           </label>
           <SearchBox value={q} />
         </div>
         <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          {total} {total === 1 ? "materiał" : total >= 2 && total <= 4 ? "materiały" : "materiałów"}
+          {total} {countLabel}
         </p>
       </div>
 
-      <FilterRow label="Tydzień po zabiegu" paramKey="week" current={String(week)} options={[
-        { value: "all", label: "Wszystkie" },
+      <FilterRow label={t("panel.filters.week")} paramKey="week" current={String(week)} options={[
+        { value: "all", label: t("panel.filters.all") },
         ...WEEKS.map((w) => ({ value: String(w), label: `T${w}` })),
       ]} />
 
-      <FilterRow label="Kategoria" paramKey="cat" current={cat} options={[
-        { value: "all", label: "Wszystkie" },
-        ...CATEGORIES.map((c) => ({ value: c, label: c })),
+      <FilterRow label={t("panel.filters.category")} paramKey="cat" current={cat} options={[
+        { value: "all", label: t("panel.filters.all") },
+        ...CATEGORIES.map((c) => ({ value: c, label: t(`panel.filters.categories.${c}`) })),
       ]} />
 
-      <FilterRow label="Typ materiału" paramKey="type" current={type} options={[
-        { value: "all", label: "Wszystkie" },
-        ...TYPES.map((t) => ({ value: t, label: t })),
+      <FilterRow label={t("panel.filters.type")} paramKey="type" current={type} options={[
+        { value: "all", label: t("panel.filters.all") },
+        ...TYPES.map((ty) => ({ value: ty, label: t(`panel.filters.types.${ty}`) })),
       ]} />
     </section>
   );
 }
 
 function SearchBox({ value }: { value: string }) {
+  const { t } = useTranslation();
   return (
     <form
       method="get"
@@ -505,17 +525,17 @@ function SearchBox({ value }: { value: string }) {
         name="q"
         aria-describedby="panel-search-hint"
         defaultValue={value}
-        placeholder="np. mycie, HBOT, dieta…"
+        placeholder={t("panel.filters.searchPlaceholder")}
         className="flex-1 rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-accent focus:outline-none"
       />
       <span id="panel-search-hint" className="sr-only">
-        Wyszukuje w tytułach i opisach materiałów. Zatwierdź przyciskiem Szukaj.
+        {t("panel.filters.searchHint")}
       </span>
       <button
         type="submit"
         className="rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
       >
-        Szukaj
+        {t("panel.filters.searchSubmit")}
       </button>
     </form>
   );
@@ -532,6 +552,7 @@ function FilterRow({
   current: string;
   options: { value: string; label: string }[];
 }) {
+  const { t } = useTranslation();
   return (
     <div className="mt-5 border-t border-border/50 pt-4">
       <p id={`filter-${paramKey}-label`} className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -545,7 +566,7 @@ function FilterRow({
               key={o.value}
               from="/panel"
               aria-current={active ? "true" : undefined}
-              aria-label={`${label}: ${o.label}${active ? " — filtr aktywny" : ""}`}
+              aria-label={`${label}: ${o.label}${active ? ` — ${t("panel.filters.activeSuffix")}` : ""}`}
               search={(prev: Record<string, unknown>) => {
                 const next: Record<string, unknown> = { ...prev };
                 if (o.value === "all") {
@@ -572,6 +593,7 @@ function FilterRow({
     </div>
   );
 }
+
 
 function MaterialCard({
   material,
