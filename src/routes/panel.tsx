@@ -4,6 +4,8 @@ import { z } from "zod";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePanelProgress } from "@/hooks/use-panel-progress";
+import { usePanelFilterPresets } from "@/lib/filter-presets";
+
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
 
