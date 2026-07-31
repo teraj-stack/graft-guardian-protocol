@@ -1027,6 +1027,51 @@
       "title": "Seçilen filtrelerle eşleşen materyal yok",
       "hint": "Hafta, kategori, tür veya arama ifadesini değiştirmeyi deneyin. “Tamamlananları gizle” açıksa, işaretlenmemiş öğeleri görmek için kapatın.",
       "clearFilters": "Filtreleri temizle"
+    },
+    "progress": {
+      "heading": "İlerlemeniz",
+      "completedMaterials": "tamamlanan materyal",
+      "hideDone": "Tamamlananları gizle",
+      "stateOn": "açık",
+      "stateOff": "kapalı",
+      "reset": "İlerlemeyi sıfırla",
+      "resetConfirm": "Kaydedilen tüm ilerleme silinsin mi?",
+      "valueText": "Materyallerin %{{pct}} kadarı tamamlandı",
+      "weeksHeading": "Tamamlanan protokol haftaları",
+      "weeksHint": "Protokol haftası durum düğmesi. Haftayı tamamlandı olarak işaretlemek veya geri almak için basın.",
+      "week": "Hafta {{week}}",
+      "weekAria": "Hafta {{week}} — {{status}}",
+      "weekDone": "tamamlandı",
+      "weekNotDone": "tamamlanmadı"
+    },
+    "filters": {
+      "heading": "Materyal kütüphanesi filtreleri",
+      "searchLabel": "Ara",
+      "searchPlaceholder": "örn. yıkama, HBOT, beslenme…",
+      "searchHint": "Materyal başlıkları ve açıklamalarında arar. Ara düğmesiyle onaylayın.",
+      "searchSubmit": "Ara",
+      "resultsOne": "materyal",
+      "resultsFew": "materyal",
+      "resultsMany": "materyal",
+      "week": "İşlem sonrası hafta",
+      "category": "Kategori",
+      "type": "Materyal türü",
+      "all": "Tümü",
+      "activeSuffix": "filtre etkin",
+      "categories": {
+        "Pielęgnacja": "Bakım",
+        "HBOT": "HBOT",
+        "PBM": "PBM",
+        "LADD": "LADD",
+        "Dieta": "Beslenme",
+        "Anti-aging": "Anti-aging"
+      },
+      "types": {
+        "Artykuł": "Makale",
+        "Wideo": "Video",
+        "PDF": "PDF",
+        "Checklist": "Kontrol listesi"
+      }
     }
   }
 }

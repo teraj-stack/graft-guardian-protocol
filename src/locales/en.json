@@ -1027,6 +1027,51 @@
       "title": "No materials match the selected filters",
       "hint": "Try changing the week, category, type, or search phrase. If you have enabled “hide completed,” turn it off to see unchecked items.",
       "clearFilters": "Clear filters"
+    },
+    "progress": {
+      "heading": "Your progress",
+      "completedMaterials": "materials completed",
+      "hideDone": "Hide completed",
+      "stateOn": "on",
+      "stateOff": "off",
+      "reset": "Clear progress",
+      "resetConfirm": "Clear all saved progress?",
+      "valueText": "{{pct}}% of materials completed",
+      "weeksHeading": "Completed protocol weeks",
+      "weeksHint": "Protocol week status toggle. Press to mark the week as completed or to undo it.",
+      "week": "Week {{week}}",
+      "weekAria": "Week {{week}} — {{status}}",
+      "weekDone": "completed",
+      "weekNotDone": "not completed"
+    },
+    "filters": {
+      "heading": "Material library filters",
+      "searchLabel": "Search",
+      "searchPlaceholder": "e.g. washing, HBOT, diet…",
+      "searchHint": "Searches material titles and descriptions. Confirm with the Search button.",
+      "searchSubmit": "Search",
+      "resultsOne": "material",
+      "resultsFew": "materials",
+      "resultsMany": "materials",
+      "week": "Week after the procedure",
+      "category": "Category",
+      "type": "Material type",
+      "all": "All",
+      "activeSuffix": "filter active",
+      "categories": {
+        "Pielęgnacja": "Aftercare",
+        "HBOT": "HBOT",
+        "PBM": "PBM",
+        "LADD": "LADD",
+        "Dieta": "Diet",
+        "Anti-aging": "Anti-aging"
+      },
+      "types": {
+        "Artykuł": "Article",
+        "Wideo": "Video",
+        "PDF": "PDF",
+        "Checklist": "Checklist"
+      }
     }
   }
 }

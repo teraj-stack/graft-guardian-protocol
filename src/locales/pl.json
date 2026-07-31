@@ -1027,6 +1027,51 @@
       "title": "Brak materiałów dla wybranych filtrów",
       "hint": "Spróbuj zmienić zakres tygodnia, kategorię, typ lub wyszukiwanie. Jeśli włączyłeś „ukryj ukończone”, wyłącz je, aby zobaczyć odznaczone pozycje.",
       "clearFilters": "Wyczyść filtry"
+    },
+    "progress": {
+      "heading": "Twój postęp",
+      "completedMaterials": "ukończonych materiałów",
+      "hideDone": "Ukryj ukończone",
+      "stateOn": "włączone",
+      "stateOff": "wyłączone",
+      "reset": "Wyczyść postęp",
+      "resetConfirm": "Wyczyścić cały zapisany postęp?",
+      "valueText": "{{pct}}% ukończonych materiałów",
+      "weeksHeading": "Ukończone tygodnie protokołu",
+      "weeksHint": "Przełącznik statusu tygodnia protokołu. Naciśnij, aby oznaczyć tydzień jako ukończony lub cofnąć oznaczenie.",
+      "week": "Tydzień {{week}}",
+      "weekAria": "Tydzień {{week}} — {{status}}",
+      "weekDone": "ukończony",
+      "weekNotDone": "nieukończony"
+    },
+    "filters": {
+      "heading": "Filtry biblioteki materiałów",
+      "searchLabel": "Szukaj",
+      "searchPlaceholder": "np. mycie, HBOT, dieta…",
+      "searchHint": "Wyszukuje w tytułach i opisach materiałów. Zatwierdź przyciskiem Szukaj.",
+      "searchSubmit": "Szukaj",
+      "resultsOne": "materiał",
+      "resultsFew": "materiały",
+      "resultsMany": "materiałów",
+      "week": "Tydzień po zabiegu",
+      "category": "Kategoria",
+      "type": "Typ materiału",
+      "all": "Wszystkie",
+      "activeSuffix": "filtr aktywny",
+      "categories": {
+        "Pielęgnacja": "Pielęgnacja",
+        "HBOT": "HBOT",
+        "PBM": "PBM",
+        "LADD": "LADD",
+        "Dieta": "Dieta",
+        "Anti-aging": "Anti-aging"
+      },
+      "types": {
+        "Artykuł": "Artykuł",
+        "Wideo": "Wideo",
+        "PDF": "PDF",
+        "Checklist": "Checklist"
+      }
     }
   }
 }
