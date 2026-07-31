@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePanelProgress } from "@/hooks/use-panel-progress";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -234,6 +234,32 @@ function PanelPage() {
   const totalCount = MATERIALS.length;
   const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
+  const [liveMessage, setLiveMessage] = useState("");
+  const prevFilterRef = useRef({ week, cat, type, q });
+  const filteredCount = filtered.length;
+  const countLabel =
+    filteredCount === 1
+      ? t("panel.filters.resultsOne")
+      : filteredCount >= 2 && filteredCount <= 4
+        ? t("panel.filters.resultsFew")
+        : t("panel.filters.resultsMany");
+
+  useEffect(() => {
+    const prev = prevFilterRef.current;
+    const changed =
+      week !== prev.week || cat !== prev.cat || type !== prev.type || q !== prev.q;
+    if (changed) {
+      const message =
+        filteredCount === 0
+          ? t("panel.filters.liveUpdateZero")
+          : t("panel.filters.liveUpdate", { count: filteredCount, label: countLabel });
+      setLiveMessage(message);
+      const timer = setTimeout(() => setLiveMessage(""), 5000);
+      prevFilterRef.current = { week, cat, type, q };
+      return () => clearTimeout(timer);
+    }
+  }, [week, cat, type, q, filteredCount, t, countLabel]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border/60">
@@ -284,7 +310,7 @@ function PanelPage() {
           setHideDone={setHideDone}
         />
 
-        <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} />
+        <Filters week={week} cat={cat} type={type} q={q} total={filtered.length} liveMessage={liveMessage} />
 
         {filtered.length === 0 ? (
           <section
@@ -459,12 +485,14 @@ function Filters({
   type,
   q,
   total,
+  liveMessage,
 }: {
   week: number | "all";
   cat: string;
   type: string;
   q: string;
   total: number;
+  liveMessage: string;
 }) {
   const { t } = useTranslation();
   const countLabel =
@@ -483,6 +511,9 @@ function Filters({
       <h2 id="filters-heading" className="sr-only">
         {t("panel.filters.heading")}
       </h2>
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveMessage || " "}
+      </div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex-1">
           <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
