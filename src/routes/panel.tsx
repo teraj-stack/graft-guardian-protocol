@@ -473,6 +473,8 @@ function Filters({
       : total >= 2 && total <= 4
         ? t("panel.filters.resultsFew")
         : t("panel.filters.resultsMany");
+  const hasActiveFilters = week !== "all" || cat !== "all" || type !== "all" || q.trim() !== "";
+
   return (
     <section
       aria-labelledby="filters-heading"
