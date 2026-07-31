@@ -475,6 +475,33 @@ function Filters({
         : t("panel.filters.resultsMany");
   const hasActiveFilters = week !== "all" || cat !== "all" || type !== "all" || q.trim() !== "";
 
+  const [liveMessage, setLiveMessage] = useState("");
+  const isFirstRender = useRef(true);
+  const prevParams = useRef({ week, cat, type, q });
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      prevParams.current = { week, cat, type, q };
+      return;
+    }
+    const changed =
+      week !== prevParams.current.week ||
+      cat !== prevParams.current.cat ||
+      type !== prevParams.current.type ||
+      q !== prevParams.current.q;
+    if (changed) {
+      const message =
+        total === 0
+          ? t("panel.filters.liveUpdateZero")
+          : t("panel.filters.liveUpdate", { count: total, label: countLabel });
+      setLiveMessage(message);
+      const timer = setTimeout(() => setLiveMessage(""), 1500);
+      prevParams.current = { week, cat, type, q };
+      return () => clearTimeout(timer);
+    }
+  }, [week, cat, type, q, total, t, countLabel]);
+
   return (
     <section
       aria-labelledby="filters-heading"
@@ -483,6 +510,9 @@ function Filters({
       <h2 id="filters-heading" className="sr-only">
         {t("panel.filters.heading")}
       </h2>
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveMessage || " "}
+      </div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex-1">
           <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
