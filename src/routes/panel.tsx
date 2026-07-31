@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { usePanelProgress } from "@/hooks/use-panel-progress";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
