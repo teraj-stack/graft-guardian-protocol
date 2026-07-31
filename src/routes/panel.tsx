@@ -416,7 +416,6 @@ function ProgressPanel({
               >
                 <span aria-hidden="true">{done ? "✓" : "○"}</span>
                 <span aria-hidden="true">Tydzień {w}</span>
-                <span className="sr-only">{done ? "ukończony" : "nieukończony"}</span>
               </button>
             );
           })}
