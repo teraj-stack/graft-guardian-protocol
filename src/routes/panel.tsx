@@ -466,45 +466,53 @@ function Filters({
   q: string;
   total: number;
 }) {
+  const { t } = useTranslation();
+  const countLabel =
+    total === 1
+      ? t("panel.filters.resultsOne")
+      : total >= 2 && total <= 4
+        ? t("panel.filters.resultsFew")
+        : t("panel.filters.resultsMany");
   return (
     <section
       aria-labelledby="filters-heading"
       className="mt-12 rounded-sm border border-border bg-card p-5 md:p-6"
     >
       <h2 id="filters-heading" className="sr-only">
-        Filtry biblioteki materiałów
+        {t("panel.filters.heading")}
       </h2>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex-1">
           <label htmlFor="panel-search" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Szukaj
+            {t("panel.filters.searchLabel")}
           </label>
           <SearchBox value={q} />
         </div>
         <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          {total} {total === 1 ? "materiał" : total >= 2 && total <= 4 ? "materiały" : "materiałów"}
+          {total} {countLabel}
         </p>
       </div>
 
-      <FilterRow label="Tydzień po zabiegu" paramKey="week" current={String(week)} options={[
-        { value: "all", label: "Wszystkie" },
+      <FilterRow label={t("panel.filters.week")} paramKey="week" current={String(week)} options={[
+        { value: "all", label: t("panel.filters.all") },
         ...WEEKS.map((w) => ({ value: String(w), label: `T${w}` })),
       ]} />
 
-      <FilterRow label="Kategoria" paramKey="cat" current={cat} options={[
-        { value: "all", label: "Wszystkie" },
-        ...CATEGORIES.map((c) => ({ value: c, label: c })),
+      <FilterRow label={t("panel.filters.category")} paramKey="cat" current={cat} options={[
+        { value: "all", label: t("panel.filters.all") },
+        ...CATEGORIES.map((c) => ({ value: c, label: t(`panel.filters.categories.${c}`) })),
       ]} />
 
-      <FilterRow label="Typ materiału" paramKey="type" current={type} options={[
-        { value: "all", label: "Wszystkie" },
-        ...TYPES.map((t) => ({ value: t, label: t })),
+      <FilterRow label={t("panel.filters.type")} paramKey="type" current={type} options={[
+        { value: "all", label: t("panel.filters.all") },
+        ...TYPES.map((ty) => ({ value: ty, label: t(`panel.filters.types.${ty}`) })),
       ]} />
     </section>
   );
 }
 
 function SearchBox({ value }: { value: string }) {
+  const { t } = useTranslation();
   return (
     <form
       method="get"
@@ -517,17 +525,17 @@ function SearchBox({ value }: { value: string }) {
         name="q"
         aria-describedby="panel-search-hint"
         defaultValue={value}
-        placeholder="np. mycie, HBOT, dieta…"
+        placeholder={t("panel.filters.searchPlaceholder")}
         className="flex-1 rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-accent focus:outline-none"
       />
       <span id="panel-search-hint" className="sr-only">
-        Wyszukuje w tytułach i opisach materiałów. Zatwierdź przyciskiem Szukaj.
+        {t("panel.filters.searchHint")}
       </span>
       <button
         type="submit"
         className="rounded-sm bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/90"
       >
-        Szukaj
+        {t("panel.filters.searchSubmit")}
       </button>
     </form>
   );
@@ -544,6 +552,7 @@ function FilterRow({
   current: string;
   options: { value: string; label: string }[];
 }) {
+  const { t } = useTranslation();
   return (
     <div className="mt-5 border-t border-border/50 pt-4">
       <p id={`filter-${paramKey}-label`} className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -557,7 +566,7 @@ function FilterRow({
               key={o.value}
               from="/panel"
               aria-current={active ? "true" : undefined}
-              aria-label={`${label}: ${o.label}${active ? " — filtr aktywny" : ""}`}
+              aria-label={`${label}: ${o.label}${active ? ` — ${t("panel.filters.activeSuffix")}` : ""}`}
               search={(prev: Record<string, unknown>) => {
                 const next: Record<string, unknown> = { ...prev };
                 if (o.value === "all") {
@@ -584,6 +593,7 @@ function FilterRow({
     </div>
   );
 }
+
 
 function MaterialCard({
   material,
