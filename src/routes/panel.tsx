@@ -234,6 +234,7 @@ function PanelPage() {
   const totalCount = MATERIALS.length;
   const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
+  console.log("PanelPage render", { week, cat, type, q, total: filtered.length });
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border/60">
