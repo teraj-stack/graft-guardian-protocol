@@ -1071,7 +1071,9 @@
         "Wideo": "Video",
         "PDF": "PDF",
         "Checklist": "Kontrol listesi"
-      }
+      },
+      "reset": "Filtreleri sıfırla",
+      "resetAria": "Tüm filtreleri ve aramayı sıfırla"
     }
   }
 }
