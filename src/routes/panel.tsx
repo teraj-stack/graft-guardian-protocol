@@ -254,6 +254,7 @@ function PanelPage() {
         filteredCount === 0
           ? t("panel.filters.liveUpdateZero")
           : t("panel.filters.liveUpdate", { count: filteredCount, label: countLabel });
+      console.log("setting message", message, "filteredCount", filteredCount, "countLabel", countLabel);
       setLiveMessage(message);
       const timer = setTimeout(() => setLiveMessage(""), 2000);
       prevFilterRef.current = { week, cat, type, q };
