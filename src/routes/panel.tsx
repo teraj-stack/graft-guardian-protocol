@@ -347,6 +347,8 @@ function ProgressPanel({
   hideDone: boolean;
   setHideDone: (v: boolean) => void;
 }) {
+  const { t } = useTranslation();
+  const pctRounded = hydrated ? Math.round(pct) : 0;
   return (
     <section
       aria-labelledby="progress-heading"
@@ -355,11 +357,13 @@ function ProgressPanel({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 id="progress-heading" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Twój postęp
+            {t("panel.progress.heading")}
           </h2>
           <p className="mt-2 font-display text-3xl" aria-live="polite" id="progress-summary">
             {hydrated ? `${doneCount} / ${totalCount}` : "— / —"}
-            <span className="ml-3 text-base text-muted-foreground">ukończonych materiałów</span>
+            <span className="ml-3 text-base text-muted-foreground">
+              {t("panel.progress.completedMaterials")}
+            </span>
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -367,7 +371,9 @@ function ProgressPanel({
             type="button"
             onClick={() => setHideDone(!hideDone)}
             aria-pressed={hideDone}
-            aria-label={hideDone ? "Ukryj ukończone materiały — włączone" : "Ukryj ukończone materiały — wyłączone"}
+            aria-label={`${t("panel.progress.hideDone")} — ${
+              hideDone ? t("panel.progress.stateOn") : t("panel.progress.stateOff")
+            }`}
             className={
               "inline-flex items-center rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
               (hideDone
@@ -375,17 +381,17 @@ function ProgressPanel({
                 : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")
             }
           >
-            {hideDone ? "✓ Ukryj ukończone" : "Ukryj ukończone"}
+            {hideDone ? `✓ ${t("panel.progress.hideDone")}` : t("panel.progress.hideDone")}
           </button>
           <button
             type="button"
             onClick={() => {
-              if (window.confirm("Wyczyścić cały zapisany postęp?")) reset();
+              if (window.confirm(t("panel.progress.resetConfirm"))) reset();
             }}
             aria-describedby="progress-summary"
             className="inline-flex items-center rounded-sm border border-border px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground transition hover:border-destructive hover:text-destructive"
           >
-            Wyczyść postęp
+            {t("panel.progress.reset")}
           </button>
         </div>
       </div>
@@ -394,8 +400,8 @@ function ProgressPanel({
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-valuenow={hydrated ? Math.round(pct) : 0}
-        aria-valuetext={`${hydrated ? Math.round(pct) : 0}% ukończonych materiałów`}
+        aria-valuenow={pctRounded}
+        aria-valuetext={t("panel.progress.valueText", { pct: pctRounded })}
         aria-labelledby="progress-heading"
         className="mt-5 h-2 w-full overflow-hidden rounded-full bg-secondary"
       >
@@ -407,10 +413,10 @@ function ProgressPanel({
 
       <div className="mt-6 border-t border-border/50 pt-4">
         <p id="weeks-heading" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Ukończone tygodnie protokołu
+          {t("panel.progress.weeksHeading")}
         </p>
         <p id="weeks-hint" className="sr-only">
-          Przełącznik statusu tygodnia protokołu. Naciśnij, aby oznaczyć tydzień jako ukończony lub cofnąć oznaczenie.
+          {t("panel.progress.weeksHint")}
         </p>
         <div className="mt-3 flex flex-wrap gap-2" role="group" aria-labelledby="weeks-heading">
           {weeks.map((w) => {
@@ -428,10 +434,15 @@ function ProgressPanel({
                 }
                 aria-pressed={done}
                 aria-describedby="weeks-hint"
-                aria-label={`Tydzień ${w} — ${done ? "ukończony" : "nieukończony"}`}
+                aria-label={t("panel.progress.weekAria", {
+                  week: w,
+                  status: done
+                    ? t("panel.progress.weekDone")
+                    : t("panel.progress.weekNotDone"),
+                })}
               >
                 <span aria-hidden="true">{done ? "✓" : "○"}</span>
-                <span aria-hidden="true">Tydzień {w}</span>
+                <span aria-hidden="true">{t("panel.progress.week", { week: w })}</span>
               </button>
             );
           })}
@@ -440,6 +451,7 @@ function ProgressPanel({
     </section>
   );
 }
+
 
 function Filters({
   week,
