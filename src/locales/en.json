@@ -1084,6 +1084,15 @@
         "empty": "No saved presets yet. Set filters and save the combination to return to it quickly.",
         "deleteAria": "Delete preset {{name}}"
       }
+    },
+    "pagination": {
+      "navAria": "Material library results pagination",
+      "range": "Showing {{start}}–{{end}} of {{total}}",
+      "prev": "Previous",
+      "next": "Next",
+      "prevAria": "Go to previous results page",
+      "nextAria": "Go to next results page",
+      "pageAria": "Page {{page}} of {{total}}"
     }
   }
 }

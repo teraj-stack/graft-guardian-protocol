@@ -1084,6 +1084,15 @@
         "empty": "Brak zapisanych presetów. Ustaw filtry i zapisz kombinację, aby szybko do niej wracać.",
         "deleteAria": "Usuń preset {{name}}"
       }
+    },
+    "pagination": {
+      "navAria": "Paginacja wyników biblioteki materiałów",
+      "range": "Pokazano {{start}}–{{end}} z {{total}}",
+      "prev": "Poprzednia",
+      "next": "Następna",
+      "prevAria": "Przejdź do poprzedniej strony wyników",
+      "nextAria": "Przejdź do następnej strony wyników",
+      "pageAria": "Strona {{page}} z {{total}}"
     }
   }
 }
