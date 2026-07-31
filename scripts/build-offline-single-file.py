@@ -203,7 +203,7 @@ async def main():
             pages.append({"path": path, "label": label, "title": title, "css": css, "body": body})
         await browser.close()
 
-    all_css = "\n".join(dict.fromkeys(p["css"] for p in pages))
+    all_css = "\n".join(dict.fromkeys(p["css"] for p in pages)).replace("</style", "<\\/style")
     nav = "".join(
         f'<a href="#page-{ids[p["path"]]}" class="offline-nav-link">{p["label"]}</a>' for p in pages
     )
