@@ -776,6 +776,7 @@ function FilterRow({
               aria-label={`${label}: ${o.label}${active ? ` — ${t("panel.filters.activeSuffix")}` : ""}`}
               search={(prev: Record<string, unknown>) => {
                 const next: Record<string, unknown> = { ...prev };
+                delete next.page;
                 if (o.value === "all") {
                   delete next[paramKey];
                 } else if (paramKey === "week") {
@@ -785,6 +786,7 @@ function FilterRow({
                 }
                 return next as never;
               }}
+
               className={
                 "inline-flex items-center rounded-sm border px-3 py-1.5 text-xs uppercase tracking-wider transition " +
                 (active
