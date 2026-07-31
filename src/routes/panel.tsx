@@ -715,6 +715,99 @@ function FilterPresets({
   );
 }
 
+function Pagination({
+  page,
+  totalPages,
+  rangeStart,
+  rangeEnd,
+  total,
+}: {
+  page: number;
+  totalPages: number;
+  rangeStart: number;
+  rangeEnd: number;
+  total: number;
+}) {
+  const { t } = useTranslation();
+  if (totalPages <= 1) return null;
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const base =
+    "inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border px-3 py-2 text-sm transition";
+
+  return (
+    <nav
+      aria-label={t("panel.pagination.navAria")}
+      data-testid="panel-pagination"
+      className="mt-10 flex flex-col items-center gap-3 border-t border-border pt-6"
+    >
+      <p aria-live="polite" className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        {t("panel.pagination.range", { start: rangeStart, end: rangeEnd, total })}
+      </p>
+      <ul className="flex flex-wrap items-center justify-center gap-2">
+        <li>
+          {page > 1 ? (
+            <Link
+              from="/panel"
+              search={(prev: Record<string, unknown>) => ({ ...prev, page: page - 1 }) as never}
+              aria-label={t("panel.pagination.prevAria")}
+              className={`${base} border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground`}
+            >
+              ← {t("panel.pagination.prev")}
+            </Link>
+          ) : (
+            <span
+              aria-disabled="true"
+              className={`${base} border-border/50 text-muted-foreground/50`}
+            >
+              ← {t("panel.pagination.prev")}
+            </span>
+          )}
+        </li>
+        {pages.map((p) => {
+          const active = p === page;
+          return (
+            <li key={p}>
+              <Link
+                from="/panel"
+                search={(prev: Record<string, unknown>) => ({ ...prev, page: p }) as never}
+                aria-current={active ? "page" : undefined}
+                aria-label={t("panel.pagination.pageAria", { page: p, total: totalPages })}
+                className={`${base} ${
+                  active
+                    ? "border-accent bg-accent font-medium text-accent-foreground"
+                    : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground"
+                }`}
+              >
+                {p}
+              </Link>
+            </li>
+          );
+        })}
+        <li>
+          {page < totalPages ? (
+            <Link
+              from="/panel"
+              search={(prev: Record<string, unknown>) => ({ ...prev, page: page + 1 }) as never}
+              aria-label={t("panel.pagination.nextAria")}
+              className={`${base} border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground`}
+            >
+              {t("panel.pagination.next")} →
+            </Link>
+          ) : (
+            <span
+              aria-disabled="true"
+              className={`${base} border-border/50 text-muted-foreground/50`}
+            >
+              {t("panel.pagination.next")} →
+            </span>
+          )}
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
 
 function SearchBox({ value, inputRef }: { value: string; inputRef: React.RefObject<HTMLInputElement | null> }) {
   const { t } = useTranslation();
