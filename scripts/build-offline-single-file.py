@@ -97,24 +97,21 @@ async def snapshot(page, base, path, cache):
     await page.evaluate("window.scrollTo(0,0)")
 
     # 1) zbierz i zinline'uj arkusze stylów
-    sheets = await page.evaluate(
-        """() => Array.from(document.querySelectorAll('link[rel=stylesheet]')).map(l => l.href)"""
+    raw_css = await page.evaluate(
+        """() => {
+            const out = [];
+            for (const sheet of Array.from(document.styleSheets)) {
+              try {
+                const rules = sheet.cssRules;
+                if (!rules) continue;
+                out.push(Array.from(rules).map(r => r.cssText).join('\\n'));
+              } catch (e) { /* cross-origin */ }
+            }
+            return out.join('\\n');
+        }"""
     )
-    css_parts = []
-    for href in sheets:
-        if href in cache and cache[href] is not None:
-            css_parts.append(cache[href])
-            continue
-        body, _ = await fetch_bytes(page, href)
-        if not body:
-            continue
-        css = await inline_css(page, body.decode("utf-8", "ignore"), href, cache)
-        cache[href] = css
-        css_parts.append(css)
-    inline_styles = await page.evaluate(
-        """() => Array.from(document.querySelectorAll('style')).map(s => s.textContent).join('\\n')"""
-    )
-    css_parts.append(inline_styles or "")
+    css_parts = [await inline_css(page, raw_css, urljoin(base, path), cache)]
+
 
     # 2) obrazy -> data URI
     img_urls = await page.evaluate(
