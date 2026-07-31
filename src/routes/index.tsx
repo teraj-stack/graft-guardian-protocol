@@ -199,7 +199,7 @@ function Nav() {
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground lg:flex">
           {navLinks.map((l) =>
             "to" in l ? (
-              <Link key={l.to} to={l.to} className="hover:text-foreground">{l.label}</Link>
+              <Link key={l.to} to={l.to!} className="hover:text-foreground">{l.label}</Link>
             ) : (
               <a key={l.href} href={l.href} className="hover:text-foreground">{l.label}</a>
             )
@@ -254,7 +254,7 @@ function Nav() {
           <nav className="flex flex-col gap-4 text-sm text-muted-foreground">
             {navLinks.map((l) =>
               "to" in l ? (
-                <Link key={l.to} to={l.to} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</Link>
+                <Link key={l.to} to={l.to!} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</Link>
               ) : (
                 <a key={l.href} href={l.href} className="hover:text-foreground" onClick={() => setOpen(false)}>{l.label}</a>
               )
