@@ -245,7 +245,6 @@ function PanelPage() {
         : t("panel.filters.resultsMany");
 
   useEffect(() => {
-    console.log("PanelPage effect", { prev: prevFilterRef.current, curr: { week, cat, type, q }, changed: week !== prevFilterRef.current.week || cat !== prevFilterRef.current.cat || type !== prevFilterRef.current.type || q !== prevFilterRef.current.q });
     const prev = prevFilterRef.current;
     const changed =
       week !== prev.week || cat !== prev.cat || type !== prev.type || q !== prev.q;
@@ -254,9 +253,8 @@ function PanelPage() {
         filteredCount === 0
           ? t("panel.filters.liveUpdateZero")
           : t("panel.filters.liveUpdate", { count: filteredCount, label: countLabel });
-      console.log("setting message", message, "filteredCount", filteredCount, "countLabel", countLabel);
       setLiveMessage(message);
-      const timer = setTimeout(() => setLiveMessage(""), 2000);
+      const timer = setTimeout(() => setLiveMessage(""), 5000);
       prevFilterRef.current = { week, cat, type, q };
       return () => clearTimeout(timer);
     }
