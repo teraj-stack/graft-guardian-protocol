@@ -262,7 +262,6 @@ function PanelPage() {
     }
   }, [week, cat, type, q, filteredCount, t, countLabel]);
 
-  console.log("PanelPage render", { week, cat, type, q, filteredCount });
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border/60">
