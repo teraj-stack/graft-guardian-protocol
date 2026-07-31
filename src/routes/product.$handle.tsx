@@ -62,10 +62,7 @@ export const Route = createFileRoute("/product/$handle")({
   component: ProductPage,
 });
 
-async function fetchProduct(handle: string) {
-  const data = await storefrontApiRequest(STOREFRONT_PRODUCT_BY_HANDLE_QUERY, { handle });
-  return data?.data?.product ?? null;
-}
+
 
 function productPlaceholder(product: any) {
   const t = (product.title ?? "").toLowerCase();
